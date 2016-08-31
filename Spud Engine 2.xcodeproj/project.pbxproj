@@ -7,20 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0259030E1D77933E00EA6372 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0259030D1D77933E00EA6372 /* AppDelegate.m */; };
-		025903111D77933E00EA6372 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 025903101D77933E00EA6372 /* main.m */; };
-		025903131D77933E00EA6372 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 025903121D77933E00EA6372 /* Assets.xcassets */; };
-		025903161D77933E00EA6372 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 025903141D77933E00EA6372 /* MainMenu.xib */; };
+		025903251D7793EA00EA6372 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259031E1D7793EA00EA6372 /* libboost_system.a */; };
+		025903261D7793EA00EA6372 /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259031F1D7793EA00EA6372 /* libboost_thread.a */; };
+		025903271D7793EA00EA6372 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903201D7793EA00EA6372 /* libglfw3.a */; };
+		025903281D7793EA00EA6372 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903211D7793EA00EA6372 /* CoreVideo.framework */; };
+		025903291D7793EA00EA6372 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903221D7793EA00EA6372 /* IOKit.framework */; };
+		0259032A1D7793EA00EA6372 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903231D7793EA00EA6372 /* Cocoa.framework */; };
+		0259032B1D7793EA00EA6372 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903241D7793EA00EA6372 /* OpenGL.framework */; };
+		025903301D77940400EA6372 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0259032D1D77940400EA6372 /* main.cpp */; };
+		025903311D77940400EA6372 /* object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0259032E1D77940400EA6372 /* object.cpp */; };
+		025903351D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */; };
+		025903361D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */; };
+		025903371D7794B500EA6372 /* libLinearMath_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		025903091D77933E00EA6372 /* Spud Engine 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Spud Engine 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		0259030C1D77933E00EA6372 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		0259030D1D77933E00EA6372 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		025903101D77933E00EA6372 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		025903121D77933E00EA6372 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		025903151D77933E00EA6372 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		025903171D77933E00EA6372 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0259031E1D7793EA00EA6372 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = /usr/local/lib/libboost_system.a; sourceTree = "<absolute>"; };
+		0259031F1D7793EA00EA6372 /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = /usr/local/lib/libboost_thread.a; sourceTree = "<absolute>"; };
+		025903201D7793EA00EA6372 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = /usr/local/lib/libglfw3.a; sourceTree = "<absolute>"; };
+		025903211D7793EA00EA6372 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		025903221D7793EA00EA6372 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		025903231D7793EA00EA6372 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		025903241D7793EA00EA6372 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		0259032C1D77940400EA6372 /* driver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = driver.hpp; sourceTree = "<group>"; };
+		0259032D1D77940400EA6372 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		0259032E1D77940400EA6372 /* object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = object.cpp; sourceTree = "<group>"; };
+		0259032F1D77940400EA6372 /* object.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = object.hpp; sourceTree = "<group>"; };
+		025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
+		025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
+		025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,6 +45,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				025903251D7793EA00EA6372 /* libboost_system.a in Frameworks */,
+				025903261D7793EA00EA6372 /* libboost_thread.a in Frameworks */,
+				0259032A1D7793EA00EA6372 /* Cocoa.framework in Frameworks */,
+				025903361D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a in Frameworks */,
+				0259032B1D7793EA00EA6372 /* OpenGL.framework in Frameworks */,
+				025903271D7793EA00EA6372 /* libglfw3.a in Frameworks */,
+				025903351D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a in Frameworks */,
+				025903291D7793EA00EA6372 /* IOKit.framework in Frameworks */,
+				025903281D7793EA00EA6372 /* CoreVideo.framework in Frameworks */,
+				025903371D7794B500EA6372 /* libLinearMath_gmake_x64_release.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,6 +64,7 @@
 		025903001D77933E00EA6372 = {
 			isa = PBXGroup;
 			children = (
+				0259031D1D7793CF00EA6372 /* Libraries */,
 				0259030B1D77933E00EA6372 /* Spud Engine 2 */,
 				0259030A1D77933E00EA6372 /* Products */,
 			);
@@ -53,22 +81,54 @@
 		0259030B1D77933E00EA6372 /* Spud Engine 2 */ = {
 			isa = PBXGroup;
 			children = (
-				0259030C1D77933E00EA6372 /* AppDelegate.h */,
-				0259030D1D77933E00EA6372 /* AppDelegate.m */,
-				025903121D77933E00EA6372 /* Assets.xcassets */,
-				025903141D77933E00EA6372 /* MainMenu.xib */,
+				0259032C1D77940400EA6372 /* driver.hpp */,
+				0259032D1D77940400EA6372 /* main.cpp */,
+				0259032E1D77940400EA6372 /* object.cpp */,
+				0259032F1D77940400EA6372 /* object.hpp */,
 				025903171D77933E00EA6372 /* Info.plist */,
-				0259030F1D77933E00EA6372 /* Supporting Files */,
 			);
 			path = "Spud Engine 2";
 			sourceTree = "<group>";
 		};
-		0259030F1D77933E00EA6372 /* Supporting Files */ = {
+		0259031D1D7793CF00EA6372 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				025903101D77933E00EA6372 /* main.m */,
+				025903391D7794EC00EA6372 /* Boost */,
+				025903381D7794E500EA6372 /* Bullet */,
+				0259033A1D7794F400EA6372 /* GLFW */,
 			);
-			name = "Supporting Files";
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		025903381D7794E500EA6372 /* Bullet */ = {
+			isa = PBXGroup;
+			children = (
+				025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */,
+				025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */,
+				025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */,
+			);
+			name = Bullet;
+			sourceTree = "<group>";
+		};
+		025903391D7794EC00EA6372 /* Boost */ = {
+			isa = PBXGroup;
+			children = (
+				0259031E1D7793EA00EA6372 /* libboost_system.a */,
+				0259031F1D7793EA00EA6372 /* libboost_thread.a */,
+			);
+			name = Boost;
+			sourceTree = "<group>";
+		};
+		0259033A1D7794F400EA6372 /* GLFW */ = {
+			isa = PBXGroup;
+			children = (
+				025903201D7793EA00EA6372 /* libglfw3.a */,
+				025903211D7793EA00EA6372 /* CoreVideo.framework */,
+				025903221D7793EA00EA6372 /* IOKit.framework */,
+				025903231D7793EA00EA6372 /* Cocoa.framework */,
+				025903241D7793EA00EA6372 /* OpenGL.framework */,
+			);
+			name = GLFW;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,8 +190,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				025903131D77933E00EA6372 /* Assets.xcassets in Resources */,
-				025903161D77933E00EA6372 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,23 +200,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				025903111D77933E00EA6372 /* main.m in Sources */,
-				0259030E1D77933E00EA6372 /* AppDelegate.m in Sources */,
+				025903311D77940400EA6372 /* object.cpp in Sources */,
+				025903301D77940400EA6372 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		025903141D77933E00EA6372 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				025903151D77933E00EA6372 /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		025903181D77933E00EA6372 /* Debug */ = {
@@ -252,10 +299,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 259SD8597R;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					"$(PROJECT_DIR)/Bullet/include",
+				);
 				INFOPLIST_FILE = "Spud Engine 2/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"$(PROJECT_DIR)/Bullet/lib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.thinkworkx.Spud-Engine-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -265,10 +321,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 259SD8597R;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					"$(PROJECT_DIR)/Bullet/include",
+				);
 				INFOPLIST_FILE = "Spud Engine 2/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"$(PROJECT_DIR)/Bullet/lib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.thinkworkx.Spud-Engine-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
