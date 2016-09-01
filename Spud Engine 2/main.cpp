@@ -10,6 +10,7 @@
 #include <vector>
 #include <boost/thread.hpp>
 #include <btBulletDynamicsCommon.h>
+#include <glm/glm.hpp>
 
 #include "object.hpp"
 

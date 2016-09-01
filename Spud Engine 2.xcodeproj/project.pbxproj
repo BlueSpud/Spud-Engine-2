@@ -305,6 +305,7 @@
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					"$(PROJECT_DIR)/Bullet/include",
+					"$(PROJECT_DIR)/glm",
 				);
 				INFOPLIST_FILE = "Spud Engine 2/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -327,6 +328,7 @@
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					"$(PROJECT_DIR)/Bullet/include",
+					"$(PROJECT_DIR)/glm",
 				);
 				INFOPLIST_FILE = "Spud Engine 2/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -358,6 +360,7 @@
 				0259031C1D77933E00EA6372 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
