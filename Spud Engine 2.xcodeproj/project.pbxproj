@@ -38,6 +38,7 @@
 		025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
 		025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
 		025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
+		0294E15F1D78B06500E5500D /* SPool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SPool.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +82,7 @@
 		0259030B1D77933E00EA6372 /* Spud Engine 2 */ = {
 			isa = PBXGroup;
 			children = (
+				0294E1611D78B06700E5500D /* Memory */,
 				0259032C1D77940400EA6372 /* driver.hpp */,
 				0259032D1D77940400EA6372 /* main.cpp */,
 				0259032E1D77940400EA6372 /* object.cpp */,
@@ -129,6 +131,22 @@
 				025903241D7793EA00EA6372 /* OpenGL.framework */,
 			);
 			name = GLFW;
+			sourceTree = "<group>";
+		};
+		0294E1611D78B06700E5500D /* Memory */ = {
+			isa = PBXGroup;
+			children = (
+				0294E1621D78B64600E5500D /* Pool */,
+			);
+			name = Memory;
+			sourceTree = "<group>";
+		};
+		0294E1621D78B64600E5500D /* Pool */ = {
+			isa = PBXGroup;
+			children = (
+				0294E15F1D78B06500E5500D /* SPool.hpp */,
+			);
+			name = Pool;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
