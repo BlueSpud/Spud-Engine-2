@@ -12,13 +12,12 @@
 #include <iostream>
 #include <list>
 
+/******************************************************************************
+ *  Defition for the base object pool, needs to be subclassed to recycle      *
+ ******************************************************************************/
+
 template <class T>
 class SPool {
-    
-    private:
-    
-        std::list<T*>used_objects;
-        std::list<T*>avaliable_objects;
     
     public:
     
@@ -26,6 +25,11 @@ class SPool {
     
         T& getObject();
         void returnObject(T& object);
+    
+    private:
+    
+        std::list<T*>used_objects;
+        std::list<T*>avaliable_objects;
     
     protected:
     

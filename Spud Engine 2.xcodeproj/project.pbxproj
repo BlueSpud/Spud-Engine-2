@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B87E1D7A6BB100596526 /* SResourceManager.cpp */; };
+		0228B8841D7A779200596526 /* SMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B8821D7A779200596526 /* SMesh.cpp */; };
+		022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */; };
+		022ED1601D79205400DC1ECD /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = 022ED15F1D79205400DC1ECD /* test.txt */; };
 		025903251D7793EA00EA6372 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259031E1D7793EA00EA6372 /* libboost_system.a */; };
 		025903261D7793EA00EA6372 /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259031F1D7793EA00EA6372 /* libboost_thread.a */; };
 		025903271D7793EA00EA6372 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903201D7793EA00EA6372 /* libglfw3.a */; };
@@ -22,6 +26,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0228B87E1D7A6BB100596526 /* SResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SResourceManager.cpp; sourceTree = "<group>"; };
+		0228B87F1D7A6BB100596526 /* SResourceManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SResourceManager.hpp; sourceTree = "<group>"; };
+		0228B8821D7A779200596526 /* SMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMesh.cpp; sourceTree = "<group>"; };
+		0228B8831D7A779200596526 /* SMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SMesh.hpp; sourceTree = "<group>"; };
+		022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFileSystem.cpp; sourceTree = "<group>"; };
+		022ED1571D78FA3100DC1ECD /* SFileSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFileSystem.hpp; sourceTree = "<group>"; };
+		022ED15B1D79165A00DC1ECD /* SSubsystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSubsystem.hpp; sourceTree = "<group>"; };
+		022ED15F1D79205400DC1ECD /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.txt; sourceTree = "<group>"; };
 		025903091D77933E00EA6372 /* Spud Engine 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Spud Engine 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		025903171D77933E00EA6372 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0259031E1D7793EA00EA6372 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = /usr/local/lib/libboost_system.a; sourceTree = "<absolute>"; };
@@ -62,9 +74,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0228B87D1D7A6BA200596526 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				0228B8811D7A778300596526 /* Resources */,
+				0228B87E1D7A6BB100596526 /* SResourceManager.cpp */,
+				0228B87F1D7A6BB100596526 /* SResourceManager.hpp */,
+			);
+			name = Resource;
+			sourceTree = "<group>";
+		};
+		0228B8811D7A778300596526 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0228B8821D7A779200596526 /* SMesh.cpp */,
+				0228B8831D7A779200596526 /* SMesh.hpp */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		022ED1551D78FA2400DC1ECD /* File */ = {
+			isa = PBXGroup;
+			children = (
+				022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */,
+				022ED1571D78FA3100DC1ECD /* SFileSystem.hpp */,
+			);
+			name = File;
+			sourceTree = "<group>";
+		};
+		022ED1591D79164500DC1ECD /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				022ED15B1D79165A00DC1ECD /* SSubsystem.hpp */,
+			);
+			name = Engine;
+			sourceTree = "<group>";
+		};
+		022ED15E1D79202C00DC1ECD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				022ED15F1D79205400DC1ECD /* test.txt */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		025903001D77933E00EA6372 = {
 			isa = PBXGroup;
 			children = (
+				022ED15E1D79202C00DC1ECD /* Resources */,
 				0259031D1D7793CF00EA6372 /* Libraries */,
 				0259030B1D77933E00EA6372 /* Spud Engine 2 */,
 				0259030A1D77933E00EA6372 /* Products */,
@@ -82,6 +139,9 @@
 		0259030B1D77933E00EA6372 /* Spud Engine 2 */ = {
 			isa = PBXGroup;
 			children = (
+				0228B87D1D7A6BA200596526 /* Resource */,
+				022ED1591D79164500DC1ECD /* Engine */,
+				022ED1551D78FA2400DC1ECD /* File */,
 				0294E1611D78B06700E5500D /* Memory */,
 				0259032C1D77940400EA6372 /* driver.hpp */,
 				0259032D1D77940400EA6372 /* main.cpp */,
@@ -208,6 +268,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				022ED1601D79205400DC1ECD /* test.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,8 +279,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */,
 				025903311D77940400EA6372 /* object.cpp in Sources */,
+				0228B8841D7A779200596526 /* SMesh.cpp in Sources */,
 				025903301D77940400EA6372 /* main.cpp in Sources */,
+				0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

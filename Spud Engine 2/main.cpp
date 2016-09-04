@@ -13,6 +13,9 @@
 #include <glm/glm.hpp>
 
 #include "object.hpp"
+#include "SFileSystem.hpp"
+#include "SResourceManager.hpp"
+#include "SMesh.hpp"
 
 std::vector<object*>objects;
 object* a;
@@ -124,8 +127,20 @@ void wait(double time) {
     
 }
 
-int main(void) {
+int main(int argc, char* argv[]) {
     
+    // Subsystem startup
+    SFileSystem::startup();
+    SFileSystem::getDefaultRootDirectory(argv[0]);
+    
+    SResourceManager::startup();
+    SMesh::registerAllocators();
+    
+    SPath p = SPath("test.txt");
+    SResourceManager::getResource(p);
+    
+    
+ 
     GLFWwindow* window;
     
     /* Initialize the library */
@@ -199,5 +214,12 @@ int main(void) {
     }
     
     glfwTerminate();
+    
+    SResourceManager::shutdown();
+    
+    // Subsystem shutdown
+    SFileSystem::shutdown();
+    
+    
     return 0;
 }
