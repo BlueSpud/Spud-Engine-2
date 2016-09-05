@@ -12,24 +12,16 @@
 #include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
 
+#include <GLFW/glfw3.h>
+
 #include "object.hpp"
 #include "SFileSystem.hpp"
 #include "SResourceManager.hpp"
 #include "SMesh.hpp"
 
-std::vector<object*>objects;
-object* a;
+#include "SEvents.hpp"
 
-template <class T>
-T* createObject() {
-    
-    T* newObject = new T();
-    
-    objects.push_back(newObject);
-    
-    return newObject;
-    
-}
+object* a;
 
 double velocity_constant = 5;
 
@@ -119,34 +111,25 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     
 }
 
-void wait(double time) {
-    
-    double start = glfwGetTime();
-    
-    while (glfwGetTime() < start + time) {}
-    
-}
-
 int main(int argc, char* argv[]) {
     
     // Subsystem startup
+    SEventSystem::startup();
+    
     SFileSystem::startup();
     SFileSystem::getDefaultRootDirectory(argv[0]);
     
     SResourceManager::startup();
-    SMesh::registerAllocators();
     
-    SPath p = SPath("test.txt");
+    SPath p = SPath("tests.txt");
     SResourceManager::getResource(p);
-    
-    
  
     GLFWwindow* window;
     
     /* Initialize the library */
     if (!glfwInit())
         return -1;
-    
+
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(1280, 800, "Hello World", NULL, NULL);
     if (!window) {
@@ -160,7 +143,7 @@ int main(int argc, char* argv[]) {
     
     glfwSetKeyCallback(window, key_callback);
     
-    a = createObject<object>();
+    a = new object();
     
     double timePerTick = 1.0 / TICKS_PER_SECOND;
     double lastTime = glfwGetTime();
@@ -178,9 +161,9 @@ int main(int argc, char* argv[]) {
         
         int loops = 0;
         while (loopElapsedTime >= timePerTick && loops < maxUpdateCount) {
-            
-            for (int i = 0; i < objects.size(); i++)
-                objects[i]->update();
+
+            SEventTick e;
+            SEventSystem::postEvent(0, e);
             
             /* Poll for and process events */
             glfwPollEvents();
@@ -205,8 +188,7 @@ int main(int argc, char* argv[]) {
         glOrtho(0, 1280, 800, 0, -1, 1);
         glMatrixMode(GL_MODELVIEW);
 
-        for (int i = 0; i < objects.size(); i++)
-            objects[i]->render(interpolation);
+        a->render(interpolation);
         
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -215,10 +197,14 @@ int main(int argc, char* argv[]) {
     
     glfwTerminate();
     
-    SResourceManager::shutdown();
+    delete a;
     
     // Subsystem shutdown
+    SResourceManager::shutdown();
+    
     SFileSystem::shutdown();
+    
+    SEventSystem::shutdown();
     
     
     return 0;

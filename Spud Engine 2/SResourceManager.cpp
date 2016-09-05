@@ -9,8 +9,6 @@
 #include "SResourceManager.hpp"
 
 std::map<size_t, SResource*>SResourceManager::loaded_resources;
-std::map<size_t, SResource*(*)()>SResourceManager::allocators;
-
 std::hash<std::string>SResourceManager::hasher;
 
 /******************************************************************************
@@ -18,19 +16,68 @@ std::hash<std::string>SResourceManager::hasher;
  ******************************************************************************/
 
 SResource* SResource::allocate() { return nullptr; }
-void SResource::registerAllocators() { /* stub */ }
+SResource::~SResource() { /* stub */ }
 
 void SResource::upload() { /* stub */ }
+
+/******************************************************************************
+ *  Functions  for resource allocation manager                                *
+ ******************************************************************************/
+
+SResourceAllocatorManger* SResourceAllocatorManger::instance() {
+    
+    // Return a static instace of the manager
+    static SResourceAllocatorManger* _instance = NULL;
+    if (_instance == NULL)
+        _instance = new SResourceAllocatorManger();
+    
+    return _instance;
+    
+}
+
+bool SResourceAllocatorManger::registerAllocatorForExtension(const std::string& extension,  SResource* (*allocator)()) {
+    
+    // Keep track of the allocator for this extension
+    allocators[extension] = allocator;
+    return true;
+    
+}
 
 /******************************************************************************
  *  Functions  for resource manager                                           *
  ******************************************************************************/
 
-void SResourceManager::registerAllocatorForExtension(std::string extension, SResource*(*allocator)()) {
+void SResourceManager::startup() {
+
+    std::cout << "SResourceManager startup\n";
+
+}
+
+void SResourceManager::shutdown() {
+
+    std::cout << "SResourceManager shutdown\n";
     
-    // Add it to the collection of allocators
-    allocators.insert(std::pair<size_t, SResource*(*)()>(hasher(extension), allocator));
+    // Delete all the loaded resources
+    std::map<size_t, SResource*>::iterator i = loaded_resources.begin();
     
+    while (i != loaded_resources.end()) {
+        
+        SResource* resource = i->second;
+        
+        if (resource) {
+            
+            // Close the file and delete it from memory
+            delete loaded_resources[i->first];
+            
+        }
+        
+        i++;
+    }
+
+    
+    // Delete the instance of the allocation manager that we dynamically allocated
+    delete SResourceAllocatorManger::instance();
+
 }
 
 SResource* SResourceManager::getResource(const SPath& resource_path) {
@@ -43,21 +90,30 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
     
     if (!resource) {
         
-        size_t extension_hash = hasher(resource_path.getExtension());
-        SResource*(*allocator)()  = allocators[extension_hash];
+        // Get the allocator that handles this type of resource
+        SResource*(*allocator)()  = SResourceAllocatorManger::instance()->allocators[resource_path.getExtension()];
         
         if (allocator) {
         
             // Load the resource, upload it and keep it
             resource = allocator();
-            resource->load(resource_path);
-            resource->upload();
+            if (resource->load(resource_path)) {
+                
+                resource->upload();
+                loaded_resources.insert(std::pair<size_t, SResource*>(hash, resource));
+                
+                return resource;
+                
+            }
             
-            loaded_resources.insert(std::pair<size_t, SResource*>(hash, resource));
+            // Couldnt load the resource
+            delete resource;
             
         }
             
     }
+    
+    std::cout << "Could not load resource: " << resource_path.getPathAsString() << std::endl;
     
     return resource;
     

@@ -8,9 +8,20 @@
 
 #include "object.hpp"
 
-object::object() : scale_driver(&scale, 0.25, 20.0, 1.0) {}
+object::object() : scale_driver(&scale, 0.25, 20.0, 1.0) {
 
-void object::update() {
+    // Listen to events
+    event_listener.listenToEvent(0, boost::bind(&object::update, this, _1));
+
+}
+
+object::~object() {
+    
+    std::cout << "Object dealloc\n";
+    
+}
+
+void object::update(const SEvent& event) {
     
     position_x += velocity_x;
     position_y += velocity_y;

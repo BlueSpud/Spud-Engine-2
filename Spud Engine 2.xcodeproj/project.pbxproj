@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */; };
+		0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0202413D1D7C99130050E9D3 /* libboost_signals.a */; };
 		0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B87E1D7A6BB100596526 /* SResourceManager.cpp */; };
 		0228B8841D7A779200596526 /* SMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B8821D7A779200596526 /* SMesh.cpp */; };
 		022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */; };
@@ -26,6 +28,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SEventSystem.cpp; sourceTree = "<group>"; };
+		0202413B1D7C98D80050E9D3 /* SEventSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SEventSystem.hpp; sourceTree = "<group>"; };
+		0202413D1D7C99130050E9D3 /* libboost_signals.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_signals.a; path = ../../../../usr/local/lib/libboost_signals.a; sourceTree = "<group>"; };
+		0202415A1D7CECAD0050E9D3 /* SEvents.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SEvents.hpp; sourceTree = "<group>"; };
 		0228B87E1D7A6BB100596526 /* SResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SResourceManager.cpp; sourceTree = "<group>"; };
 		0228B87F1D7A6BB100596526 /* SResourceManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SResourceManager.hpp; sourceTree = "<group>"; };
 		0228B8821D7A779200596526 /* SMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMesh.cpp; sourceTree = "<group>"; };
@@ -50,7 +56,6 @@
 		025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
 		025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
 		025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
-		0294E15F1D78B06500E5500D /* SPool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SPool.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +71,7 @@
 				025903271D7793EA00EA6372 /* libglfw3.a in Frameworks */,
 				025903351D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a in Frameworks */,
 				025903291D7793EA00EA6372 /* IOKit.framework in Frameworks */,
+				0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */,
 				025903281D7793EA00EA6372 /* CoreVideo.framework in Frameworks */,
 				025903371D7794B500EA6372 /* libLinearMath_gmake_x64_release.a in Frameworks */,
 			);
@@ -74,6 +80,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		020241581D7CEC930050E9D3 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				0202415A1D7CECAD0050E9D3 /* SEvents.hpp */,
+				0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */,
+				0202413B1D7C98D80050E9D3 /* SEventSystem.hpp */,
+			);
+			name = Event;
+			sourceTree = "<group>";
+		};
 		0228B87D1D7A6BA200596526 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,10 +155,10 @@
 		0259030B1D77933E00EA6372 /* Spud Engine 2 */ = {
 			isa = PBXGroup;
 			children = (
+				020241581D7CEC930050E9D3 /* Event */,
 				0228B87D1D7A6BA200596526 /* Resource */,
 				022ED1591D79164500DC1ECD /* Engine */,
 				022ED1551D78FA2400DC1ECD /* File */,
-				0294E1611D78B06700E5500D /* Memory */,
 				0259032C1D77940400EA6372 /* driver.hpp */,
 				0259032D1D77940400EA6372 /* main.cpp */,
 				0259032E1D77940400EA6372 /* object.cpp */,
@@ -175,6 +191,7 @@
 		025903391D7794EC00EA6372 /* Boost */ = {
 			isa = PBXGroup;
 			children = (
+				0202413D1D7C99130050E9D3 /* libboost_signals.a */,
 				0259031E1D7793EA00EA6372 /* libboost_system.a */,
 				0259031F1D7793EA00EA6372 /* libboost_thread.a */,
 			);
@@ -191,22 +208,6 @@
 				025903241D7793EA00EA6372 /* OpenGL.framework */,
 			);
 			name = GLFW;
-			sourceTree = "<group>";
-		};
-		0294E1611D78B06700E5500D /* Memory */ = {
-			isa = PBXGroup;
-			children = (
-				0294E1621D78B64600E5500D /* Pool */,
-			);
-			name = Memory;
-			sourceTree = "<group>";
-		};
-		0294E1621D78B64600E5500D /* Pool */ = {
-			isa = PBXGroup;
-			children = (
-				0294E15F1D78B06500E5500D /* SPool.hpp */,
-			);
-			name = Pool;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -279,6 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */,
 				022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */,
 				025903311D77940400EA6372 /* object.cpp in Sources */,
 				0228B8841D7A779200596526 /* SMesh.cpp in Sources */,

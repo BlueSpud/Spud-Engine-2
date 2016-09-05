@@ -8,26 +8,38 @@
 
 #include "SMesh.hpp"
 
+/******************************************************************************
+ *  Registration for supported mesh extensions                                *
+ ******************************************************************************/
+
+REGISTER_RESOURCE_CLASS(txt, SMesh);
+REGISTER_RESOURCE_CLASS(obj, SMesh);
+
+/******************************************************************************
+ *  Functions for mesh                                                        *
+ ******************************************************************************/
+
 SResource* SMesh::allocate() { return new SMesh(); }
 
-void SMesh::registerAllocators() {
-    
-    // Register types of files that can be handled by this class
-    SResourceManager::registerAllocatorForExtension("txt", SMesh::allocate);
-    SResourceManager::registerAllocatorForExtension("obj", SMesh::allocate);
-    
-}
-
-void SMesh::load(const SPath& path) {
+bool SMesh::load(const SPath& path) {
 
     SFile* file = SFileSystem::loadFile(path);
-    std::string t;
     
-    std::cout << "\n\n";
-    while (file->getNextTokenWithDeliminator('\n', t))
-        std::cout << t << std::endl;
-    std::cout << "\n\n";
+    if (file) {
+    
+        std::string t;
+    
+        std::cout << "\n\n";
+        while (file->getNextTokenWithDeliminator('\n', t))
+            std::cout << t << std::endl;
+        std::cout << "\n\n";
+        
+        return true;
+        
+    }
 
+    return false;
+    
 }
 
 void SMesh::unload() {}

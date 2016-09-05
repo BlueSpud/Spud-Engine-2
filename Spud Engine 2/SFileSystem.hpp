@@ -16,6 +16,7 @@
 #include <vector>
 
 #include <dirent.h>
+#include <unistd.h>
 
 #include "SSubsystem.hpp"
 
@@ -104,10 +105,11 @@ class SFileSystem : public SSubsystem {
         static void closeFile(SFile* file);
     
         static std::vector<SPath> listDirectory(SPath& path);
+        static bool fileExitsAtPath(const SPath& path);
     
     private:
     
-        static std::map<unsigned long, SFile*>loaded_files;
+        static std::map<size_t, SFile*>loaded_files;
         static std::hash<std::string>hasher;
     
 };

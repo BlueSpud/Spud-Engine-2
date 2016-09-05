@@ -120,7 +120,7 @@ void SFile::load(const std::string& _path) {
 void SFile::close() {
     
     // Close the stream if its open
-    if (in_stream)
+    if (in_stream.is_open())
         in_stream.close();
 }
 
@@ -188,7 +188,7 @@ void SFileSystem::shutdown() {
         
             // Close the file and delete it from memory
             file->close();
-            delete loaded_files[i->first];
+            delete file;
             
         }
         
@@ -243,7 +243,7 @@ SFile* SFileSystem::loadFile(const SPath& path) {
             SFile* new_file = new SFile(full_path);
     
             // Make sure that we are good
-            if (!new_file->bad()) {
+            if (fileExitsAtPath(path)) {
         
                 // Add it to the registry of loaded files
                 new_file->hash = hash;
@@ -253,11 +253,13 @@ SFile* SFileSystem::loadFile(const SPath& path) {
                 return new_file;
         
             }
-        
-            return nullptr;
+            
+            // Get rid of it if we didnt need it
+            delete new_file;
         
         }
         
+        // Return the already loaded file
         return file;
         
     }
@@ -282,6 +284,7 @@ void SFileSystem::closeFile(SFile* file) {
 
     // Get rid of it
     file->close();
+    delete file;
     loaded_files.erase(i);
     
 }
@@ -310,4 +313,13 @@ std::vector<SPath> SFileSystem::listDirectory(SPath& path) {
     
     return file_paths;
         
+}
+
+bool SFileSystem::fileExitsAtPath(const SPath& path) {
+    
+    // Check if it exists
+    if (access(path.path_str.c_str(), F_OK ) != -1)
+        return true;
+    return false;
+    
 }

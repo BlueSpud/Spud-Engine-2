@@ -11,16 +11,19 @@
 
 #include "SResourceManager.hpp"
 
+/******************************************************************************
+ *  Definition for mesh                                                       *
+ ******************************************************************************/
+
 class SMesh : public SResource {
     
     public:
     
         static SResource* allocate();
-        static void registerAllocators();
     
     protected:
     
-        virtual void load(const SPath& path);
+        virtual bool load(const SPath& path);
         virtual void unload();
     
         virtual void upload();

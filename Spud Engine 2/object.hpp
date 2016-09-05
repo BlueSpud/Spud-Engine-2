@@ -14,6 +14,7 @@
 #include <GLFW/glfw3.h>
 
 #include "driver.hpp"
+#include "SEventSystem.hpp"
 
 class object {
     
@@ -22,11 +23,14 @@ class object {
     
         double scale = 1.0;
     
+        SEventListener event_listener;
+    
     public:
     
         object();
+        ~object();
     
-        void update();
+        void update(const SEvent& event);
         void render(double interpolation);
     
         double velocity_x = 0.0;
