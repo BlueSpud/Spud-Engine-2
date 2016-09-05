@@ -318,7 +318,7 @@ std::vector<SPath> SFileSystem::listDirectory(SPath& path) {
 bool SFileSystem::fileExitsAtPath(const SPath& path) {
     
     // Check if it exists
-    if (access(path.path_str.c_str(), F_OK ) != -1)
+    if (access((root_directory + path.path_str).c_str(), F_OK ) != -1)
         return true;
     return false;
     

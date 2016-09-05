@@ -7,11 +7,12 @@
 //
 
 #include "object.hpp"
+#include "SEvents.hpp"
 
 object::object() : scale_driver(&scale, 0.25, 20.0, 1.0) {
 
     // Listen to events
-    event_listener.listenToEvent(0, boost::bind(&object::update, this, _1));
+    event_listener.listenToEvent(EVENT_TICK, boost::bind(&object::update, this, _1));
 
 }
 

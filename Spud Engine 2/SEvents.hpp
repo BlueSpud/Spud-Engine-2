@@ -9,8 +9,13 @@
 #ifndef SEvents_h
 #define SEvents_h
 
-#include "SEventSystem.hpp"
+/******************************************************************************
+ *  Standard event definition                                                 *
+ ******************************************************************************/
 
+struct SEvent {};
+
+#define EVENT_TICK 0
 struct SEventTick : SEvent {};
 
 #endif /* SEvents_h */

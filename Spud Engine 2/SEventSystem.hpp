@@ -14,8 +14,7 @@
 #include <boost/signals2.hpp>
 
 #include "SSubsystem.hpp"
-
-struct SEvent {};
+#include "SEvents.hpp"
 
 /******************************************************************************
  *  Definition for event listener                                             *

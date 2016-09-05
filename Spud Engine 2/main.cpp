@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
     
     SResourceManager::startup();
     
-    SPath p = SPath("tests.txt");
+    SPath p = SPath("test.txt");
     SResourceManager::getResource(p);
  
     GLFWwindow* window;
@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
         while (loopElapsedTime >= timePerTick && loops < maxUpdateCount) {
 
             SEventTick e;
-            SEventSystem::postEvent(0, e);
+            SEventSystem::postEvent(EVENT_TICK, e);
             
             /* Poll for and process events */
             glfwPollEvents();
