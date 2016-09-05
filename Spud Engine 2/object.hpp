@@ -11,9 +11,9 @@
 
 #include <iostream>
 #include <math.h>
-#include <GLFW/glfw3.h>
 
 #include "driver.hpp"
+#include "SGL.hpp"
 #include "SEventSystem.hpp"
 
 class object {

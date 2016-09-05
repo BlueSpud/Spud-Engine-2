@@ -9,11 +9,10 @@
 #ifndef driver_hpp
 #define driver_hpp
 
-// Temp
-#define TICKS_PER_SECOND 30.0
-
 #include <iostream>
 #include <math.h>
+
+#include "STime.hpp"
 
 /******************************************************************************
  *  Definition for default value driver class                                 *

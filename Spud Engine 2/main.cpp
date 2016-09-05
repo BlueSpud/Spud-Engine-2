@@ -12,14 +12,10 @@
 #include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
 
-#include <GLFW/glfw3.h>
-
 #include "object.hpp"
 #include "SFileSystem.hpp"
 #include "SResourceManager.hpp"
 #include "SMesh.hpp"
-
-#include "SEvents.hpp"
 
 object* a;
 
@@ -111,6 +107,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     
 }
 
+void test() {
+    
+    SLog::verboseLog(SVerbosityLevel::Debug, "Testing timer function");
+    
+}
+
 int main(int argc, char* argv[]) {
     
     // Set verbosity level
@@ -118,6 +120,10 @@ int main(int argc, char* argv[]) {
     
     // Subsystem startup
     SEventSystem::startup();
+    
+    SGL::startup();
+    
+    STime::startup();
     
     SFileSystem::startup();
     SFileSystem::getDefaultRootDirectory(argv[0]);
@@ -127,43 +133,28 @@ int main(int argc, char* argv[]) {
     SPath p = SPath("test.txt");
     SResourceManager::getResource(p);
  
-    GLFWwindow* window;
-    
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
-
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1280, 800, "Hello World", NULL, NULL);
-    if (!window) {
-        
-        glfwTerminate();
-        return -1;
-    }
-    
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-    
-    glfwSetKeyCallback(window, key_callback);
+    SGL::setKeyCallback(key_callback);
     
     a = new object();
     
-    double timePerTick = 1.0 / TICKS_PER_SECOND;
-    double lastTime = glfwGetTime();
     double loopElapsedTime = 0.0;
-    
     int maxUpdateCount = 5;
     
+    SStopwatch stopwatch;
+    stopwatch.start();
+    
+    STimer t = STimer(boost::bind(&test), 2.0, true);
+    
     /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window)) {
+    while (SGL::windowGood()) {
         
-        double elapsed = glfwGetTime() - lastTime;
-        lastTime = glfwGetTime();
-
+        // Manage elapsed time for the loop
+        double elapsed = stopwatch.stop();
+        stopwatch.start();
         loopElapsedTime += elapsed;
         
         int loops = 0;
-        while (loopElapsedTime >= timePerTick && loops < maxUpdateCount) {
+        while (loopElapsedTime >= TIME_PER_TICK && loops < maxUpdateCount) {
 
             SEventTick e;
             SEventSystem::postEvent(EVENT_TICK, e);
@@ -171,7 +162,7 @@ int main(int argc, char* argv[]) {
             /* Poll for and process events */
             glfwPollEvents();
             
-            loopElapsedTime -= timePerTick;
+            loopElapsedTime -= TIME_PER_TICK;
             
             loops++;
             
@@ -180,7 +171,7 @@ int main(int argc, char* argv[]) {
         if (loops == maxUpdateCount)
             SLog::verboseLog(SVerbosityLevel::Critical, "Cant keep up with %i ticks per second!", TICKS_PER_SECOND);
         
-        double interpolation = loopElapsedTime / timePerTick;
+        double interpolation = loopElapsedTime / TIME_PER_TICK;
         
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
@@ -194,7 +185,7 @@ int main(int argc, char* argv[]) {
         a->render(interpolation);
         
         /* Swap front and back buffers */
-        glfwSwapBuffers(window);
+        SGL::swapBuffers();
         
     }
     
@@ -221,6 +212,10 @@ int main(int argc, char* argv[]) {
     SLog::writeLogToFile();
     
     SFileSystem::shutdown();
+    
+    STime::shutdown();
+    
+    SGL::shutdown();
     
     SEventSystem::shutdown();
     

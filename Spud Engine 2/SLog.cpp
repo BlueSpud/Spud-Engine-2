@@ -15,6 +15,10 @@ const char* verbosity_strs[] = {"Critical", "Warning", "Debug"};
 SVerbosityLevel SLog::verbosity_level = SVerbosityLevel::Critical;
 std::stringstream SLog::log_stream;
 
+/******************************************************************************
+ *  Functions for logging system                                              *
+ ******************************************************************************/
+
 void SLog::setVerbosityLevel(SVerbosityLevel level) { verbosity_level = level; }
 
 void SLog::verboseLog(SVerbosityLevel verbosity, const char* format, ...) {
@@ -48,6 +52,7 @@ void SLog::verboseLog(SVerbosityLevel verbosity, const char* format, ...) {
 
 void SLog::writeLogToFile() {
     
+    // Write out everything we have logged
     std::string log_str = log_stream.str();
     SPath log_path = SPath("Spud Engine.log");
     
