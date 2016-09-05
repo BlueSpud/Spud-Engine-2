@@ -29,10 +29,10 @@ bool SMesh::load(const SPath& path) {
     
         std::string t;
     
-        std::cout << "\n\n";
+        SLog::verboseLog(SVerbosityLevel::Debug, "\n");
         while (file->getNextTokenWithDeliminator('\n', t))
-            std::cout << t << std::endl;
-        std::cout << "\n\n";
+            SLog::verboseLog(SVerbosityLevel::Debug, "%s", t.c_str());
+        SLog::verboseLog(SVerbosityLevel::Debug, "\n");
         
         return true;
         

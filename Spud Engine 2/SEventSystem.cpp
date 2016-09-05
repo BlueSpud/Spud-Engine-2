@@ -48,13 +48,13 @@ std::map<int, boost::signals2::signal<void(const SEvent&)>>SEventSystem::signals
 
 void SEventSystem::startup() {
 
-    std::cout << "SEventSystem startup\n";
+    SLog::verboseLog(SVerbosityLevel::Debug, "SEventSystem startup");
     
 }
 
 void SEventSystem::shutdown() {
     
-    std::cout << "SEventSystem shutdown\n";
+    SLog::verboseLog(SVerbosityLevel::Debug, "SEventSystem shutdown");
 
 }
 

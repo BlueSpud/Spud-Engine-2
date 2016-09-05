@@ -28,7 +28,6 @@ class object {
     public:
     
         object();
-        ~object();
     
         void update(const SEvent& event);
         void render(double interpolation);

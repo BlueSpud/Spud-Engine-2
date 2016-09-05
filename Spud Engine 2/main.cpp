@@ -113,6 +113,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 int main(int argc, char* argv[]) {
     
+    // Set verbosity level
+    SLog::setVerbosityLevel(SVerbosityLevel::Debug);
+    
     // Subsystem startup
     SEventSystem::startup();
     
@@ -175,7 +178,7 @@ int main(int argc, char* argv[]) {
         }
         
         if (loops == maxUpdateCount)
-            std::cout << "Cant keep up with " << TICKS_PER_SECOND << "UPS!\n";
+            SLog::verboseLog(SVerbosityLevel::Critical, "Cant keep up with %i ticks per second!", TICKS_PER_SECOND);
         
         double interpolation = loopElapsedTime / timePerTick;
         
@@ -202,10 +205,24 @@ int main(int argc, char* argv[]) {
     // Subsystem shutdown
     SResourceManager::shutdown();
     
+    // Write out the log to a file, make a new path where we can edit if we are on macOS
+    #ifdef __APPLE__
+    
+    SPath log_root_path = SPath(argv[0]);
+    
+    log_root_path.removeLastPathComponent();
+    log_root_path.removeLastPathComponent();
+    log_root_path.removeLastPathComponent();
+    log_root_path.removeLastPathComponent();
+    
+    #endif
+    
+    SFileSystem::setRootDirectory(log_root_path);
+    SLog::writeLogToFile();
+    
     SFileSystem::shutdown();
     
     SEventSystem::shutdown();
-    
     
     return 0;
 }

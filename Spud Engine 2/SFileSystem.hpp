@@ -99,13 +99,15 @@ class SFileSystem : public SSubsystem {
         static void shutdown();
     
         static void getDefaultRootDirectory(std::string argv_0);
-        static void setRoodDirectory(const SPath& _root_directory);
+        static void setRootDirectory(const SPath& _root_directory);
     
         static SFile* loadFile(const SPath& path);
         static void closeFile(SFile* file);
     
         static std::vector<SPath> listDirectory(SPath& path);
         static bool fileExitsAtPath(const SPath& path);
+    
+        static void writeStringToFile(const SPath& path, const std::string& str);
     
     private:
     

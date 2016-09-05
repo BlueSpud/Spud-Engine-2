@@ -49,13 +49,11 @@ bool SResourceAllocatorManger::registerAllocatorForExtension(const std::string& 
 
 void SResourceManager::startup() {
 
-    std::cout << "SResourceManager startup\n";
+    SLog::verboseLog(SVerbosityLevel::Debug, "SResourceManager startup");
 
 }
 
 void SResourceManager::shutdown() {
-
-    std::cout << "SResourceManager shutdown\n";
     
     // Delete all the loaded resources
     std::map<size_t, SResource*>::iterator i = loaded_resources.begin();
@@ -77,6 +75,8 @@ void SResourceManager::shutdown() {
     
     // Delete the instance of the allocation manager that we dynamically allocated
     delete SResourceAllocatorManger::instance();
+    
+    SLog::verboseLog(SVerbosityLevel::Debug, "SEventSystem startup");
 
 }
 
@@ -113,7 +113,7 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
             
     }
     
-    std::cout << "Could not load resource: " << resource_path.getPathAsString() << std::endl;
+    SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s", resource_path.getPathAsString().c_str());
     
     return resource;
     

@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+#include "SLog.hpp"
+
 class SSubsystem {
     
     public:

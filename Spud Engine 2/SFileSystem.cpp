@@ -172,7 +172,7 @@ bool SFile::bad() {
 void SFileSystem::startup() {
     
     // No startup required for file system
-    std::cout << "SFileSystem Initialized\n";
+    SLog::verboseLog(SVerbosityLevel::Debug, "SFileSystem startup");
 }
 
 void SFileSystem::shutdown() {
@@ -195,7 +195,7 @@ void SFileSystem::shutdown() {
         i++;
     }
 
-    std::cout << "SFileSystem shutdown\n";
+    SLog::verboseLog(SVerbosityLevel::Debug, "SFileSystem startup");
 
 }
 
@@ -214,11 +214,11 @@ void SFileSystem::getDefaultRootDirectory(std::string argv_0) {
     // Append the resources folder
     root_filesystem_path.appendPathComponent("Resources/");
     
-    setRoodDirectory(root_filesystem_path);
+    setRootDirectory(root_filesystem_path);
     
 }
 
-void SFileSystem::setRoodDirectory(const SPath& _root_directory) {
+void SFileSystem::setRootDirectory(const SPath& _root_directory) {
     
     // Save the new root directory
     if (_root_directory.is_directory)
@@ -321,5 +321,19 @@ bool SFileSystem::fileExitsAtPath(const SPath& path) {
     if (access((root_directory + path.path_str).c_str(), F_OK ) != -1)
         return true;
     return false;
+    
+}
+
+void SFileSystem::writeStringToFile(const SPath& path, const std::string& str) {
+    
+    // Write the contents of a string out to a file
+    std::ofstream output_stream = std::ofstream(root_directory + path.path_str);
+    
+    if (!output_stream.bad())
+        output_stream << str;
+    
+    
+    // Close it
+    output_stream.close();
     
 }
