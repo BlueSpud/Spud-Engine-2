@@ -49,3 +49,22 @@ bool SGL::windowGood() { return !glfwWindowShouldClose(window); }
 void SGL::swapBuffers() { glfwSwapBuffers(window); }
 
 void SGL::setKeyCallback(GLFWkeyfun func) { glfwSetKeyCallback(window, func); }
+
+/******************************************************************************
+ *  Functions for operations pertaining to graphics math                      *
+ ******************************************************************************/
+
+glm::mat4 SGL::transformToMatrix(const STransform& transform) {
+    
+    glm::mat4 to_return = glm::mat4(1);
+    
+    //Perform the operations on the matrix
+    glm::translate(to_return, transform.translation);
+    glm::rotate(to_return, transform.rotation.y, x_axis);
+    glm::rotate(to_return, transform.rotation.x, y_axis);
+    glm::rotate(to_return, transform.rotation.z, z_axis);
+    glm::scale(to_return, transform.scale);
+    
+    return to_return;
+    
+}
