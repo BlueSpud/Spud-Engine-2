@@ -191,6 +191,7 @@ int main(int argc, char* argv[]) {
     
     glfwTerminate();
     
+    std::cout << "A test line of code\n";
     delete a;
     
     // Subsystem shutdown
