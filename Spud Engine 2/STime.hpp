@@ -17,7 +17,6 @@
 #include "SEventSystem.hpp"
 
 #define TICKS_PER_SECOND 30
-#define TIME_PER_TICK 1.0f / TICKS_PER_SECOND
 
 /******************************************************************************
  *  Definition for time system                                                *

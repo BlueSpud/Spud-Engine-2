@@ -106,12 +106,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     
 }
 
-void test() {
-    
-    SLog::verboseLog(SVerbosityLevel::Debug, "Testing timer function");
-    
-}
-
 int main(int argc, char* argv[]) {
     
     // Set verbosity level
@@ -137,12 +131,11 @@ int main(int argc, char* argv[]) {
     a = new object();
     
     double loopElapsedTime = 0.0;
+    double time_tick = 1.0 / TICKS_PER_SECOND;
     int maxUpdateCount = 5;
     
     SStopwatch stopwatch;
     stopwatch.start();
-    
-    STimer t = STimer(boost::bind(&test), 2.0, true);
     
     /* Loop until the user closes the window */
     while (SGL::windowGood()) {
@@ -153,7 +146,7 @@ int main(int argc, char* argv[]) {
         loopElapsedTime += elapsed;
         
         int loops = 0;
-        while (loopElapsedTime >= TIME_PER_TICK && loops < maxUpdateCount) {
+        while (loopElapsedTime >= time_tick && loops < maxUpdateCount) {
 
             SEventTick e;
             SEventSystem::postEvent(EVENT_TICK, e);
@@ -161,7 +154,7 @@ int main(int argc, char* argv[]) {
             /* Poll for and process events */
             glfwPollEvents();
             
-            loopElapsedTime -= TIME_PER_TICK;
+            loopElapsedTime -= time_tick;
             
             loops++;
             
@@ -170,7 +163,7 @@ int main(int argc, char* argv[]) {
         if (loops == maxUpdateCount)
             SLog::verboseLog(SVerbosityLevel::Critical, "Cant keep up with %i ticks per second!", TICKS_PER_SECOND);
         
-        double interpolation = loopElapsedTime / TIME_PER_TICK;
+        double interpolation = loopElapsedTime / time_tick;
         
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
@@ -190,7 +183,6 @@ int main(int argc, char* argv[]) {
     
     glfwTerminate();
     
-    std::cout << "A test line of code\n";
     delete a;
     
     // Subsystem shutdown
