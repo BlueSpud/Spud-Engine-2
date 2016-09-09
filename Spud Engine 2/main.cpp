@@ -138,7 +138,7 @@ int main(int argc, char* argv[]) {
     stopwatch.start();
     
     /* Loop until the user closes the window */
-    while (SGL::windowGood()) {
+    while (SGL::windowIsGood()) {
         
         // Manage elapsed time for the loop
         double elapsed = stopwatch.stop();

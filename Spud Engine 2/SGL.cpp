@@ -18,16 +18,12 @@ void SGL::startup() {
 
     SLog::verboseLog(SVerbosityLevel::Debug, "SGL startup");
     
-    /* Initialize the library */
+    // Initialize GLFW
     if (!glfwInit())
         exit(0);
     
-    // Check if the window was able to be made
-    if (!(window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Spud Engine 2", NULL, NULL))) {
-        
-        glfwTerminate();
-        exit(0);
-    }
+    // Create a window
+    createWindow();
     
     // Make the current context
     glfwMakeContextCurrent(window);
@@ -44,7 +40,58 @@ void SGL::shutdown() {
 
 }
 
-bool SGL::windowGood() { return !glfwWindowShouldClose(window); }
+void SGL::createWindow() {
+    
+    // Set parameters of the window and the context
+    if (REQUEST_OPENGL_32) {
+        
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        
+    }
+    
+    // Turn of VSync by default
+    glfwSwapInterval(0);
+    
+    if (!(window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Spud Engine 2", NULL, NULL))) {
+        
+        if (REQUEST_OPENGL_32) {
+            
+            // Make the context earlier, did not have a GPU to supprot OpenGL 3.2+
+            SLog::verboseLog(SVerbosityLevel::Warning, "Failed to create OpenGL 3.2 context, GPU does not support it");
+        
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_FALSE);
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
+            
+            if (!(window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Spud Engine 2", NULL, NULL))) {
+                
+                // Window creation failed
+                SLog::verboseLog(SVerbosityLevel::Critical, "Failed to create OpenGL context");
+                shutdown();
+                
+            }
+            
+        } else {
+            
+            // Window creation failed
+            SLog::verboseLog(SVerbosityLevel::Critical, "Failed to create OpenGL context");
+            shutdown();
+            
+        }
+    }
+
+    
+    SLog::verboseLog(SVerbosityLevel::Debug, "Created a window with an OpenGL context version of: %i.%i",
+                     glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR),
+                     glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR));
+    
+}
+
+bool SGL::windowIsGood() { return !glfwWindowShouldClose(window); }
 
 void SGL::swapBuffers() { glfwSwapBuffers(window); }
 

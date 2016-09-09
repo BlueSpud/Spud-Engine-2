@@ -20,6 +20,8 @@
 #define WINDOW_WIDTH 1440
 #define WINDOW_HEIGHT 800
 
+#define REQUEST_OPENGL_32 0
+
 /******************************************************************************
  *  Definition for transform                                                  *
  ******************************************************************************/
@@ -43,7 +45,9 @@ class SGL : public SSubsystem {
         static void startup();
         static void shutdown();
     
-        static bool windowGood();
+        static void createWindow();
+    
+        static bool windowIsGood();
     
         static void swapBuffers();
     
