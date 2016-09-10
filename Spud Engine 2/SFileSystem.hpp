@@ -40,8 +40,9 @@ class SPath {
         const std::string& getExtension() const;
         const std::string& getFilename() const;
         const std::string& getPathAsString() const;
+        std::string getPathAsAbsolutePath() const;
     
-        bool getIsDirectory();
+        bool getIsDirectory() const;
     
         void appendPathComponent(std::string new_component);
         void removeLastPathComponent();

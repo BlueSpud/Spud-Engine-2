@@ -22,6 +22,15 @@ REGISTER_RESOURCE_CLASS(obj, SModel);
 
 SResource* SModel::allocate() { return new SModel(); }
 
+void SModel::render() {
+    
+    // Bind the array and then draw
+    glBindVertexArray(array_id);
+    glDrawArrays(GL_TRIANGLES, 0, face_count * 3);
+    glBindVertexArray(0);
+    
+}
+
 bool SModel::load(const SPath& path) {
 
     SFile* file = SFileSystem::loadFile(path);
@@ -108,8 +117,6 @@ bool SModel::load(const SPath& path) {
             tex_coords[i*6 + 4] = _tex_coords[ti.z].x; tex_coords[i*6 + 5] = _tex_coords[ti.z].y;
             
         }
-        
-        face_count = (unsigned int)_indicies.size() * 3;
 
         return true;
         
@@ -122,7 +129,7 @@ bool SModel::load(const SPath& path) {
 void SModel::unload() {
 
     // Check if we havent already deleted these already, we might not have uploaded it yet
-    if (!uploded) {
+    if (!uploaded) {
         
         delete verts;
         delete normals;
@@ -132,10 +139,8 @@ void SModel::unload() {
     } else {
         
         // We had already uploaded the GPU
-        glDeleteBuffers(1, &verts_id);
-        glDeleteBuffers(1, &normals_id);
-        glDeleteBuffers(1, &tex_coords_id);
-        //glDeleteBuffers(1, &indicies_id);
+        glDeleteBuffers(buffer_count, buffer_ids);
+        glDeleteVertexArrays(1, &array_id);
         
     }
 
@@ -143,24 +148,35 @@ void SModel::unload() {
 
 void SModel::upload() {
 
-    // Generate the buffers and fill them with their data
-    glGenBuffers(1, &verts_id);
-    glBindBuffer(GL_ARRAY_BUFFER, verts_id);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * face_count, verts, GL_STATIC_DRAW);
+    // Generate the array and the buffers
+    glGenVertexArrays(1, &array_id);
+    glGenBuffers(buffer_count, buffer_ids);
     
+    // Bind the array and fill the buffers
+    glBindVertexArray(array_id);
     
-    glGenBuffers(1, &normals_id);
-    glBindBuffer(GL_ARRAY_BUFFER, normals_id);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * face_count, normals, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer_ids[buffer_position]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_count * 9, verts, GL_STATIC_DRAW);
     
-    glGenBuffers(1, &tex_coords_id);
-    glBindBuffer(GL_ARRAY_BUFFER, tex_coords_id);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * face_count, tex_coords, GL_STATIC_DRAW);
+    // Tell OpenGL how to read this
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffer_ids[buffer_normal]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_count * 9, normals, GL_STATIC_DRAW);
+
+    // Tell OpenGL how to read this
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffer_ids[buffer_tex_coord]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_count * 6, tex_coords, GL_STATIC_DRAW);
     
-    //glGenBuffers(1, &indicies_id);
+    // Tell OpenGL how to read this
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
     
-    // Clear the buffer just in case
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
     
     // Delete the buffers in regular RAM
     delete verts;
@@ -169,6 +185,6 @@ void SModel::upload() {
     //delete indicies;
 
     // Make sure we know if we uploaded
-    uploded = true;
+    uploaded = true;
 
 }

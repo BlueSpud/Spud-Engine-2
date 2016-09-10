@@ -18,7 +18,7 @@ std::hash<std::string>SResourceManager::hasher;
 SResource* SResource::allocate() { return nullptr; }
 SResource::~SResource() { /* stub */ }
 
-void SResource::upload() { uploded = true; }
+void SResource::upload() { uploaded = true; }
 
 /******************************************************************************
  *  Functions  for resource allocation manager                                *
@@ -86,9 +86,7 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
     size_t hash = hasher(resource_path.getPathAsString());
     
     // Check for loaded resource
-    SResource* resource = loaded_resources[hash];
-    
-    if (!resource) {
+    if (!loaded_resources.count(hash)) {
         
         // Get the allocator that handles this type of resource
         SResource*(*allocator)()  = SResourceAllocatorManger::instance()->allocators[resource_path.getExtension()];
@@ -96,7 +94,7 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
         if (allocator) {
         
             // Load the resource, upload it and keep it
-            resource = allocator();
+            SResource* resource = allocator();
             if (resource->load(resource_path)) {
                 
                 resource->upload();
@@ -109,12 +107,13 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
             // Couldnt load the resource
             delete resource;
             
+            SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s", resource_path.getPathAsString().c_str());
+            return nullptr;
+            
         }
             
     }
     
-    SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s", resource_path.getPathAsString().c_str());
-    
-    return resource;
+    return loaded_resources[hash];
     
 }

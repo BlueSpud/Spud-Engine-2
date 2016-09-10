@@ -10,6 +10,9 @@
 #define SGL_hpp
 
 #include <iostream>
+#include <map>
+
+#define GLFW_INCLUDE_GLCOREARB
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
@@ -19,8 +22,6 @@
 
 #define WINDOW_WIDTH 1440
 #define WINDOW_HEIGHT 800
-
-#define REQUEST_OPENGL_32 0
 
 /******************************************************************************
  *  Definition for transform                                                  *
@@ -33,6 +34,13 @@ struct STransform {
     glm::vec3 scale = glm::vec3(1.0);
     
 };
+
+/******************************************************************************
+ *  Definition for matrix types/locations                                     *
+ ******************************************************************************/
+
+#define MAT_MODELVIEW_MATRIX "mat_model_view"
+#define MAT_PROJECTION_MATRIX "mat_projection"
 
 /******************************************************************************
  *  Definition for 3D viewport                                                *
@@ -84,9 +92,21 @@ class SGL : public SSubsystem {
         static glm::mat4 transformToMatrix(const STransform& transform);
     
         static glm::mat4 getProjectionMatrix(const SViewport3D& viewport);
-        static void setUp3DViewport(const SViewport3D& viewport);
+        static void setUpViewport(const SViewport3D& viewport);
+    
+/******************************************************************************
+*  Definition for functions (and data) to manage matrices on the GPU          *
+******************************************************************************/
+    
+        static void loadMatrix(const glm::mat4& mat, const char* mat_name);
+        static void mulMatrix(const glm::mat4& mat, const char* mat_name);
+        static void clearMatrix(const char* mat_name);
     
     private:
+    
+        static void uploadMatrix(const glm::mat4& mat, const char* mat_name);
+    
+        static std::map<const char*, glm::mat4>matrices;
     
         static GLFWwindow* window;
     

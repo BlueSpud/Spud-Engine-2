@@ -7,8 +7,10 @@
 //
 
 #include "SGL.hpp"
+#include "SShader.hpp"
 
 GLFWwindow* SGL::window;
+std::map<const char*, glm::mat4>SGL::matrices;
 
 /******************************************************************************
  *  Functions for OpenGL system                                               *
@@ -43,51 +45,28 @@ void SGL::shutdown() {
 void SGL::createWindow() {
     
     // Set parameters of the window and the context
-    if (REQUEST_OPENGL_32) {
-        
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        
-    }
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
     // Turn of VSync by default
     glfwSwapInterval(0);
     
     if (!(window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Spud Engine 2", NULL, NULL))) {
         
-        if (REQUEST_OPENGL_32) {
-            
-            // Make the context earlier, did not have a GPU to supprot OpenGL 3.2+
-            SLog::verboseLog(SVerbosityLevel::Warning, "Failed to create OpenGL 3.2 context, GPU does not support it");
-        
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_FALSE);
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
-            
-            if (!(window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Spud Engine 2", NULL, NULL))) {
-                
-                // Window creation failed
-                SLog::verboseLog(SVerbosityLevel::Critical, "Failed to create OpenGL context");
-                shutdown();
-                
-            }
-            
-        } else {
-            
-            // Window creation failed
-            SLog::verboseLog(SVerbosityLevel::Critical, "Failed to create OpenGL context");
-            shutdown();
-            
-        }
+        // For some reason we couldnt make the context, log it and then shutdown
+        SLog::verboseLog(SVerbosityLevel::Warning, "Failed to create an OpenGL context of at least version 3.2. Your GPU may not support this version of OpenGL, try updating your drivers");
+        shutdown();
+  
     }
 
-    
     SLog::verboseLog(SVerbosityLevel::Debug, "Created a window with an OpenGL context version of: %i.%i",
                      glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR),
                      glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR));
+    
+    // Refresh once to show it immediately
+    glfwSwapBuffers(window);
     
 }
 
@@ -101,35 +80,83 @@ void SGL::setKeyCallback(GLFWkeyfun func) { glfwSetKeyCallback(window, func); }
  *  Functions for operations pertaining to graphics math                      *
  ******************************************************************************/
 
+void SGL::uploadMatrix(const glm::mat4& mat, const char* mat_name) {
+    
+    // Get the shader if it exists
+    SShader* shader = SShader::getBoundShader();
+    if (shader) {
+        
+        // Upload the matrix
+        glUniformMatrix4fv(SShader::getUniformLocation(shader, mat_name), 1, GL_FALSE, &mat[0][0]);
+        
+    }
+
+}
+
 glm::mat4 SGL::transformToMatrix(const STransform& transform) {
     
     glm::mat4 to_return = glm::mat4(1.0);
     
     //Perform the operations on the matrix
-    glm::translate(to_return, transform.translation);
-    glm::rotate(to_return, transform.rotation.y, x_axis);
-    glm::rotate(to_return, transform.rotation.x, y_axis);
-    glm::rotate(to_return, transform.rotation.z, z_axis);
-    glm::scale(to_return, transform.scale);
-    
-    std::cout << transform.translation.y << std::endl;
-    //SLog::verboseLog(SVerbosityLevel::Debug, "%d", to_return[3][0]);
+    to_return = glm::translate(to_return, transform.translation);
+    to_return = glm::rotate(to_return, transform.rotation.x, glm::vec3(1, 0, 0));
+    to_return = glm::rotate(to_return, transform.rotation.y, glm::vec3(0, 1, 0));
+    to_return = glm::rotate(to_return, transform.rotation.z, z_axis);
+    to_return = glm::scale(to_return, transform.scale);
     
     return to_return;
     
 }
 
-glm::mat4 SGL::getProjectionMatrix(const SViewport3D& viewport) { return glm::perspective(viewport.field_of_view, viewport.screen_size.x / viewport.screen_size.y, viewport.planes.x, viewport.planes.y); }
+glm::mat4 SGL::getProjectionMatrix(const SViewport3D& viewport) { return glm::perspective(viewport.field_of_view,
+                                                                                          viewport.screen_size.x / viewport.screen_size.y,
+                                                                                          viewport.planes.x,
+                                                                                          viewport.planes.y); }
 
-void SGL::setUp3DViewport(const SViewport3D& viewport) {
+void SGL::setUpViewport(const SViewport3D& viewport) { glViewport(viewport.screen_pos.x,
+                                                                  viewport.screen_pos.y,
+                                                                  viewport.screen_size.x,
+                                                                  viewport.screen_size.y); }
+
+/******************************************************************************
+ *  Functions for managing matrices on the GPU                                *
+ ******************************************************************************/
+
+void SGL::loadMatrix(const glm::mat4& mat, const char* mat_name) {
     
-    // Set the viewport to draw to and then upload the matrix
-    glViewport(viewport.screen_pos.x, viewport.screen_pos.y, viewport.screen_size.x, viewport.screen_size.y);
-    glm::mat4 projection_matrix = getProjectionMatrix(viewport);
+    // Load the matrix into the storage
+    matrices[mat_name] = mat;
     
-    // Upload to OpenGL
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glLoadMatrixf(&projection_matrix[0][0]);
+    // Upload the matrix
+    uploadMatrix(mat, mat_name);
+    
+
+}
+
+void SGL::mulMatrix(const glm::mat4& mat, const char* mat_name) {
+    
+    // Check if there is already a matrix with this name
+    if (matrices.count(mat_name)) {
+        
+        // Multiply it and upload it
+        const glm::mat4& mat_current = matrices[mat_name];
+        matrices[mat_name] = mat_current * mat;
+        
+        uploadMatrix(matrices[mat_name], mat_name);
+        
+    } else {
+        
+        // Behave like a regular upload
+        loadMatrix(mat, mat_name);
+        
+    }
+
+}
+
+
+void SGL::clearMatrix(const char* mat_name) {
+    
+    glm::mat4 mat_new = glm::mat4(1.0);
+    loadMatrix(mat_new, mat_name);
     
 }

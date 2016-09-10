@@ -1,0 +1,35 @@
+//
+//  SCamera.cpp
+//  Spud Engine 2
+//
+//  Created by Logan Pazol on 9/10/16.
+//  Copyright © 2016 Logan Pazol. All rights reserved.
+//
+
+#include "SCamera.hpp"
+
+/******************************************************************************
+ *  Functions for camera                                                      *
+ ******************************************************************************/
+
+glm::mat4 SCamera::getCameraMatrix() {
+    
+    glm::mat4 to_return = glm::mat4(1.0);
+    
+    //Perform the operations on the matrix (similar to the one in SGL but inverse and no scale)
+    to_return = glm::rotate(to_return, (float)(M_PI - transform.rotation.z), z_axis);
+    to_return = glm::rotate(to_return, (float)(M_PI - transform.rotation.y), y_axis);
+    to_return = glm::rotate(to_return, (float)(M_PI - transform.rotation.x), x_axis);
+    to_return = glm::translate(to_return, -transform.translation);
+    
+    return to_return;
+    
+}
+
+void SCamera::translateToCameraSpace() {
+    
+    // Get the matrix and upload it
+    glm::mat4 mat = getCameraMatrix();
+    SGL::mulMatrix(mat, MAT_MODELVIEW_MATRIX);
+    
+}

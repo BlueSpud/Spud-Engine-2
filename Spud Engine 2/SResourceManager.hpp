@@ -38,7 +38,7 @@ class SResource {
     
         virtual void upload();
     
-        bool uploded = false;
+        bool uploaded = false;
     
 };
 

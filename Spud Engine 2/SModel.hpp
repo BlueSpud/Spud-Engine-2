@@ -15,6 +15,20 @@
 #include "SGL.hpp"
 
 /******************************************************************************
+ *  Definition for enum for VBOs                                              *
+ ******************************************************************************/
+
+enum SModelBuffers {
+    
+    buffer_position,
+    buffer_normal,
+    buffer_tex_coord,
+    //buffer_indicies
+    
+    buffer_count
+};
+
+/******************************************************************************
  *  Definition for model                                                      *
  ******************************************************************************/
 
@@ -24,12 +38,7 @@ class SModel : public SResource {
     
         static SResource* allocate();
     
-        // TEMP! they shouldnt be public
-        GLuint verts_id;
-        GLuint normals_id;
-        GLuint tex_coords_id;
-        GLuint indicies_id;
-        unsigned int face_count;
+        void render();
     
     protected:
     
@@ -47,7 +56,13 @@ class SModel : public SResource {
     
         unsigned int* indicies;
     
+        unsigned int face_count;
     
+        // Storage for the VAO
+        GLuint array_id;
+    
+        // Storage for the VBOs
+        GLuint buffer_ids[buffer_count];
     
 };
 

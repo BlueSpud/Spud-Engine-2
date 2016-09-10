@@ -90,9 +90,10 @@ void SPath::getFileInfo() {
 const std::string& SPath::getExtension() const { return extension; }
 const std::string& SPath::getFilename() const { return filename; }
 const std::string& SPath::getPathAsString() const { return path_str; }
+std::string SPath::getPathAsAbsolutePath() const { return root_directory + path_str; }
 
 
-bool SPath::getIsDirectory() { return is_directory; }
+bool SPath::getIsDirectory() const { return is_directory; }
 
 /******************************************************************************
  *  Functions for the file class                                              *
@@ -234,9 +235,7 @@ SFile* SFileSystem::loadFile(const SPath& path) {
         // Get the hash and check if we have it
         unsigned long hash = hasher(path.path_str);
     
-        SFile* file = loaded_files[hash];
-    
-        if (!file) {
+        if (!loaded_files.count(hash)) {
     
             // Create a new file, give the root directory to it
             std::string full_path = root_directory + path.path_str;
@@ -260,7 +259,7 @@ SFile* SFileSystem::loadFile(const SPath& path) {
         }
         
         // Return the already loaded file
-        return file;
+        return loaded_files[hash];
         
     }
     
