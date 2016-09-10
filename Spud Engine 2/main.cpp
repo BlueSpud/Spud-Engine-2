@@ -13,15 +13,8 @@
 
 #include "object.hpp"
 #include "SFileSystem.hpp"
-#include "SResourceManager.hpp"
-#include "SModel.hpp"
-#include "SMaterial.hpp"
+#include "SMesh.hpp"
 #include "SCamera.hpp"
-
-double velocity_constant = 0.1;
-double direction = 1;
-
-SCamera camera;
 
 void key_release(int key) {
     
@@ -59,9 +52,6 @@ int main(int argc, char* argv[]) {
     SFileSystem::getDefaultRootDirectory(argv[0]);
     
     SResourceManager::startup();
-    
-    SPath pasd = SPath("test.obj");
-    SModel* mesh = (SModel*)SResourceManager::getResource(pasd);
  
     SGL::setKeyCallback(key_callback);
     
@@ -69,31 +59,23 @@ int main(int argc, char* argv[]) {
     double time_tick = 1.0 / TICKS_PER_SECOND;
     int maxUpdateCount = 5;
     
-    double cam_position = 0;
-    
-    SStopwatch stopwatch;
-    stopwatch.start();
+    SCamera camera;
     
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     
     glEnable(GL_DEPTH_TEST);
     
-    SMaterial* mat = (SMaterial*)SResourceManager::getResource(SPath("Material/test.mat"));
-    
-    std::map<std::string, STexture*>textures;
-    textures["tex_albedo"] = (STexture*)SResourceManager::getResource(SPath("tank.jpg"));
-    textures["tex_overlay"] = (STexture*)SResourceManager::getResource(SPath("overlay.png"));
-    SMaterialInstance* mat_instance = mat->createMaterialInstance(textures, 1);
-    
-    STransform transform;
-    transform.translation.x = 2;
+    SMesh mesh = SMesh(SPath("Mesh/tank.mesh"));
     
     SViewport3D viewport = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
     SGL::setUpViewport(viewport);
     
     camera.transform.translation.y = 1.0;
     camera.transform.translation.z = 4.0;
+    
+    SStopwatch stopwatch;
+    stopwatch.start();
     
     /* Loop until the user closes the window */
     while (SGL::windowIsGood()) {
@@ -109,8 +91,6 @@ int main(int argc, char* argv[]) {
             SEventTick e;
             SEventSystem::postEvent(EVENT_TICK, e);
             
-            cam_position += velocity_constant * direction;
-            
             /* Poll for and process events */
             glfwPollEvents();
             
@@ -123,23 +103,19 @@ int main(int argc, char* argv[]) {
         if (loops == maxUpdateCount)
             SLog::verboseLog(SVerbosityLevel::Critical, "Cant keep up with %i ticks per second!", TICKS_PER_SECOND);
         
-        //double interpolation = loopElapsedTime / time_tick;
+        double interpolation = loopElapsedTime / time_tick;
         
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        mat_instance->useMaterial();
         
-        glm::mat4 model_matrix = SGL::transformToMatrix(transform);
         glm::mat4 projection_matrix = SGL::getProjectionMatrix(viewport);
         
         SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
         
         SGL::clearMatrix(MAT_MODELVIEW_MATRIX);
         camera.translateToCameraSpace();
-        SGL::mulMatrix(model_matrix, MAT_MODELVIEW_MATRIX);
         
-        mesh->render();
+        mesh.render(interpolation);
         
         /* Swap front and back buffers */
         SGL::swapBuffers();

@@ -86,16 +86,15 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
     size_t hash = hasher(resource_path.getPathAsString());
     
     // Check for loaded resource
-    if (!loaded_resources.count(hash)) {
+    if (!resource_path.getIsDirectory() && !loaded_resources.count(hash)) {
         
-        // Get the allocator that handles this type of resource
-        SResource*(*allocator)()  = SResourceAllocatorManger::instance()->allocators[resource_path.getExtension()];
-        
-        if (allocator) {
+        // Check that we have the allocator that handles this type of resource
+        if (SResourceAllocatorManger::instance()->allocators.count(resource_path.getExtension())) {
         
             // Load the resource, upload it and keep it
-            SResource* resource = allocator();
+            SResource* resource = SResourceAllocatorManger::instance()->allocators[resource_path.getExtension()]();
             
+            // Make sure we have an allocator
             if (!resource->load(resource_path)) {
                 
                 // Failed to load it

@@ -6,8 +6,8 @@
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#ifndef SMesh_hpp
-#define SMesh_hpp
+#ifndef SModel_hpp
+#define SModel_hpp
 
 #include <glm/glm.hpp>
 

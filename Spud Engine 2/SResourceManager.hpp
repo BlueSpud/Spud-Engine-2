@@ -12,7 +12,6 @@
 #include <iostream>
 #include <map>
 
-#include "SSubsystem.hpp"
 #include "SFileSystem.hpp"
 
 // Forward declarations

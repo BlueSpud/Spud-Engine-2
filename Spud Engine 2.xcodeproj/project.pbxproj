@@ -29,14 +29,15 @@
 		025903371D7794B500EA6372 /* libLinearMath_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */; };
 		025CB5961D83CD880059AF6C /* SShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025CB5941D83CD880059AF6C /* SShader.cpp */; };
 		025CB5AC1D83D6E20059AF6C /* Shader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 025CB5AB1D83D6D30059AF6C /* Shader */; };
-		025CB5AD1D83D6E20059AF6C /* test.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 025CB5AA1D83D6BA0059AF6C /* test.obj */; };
 		025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025CB5AE1D83EB500059AF6C /* STexture.cpp */; };
 		025CB5B21D83EE5E0059AF6C /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025CB5B11D83EE5E0059AF6C /* libfreeimage.a */; };
-		025CB5B41D83F3330059AF6C /* tank.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 025CB5B31D83F2A70059AF6C /* tank.jpg */; };
 		029865801D8460DC005EED43 /* SCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0298657E1D8460DC005EED43 /* SCamera.cpp */; };
 		029865831D847429005EED43 /* SMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 029865811D847429005EED43 /* SMaterial.cpp */; };
 		029865851D84771F005EED43 /* Material in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865841D84771A005EED43 /* Material */; };
-		0298658B1D84943E005EED43 /* overlay.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298658A1D84943E005EED43 /* overlay.png */; };
+		029865931D84A524005EED43 /* SMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 029865911D84A524005EED43 /* SMesh.cpp */; };
+		029865961D84ACE9005EED43 /* Mesh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865951D84ACE4005EED43 /* Mesh */; };
+		029865981D84AD52005EED43 /* Model in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865971D84AD4D005EED43 /* Model */; };
+		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,11 +47,11 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				0298659B1D84C3A8005EED43 /* Texture in CopyFiles */,
 				029865851D84771F005EED43 /* Material in CopyFiles */,
+				029865961D84ACE9005EED43 /* Mesh in CopyFiles */,
+				029865981D84AD52005EED43 /* Model in CopyFiles */,
 				025CB5AC1D83D6E20059AF6C /* Shader in CopyFiles */,
-				025CB5AD1D83D6E20059AF6C /* test.obj in CopyFiles */,
-				0298658B1D84943E005EED43 /* overlay.png in CopyFiles */,
-				025CB5B41D83F3330059AF6C /* tank.jpg in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,18 +93,21 @@
 		025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
 		025CB5941D83CD880059AF6C /* SShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SShader.cpp; sourceTree = "<group>"; };
 		025CB5951D83CD880059AF6C /* SShader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SShader.hpp; sourceTree = "<group>"; };
-		025CB5AA1D83D6BA0059AF6C /* test.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = test.obj; path = Resources/test.obj; sourceTree = "<group>"; };
 		025CB5AB1D83D6D30059AF6C /* Shader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shader; path = Resources/Shader; sourceTree = "<group>"; };
 		025CB5AE1D83EB500059AF6C /* STexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STexture.cpp; sourceTree = "<group>"; };
 		025CB5AF1D83EB500059AF6C /* STexture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = STexture.hpp; sourceTree = "<group>"; };
 		025CB5B11D83EE5E0059AF6C /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = FreeImage/lib/libfreeimage.a; sourceTree = "<group>"; };
-		025CB5B31D83F2A70059AF6C /* tank.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = tank.jpg; path = Resources/tank.jpg; sourceTree = "<group>"; };
 		0298657E1D8460DC005EED43 /* SCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SCamera.cpp; sourceTree = "<group>"; };
 		0298657F1D8460DC005EED43 /* SCamera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SCamera.hpp; sourceTree = "<group>"; };
 		029865811D847429005EED43 /* SMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMaterial.cpp; sourceTree = "<group>"; };
 		029865821D847429005EED43 /* SMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SMaterial.hpp; sourceTree = "<group>"; };
 		029865841D84771A005EED43 /* Material */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Material; path = Resources/Material; sourceTree = "<group>"; };
-		0298658A1D84943E005EED43 /* overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = overlay.png; path = Resources/overlay.png; sourceTree = "<group>"; };
+		0298658F1D84A26E005EED43 /* SObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SObject.hpp; sourceTree = "<group>"; };
+		029865911D84A524005EED43 /* SMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMesh.cpp; sourceTree = "<group>"; };
+		029865921D84A524005EED43 /* SMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SMesh.hpp; sourceTree = "<group>"; };
+		029865951D84ACE4005EED43 /* Mesh */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Mesh; path = Resources/Mesh; sourceTree = "<group>"; };
+		029865971D84AD4D005EED43 /* Model */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Model; path = Resources/Model; sourceTree = "<group>"; };
+		0298659A1D84C38D005EED43 /* Texture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Texture; path = Resources/Texture; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +199,7 @@
 		0251FC3D1D7DC62400B3E63E /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
+				0298658D1D84A264005EED43 /* Objects */,
 				0298657E1D8460DC005EED43 /* SCamera.cpp */,
 				0298657F1D8460DC005EED43 /* SCamera.hpp */,
 				0251FC3E1D7DC64300B3E63E /* SGL.cpp */,
@@ -285,13 +290,23 @@
 		025CB5A61D83D6AE0059AF6C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0298659A1D84C38D005EED43 /* Texture */,
 				029865841D84771A005EED43 /* Material */,
+				029865951D84ACE4005EED43 /* Mesh */,
+				029865971D84AD4D005EED43 /* Model */,
 				025CB5AB1D83D6D30059AF6C /* Shader */,
-				0298658A1D84943E005EED43 /* overlay.png */,
-				025CB5B31D83F2A70059AF6C /* tank.jpg */,
-				025CB5AA1D83D6BA0059AF6C /* test.obj */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		0298658D1D84A264005EED43 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				029865911D84A524005EED43 /* SMesh.cpp */,
+				029865921D84A524005EED43 /* SMesh.hpp */,
+				0298658F1D84A26E005EED43 /* SObject.hpp */,
+			);
+			name = Objects;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -353,6 +368,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				029865931D84A524005EED43 /* SMesh.cpp in Sources */,
 				029865801D8460DC005EED43 /* SCamera.cpp in Sources */,
 				025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */,
 				029865831D847429005EED43 /* SMaterial.cpp in Sources */,

@@ -25,13 +25,9 @@ void SMaterialInstance::useMaterial() {
     if (current_shader != parent_mat->shader) {
         
         // Bind the textures
-        for (int i = 0; i < textures.size(); i++) {
-            
+        for (int i = 0; i < textures.size(); i++)
             textures[i]->bind(i);
-            
-        }
-
-        
+ 
         parent_mat->shader->bind();
         
     }
@@ -86,7 +82,7 @@ bool SMaterial::load(const SPath& path) {
 
 }
 
-SMaterialInstance* SMaterial::createMaterialInstance(std::map<std::string, STexture*>& _textures, int num_textures) {
+SMaterialInstance* SMaterial::createMaterialInstance(std::map<std::string, STexture*>& _textures) {
     
     // Make sure we have enough textures
     if (_textures.size() >= req_textures_count) {

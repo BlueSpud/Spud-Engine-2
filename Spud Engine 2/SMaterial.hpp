@@ -48,7 +48,7 @@ class SMaterial : public SResource {
     
         static SResource* allocate();
     
-        SMaterialInstance* createMaterialInstance(std::map<std::string, STexture*>& _textures, int num_textures);
+        SMaterialInstance* createMaterialInstance(std::map<std::string, STexture*>& _textures);
     
     protected:
     
