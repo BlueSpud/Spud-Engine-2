@@ -247,7 +247,7 @@ SFile* SFileSystem::loadFile(const SPath& path) {
                 // Add it to the registry of loaded files
                 new_file->hash = hash;
         
-                loaded_files.insert(std::pair<std::uint8_t, SFile*>(hash, new_file));
+                loaded_files[hash] = new_file;
             
                 return new_file;
         

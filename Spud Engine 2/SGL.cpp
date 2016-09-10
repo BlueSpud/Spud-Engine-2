@@ -65,9 +65,6 @@ void SGL::createWindow() {
                      glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR),
                      glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR));
     
-    // Refresh once to show it immediately
-    glfwSwapBuffers(window);
-    
 }
 
 bool SGL::windowIsGood() { return !glfwWindowShouldClose(window); }

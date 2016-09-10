@@ -37,11 +37,11 @@ void SShader::unbind() {
 
 SShader* SShader::getBoundShader() { return bound_shader; }
 
-int SShader::getUniformLocation(SShader* shader, const char* name) {
+int SShader::getUniformLocation(SShader* shader, const std::string& name) {
     
     // Check if the shader is valid, otherwise return cant fine it
     if (shader && shader->uploaded)
-        return glGetUniformLocation(shader->program_id, name);
+        return glGetUniformLocation(shader->program_id, name.c_str());
     else return -1;
     
 }

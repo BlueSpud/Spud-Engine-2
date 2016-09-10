@@ -36,6 +36,7 @@
 		029865801D8460DC005EED43 /* SCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0298657E1D8460DC005EED43 /* SCamera.cpp */; };
 		029865831D847429005EED43 /* SMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 029865811D847429005EED43 /* SMaterial.cpp */; };
 		029865851D84771F005EED43 /* Material in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865841D84771A005EED43 /* Material */; };
+		0298658B1D84943E005EED43 /* overlay.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298658A1D84943E005EED43 /* overlay.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +49,7 @@
 				029865851D84771F005EED43 /* Material in CopyFiles */,
 				025CB5AC1D83D6E20059AF6C /* Shader in CopyFiles */,
 				025CB5AD1D83D6E20059AF6C /* test.obj in CopyFiles */,
+				0298658B1D84943E005EED43 /* overlay.png in CopyFiles */,
 				025CB5B41D83F3330059AF6C /* tank.jpg in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +103,7 @@
 		029865811D847429005EED43 /* SMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMaterial.cpp; sourceTree = "<group>"; };
 		029865821D847429005EED43 /* SMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SMaterial.hpp; sourceTree = "<group>"; };
 		029865841D84771A005EED43 /* Material */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Material; path = Resources/Material; sourceTree = "<group>"; };
+		0298658A1D84943E005EED43 /* overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = overlay.png; path = Resources/overlay.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,6 +287,7 @@
 			children = (
 				029865841D84771A005EED43 /* Material */,
 				025CB5AB1D83D6D30059AF6C /* Shader */,
+				0298658A1D84943E005EED43 /* overlay.png */,
 				025CB5B31D83F2A70059AF6C /* tank.jpg */,
 				025CB5AA1D83D6BA0059AF6C /* test.obj */,
 			);

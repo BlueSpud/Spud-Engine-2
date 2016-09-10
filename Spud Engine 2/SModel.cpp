@@ -32,10 +32,10 @@ void SModel::render() {
 }
 
 bool SModel::load(const SPath& path) {
-
+    
     SFile* file = SFileSystem::loadFile(path);
     
-    if (file) {
+    if (file != nullptr) {
     
         std::string line;
         

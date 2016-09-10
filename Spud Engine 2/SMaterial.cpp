@@ -25,8 +25,12 @@ void SMaterialInstance::useMaterial() {
     if (current_shader != parent_mat->shader) {
         
         // Bind the textures
-        for (int i = 0; i < textures.size(); i++)
+        for (int i = 0; i < textures.size(); i++) {
+            
             textures[i]->bind(i);
+            
+        }
+
         
         parent_mat->shader->bind();
         
@@ -56,8 +60,6 @@ bool SMaterial::load(const SPath& path) {
                 
                 // Load up the shader
                 std::string shader_path_s = line.substr(7, line.length() - 7);
-                SLog::verboseLog(SVerbosityLevel::Debug, "Using shader %s", shader_path_s.c_str());
-                
                 SPath shader_path = SPath(shader_path_s);
                 
                 shader = (SShader*)SResourceManager::getResource(shader_path);
@@ -74,6 +76,8 @@ bool SMaterial::load(const SPath& path) {
             
         }
         
+        req_textures_count = (int)req_textures.size();
+        
         return true;
         
     }
@@ -85,16 +89,16 @@ bool SMaterial::load(const SPath& path) {
 SMaterialInstance* SMaterial::createMaterialInstance(std::map<std::string, STexture*>& _textures, int num_textures) {
     
     // Make sure we have enough textures
-    if (_textures.size() >= req_textures.size()) {
+    if (_textures.size() >= req_textures_count) {
         
         // Create an instance of this material, so we can use it
         SMaterialInstance* instance = new SMaterialInstance();
         instance->parent_mat = this;
         
         // Make sure what we had is what we need
-        for (int i = 0; i < req_textures.size(); i++) {
+        for (int i = 0; i < req_textures_count; i++) {
             
-            if (!_textures.count(req_textures[i].c_str())) {
+            if (!_textures.count(req_textures[i])) {
                 
                 // Clean up
                 delete instance;
@@ -102,7 +106,7 @@ SMaterialInstance* SMaterial::createMaterialInstance(std::map<std::string, SText
                 SLog::verboseLog(SVerbosityLevel::Critical, "Attempted to create material instance with enough, but not the proper textures! Missing: %s", req_textures[i].c_str());
                 return nullptr;
                 
-            } else instance->textures.push_back(_textures[req_textures[i].c_str()]);
+            } else instance->textures.push_back(_textures[req_textures[i]]);
             
         }
     
@@ -119,9 +123,13 @@ SMaterialInstance* SMaterial::createMaterialInstance(std::map<std::string, SText
 
 void SMaterial::upload() {
     
+    shader->bind();
+    
     // Go through the textures and assign Ids for them
-    for (int i = 0; i < req_textures[i].size(); i++)
-        glUniform1i(SShader::getUniformLocation(shader, req_textures[i].c_str()), 0);
+    for (int i = 0; i < req_textures_count; i++)
+        glUniform1i(SShader::getUniformLocation(shader, req_textures[i]), i);
+    
+    shader->unbind();
     
 }
 

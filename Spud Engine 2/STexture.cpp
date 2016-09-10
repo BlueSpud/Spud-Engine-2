@@ -95,8 +95,18 @@ void STexture::upload() {
     glGenTextures(1, &texture_id);
     glBindTexture(GL_TEXTURE_2D, texture_id);
 
+    // Figure out if we had alpha
+    GLint internal_format = GL_RGB;
+    GLint external_format = GL_BGR;
+    if (FreeImage_GetChannel(bitmap, FICC_ALPHA) != NULL) {
+        
+        internal_format = GL_RGBA;
+        external_format = GL_BGRA;
+        
+    }
+    
     // Set the parameters of the texture
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image_data);
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0, external_format, GL_UNSIGNED_BYTE, image_data);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     

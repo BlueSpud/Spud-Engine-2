@@ -60,8 +60,8 @@ int main(int argc, char* argv[]) {
     
     SResourceManager::startup();
     
-    SPath p = SPath("test.obj");
-    SModel* mesh = (SModel*)SResourceManager::getResource(p);
+    SPath pasd = SPath("test.obj");
+    SModel* mesh = (SModel*)SResourceManager::getResource(pasd);
  
     SGL::setKeyCallback(key_callback);
     
@@ -83,9 +83,11 @@ int main(int argc, char* argv[]) {
     
     std::map<std::string, STexture*>textures;
     textures["tex_albedo"] = (STexture*)SResourceManager::getResource(SPath("tank.jpg"));
+    textures["tex_overlay"] = (STexture*)SResourceManager::getResource(SPath("overlay.png"));
     SMaterialInstance* mat_instance = mat->createMaterialInstance(textures, 1);
     
     STransform transform;
+    transform.translation.x = 2;
     
     SViewport3D viewport = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
     SGL::setUpViewport(viewport);

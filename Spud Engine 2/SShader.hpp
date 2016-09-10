@@ -26,7 +26,7 @@ class SShader : public SResource {
         void static unbind();
         static SShader* getBoundShader();
     
-        static int getUniformLocation(SShader* shader, const char* name);
+        static int getUniformLocation(SShader* shader, const std::string& name);
     
     protected:
     

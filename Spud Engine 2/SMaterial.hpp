@@ -61,6 +61,7 @@ class SMaterial : public SResource {
     
         SShader* shader;
         std::vector<std::string>req_textures;
+        int req_textures_count;
     
         std::vector<SMaterialInstance*>instances;
     

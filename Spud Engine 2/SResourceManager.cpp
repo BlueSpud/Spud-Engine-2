@@ -95,25 +95,24 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
         
             // Load the resource, upload it and keep it
             SResource* resource = allocator();
-            if (resource->load(resource_path)) {
-                
-                resource->upload();
-                loaded_resources.insert(std::pair<size_t, SResource*>(hash, resource));
-                
-                return resource;
-                
-            }
             
-            // Couldnt load the resource
-            delete resource;
+            if (!resource->load(resource_path)) {
+                
+                // Failed to load it
+                SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s! Resource was returned but may behave unexpectadly", resource_path.getPathAsString().c_str());
+                
+            } else resource->upload();
             
-            SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s", resource_path.getPathAsString().c_str());
-            return nullptr;
+            loaded_resources[hash] = resource;
+         
+            return resource;
             
         }
+        
+        SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s! Resource had an extension that was not valid", resource_path.getPathAsString().c_str());
             
     }
-    
+        
     return loaded_resources[hash];
     
 }
