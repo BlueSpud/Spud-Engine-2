@@ -12,7 +12,6 @@
 		0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B87E1D7A6BB100596526 /* SResourceManager.cpp */; };
 		0228B8841D7A779200596526 /* SModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B8821D7A779200596526 /* SModel.cpp */; };
 		022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */; };
-		022ED1601D79205400DC1ECD /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = 022ED15F1D79205400DC1ECD /* test.txt */; };
 		0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0236A34C1D7D316D00DB2DBA /* SLog.cpp */; };
 		0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3A1D7DC57300B3E63E /* STime.cpp */; };
 		0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3E1D7DC64300B3E63E /* SGL.cpp */; };
@@ -28,6 +27,7 @@
 		025903351D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */; };
 		025903361D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */; };
 		025903371D7794B500EA6372 /* libLinearMath_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */; };
+		025C02A11D83B37D00F23745 /* test.obj in Resources */ = {isa = PBXBuildFile; fileRef = 025C02A01D83B37D00F23745 /* test.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +42,6 @@
 		022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFileSystem.cpp; sourceTree = "<group>"; };
 		022ED1571D78FA3100DC1ECD /* SFileSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFileSystem.hpp; sourceTree = "<group>"; };
 		022ED15B1D79165A00DC1ECD /* SSubsystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSubsystem.hpp; sourceTree = "<group>"; };
-		022ED15F1D79205400DC1ECD /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.txt; sourceTree = "<group>"; };
 		0236A34C1D7D316D00DB2DBA /* SLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLog.cpp; sourceTree = "<group>"; };
 		0236A34D1D7D316D00DB2DBA /* SLog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLog.hpp; sourceTree = "<group>"; };
 		0251FC3A1D7DC57300B3E63E /* STime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STime.cpp; sourceTree = "<group>"; };
@@ -65,6 +64,7 @@
 		025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
 		025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
 		025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
+		025C02A01D83B37D00F23745 /* test.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,7 +140,7 @@
 		022ED15E1D79202C00DC1ECD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				022ED15F1D79205400DC1ECD /* test.txt */,
+				025C02A01D83B37D00F23745 /* test.obj */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -300,7 +300,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				022ED1601D79205400DC1ECD /* test.txt in Resources */,
+				025C02A11D83B37D00F23745 /* test.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

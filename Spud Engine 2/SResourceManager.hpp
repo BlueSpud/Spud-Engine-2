@@ -38,6 +38,8 @@ class SResource {
     
         virtual void upload();
     
+        bool uploded = false;
+    
 };
 
 /******************************************************************************

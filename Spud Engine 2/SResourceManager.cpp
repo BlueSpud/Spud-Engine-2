@@ -18,7 +18,7 @@ std::hash<std::string>SResourceManager::hasher;
 SResource* SResource::allocate() { return nullptr; }
 SResource::~SResource() { /* stub */ }
 
-void SResource::upload() { /* stub */ }
+void SResource::upload() { uploded = true; }
 
 /******************************************************************************
  *  Functions  for resource allocation manager                                *

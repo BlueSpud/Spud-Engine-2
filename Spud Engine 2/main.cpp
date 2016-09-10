@@ -14,7 +14,7 @@
 #include "object.hpp"
 #include "SFileSystem.hpp"
 #include "SResourceManager.hpp"
-#include "SMesh.hpp"
+#include "SModel.hpp"
 
 object* a;
 
@@ -123,8 +123,8 @@ int main(int argc, char* argv[]) {
     
     SResourceManager::startup();
     
-    SPath p = SPath("test.txt");
-    SMesh* mesh = SResourceManager::getResource(p);
+    SPath p = SPath("test.obj");
+    SModel* mesh = (SModel*)SResourceManager::getResource(p);
  
     SGL::setKeyCallback(key_callback);
     
@@ -143,6 +143,12 @@ int main(int argc, char* argv[]) {
     
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+    
+    glEnable(GL_DEPTH_TEST);
+    
+    // Lighting
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
     
     /* Loop until the user closes the window */
     while (SGL::windowIsGood()) {
@@ -175,61 +181,45 @@ int main(int argc, char* argv[]) {
         double interpolation = loopElapsedTime / time_tick;
         
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         SGL::setUp3DViewport(viewport);
         
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         
-        glTranslatef(0, 0, -6);
+        glTranslatef(-4, 0, -12);
         glRotated(angle + interpolation, 0, 1, 0);
-        glScalef(2, 2, 2);
         
-        // White side - BACK
-        glBegin(GL_POLYGON);
-        glColor3f(   1.0,  1.0, 1.0 );
-        glVertex3f(  0.5, -0.5, 0.5 );
-        glVertex3f(  0.5,  0.5, 0.5 );
-        glVertex3f( -0.5,  0.5, 0.5 );
-        glVertex3f( -0.5, -0.5, 0.5 );
-        glEnd();
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         
-        // Purple side - RIGHT
-        glBegin(GL_POLYGON);
-        glColor3f(  1.0,  0.0,  1.0 );
-        glVertex3f( 0.5, -0.5, -0.5 );
-        glVertex3f( 0.5,  0.5, -0.5 );
-        glVertex3f( 0.5,  0.5,  0.5 );
-        glVertex3f( 0.5, -0.5,  0.5 );
-        glEnd();
         
-        // Green side - LEFT
-        glBegin(GL_POLYGON);
-        glColor3f(   0.0,  1.0,  0.0 );
-        glVertex3f( -0.5, -0.5,  0.5 );
-        glVertex3f( -0.5,  0.5,  0.5 );
-        glVertex3f( -0.5,  0.5, -0.5 );
-        glVertex3f( -0.5, -0.5, -0.5 );
-        glEnd();
+        glBindBuffer(GL_ARRAY_BUFFER, mesh->verts_id);
+        glVertexPointer(3, GL_FLOAT, 0, 0);
         
-        // Blue side - TOP
-        glBegin(GL_POLYGON);
-        glColor3f(   0.0,  0.0,  1.0 );
-        glVertex3f(  0.5,  0.5,  0.5 );
-        glVertex3f(  0.5,  0.5, -0.5 );
-        glVertex3f( -0.5,  0.5, -0.5 );
-        glVertex3f( -0.5,  0.5,  0.5 );
-        glEnd();
+        glBindBuffer(GL_ARRAY_BUFFER, mesh->normals_id);
+        glNormalPointer(GL_FLOAT, 0, 0);
         
-        // Red side - BOTTOM
-        glBegin(GL_POLYGON);
-        glColor3f(   1.0,  0.0,  0.0 );
-        glVertex3f(  0.5, -0.5, -0.5 );
-        glVertex3f(  0.5, -0.5,  0.5 );
-        glVertex3f( -0.5, -0.5,  0.5 );
-        glVertex3f( -0.5, -0.5, -0.5 );
-        glEnd();
+        glBindBuffer(GL_ARRAY_BUFFER, mesh->tex_coords_id);
+        glTexCoordPointer(2, GL_FLOAT, 0, 0);
+        
+        
+        glDrawArrays(GL_TRIANGLES, 0, mesh->face_count);
+        
+        glLoadIdentity();
+        glTranslatef(4, 0, -12);
+        glRotated(angle + interpolation, 0, 1, 0);
+        
+        glDrawArrays(GL_TRIANGLES, 0, mesh->face_count);
+        
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
         
         /* Swap front and back buffers */
         SGL::swapBuffers();
