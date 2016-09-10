@@ -1,27 +1,27 @@
 //
-//  SMesh.cpp
+//  SModel.cpp
 //  Spud Engine 2
 //
 //  Created by Logan Pazol on 9/2/16.
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#include "SMesh.hpp"
+#include "SModel.hpp"
 
 /******************************************************************************
- *  Registration for supported mesh extensions                                *
+ *  Registration for supported model extensions                               *
  ******************************************************************************/
 
-REGISTER_RESOURCE_CLASS(txt, SMesh);
-REGISTER_RESOURCE_CLASS(obj, SMesh);
+REGISTER_RESOURCE_CLASS(txt, SModel);
+REGISTER_RESOURCE_CLASS(obj, SModel);
 
 /******************************************************************************
- *  Functions for mesh                                                        *
+ *  Functions for model                                                       *
  ******************************************************************************/
 
-SResource* SMesh::allocate() { return new SMesh(); }
+SResource* SModel::allocate() { return new SModel(); }
 
-bool SMesh::load(const SPath& path) {
+bool SModel::load(const SPath& path) {
 
     SFile* file = SFileSystem::loadFile(path);
     
@@ -42,6 +42,6 @@ bool SMesh::load(const SPath& path) {
     
 }
 
-void SMesh::unload() {}
+void SModel::unload() {}
 
-void SMesh::upload() {}
+void SModel::upload() {}

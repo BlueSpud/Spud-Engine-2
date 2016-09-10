@@ -124,18 +124,25 @@ int main(int argc, char* argv[]) {
     SResourceManager::startup();
     
     SPath p = SPath("test.txt");
-    SResourceManager::getResource(p);
+    SMesh* mesh = SResourceManager::getResource(p);
  
     SGL::setKeyCallback(key_callback);
     
     a = new object();
     
+    SViewport3D viewport = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
+    
     double loopElapsedTime = 0.0;
     double time_tick = 1.0 / TICKS_PER_SECOND;
     int maxUpdateCount = 5;
     
+    int angle = 0;
+    
     SStopwatch stopwatch;
     stopwatch.start();
+    
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     
     /* Loop until the user closes the window */
     while (SGL::windowIsGood()) {
@@ -150,6 +157,8 @@ int main(int argc, char* argv[]) {
 
             SEventTick e;
             SEventSystem::postEvent(EVENT_TICK, e);
+            
+            angle++;
             
             /* Poll for and process events */
             glfwPollEvents();
@@ -168,13 +177,59 @@ int main(int argc, char* argv[]) {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
         
-        glLoadIdentity();
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0, 1280, 800, 0, -1, 1);
+        SGL::setUp3DViewport(viewport);
+        
         glMatrixMode(GL_MODELVIEW);
-
-        a->render(interpolation);
+        glLoadIdentity();
+        
+        glTranslatef(0, 0, -6);
+        glRotated(angle + interpolation, 0, 1, 0);
+        glScalef(2, 2, 2);
+        
+        // White side - BACK
+        glBegin(GL_POLYGON);
+        glColor3f(   1.0,  1.0, 1.0 );
+        glVertex3f(  0.5, -0.5, 0.5 );
+        glVertex3f(  0.5,  0.5, 0.5 );
+        glVertex3f( -0.5,  0.5, 0.5 );
+        glVertex3f( -0.5, -0.5, 0.5 );
+        glEnd();
+        
+        // Purple side - RIGHT
+        glBegin(GL_POLYGON);
+        glColor3f(  1.0,  0.0,  1.0 );
+        glVertex3f( 0.5, -0.5, -0.5 );
+        glVertex3f( 0.5,  0.5, -0.5 );
+        glVertex3f( 0.5,  0.5,  0.5 );
+        glVertex3f( 0.5, -0.5,  0.5 );
+        glEnd();
+        
+        // Green side - LEFT
+        glBegin(GL_POLYGON);
+        glColor3f(   0.0,  1.0,  0.0 );
+        glVertex3f( -0.5, -0.5,  0.5 );
+        glVertex3f( -0.5,  0.5,  0.5 );
+        glVertex3f( -0.5,  0.5, -0.5 );
+        glVertex3f( -0.5, -0.5, -0.5 );
+        glEnd();
+        
+        // Blue side - TOP
+        glBegin(GL_POLYGON);
+        glColor3f(   0.0,  0.0,  1.0 );
+        glVertex3f(  0.5,  0.5,  0.5 );
+        glVertex3f(  0.5,  0.5, -0.5 );
+        glVertex3f( -0.5,  0.5, -0.5 );
+        glVertex3f( -0.5,  0.5,  0.5 );
+        glEnd();
+        
+        // Red side - BOTTOM
+        glBegin(GL_POLYGON);
+        glColor3f(   1.0,  0.0,  0.0 );
+        glVertex3f(  0.5, -0.5, -0.5 );
+        glVertex3f(  0.5, -0.5,  0.5 );
+        glVertex3f( -0.5, -0.5,  0.5 );
+        glVertex3f( -0.5, -0.5, -0.5 );
+        glEnd();
         
         /* Swap front and back buffers */
         SGL::swapBuffers();

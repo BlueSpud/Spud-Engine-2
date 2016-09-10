@@ -103,7 +103,7 @@ void SGL::setKeyCallback(GLFWkeyfun func) { glfwSetKeyCallback(window, func); }
 
 glm::mat4 SGL::transformToMatrix(const STransform& transform) {
     
-    glm::mat4 to_return = glm::mat4(1);
+    glm::mat4 to_return = glm::mat4(1.0);
     
     //Perform the operations on the matrix
     glm::translate(to_return, transform.translation);
@@ -112,6 +112,24 @@ glm::mat4 SGL::transformToMatrix(const STransform& transform) {
     glm::rotate(to_return, transform.rotation.z, z_axis);
     glm::scale(to_return, transform.scale);
     
+    std::cout << transform.translation.y << std::endl;
+    //SLog::verboseLog(SVerbosityLevel::Debug, "%d", to_return[3][0]);
+    
     return to_return;
+    
+}
+
+glm::mat4 SGL::getProjectionMatrix(const SViewport3D& viewport) { return glm::perspective(viewport.field_of_view, viewport.screen_size.x / viewport.screen_size.y, viewport.planes.x, viewport.planes.y); }
+
+void SGL::setUp3DViewport(const SViewport3D& viewport) {
+    
+    // Set the viewport to draw to and then upload the matrix
+    glViewport(viewport.screen_pos.x, viewport.screen_pos.y, viewport.screen_size.x, viewport.screen_size.y);
+    glm::mat4 projection_matrix = getProjectionMatrix(viewport);
+    
+    // Upload to OpenGL
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glLoadMatrixf(&projection_matrix[0][0]);
     
 }

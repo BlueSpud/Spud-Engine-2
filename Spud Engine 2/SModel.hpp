@@ -1,5 +1,5 @@
 //
-//  SMesh.hpp
+//  SModel.hpp
 //  Spud Engine 2
 //
 //  Created by Logan Pazol on 9/2/16.
@@ -12,10 +12,10 @@
 #include "SResourceManager.hpp"
 
 /******************************************************************************
- *  Definition for mesh                                                       *
+ *  Definition for model                                                      *
  ******************************************************************************/
 
-class SMesh : public SResource {
+class SModel : public SResource {
     
     public:
     
@@ -29,4 +29,4 @@ class SMesh : public SResource {
         virtual void upload();
 };
 
-#endif /* SMesh_hpp */
+#endif /* SModel_hpp */

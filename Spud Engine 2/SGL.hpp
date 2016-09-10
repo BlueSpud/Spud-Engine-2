@@ -30,7 +30,31 @@ struct STransform {
     
     glm::vec3 translation;
     glm::vec3 rotation;
-    glm::vec3 scale;
+    glm::vec3 scale = glm::vec3(1.0);
+    
+};
+
+/******************************************************************************
+ *  Definition for 3D viewport                                                *
+ ******************************************************************************/
+
+struct SViewport3D {
+    
+    glm::vec2 screen_size;
+    glm::vec2 screen_pos;
+    
+    float field_of_view;
+    
+    glm::vec2 planes;
+    
+    SViewport3D(glm::vec2 _screen_size, glm::vec2 _screen_pos, float _field_of_view, glm::vec2 _planes) {
+        
+        screen_size = _screen_size;
+        screen_pos = _screen_pos;
+        field_of_view = _field_of_view;
+        planes = _planes;
+        
+    }
     
 };
 
@@ -59,7 +83,8 @@ class SGL : public SSubsystem {
     
         static glm::mat4 transformToMatrix(const STransform& transform);
     
-    
+        static glm::mat4 getProjectionMatrix(const SViewport3D& viewport);
+        static void setUp3DViewport(const SViewport3D& viewport);
     
     private:
     
