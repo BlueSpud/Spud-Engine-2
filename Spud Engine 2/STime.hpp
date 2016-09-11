@@ -16,7 +16,7 @@
 #include "SGL.hpp"
 #include "SEventSystem.hpp"
 
-#define TICKS_PER_SECOND 30
+#define TICKS_PER_SECOND 60
 
 /******************************************************************************
  *  Definition for time system                                                *

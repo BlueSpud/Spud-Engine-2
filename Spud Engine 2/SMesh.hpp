@@ -14,6 +14,10 @@
 #include "SModel.hpp"
 #include "SMaterial.hpp"
 
+/******************************************************************************
+ *  Defiunition for mesh                                                      *
+ ******************************************************************************/
+
 class SMesh : public SObject {
     
     public:

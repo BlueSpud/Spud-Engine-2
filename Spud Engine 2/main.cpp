@@ -12,27 +12,30 @@
 #include <btBulletDynamicsCommon.h>
 
 #include "object.hpp"
-#include "SFileSystem.hpp"
+#include "SKeyboardSystem.hpp"
 #include "SMesh.hpp"
 #include "SCamera.hpp"
 
-void key_release(int key) {
+double speed = 0.0;
+
+void keyPress(int key) {
     
+    switch (key) {
+            
+        case GLFW_KEY_W:
+            speed = 0.1;
+            break;
+        
+        case GLFW_KEY_S:
+            speed = -0.1;
+            break;
+    }
     
 }
 
-void key_press(int key) {
+void keyRelease(int key) {
     
-    
-}
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    
-    if (action == GLFW_PRESS)
-        key_press(key);
-    
-    if (action == GLFW_RELEASE)
-        key_release(key);
+    speed = 0.0;
     
 }
 
@@ -46,18 +49,14 @@ int main(int argc, char* argv[]) {
     
     SGL::startup();
     
+    SKeyboardSystem::startup();
+    
     STime::startup();
     
     SFileSystem::startup();
     SFileSystem::getDefaultRootDirectory(argv[0]);
     
     SResourceManager::startup();
- 
-    SGL::setKeyCallback(key_callback);
-    
-    double loopElapsedTime = 0.0;
-    double time_tick = 1.0 / TICKS_PER_SECOND;
-    int maxUpdateCount = 5;
     
     SCamera camera;
     
@@ -72,10 +71,25 @@ int main(int argc, char* argv[]) {
     SGL::setUpViewport(viewport);
     
     camera.transform.translation.y = 1.0;
-    camera.transform.translation.z = 4.0;
+    
+    SKeyboardListener listener;
+    listener.bind(&keyPress, GLFW_KEY_S, KEY_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_W, KEY_ACTION_DOWN);
+    
+    listener.bind(&keyRelease, GLFW_KEY_S, KEY_ACTION_UP);
+    listener.bind(&keyRelease, GLFW_KEY_W, KEY_ACTION_UP);
+    
+    listener.setHasFocus();
+    
+    
+    double loopElapsedTime = 0.0;
+    double time_tick = 1.0 / TICKS_PER_SECOND;
+    int maxUpdateCount = 5;
     
     SStopwatch stopwatch;
     stopwatch.start();
+    
+    double rot = 0.0;
     
     /* Loop until the user closes the window */
     while (SGL::windowIsGood()) {
@@ -96,6 +110,11 @@ int main(int argc, char* argv[]) {
             
             loopElapsedTime -= time_tick;
             
+            rot += 0.02;
+            
+            camera.transform.translation.x += (sinf(camera.transform.rotation.y)) * speed;
+            camera.transform.translation.z -= (cos(camera.transform.rotation.y)) * speed;
+            
             loops++;
             
         }
@@ -115,6 +134,8 @@ int main(int argc, char* argv[]) {
         SGL::clearMatrix(MAT_MODELVIEW_MATRIX);
         camera.translateToCameraSpace();
         
+        mesh.transform.rotation.y = rot + interpolation * 0.02;
+        
         mesh.render(interpolation);
         
         /* Swap front and back buffers */
@@ -127,9 +148,10 @@ int main(int argc, char* argv[]) {
     // Subsystem shutdown
     SResourceManager::shutdown();
     
-    // Write out the log to a file, make a new path where we can edit if we are on macOS
+    // Write out the log to a file
     #ifdef __APPLE__
     
+    // Because the root path is in the app bundle, which we cant write to, so we move the path to outside it
     SPath log_root_path = SPath(argv[0]);
     
     log_root_path.removeLastPathComponent();
@@ -145,6 +167,8 @@ int main(int argc, char* argv[]) {
     SFileSystem::shutdown();
     
     STime::shutdown();
+    
+    SKeyboardSystem::shutdown();
     
     SGL::shutdown();
     
