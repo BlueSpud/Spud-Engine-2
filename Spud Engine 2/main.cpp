@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
             camera.transform.translation.x += (sinf(camera.transform.rotation.y)) * speed;
             camera.transform.translation.z -= (cos(camera.transform.rotation.y)) * speed;
             
-            sub->transform.rotation.z += 0.2;
+            //sub->transform.rotation.z += 0.2;
             
             loops++;
             

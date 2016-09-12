@@ -65,6 +65,7 @@ void SResourceManager::shutdown() {
         if (resource) {
             
             // Close the file and delete it from memory
+            loaded_resources[i->first]->unload();
             delete loaded_resources[i->first];
             
         }
