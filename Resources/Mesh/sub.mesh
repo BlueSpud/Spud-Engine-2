@@ -1,0 +1,6 @@
+model:Model/sub.obj
+
+mat:Material/test.mat
+
+tex_n:tex_albedo
+tex:Texture/tank.jpg

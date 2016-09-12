@@ -90,6 +90,10 @@ void SMesh::render(double interpolation) {
     
         // Bind the material
         mat_instance->useMaterial();
+        
+        // Force an upload of the matricies
+        SGL::flushMatrix(MAT_PROJECTION_MATRIX);
+        SGL::flushMatrix(MAT_MODELVIEW_MATRIX);
     
         // Render the model
         model->render();

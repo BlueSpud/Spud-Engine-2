@@ -22,6 +22,10 @@ class SObject {
         virtual void render(double interpolation) = 0;
         virtual void update() = 0;
     
+        virtual bool shouldBeRendered() { return true; }
+    
+        virtual ~SObject() { /* stub */ }
+    
     private:
     
         SEventListener event_listener;

@@ -10,7 +10,7 @@
 #include "SFileSystem.hpp"
 
 // Definition for printable names of verbosity
-const char* verbosity_strs[] = {"Critical", "Warning", "Debug"};
+std::string verbosity_strs[] = {"Critical", "Warning", "Debug"};
 
 SVerbosityLevel SLog::verbosity_level = SVerbosityLevel::Critical;
 std::stringstream SLog::log_stream;
@@ -40,7 +40,7 @@ void SLog::verboseLog(SVerbosityLevel verbosity, const char* format, ...) {
         va_end(args);
     
         // Output the message to the log stream, if we're in debug, output to cout as well
-        std::string final_output = "[" + std::string(verbosity_strs[verbosity_level]) + "] " + buffer;
+        std::string final_output = "[" + verbosity_strs[verbosity] + "] " + buffer;
         
         log_stream << final_output << std::endl;
         if (verbosity_level == SVerbosityLevel::Debug)

@@ -26,6 +26,7 @@ class SMaterialInstance {
     public:
     
         void useMaterial();
+        long getMaterialID();
     
     private:
     
@@ -57,6 +58,8 @@ class SMaterial : public SResource {
     
         virtual void upload();
     
+        long mat_id;
+    
     private:
     
         SShader* shader;
@@ -65,6 +68,8 @@ class SMaterial : public SResource {
     
         std::vector<SMaterialInstance*>instances;
     
+        static long next_mat_id;
+        static long current_mat_id;
     
     
 };

@@ -14,6 +14,7 @@
 #include "object.hpp"
 #include "SKeyboardSystem.hpp"
 #include "SMesh.hpp"
+#include "SSceneGraph.hpp"
 #include "SCamera.hpp"
 
 double speed = 0.0;
@@ -58,14 +59,22 @@ int main(int argc, char* argv[]) {
     
     SResourceManager::startup();
     
-    SCamera camera;
-    
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     
     glEnable(GL_DEPTH_TEST);
     
-    SMesh mesh = SMesh(SPath("Mesh/tank.mesh"));
+    // TEMP CODE
+    
+    SCamera camera;
+    
+    SSimpleSceneGraph scene_graph;
+    scene_graph.addObject(new SMesh(SPath("Mesh/tank.mesh")));
+    
+    SMesh* sub = new SMesh(SPath("Mesh/sub.mesh"));
+    sub->transform.translation.x = 4;
+    
+    scene_graph.addObject(sub);
     
     SViewport3D viewport = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
     SGL::setUpViewport(viewport);
@@ -81,6 +90,7 @@ int main(int argc, char* argv[]) {
     
     listener.setHasFocus();
     
+    // END TEMP CODE
     
     double loopElapsedTime = 0.0;
     double time_tick = 1.0 / TICKS_PER_SECOND;
@@ -88,8 +98,6 @@ int main(int argc, char* argv[]) {
     
     SStopwatch stopwatch;
     stopwatch.start();
-    
-    double rot = 0.0;
     
     /* Loop until the user closes the window */
     while (SGL::windowIsGood()) {
@@ -110,10 +118,10 @@ int main(int argc, char* argv[]) {
             
             loopElapsedTime -= time_tick;
             
-            rot += 0.02;
-            
             camera.transform.translation.x += (sinf(camera.transform.rotation.y)) * speed;
             camera.transform.translation.z -= (cos(camera.transform.rotation.y)) * speed;
+            
+            sub->transform.rotation.z += 0.2;
             
             loops++;
             
@@ -131,12 +139,7 @@ int main(int argc, char* argv[]) {
         
         SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
         
-        SGL::clearMatrix(MAT_MODELVIEW_MATRIX);
-        camera.translateToCameraSpace();
-        
-        mesh.transform.rotation.y = rot + interpolation * 0.02;
-        
-        mesh.render(interpolation);
+        scene_graph.render(camera, interpolation);
         
         /* Swap front and back buffers */
         SGL::swapBuffers();

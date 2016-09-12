@@ -96,8 +96,8 @@ glm::mat4 SGL::transformToMatrix(const STransform& transform) {
     
     //Perform the operations on the matrix
     to_return = glm::translate(to_return, transform.translation);
-    to_return = glm::rotate(to_return, transform.rotation.x, glm::vec3(1, 0, 0));
-    to_return = glm::rotate(to_return, transform.rotation.y, glm::vec3(0, 1, 0));
+    to_return = glm::rotate(to_return, transform.rotation.x, x_axis);
+    to_return = glm::rotate(to_return, transform.rotation.y, y_axis);
     to_return = glm::rotate(to_return, transform.rotation.z, z_axis);
     to_return = glm::scale(to_return, transform.scale);
     
@@ -123,10 +123,6 @@ void SGL::loadMatrix(const glm::mat4& mat, const char* mat_name) {
     
     // Load the matrix into the storage
     matrices[mat_name] = mat;
-    
-    // Upload the matrix
-    uploadMatrix(mat, mat_name);
-    
 
 }
 
@@ -138,8 +134,6 @@ void SGL::mulMatrix(const glm::mat4& mat, const char* mat_name) {
         // Multiply it and upload it
         const glm::mat4& mat_current = matrices[mat_name];
         matrices[mat_name] = mat_current * mat;
-        
-        uploadMatrix(matrices[mat_name], mat_name);
         
     } else {
         
@@ -155,5 +149,12 @@ void SGL::clearMatrix(const char* mat_name) {
     
     glm::mat4 mat_new = glm::mat4(1.0);
     loadMatrix(mat_new, mat_name);
+    
+}
+
+void SGL::flushMatrix(const char* mat_name) {
+    
+    // Get the matrix and upload it to the shader
+    uploadMatrix(matrices[mat_name], mat_name);
     
 }

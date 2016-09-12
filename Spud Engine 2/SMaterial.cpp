@@ -8,6 +8,9 @@
 
 #include "SMaterial.hpp"
 
+long SMaterial::next_mat_id = 0;
+long SMaterial::current_mat_id = -1;
+
 /******************************************************************************
  *  Registration for supported material extensions                            *
  ******************************************************************************/
@@ -22,7 +25,10 @@ void SMaterialInstance::useMaterial() {
     
     // Get the currently bound shader
     SShader* current_shader = SShader::getBoundShader();
-    if (current_shader != parent_mat->shader) {
+    if (current_shader != parent_mat->shader && SMaterial::current_mat_id != parent_mat->mat_id) {
+        
+        // Save that we bound this material
+        SMaterial::current_mat_id = parent_mat->mat_id;
         
         // Bind the textures
         for (int i = 0; i < textures.size(); i++)
@@ -33,6 +39,8 @@ void SMaterialInstance::useMaterial() {
     }
     
 }
+
+long SMaterialInstance::getMaterialID() { return parent_mat->mat_id; }
 
 SMaterialInstance::SMaterialInstance() { /* stub */ }
 
@@ -73,6 +81,10 @@ bool SMaterial::load(const SPath& path) {
         }
         
         req_textures_count = (int)req_textures.size();
+        
+        // Get a unique id for this material
+        mat_id = next_mat_id;
+        next_mat_id++;
         
         return true;
         
