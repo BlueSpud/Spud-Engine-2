@@ -28,6 +28,8 @@ class SMaterialInstance {
         void useMaterial();
         long getMaterialID();
     
+        SShader* getShader();
+    
     private:
     
         SMaterialInstance();

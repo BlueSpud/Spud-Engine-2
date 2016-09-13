@@ -41,6 +41,7 @@ void SMaterialInstance::useMaterial() {
 }
 
 long SMaterialInstance::getMaterialID() { return parent_mat->mat_id; }
+SShader* SMaterialInstance::getShader() { return parent_mat->shader; }
 
 SMaterialInstance::SMaterialInstance() { /* stub */ }
 

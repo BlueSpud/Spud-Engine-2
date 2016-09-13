@@ -30,6 +30,9 @@ void SCamera::translateToCameraSpace() {
     
     // Get the matrix and upload it
     glm::mat4 mat = getCameraMatrix();
-    SGL::mulMatrix(mat, MAT_MODELVIEW_MATRIX);
+    SGL::mulMatrix(mat, MAT_VIEW_MATRIX);
+    
+    // Store the view position where everyone can see it
+    SGL::view_position = transform.translation;
     
 }

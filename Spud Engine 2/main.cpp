@@ -18,6 +18,7 @@
 #include "SCamera.hpp"
 
 double speed = 0.0;
+double speed_x = 0.0;
 
 void keyPress(int key) {
     
@@ -30,13 +31,38 @@ void keyPress(int key) {
         case GLFW_KEY_S:
             speed = -0.1;
             break;
+            
+        case GLFW_KEY_D:
+            speed_x = 0.1;
+            break;
+            
+        case GLFW_KEY_A:
+            speed_x = -0.1;
+            break;
     }
     
 }
 
 void keyRelease(int key) {
     
-    speed = 0.0;
+    switch (key) {
+            
+        case GLFW_KEY_W:
+            speed = 0;
+            break;
+            
+        case GLFW_KEY_S:
+            speed = 0;
+            break;
+            
+        case GLFW_KEY_D:
+            speed_x = 0;
+            break;
+            
+        case GLFW_KEY_A:
+            speed_x = 0;
+            break;
+    }
     
 }
 
@@ -84,9 +110,13 @@ int main(int argc, char* argv[]) {
     SKeyboardListener listener;
     listener.bind(&keyPress, GLFW_KEY_S, KEY_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_W, KEY_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_D, KEY_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_A, KEY_ACTION_DOWN);
     
     listener.bind(&keyRelease, GLFW_KEY_S, KEY_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_W, KEY_ACTION_UP);
+    listener.bind(&keyRelease, GLFW_KEY_D, KEY_ACTION_UP);
+    listener.bind(&keyRelease, GLFW_KEY_A, KEY_ACTION_UP);
     
     listener.setHasFocus();
     
@@ -96,8 +126,12 @@ int main(int argc, char* argv[]) {
     double time_tick = 1.0 / TICKS_PER_SECOND;
     int maxUpdateCount = 5;
     
+    glClearColor(0.2, 0.2, 1.0, 1.0);
+    
     SStopwatch stopwatch;
     stopwatch.start();
+    
+    SStopwatch profiler;
     
     /* Loop until the user closes the window */
     while (SGL::windowIsGood()) {
@@ -108,6 +142,7 @@ int main(int argc, char* argv[]) {
         loopElapsedTime += elapsed;
         
         int loops = 0;
+        profiler.start();
         while (loopElapsedTime >= time_tick && loops < maxUpdateCount) {
 
             SEventTick e;
@@ -118,17 +153,21 @@ int main(int argc, char* argv[]) {
             
             loopElapsedTime -= time_tick;
             
-            camera.transform.translation.x += (sinf(camera.transform.rotation.y)) * speed;
-            camera.transform.translation.z -= (cos(camera.transform.rotation.y)) * speed;
-            
-            //sub->transform.rotation.z += 0.2;
+            glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0, -cos(camera.transform.rotation.y) * speed);
+            glm::vec3 strafe = glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0, -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
+
+            camera.transform.translation += strafe + forward;
             
             loops++;
             
         }
         
+        SLog::verboseLog(SVerbosityLevel::Debug, "Update took %fs", (float)profiler.stop());
+        
         if (loops == maxUpdateCount)
             SLog::verboseLog(SVerbosityLevel::Critical, "Cant keep up with %i ticks per second!", TICKS_PER_SECOND);
+        
+        profiler.start();
         
         double interpolation = loopElapsedTime / time_tick;
         
@@ -140,6 +179,8 @@ int main(int argc, char* argv[]) {
         SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
         
         scene_graph.render(camera, interpolation);
+        
+         SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
         
         /* Swap front and back buffers */
         SGL::swapBuffers();

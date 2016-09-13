@@ -86,14 +86,20 @@ void SMesh::render(double interpolation) {
         
         // Get the matrix for the transform and upload it
         glm::mat4 transform_matrix = SGL::transformToMatrix(transform);
-        SGL::mulMatrix(transform_matrix, MAT_MODELVIEW_MATRIX);
+        SGL::mulMatrix(transform_matrix, MAT_MODEL_MATRIX);
     
         // Bind the material
         mat_instance->useMaterial();
         
         // Force an upload of the matricies
         SGL::flushMatrix(MAT_PROJECTION_MATRIX);
-        SGL::flushMatrix(MAT_MODELVIEW_MATRIX);
+        SGL::flushMatrix(MAT_MODEL_MATRIX);
+        SGL::flushMatrix(MAT_VIEW_MATRIX);
+        
+        // Upload other uniforms
+        SShader* material_shader = mat_instance->getShader();
+        
+        material_shader->bindUniform(&SGL::view_position, VEC3_VIEW_POSITION, UNIFORM_VEC3, 1);
     
         // Render the model
         model->render();

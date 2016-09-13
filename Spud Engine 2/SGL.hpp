@@ -36,11 +36,14 @@ struct STransform {
 };
 
 /******************************************************************************
- *  Definition for matrix types/locations                                     *
+ *  Definition for unform locations                                           *
  ******************************************************************************/
 
-#define MAT_MODELVIEW_MATRIX "mat_model_view"
+#define MAT_MODEL_MATRIX "mat_model"
+#define MAT_VIEW_MATRIX "mat_view"
 #define MAT_PROJECTION_MATRIX "mat_projection"
+
+#define VEC3_VIEW_POSITION "view_position"
 
 /******************************************************************************
  *  Definition for 3D viewport                                                *
@@ -95,7 +98,7 @@ class SGL : public SSubsystem {
         static void setUpViewport(const SViewport3D& viewport);
     
 /******************************************************************************
-*  Definition for functions (and data) to manage matrices on the GPU          *
+*  Definition for the matrix stack operations                                 *
 ******************************************************************************/
     
         static void loadMatrix(const glm::mat4& mat, const char* mat_name);
@@ -104,9 +107,13 @@ class SGL : public SSubsystem {
     
         static void flushMatrix(const char* mat_name);
     
-    private:
+/******************************************************************************
+*  Definition for important data pertaining to rendering                      *
+******************************************************************************/
     
-        static void uploadMatrix(const glm::mat4& mat, const char* mat_name);
+        static glm::vec3 view_position;
+    
+    private:
     
         static std::map<const char*, glm::mat4>matrices;
     

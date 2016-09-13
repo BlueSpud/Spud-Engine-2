@@ -1,4 +1,4 @@
-model:Model/sub.obj
+model:Model/sphere.obj
 
 mat:Material/test.mat
 

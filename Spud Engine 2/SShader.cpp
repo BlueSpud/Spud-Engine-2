@@ -17,15 +17,23 @@ SShader* SShader::bound_shader;
 REGISTER_RESOURCE_CLASS(glsl, SShader);
 
 /******************************************************************************
- *  Functions for model                                                       *
+ *  Functions for shader                                                      *
  ******************************************************************************/
 
 SResource* SShader::allocate() { return new SShader(); }
 
-void SShader::bind() {
+bool SShader::bind() {
     
-    bound_shader = this;
-    glUseProgram(program_id);
+    if (bound_shader != this) {
+        
+        bound_shader = this;
+        glUseProgram(program_id);
+        
+        return true;
+        
+    }
+    
+    return false;
 
 }
 
@@ -43,6 +51,52 @@ int SShader::getUniformLocation(SShader* shader, const std::string& name) {
     if (shader && shader->uploaded)
         return glGetUniformLocation(shader->program_id, name.c_str());
     else return -1;
+    
+}
+
+void SShader::bindUniform(void* value, const std::string& name, int type, int count) {
+    
+    // Keep track of the current shader and attempt to bind ourself
+    SShader* bound_shader_old = bound_shader;
+    bool needed_bind = bind();
+    
+    // Call the appropriate uniform function
+    switch (type) {
+            
+            case UNIFORM_INT:
+                glUniform1iv(glGetUniformLocation(program_id, name.c_str()), count, (GLint*)value);
+                break;
+            
+            case UNIFORM_FLOAT:
+                glUniform1fv(glGetUniformLocation(program_id, name.c_str()), count, (GLfloat*)value);
+                break;
+            
+            case UNIFORM_VEC2:
+                glUniform2fv(glGetUniformLocation(program_id, name.c_str()), count, (GLfloat*)value);
+                break;
+            
+            case UNIFORM_VEC3:
+                glUniform3fv(glGetUniformLocation(program_id, name.c_str()), count, (GLfloat*)value);
+                break;
+            
+            case UNIFORM_VEC4:
+                glUniform4fv(glGetUniformLocation(program_id, name.c_str()), count, (GLfloat*)value);
+                break;
+            
+            
+            case UNIFORM_MAT3:
+                glUniformMatrix3fv(glGetUniformLocation(program_id, name.c_str()), count, GL_FALSE, (GLfloat*)value);
+                break;
+            
+            case UNIFORM_MAT4:
+                glUniformMatrix4fv(glGetUniformLocation(program_id, name.c_str()), count, GL_FALSE, (GLfloat*)value);
+                break;
+            
+    }
+    
+    // If we were not the current shader, we need to bind the old one
+    if (needed_bind)
+        bound_shader_old->bind();
     
 }
 
@@ -106,6 +160,9 @@ void SShader::unload() {
 }
 
 void SShader::upload() {
+    
+    // Regardless of if we fail, we uploaded
+    uploaded = true;
     
     // Create space for the shader programs on the GPU
     GLuint vert_id = glCreateShader(GL_VERTEX_SHADER);
@@ -187,6 +244,25 @@ void SShader::upload() {
     glDeleteShader(vert_id);
     glDeleteShader(frag_id);
     
-    uploaded = true;
+}
+
+/******************************************************************************
+ *  Functions for uniform struct                                              *
+ ******************************************************************************/
+
+SShaderUniform::SShaderUniform(void* _value, std::string _name, int _type, int _count) {
+    
+    // Save all the data
+    value = _value;
+    name = _name;
+    type = _type;
+    count = _count;
+    
+}
+
+void SShaderUniform::bind(SShader* shader) {
+    
+    // Shortcut call to bind
+    shader->bindUniform(value, name, type, count);
     
 }

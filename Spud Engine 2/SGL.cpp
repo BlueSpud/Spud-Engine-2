@@ -9,6 +9,8 @@
 #include "SGL.hpp"
 #include "SShader.hpp"
 
+glm::vec3 SGL::view_position;
+
 GLFWwindow* SGL::window;
 std::map<const char*, glm::mat4>SGL::matrices;
 
@@ -77,19 +79,6 @@ void SGL::setKeyCallback(GLFWkeyfun func) { glfwSetKeyCallback(window, func); }
  *  Functions for operations pertaining to graphics math                      *
  ******************************************************************************/
 
-void SGL::uploadMatrix(const glm::mat4& mat, const char* mat_name) {
-    
-    // Get the shader if it exists
-    SShader* shader = SShader::getBoundShader();
-    if (shader) {
-        
-        // Upload the matrix
-        glUniformMatrix4fv(SShader::getUniformLocation(shader, mat_name), 1, GL_FALSE, &mat[0][0]);
-        
-    }
-
-}
-
 glm::mat4 SGL::transformToMatrix(const STransform& transform) {
     
     glm::mat4 to_return = glm::mat4(1.0);
@@ -116,7 +105,7 @@ void SGL::setUpViewport(const SViewport3D& viewport) { glViewport(viewport.scree
                                                                   viewport.screen_size.y); }
 
 /******************************************************************************
- *  Functions for managing matrices on the GPU                                *
+ *  Functions for the matrix stack                                            *
  ******************************************************************************/
 
 void SGL::loadMatrix(const glm::mat4& mat, const char* mat_name) {
@@ -144,7 +133,6 @@ void SGL::mulMatrix(const glm::mat4& mat, const char* mat_name) {
 
 }
 
-
 void SGL::clearMatrix(const char* mat_name) {
     
     glm::mat4 mat_new = glm::mat4(1.0);
@@ -154,7 +142,13 @@ void SGL::clearMatrix(const char* mat_name) {
 
 void SGL::flushMatrix(const char* mat_name) {
     
-    // Get the matrix and upload it to the shader
-    uploadMatrix(matrices[mat_name], mat_name);
+    // Get the currently bound shader
+    SShader* shader = SShader::getBoundShader();
+    if (shader) {
+        
+        // Now tell it to upload a uniform of type matrix
+        shader->bindUniform(&matrices[mat_name], mat_name, UNIFORM_MAT4, 1);
+        
+    }
     
 }

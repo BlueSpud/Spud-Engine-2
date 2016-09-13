@@ -26,12 +26,14 @@ void SSimpleSceneGraph::render(SCamera& camera, double interpolation) {
         
     }
     
+    SGL::clearMatrix(MAT_VIEW_MATRIX);
+    camera.translateToCameraSpace();
+    
     // Objects are collected, now they are rendered
     for (int j = 0; j < rendered_objects.size(); j++) {
         
         // Set up the matricies for this
-        SGL::clearMatrix(MAT_MODELVIEW_MATRIX);
-        camera.translateToCameraSpace();
+        SGL::clearMatrix(MAT_MODEL_MATRIX);
         
         rendered_objects[j]->render(interpolation);
     }
