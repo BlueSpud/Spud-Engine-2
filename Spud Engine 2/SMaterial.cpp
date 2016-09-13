@@ -23,17 +23,15 @@ REGISTER_RESOURCE_CLASS(mat, SMaterial);
 
 void SMaterialInstance::useMaterial() {
     
+    // Bind the textures
+    for (int i = 0; i < textures.size(); i++)
+    textures[i]->bind(i);
+    
     // Get the currently bound shader
     SShader* current_shader = SShader::getBoundShader();
-    if (current_shader != parent_mat->shader && SMaterial::current_mat_id != parent_mat->mat_id) {
+    if (current_shader != parent_mat->shader) {
         
-        // Save that we bound this material
-        SMaterial::current_mat_id = parent_mat->mat_id;
-        
-        // Bind the textures
-        for (int i = 0; i < textures.size(); i++)
-            textures[i]->bind(i);
- 
+        // Bind the shader
         parent_mat->shader->bind();
         
     }

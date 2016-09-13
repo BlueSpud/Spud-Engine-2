@@ -20,6 +20,8 @@
 double speed = 0.0;
 double speed_x = 0.0;
 
+double speed_r = 0.0;
+
 void keyPress(int key) {
     
     switch (key) {
@@ -38,6 +40,10 @@ void keyPress(int key) {
             
         case GLFW_KEY_A:
             speed_x = -0.1;
+            break;
+            
+        case GLFW_KEY_LEFT:
+            speed_r = 0.1;
             break;
     }
     
@@ -61,6 +67,10 @@ void keyRelease(int key) {
             
         case GLFW_KEY_A:
             speed_x = 0;
+            break;
+            
+        case GLFW_KEY_LEFT:
+            speed_r = 0.0;
             break;
     }
     
@@ -98,25 +108,27 @@ int main(int argc, char* argv[]) {
     scene_graph.addObject(new SMesh(SPath("Mesh/tank.mesh")));
     
     SMesh* sub = new SMesh(SPath("Mesh/sub.mesh"));
-    sub->transform.translation.x = 4;
+    sub->transform.translation.x = 2.0;
     
     scene_graph.addObject(sub);
     
     SViewport3D viewport = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
     SGL::setUpViewport(viewport);
     
-    camera.transform.translation.y = 1.0;
+    camera.transform.translation.y = 2.0;
     
     SKeyboardListener listener;
     listener.bind(&keyPress, GLFW_KEY_S, KEY_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_W, KEY_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_D, KEY_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_A, KEY_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_LEFT, KEY_ACTION_DOWN);
     
     listener.bind(&keyRelease, GLFW_KEY_S, KEY_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_W, KEY_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_D, KEY_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_A, KEY_ACTION_UP);
+    listener.bind(&keyRelease, GLFW_KEY_LEFT, KEY_ACTION_UP);
     
     listener.setHasFocus();
     
@@ -126,7 +138,7 @@ int main(int argc, char* argv[]) {
     double time_tick = 1.0 / TICKS_PER_SECOND;
     int maxUpdateCount = 5;
     
-    glClearColor(0.2, 0.2, 1.0, 1.0);
+    glClearColor(0.2, 0.2, 0.2, 1.0);
     
     SStopwatch stopwatch;
     stopwatch.start();
@@ -157,6 +169,7 @@ int main(int argc, char* argv[]) {
             glm::vec3 strafe = glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0, -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
 
             camera.transform.translation += strafe + forward;
+            camera.transform.rotation.y += speed_r;
             
             loops++;
             

@@ -17,7 +17,7 @@ void main() {
     
     mat4 mat_model_view = mat_view * mat_model;
     
-    normal0 = (transpose(inverse(mat_model_view)) * vec4(normal, 0.0)).xyz;
+    normal0 = (transpose(inverse(mat_model)) * vec4(normal, 0.0)).xyz;
     tex_coord0 = tex_coord;
     
     // Calculate world space and view space positions
