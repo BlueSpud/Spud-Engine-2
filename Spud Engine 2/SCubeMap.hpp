@@ -1,24 +1,21 @@
 //
-//  STexture.hpp
+//  SCubeMap.hpp
 //  Spud Engine 2
 //
-//  Created by Logan Pazol on 9/10/16.
+//  Created by Logan Pazol on 9/14/16.
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#ifndef STexture_hpp
-#define STexture_hpp
+#ifndef SCubeMap_hpp
+#define SCubeMap_hpp
 
-#include <FreeImage.h>
-
-#include "SResourceManager.hpp"
-#include "SGL.hpp"
+#include "STexture.hpp"
 
 /******************************************************************************
- *  Definition for texture                                                    *
+ *  Definition for cube map                                                   *
  ******************************************************************************/
 
-class STexture : public SResource {
+class SCubeMap : public STexture {
     
     public:
     
@@ -35,9 +32,9 @@ class STexture : public SResource {
         virtual void upload();
     
     private:
-    
-        FIBITMAP* bitmap;
-        BYTE* image_data;
+
+        BYTE* image_data[6];
+        FIBITMAP* bitmaps[6];
     
         unsigned int width;
         unsigned int height;
@@ -46,4 +43,4 @@ class STexture : public SResource {
     
 };
 
-#endif /* STexture_hpp */
+#endif /* SCubeMap_hpp */

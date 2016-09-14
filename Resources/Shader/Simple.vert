@@ -8,22 +8,16 @@ in vec3 position;
 in vec3 normal;
 in vec2 tex_coord;
 
-out vec3 position_world;
-out vec3 position_view;
+out vec3 position0;
 out vec3 normal0;
 out vec2 tex_coord0;
 
 void main() {
     
-    mat4 mat_model_view = mat_view * mat_model;
-    
+    position0 = (mat_model * vec4(position, 1.0)).xyz;
     normal0 = (transpose(inverse(mat_model)) * vec4(normal, 0.0)).xyz;
     tex_coord0 = tex_coord;
     
-    // Calculate world space and view space positions
-    position_world = (mat_model * vec4(position, 1.0)).xyz;
-    
-    vec4 position_view_f = gl_Position = mat_projection * mat_view * vec4(position_world, 1.0);
-    position_view = position_view_f.xyz;
+    gl_Position = mat_projection * mat_view * vec4(position0, 1.0);
     
 }

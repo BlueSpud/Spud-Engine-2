@@ -175,7 +175,7 @@ int main(int argc, char* argv[]) {
             
         }
         
-        SLog::verboseLog(SVerbosityLevel::Debug, "Update took %fs", (float)profiler.stop());
+        //SLog::verboseLog(SVerbosityLevel::Debug, "Update took %fs", (float)profiler.stop());
         
         if (loops == maxUpdateCount)
             SLog::verboseLog(SVerbosityLevel::Critical, "Cant keep up with %i ticks per second!", TICKS_PER_SECOND);
@@ -193,7 +193,7 @@ int main(int argc, char* argv[]) {
         
         scene_graph.render(camera, interpolation);
         
-         SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
+        //SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
         
         /* Swap front and back buffers */
         SGL::swapBuffers();

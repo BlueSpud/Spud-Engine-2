@@ -7,3 +7,6 @@ tex:Texture/material_test_color.png
 
 tex_n:tex_orm
 tex:Texture/material_test_orm.png
+
+tex_n:tex_cube
+tex:Texture/sky.cube

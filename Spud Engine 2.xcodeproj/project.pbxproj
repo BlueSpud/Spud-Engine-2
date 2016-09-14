@@ -15,6 +15,7 @@
 		0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0236A34C1D7D316D00DB2DBA /* SLog.cpp */; };
 		0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3A1D7DC57300B3E63E /* STime.cpp */; };
 		0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3E1D7DC64300B3E63E /* SGL.cpp */; };
+		025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025536521D8993B5003D04EE /* SCubeMap.cpp */; };
 		025903251D7793EA00EA6372 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259031E1D7793EA00EA6372 /* libboost_system.a */; };
 		025903261D7793EA00EA6372 /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259031F1D7793EA00EA6372 /* libboost_thread.a */; };
 		025903271D7793EA00EA6372 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903201D7793EA00EA6372 /* libglfw3.a */; };
@@ -77,6 +78,8 @@
 		0251FC3B1D7DC57300B3E63E /* STime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = STime.hpp; sourceTree = "<group>"; };
 		0251FC3E1D7DC64300B3E63E /* SGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGL.cpp; sourceTree = "<group>"; };
 		0251FC3F1D7DC64300B3E63E /* SGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SGL.hpp; sourceTree = "<group>"; };
+		025536521D8993B5003D04EE /* SCubeMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SCubeMap.cpp; sourceTree = "<group>"; };
+		025536531D8993B5003D04EE /* SCubeMap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SCubeMap.hpp; sourceTree = "<group>"; };
 		025903091D77933E00EA6372 /* Spud Engine 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Spud Engine 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		025903171D77933E00EA6372 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0259031E1D7793EA00EA6372 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = /usr/local/lib/libboost_system.a; sourceTree = "<absolute>"; };
@@ -167,6 +170,8 @@
 				0228B8831D7A779200596526 /* SModel.hpp */,
 				025CB5AE1D83EB500059AF6C /* STexture.cpp */,
 				025CB5AF1D83EB500059AF6C /* STexture.hpp */,
+				025536521D8993B5003D04EE /* SCubeMap.cpp */,
+				025536531D8993B5003D04EE /* SCubeMap.hpp */,
 				025CB5941D83CD880059AF6C /* SShader.cpp */,
 				025CB5951D83CD880059AF6C /* SShader.hpp */,
 				029865811D847429005EED43 /* SMaterial.cpp */,
@@ -401,6 +406,7 @@
 				029865831D847429005EED43 /* SMaterial.cpp in Sources */,
 				025CB5961D83CD880059AF6C /* SShader.cpp in Sources */,
 				029865A11D84D0A4005EED43 /* SKeyboardSystem.cpp in Sources */,
+				025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */,
 				0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */,
 				0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */,
 				022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */,

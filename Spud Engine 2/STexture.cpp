@@ -9,7 +9,7 @@
 #include "STexture.hpp"
 
 /******************************************************************************
- *  Registration for supported texture extensions                               *
+ *  Registration for supported texture extensions                             *
  ******************************************************************************/
 
 REGISTER_RESOURCE_CLASS(png, STexture);
@@ -78,7 +78,6 @@ void STexture::unload() {
         
         // Clean up image data still in normal RAM
         FreeImage_Unload(bitmap);
-        //delete image_data;
         
     } else {
         
@@ -112,7 +111,6 @@ void STexture::upload() {
     
     // Clean up image data
     FreeImage_Unload(bitmap);
-    //delete image_data;
     
     // Bind the default texture just in case
     glBindTexture(GL_TEXTURE_2D, 0);
