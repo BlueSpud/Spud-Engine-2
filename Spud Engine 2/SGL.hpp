@@ -43,8 +43,6 @@ struct STransform {
 #define MAT_VIEW_MATRIX "mat_view"
 #define MAT_PROJECTION_MATRIX "mat_projection"
 
-#define VEC3_VIEW_POSITION "view_position"
-
 /******************************************************************************
  *  Definition for 3D viewport                                                *
  ******************************************************************************/
@@ -106,12 +104,6 @@ class SGL : public SSubsystem {
         static void clearMatrix(const char* mat_name);
     
         static void flushMatrix(const char* mat_name);
-    
-/******************************************************************************
-*  Definition for important data pertaining to rendering                      *
-******************************************************************************/
-    
-        static glm::vec3 view_position;
     
     private:
     

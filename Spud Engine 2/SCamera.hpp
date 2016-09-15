@@ -9,6 +9,7 @@
 #ifndef SCamera_hpp
 #define SCamera_hpp
 
+#include "SUniform.hpp"
 #include "SGL.hpp"
 
 /******************************************************************************
@@ -23,6 +24,9 @@ class SCamera {
     
         glm::mat4 getCameraMatrix();
         void translateToCameraSpace();
+    
+        // Store the last camera position
+        static glm::vec3 view_position;
     
 };
 

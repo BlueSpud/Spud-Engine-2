@@ -8,6 +8,9 @@
 
 #include "SCamera.hpp"
 
+glm::vec3 SCamera::view_position;
+REGISTER_UNIFORM(&SCamera::view_position, "view_position", UNIFORM_VEC3, 1);
+
 /******************************************************************************
  *  Functions for camera                                                      *
  ******************************************************************************/
@@ -33,6 +36,6 @@ void SCamera::translateToCameraSpace() {
     SGL::mulMatrix(mat, MAT_VIEW_MATRIX);
     
     // Store the view position where everyone can see it
-    SGL::view_position = transform.translation;
+    view_position = transform.translation;
     
 }

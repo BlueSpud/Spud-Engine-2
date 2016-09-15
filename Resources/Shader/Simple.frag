@@ -21,7 +21,7 @@ const float light_intensity = 1.0;
 const vec3 light_color = vec3(1.0, 0.0, 0.0);
 const vec3 light_position = vec3(2.0, 2.0, 2.0);
 
-const float fresnel_pow = 5.0;
+const float fresnel_pow = 2.0;
 
 float lerp(float a, float b, float p) {
     
@@ -46,6 +46,7 @@ void main() {
     
     vec3 properties = texture(tex_orm, tex_coord0).xyz;
     float roughness = properties.y;
+    float inverse_roughness = 1.0 - roughness;
     float metalic = properties.z;
     
     vec3 L = normalize(-light_position);
@@ -55,7 +56,7 @@ void main() {
     float intensity_diffuse = dot(-L, normal0) * light_intensity + 0.1;
     
     // Calculate fresnel term (D)
-    float F0 = clamp(roughness, 0.05, 1.0);
+    float F0 = clamp(inverse_roughness, 0.05, 0.5);
     vec3 V = normalize(position0 - view_position);
     float fresnel = F0 + (1.0 - F0) * pow(1.0 + dot(normal0, V), fresnel_pow);
     
@@ -63,7 +64,6 @@ void main() {
     vec3 H = normalize(L + V);
     
     // Calculate a few things with alpha
-    float inverse_roughness = 1.0 - roughness;
     float a = inverse_roughness * inverse_roughness;
     float a_sqrd = a * a;
     
@@ -86,10 +86,10 @@ void main() {
     
     // Get the reflection color
     vec3 reflection = reflect(-V, normal0);
-    vec3 reflection_color = textureLod(tex_cube, reflection, int(metalic * 5.0)).xyz * tex_color;
+    vec3 reflection_color = textureLod(tex_cube, reflection, int(metalic * 7.0)).xyz * tex_color;
     
     // Combine lighting and texture
-    vec3 color = lerp(tex_color, reflection_color, roughness) * properties.x * (lerp(specular, intensity_diffuse, metalic));
+    vec3 color = lerp(tex_color, reflection_color, roughness) * properties.x * (lerp(specular, intensity_diffuse, clamp(metalic, 0.2, 1.0)));
     
     
     out_color = vec4(color, 1.0);

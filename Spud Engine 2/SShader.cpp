@@ -100,6 +100,8 @@ void SShader::bindUniform(void* value, const std::string& name, int type, int co
     
 }
 
+void SShader::bindUniform(SUniform* uniform) { bindUniform(uniform->value, uniform->name, uniform->type, uniform->count); }
+
 bool SShader::load(const SPath& path) {
     
     // Get two files, one for the frag and one for the vert
@@ -243,26 +245,5 @@ void SShader::upload() {
     // Clean up the uneeded shader source
     glDeleteShader(vert_id);
     glDeleteShader(frag_id);
-    
-}
-
-/******************************************************************************
- *  Functions for uniform struct                                              *
- ******************************************************************************/
-
-SShaderUniform::SShaderUniform(void* _value, std::string _name, int _type, int _count) {
-    
-    // Save all the data
-    value = _value;
-    name = _name;
-    type = _type;
-    count = _count;
-    
-}
-
-void SShaderUniform::bind(SShader* shader) {
-    
-    // Shortcut call to bind
-    shader->bindUniform(value, name, type, count);
     
 }

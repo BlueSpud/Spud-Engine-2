@@ -12,7 +12,7 @@ std::map<size_t, SResource*>SResourceManager::loaded_resources;
 std::hash<std::string>SResourceManager::hasher;
 
 /******************************************************************************
- *  Functions  for generic resource                                           *
+ *  Functions for generic resource                                            *
  ******************************************************************************/
 
 SResource* SResource::allocate() { return nullptr; }
@@ -21,7 +21,7 @@ SResource::~SResource() { /* stub */ }
 void SResource::upload() { uploaded = true; }
 
 /******************************************************************************
- *  Functions  for resource allocation manager                                *
+ *  Functions for resource allocation manager                                 *
  ******************************************************************************/
 
 SResourceAllocatorManger* SResourceAllocatorManger::instance() {
@@ -44,7 +44,7 @@ bool SResourceAllocatorManger::registerAllocatorForExtension(const std::string& 
 }
 
 /******************************************************************************
- *  Functions  for resource manager                                           *
+ *  Functions for resource manager                                            *
  ******************************************************************************/
 
 void SResourceManager::startup() {

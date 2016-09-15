@@ -65,7 +65,10 @@ class SMaterial : public SResource {
     private:
     
         SShader* shader;
+    
         std::vector<std::string>req_textures;
+        std::vector<SUniform*>uniforms;
+    
         int req_textures_count;
     
         std::vector<SMaterialInstance*>instances;

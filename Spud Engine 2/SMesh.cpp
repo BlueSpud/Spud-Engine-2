@@ -95,12 +95,7 @@ void SMesh::render(double interpolation) {
         SGL::flushMatrix(MAT_PROJECTION_MATRIX);
         SGL::flushMatrix(MAT_MODEL_MATRIX);
         SGL::flushMatrix(MAT_VIEW_MATRIX);
-        
-        // Upload other uniforms
-        SShader* material_shader = mat_instance->getShader();
-        
-        material_shader->bindUniform(&SGL::view_position, VEC3_VIEW_POSITION, UNIFORM_VEC3, 1);
-    
+
         // Render the model
         model->render();
         

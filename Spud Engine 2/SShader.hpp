@@ -11,20 +11,7 @@
 
 #include "SResourceManager.hpp"
 #include "SGL.hpp"
-
-/******************************************************************************
- *  Definition for types of uniforms                                          *
- ******************************************************************************/
-
-#define UNIFORM_INT 0
-#define UNIFORM_FLOAT 1
-
-#define UNIFORM_VEC2 10
-#define UNIFORM_VEC3 11
-#define UNIFORM_VEC4 12
-
-#define UNIFORM_MAT3 20
-#define UNIFORM_MAT4 21
+#include "SUniform.hpp"
 
 /******************************************************************************
  *  Definition for shader                                                     *
@@ -43,6 +30,7 @@ class SShader : public SResource {
         static int getUniformLocation(SShader* shader, const std::string& name);
     
         void bindUniform(void* value, const std::string& name, int type, int count);
+        void bindUniform(SUniform* uniform);
     
     protected:
     
@@ -60,23 +48,6 @@ class SShader : public SResource {
 
         static SShader* bound_shader;
     
-    
-};
-
-/******************************************************************************
- *  Definition for uniform struct                                             *
- ******************************************************************************/
-
-struct SShaderUniform {
-    
-    int type;
-    int count;
-    void* value;
-    
-    std::string name;
-    
-    SShaderUniform(void* _value, std::string _name, int _type, int _count);
-    void bind(SShader* shader);
     
 };
 

@@ -9,8 +9,6 @@
 #include "SGL.hpp"
 #include "SShader.hpp"
 
-glm::vec3 SGL::view_position;
-
 GLFWwindow* SGL::window;
 std::map<const char*, glm::mat4>SGL::matrices;
 

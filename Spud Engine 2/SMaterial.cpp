@@ -25,7 +25,7 @@ void SMaterialInstance::useMaterial() {
     
     // Bind the textures
     for (int i = 0; i < textures.size(); i++)
-    textures[i]->bind(i);
+        textures[i]->bind(i);
     
     // Get the currently bound shader
     SShader* current_shader = SShader::getBoundShader();
@@ -35,6 +35,10 @@ void SMaterialInstance::useMaterial() {
         parent_mat->shader->bind();
         
     }
+    
+    // Bind the uniforms
+    for (int i = 0; i < parent_mat->uniforms.size(); i++)
+        parent_mat->shader->bindUniform(parent_mat->uniforms[i]);
     
 }
 
@@ -74,6 +78,14 @@ bool SMaterial::load(const SPath& path) {
                 // We found a required texture
                 std::string tex_name = line.substr(4, line.length() - 4);
                 req_textures.push_back(tex_name);
+                
+            }
+            
+            if (line.compare(0, 2, "u:") == 0) {
+                
+                // We found a required texture
+                std::string uniform_name = line.substr(2, line.length() - 2);
+                uniforms.push_back(SUniformManger::instance()->getUniformWithName(uniform_name));
                 
             }
             
