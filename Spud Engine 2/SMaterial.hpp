@@ -58,7 +58,7 @@ class SMaterial : public SResource {
         virtual bool load(const SPath& path);
         virtual void unload();
     
-        virtual void upload();
+        void uploadTextureIDs();
     
         long mat_id;
     

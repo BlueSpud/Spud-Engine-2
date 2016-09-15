@@ -34,6 +34,8 @@ void SMaterialInstance::useMaterial() {
         // Bind the shader
         parent_mat->shader->bind();
         
+        parent_mat->uploadTextureIDs();
+        
     }
     
     // Bind the uniforms
@@ -140,7 +142,7 @@ SMaterialInstance* SMaterial::createMaterialInstance(std::map<std::string, SText
     
 }
 
-void SMaterial::upload() {
+void SMaterial::uploadTextureIDs() {
     
     shader->bind();
     
@@ -148,7 +150,6 @@ void SMaterial::upload() {
     for (int i = 0; i < req_textures_count; i++)
         glUniform1i(SShader::getUniformLocation(shader, req_textures[i]), i);
     
-    shader->unbind();
     
 }
 

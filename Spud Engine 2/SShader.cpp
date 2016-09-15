@@ -24,7 +24,7 @@ SResource* SShader::allocate() { return new SShader(); }
 
 bool SShader::bind() {
     
-    if (bound_shader != this) {
+    if (bound_shader != this && uploaded) {
         
         bound_shader = this;
         glUseProgram(program_id);
@@ -142,6 +142,17 @@ bool SShader::load(const SPath& path) {
     frag_string = new char[strlen(frag_string_r)];
     strcpy(frag_string, frag_string_r);
     
+    // Make an upload
+    SShaderUpload* upload = new SShaderUpload();
+    
+    upload->vert_string = vert_string;
+    upload->frag_string = frag_string;
+    
+    upload->program_id = &program_id;
+    upload->uploaded = &uploaded;
+    
+    SGLUploadSystem::addUpload(upload);
+    
     return true;
     
 }
@@ -151,20 +162,13 @@ void SShader::unload() {
     // Delete the program if it was successfully made
     if (uploaded)
         glDeleteProgram(program_id);
-    else {
-        
-        // Delete the strings
-        delete vert_string;
-        delete frag_string;
-        
-    }
     
 }
 
-void SShader::upload() {
+void SShaderUpload::upload() {
     
     // Regardless of if we fail, we uploaded
-    uploaded = true;
+    *uploaded = true;
     
     // Create space for the shader programs on the GPU
     GLuint vert_id = glCreateShader(GL_VERTEX_SHADER);
@@ -174,9 +178,7 @@ void SShader::upload() {
     glShaderSource(vert_id, 1, &vert_string, NULL);
     glShaderSource(frag_id, 1, &frag_string, NULL);
     
-    // Delete the strings
-    delete vert_string;
-    delete frag_string;
+    unload();
     
     // Compile the shaders
     glCompileShader(vert_id);
@@ -231,19 +233,27 @@ void SShader::upload() {
     
     
     // Both shaders compiled correctly, link them and finish
-    program_id = glCreateProgram();
-    glAttachShader(program_id, frag_id);
-    glAttachShader(program_id, vert_id);
+    *program_id = glCreateProgram();
+    glAttachShader(*program_id, frag_id);
+    glAttachShader(*program_id, vert_id);
     
     // Attribute bindings
-    glBindAttribLocation(program_id, 0, "position");
-    glBindAttribLocation(program_id, 1, "normal");
-    glBindAttribLocation(program_id, 2, "tex_coord");
+    glBindAttribLocation(*program_id, 0, "position");
+    glBindAttribLocation(*program_id, 1, "normal");
+    glBindAttribLocation(*program_id, 2, "tex_coord");
     
-    glLinkProgram(program_id);
+    glLinkProgram(*program_id);
     
     // Clean up the uneeded shader source
     glDeleteShader(vert_id);
     glDeleteShader(frag_id);
+    
+}
+
+void SShaderUpload::unload() {
+    
+    // Delete the strings in RAM
+    delete vert_string;
+    delete frag_string;
     
 }

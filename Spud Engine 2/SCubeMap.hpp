@@ -12,6 +12,25 @@
 #include "STexture.hpp"
 
 /******************************************************************************
+ *  Definition for cube map upload                                            *
+ ******************************************************************************/
+
+struct SCubeMapUpload : public SGLUpload {
+    
+    virtual void upload();
+    virtual void unload();
+  
+    BYTE** image_data;
+    FIBITMAP** bitmaps;
+    
+    unsigned int width;
+    unsigned int height;
+    
+    GLuint* texture_id;
+    
+};
+
+/******************************************************************************
  *  Definition for cube map                                                   *
  ******************************************************************************/
 
@@ -28,8 +47,6 @@ class SCubeMap : public STexture {
     
         virtual bool load(const SPath& path);
         virtual void unload();
-    
-        virtual void upload();
     
     private:
 

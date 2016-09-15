@@ -32,6 +32,7 @@
 		025CB5AC1D83D6E20059AF6C /* Shader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 025CB5AB1D83D6D30059AF6C /* Shader */; };
 		025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025CB5AE1D83EB500059AF6C /* STexture.cpp */; };
 		025CB5B21D83EE5E0059AF6C /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025CB5B11D83EE5E0059AF6C /* libfreeimage.a */; };
+		02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02956BCE1D8B0FFB0035733E /* SGLUpload.cpp */; };
 		029865801D8460DC005EED43 /* SCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0298657E1D8460DC005EED43 /* SCamera.cpp */; };
 		029865831D847429005EED43 /* SMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 029865811D847429005EED43 /* SMaterial.cpp */; };
 		029865851D84771F005EED43 /* Material in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865841D84771A005EED43 /* Material */; };
@@ -42,6 +43,7 @@
 		029865A11D84D0A4005EED43 /* SKeyboardSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0298659F1D84D0A4005EED43 /* SKeyboardSystem.cpp */; };
 		02B947F81D89FF7200822957 /* SUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B947F61D89FF7200822957 /* SUniform.cpp */; };
 		02D35A731D86217A00F62A7B /* SSceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D35A711D86217A00F62A7B /* SSceneGraph.cpp */; };
+		02DAB8C61D8A28F900A39E27 /* SRenderingPipline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02DAB8C41D8A28F900A39E27 /* SRenderingPipline.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -97,12 +99,14 @@
 		025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
 		025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
 		025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
+		025A4A491D8B0EAB00AFFB79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Base; path = Base.lproj/SGLUpload.hpp; sourceTree = "<group>"; };
 		025CB5941D83CD880059AF6C /* SShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SShader.cpp; sourceTree = "<group>"; };
 		025CB5951D83CD880059AF6C /* SShader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SShader.hpp; sourceTree = "<group>"; };
 		025CB5AB1D83D6D30059AF6C /* Shader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shader; path = Resources/Shader; sourceTree = "<group>"; };
 		025CB5AE1D83EB500059AF6C /* STexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STexture.cpp; sourceTree = "<group>"; };
 		025CB5AF1D83EB500059AF6C /* STexture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = STexture.hpp; sourceTree = "<group>"; };
 		025CB5B11D83EE5E0059AF6C /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = FreeImage/lib/libfreeimage.a; sourceTree = "<group>"; };
+		02956BCE1D8B0FFB0035733E /* SGLUpload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGLUpload.cpp; sourceTree = "<group>"; };
 		0298657E1D8460DC005EED43 /* SCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SCamera.cpp; sourceTree = "<group>"; };
 		0298657F1D8460DC005EED43 /* SCamera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SCamera.hpp; sourceTree = "<group>"; };
 		029865811D847429005EED43 /* SMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMaterial.cpp; sourceTree = "<group>"; };
@@ -120,6 +124,8 @@
 		02B947F71D89FF7200822957 /* SUniform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUniform.hpp; sourceTree = "<group>"; };
 		02D35A711D86217A00F62A7B /* SSceneGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSceneGraph.cpp; sourceTree = "<group>"; };
 		02D35A721D86217A00F62A7B /* SSceneGraph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSceneGraph.hpp; sourceTree = "<group>"; };
+		02DAB8C41D8A28F900A39E27 /* SRenderingPipline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRenderingPipline.cpp; sourceTree = "<group>"; };
+		02DAB8C51D8A28F900A39E27 /* SRenderingPipline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRenderingPipline.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +219,8 @@
 		0251FC3D1D7DC62400B3E63E /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
+				025A4A451D8B0E9900AFFB79 /* Management */,
+				02DAB8C31D8A28EB00A39E27 /* Pipline */,
 				0298658D1D84A264005EED43 /* Objects */,
 				0298657E1D8460DC005EED43 /* SCamera.cpp */,
 				0298657F1D8460DC005EED43 /* SCamera.hpp */,
@@ -302,6 +310,15 @@
 			name = GLFW;
 			sourceTree = "<group>";
 		};
+		025A4A451D8B0E9900AFFB79 /* Management */ = {
+			isa = PBXGroup;
+			children = (
+				02956BCE1D8B0FFB0035733E /* SGLUpload.cpp */,
+				025A4A481D8B0EAB00AFFB79 /* SGLUpload.hpp */,
+			);
+			name = Management;
+			sourceTree = "<group>";
+		};
 		025CB5A61D83D6AE0059AF6C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -351,6 +368,15 @@
 				02D35A721D86217A00F62A7B /* SSceneGraph.hpp */,
 			);
 			name = Level;
+			sourceTree = "<group>";
+		};
+		02DAB8C31D8A28EB00A39E27 /* Pipline */ = {
+			isa = PBXGroup;
+			children = (
+				02DAB8C41D8A28F900A39E27 /* SRenderingPipline.cpp */,
+				02DAB8C51D8A28F900A39E27 /* SRenderingPipline.hpp */,
+			);
+			name = Pipline;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -425,15 +451,28 @@
 				0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */,
 				022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */,
 				025903311D77940400EA6372 /* object.cpp in Sources */,
+				02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */,
 				0228B8841D7A779200596526 /* SModel.cpp in Sources */,
 				0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */,
 				025903301D77940400EA6372 /* main.cpp in Sources */,
 				0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */,
 				0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */,
+				02DAB8C61D8A28F900A39E27 /* SRenderingPipline.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		025A4A481D8B0EAB00AFFB79 /* SGLUpload.hpp */ = {
+			isa = PBXVariantGroup;
+			children = (
+				025A4A491D8B0EAB00AFFB79 /* Base */,
+			);
+			name = SGLUpload.hpp;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		025903181D77933E00EA6372 /* Debug */ = {

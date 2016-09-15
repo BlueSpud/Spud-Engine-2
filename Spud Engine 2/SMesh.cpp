@@ -104,3 +104,11 @@ void SMesh::render(double interpolation) {
 }
 
 void SMesh::update() { /* stub */ }
+
+bool SMesh::shouldBeRendered() {
+    
+    // Perform culling in here
+    
+    return true;
+
+}

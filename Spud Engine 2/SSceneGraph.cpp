@@ -12,6 +12,10 @@ SSceneGraph::~SSceneGraph() { /* stub, destroy objects, scene graph manages memo
 
 void SSimpleSceneGraph::render(SCamera& camera, double interpolation) {
 
+    // Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling
+    SGL::clearMatrix(MAT_VIEW_MATRIX);
+    camera.translateToCameraSpace();
+    
     // Make sure that anything we want to render is added to the reder que
     std::vector<SObject*>rendered_objects;
     
@@ -25,9 +29,6 @@ void SSimpleSceneGraph::render(SCamera& camera, double interpolation) {
         i++;
         
     }
-    
-    SGL::clearMatrix(MAT_VIEW_MATRIX);
-    camera.translateToCameraSpace();
     
     // Objects are collected, now they are rendered
     for (int j = 0; j < rendered_objects.size(); j++) {

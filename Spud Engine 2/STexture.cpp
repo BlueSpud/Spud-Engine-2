@@ -57,10 +57,17 @@ bool STexture::load(const SPath& path) {
         // Make sure we can actualy read the image
         if (FreeImage_HasPixels(bitmap)) {
             
-            // Save the data, done loading
-            image_data = FreeImage_GetBits(bitmap);
-            width = FreeImage_GetWidth(bitmap);
-            height =  FreeImage_GetHeight(bitmap);
+            // Create an upload and send it off
+            STextureUpload* upload = new STextureUpload();
+            upload->image_data = FreeImage_GetBits(bitmap);
+            upload->bitmap = bitmap;
+            upload->width = FreeImage_GetWidth(bitmap);
+            upload->height =  FreeImage_GetHeight(bitmap);
+            
+            upload->texture_id = &texture_id;
+            upload->uploaded = &uploaded;
+            
+            SGLUploadSystem::addUpload(upload);
             
             return true;
             
@@ -74,25 +81,17 @@ bool STexture::load(const SPath& path) {
 
 void STexture::unload() {
 
-    if (!uploaded) {
-        
-        // Clean up image data still in normal RAM
-        FreeImage_Unload(bitmap);
-        
-    } else {
-        
-        // Delete the texture on the GPU
+    // Delete the texture on the GPU
+    if (uploaded)
         glDeleteTextures(1, &texture_id);
-        
-    }
 
 }
 
-void STexture::upload() {
+void STextureUpload::upload() {
 
     // Generate a texture
-    glGenTextures(1, &texture_id);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glGenTextures(1, texture_id);
+    glBindTexture(GL_TEXTURE_2D, *texture_id);
 
     // Figure out if we had alpha
     GLint internal_format = GL_RGB;
@@ -109,12 +108,16 @@ void STexture::upload() {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     
-    // Clean up image data
-    FreeImage_Unload(bitmap);
+    unload();
     
     // Bind the default texture just in case
     glBindTexture(GL_TEXTURE_2D, 0);
+    
+}
 
-    uploaded = true;
+void STextureUpload::unload() {
+    
+    // Clean up image data
+    FreeImage_Unload(bitmap);
     
 }

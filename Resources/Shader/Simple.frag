@@ -86,10 +86,10 @@ void main() {
     
     // Get the reflection color
     vec3 reflection = reflect(-V, normal0);
-    vec3 reflection_color = textureLod(tex_cube, reflection, int(metalic * 7.0)).xyz * tex_color;
+    vec3 reflection_color = textureLod(tex_cube, reflection, int(metalic * 8.0)).xyz * tex_color;
     
     // Combine lighting and texture
-    vec3 color = lerp(tex_color, reflection_color, roughness) * properties.x * (lerp(specular, intensity_diffuse, clamp(metalic, 0.2, 1.0)));
+    vec3 color = lerp(tex_color, reflection_color, roughness) * properties.x * (lerp(specular, intensity_diffuse, clamp(metalic, 0.08, 1.0)));
     
     
     out_color = vec4(color, 1.0);

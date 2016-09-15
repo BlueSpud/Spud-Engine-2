@@ -18,8 +18,6 @@ std::hash<std::string>SResourceManager::hasher;
 SResource* SResource::allocate() { return nullptr; }
 SResource::~SResource() { /* stub */ }
 
-void SResource::upload() { uploaded = true; }
-
 /******************************************************************************
  *  Functions for resource allocation manager                                 *
  ******************************************************************************/
@@ -77,7 +75,7 @@ void SResourceManager::shutdown() {
     // Delete the instance of the allocation manager that we dynamically allocated
     delete SResourceAllocatorManger::instance();
     
-    SLog::verboseLog(SVerbosityLevel::Debug, "SEventSystem startup");
+    SLog::verboseLog(SVerbosityLevel::Debug, "SResourceManager shutdown");
 
 }
 
@@ -101,7 +99,7 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
                 // Failed to load it
                 SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s! Resource was returned but may behave unexpectadly", resource_path.getPathAsString().c_str());
                 
-            } else resource->upload();
+            }
             
             loaded_resources[hash] = resource;
          

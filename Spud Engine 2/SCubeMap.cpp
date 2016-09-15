@@ -72,6 +72,17 @@ bool SCubeMap::load(const SPath& path) {
         
     }
     
+    // Create an upload
+    SCubeMapUpload* upload = new SCubeMapUpload();
+    upload->bitmaps = bitmaps;
+    upload->image_data = image_data;
+    
+    upload->width = width;
+    upload->height = height;
+    upload->texture_id = &texture_id;
+    upload->uploaded = &uploaded;
+    
+    SGLUploadSystem::addUpload(upload);
     
     return true;
 }
@@ -79,26 +90,17 @@ bool SCubeMap::load(const SPath& path) {
 
 void SCubeMap::unload() {
 
-    if (!uploaded) {
-        
-        // Clean up image data still in normal RAM
-        for (int i = 0; i < 6; i++)
-            FreeImage_Unload(bitmaps[i]);
-        
-    } else {
-        
-        // Delete the texture on the GPU
+    // Delete the texture on the GPU
+    if (uploaded)
         glDeleteTextures(1, &texture_id);
-        
-    }
 
 }
 
-void SCubeMap::upload() {
+void SCubeMapUpload::upload() {
 
     // Generate a texture
-    glGenTextures(1, &texture_id);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
+    glGenTextures(1, texture_id);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, *texture_id);
     
     // Parameters for the cube map
     glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -126,12 +128,19 @@ void SCubeMap::upload() {
         
         // Generate a mipmap
         glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-    
-        // Clean up image data
-        FreeImage_Unload(bitmaps[i]);
         
     }
+    
+    unload();
 
-    uploaded = true;
+    *uploaded = true;
+    
+}
+
+void SCubeMapUpload::unload() {
+    
+    // Clean up image data still in normal RAM
+    for (int i = 0; i < 6; i++)
+        FreeImage_Unload(bitmaps[i]);
     
 }

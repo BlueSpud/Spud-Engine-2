@@ -10,8 +10,25 @@
 #define SShader_hpp
 
 #include "SResourceManager.hpp"
-#include "SGL.hpp"
+#include "SGLUpload.hpp"
 #include "SUniform.hpp"
+
+/******************************************************************************
+ *  Definition for shader upload                                              *
+ ******************************************************************************/
+
+struct SShaderUpload : public SGLUpload {
+    
+    virtual void upload();
+    virtual void unload();
+    
+    char* vert_string;
+    char* frag_string;
+    
+    GLuint* program_id;
+    
+    
+};
 
 /******************************************************************************
  *  Definition for shader                                                     *
@@ -36,8 +53,6 @@ class SShader : public SResource {
     
         virtual bool load(const SPath& path);
         virtual void unload();
-    
-        virtual void upload();
     
     private:
     

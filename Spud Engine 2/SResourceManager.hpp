@@ -35,8 +35,6 @@ class SResource {
         virtual bool load(const SPath& path) = 0;
         virtual void unload() = 0;
     
-        virtual void upload();
-    
         bool uploaded = false;
     
 };

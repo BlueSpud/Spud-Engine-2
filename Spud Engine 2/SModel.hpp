@@ -12,7 +12,7 @@
 #include <glm/glm.hpp>
 
 #include "SResourceManager.hpp"
-#include "SGL.hpp"
+#include "SGLUpload.hpp"
 
 /******************************************************************************
  *  Definition for enum for VBOs                                              *
@@ -26,6 +26,31 @@ enum SModelBuffers {
     //buffer_indicies
     
     buffer_count
+};
+
+/******************************************************************************
+ *  Definition for upload                                                     *
+ ******************************************************************************/
+
+struct SModelUpload : public SGLUpload {
+    
+    virtual void upload();
+    virtual void unload();
+    
+    float* verts;
+    float* normals;
+    float* tex_coords;
+    
+    unsigned int* indicies;
+    
+    unsigned int face_count;
+    
+    // Storage for the VAO
+    GLuint* array_id;
+    
+    // Storage for the VBOs
+    GLuint* buffer_ids;
+    
 };
 
 /******************************************************************************
@@ -44,8 +69,6 @@ class SModel : public SResource {
     
         virtual bool load(const SPath& path);
         virtual void unload();
-    
-        virtual void upload();
     
     private:
     

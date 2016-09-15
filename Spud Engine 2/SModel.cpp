@@ -117,6 +117,19 @@ bool SModel::load(const SPath& path) {
             tex_coords[i*6 + 4] = _tex_coords[ti.z].x; tex_coords[i*6 + 5] = _tex_coords[ti.z].y;
             
         }
+        
+        // Create an upload
+        SModelUpload* upload = new SModelUpload();
+        upload->verts = verts;
+        upload->normals = normals;
+        upload->tex_coords = tex_coords;
+        
+        upload->face_count = face_count;
+        upload->array_id = &array_id;
+        upload->buffer_ids = buffer_ids;
+        upload->uploaded = &uploaded;
+        
+        SGLUploadSystem::addUpload(upload);
 
         return true;
         
@@ -129,14 +142,7 @@ bool SModel::load(const SPath& path) {
 void SModel::unload() {
 
     // Check if we havent already deleted these already, we might not have uploaded it yet
-    if (!uploaded) {
-        
-        delete verts;
-        delete normals;
-        delete tex_coords;
-        //delete indicies;
-        
-    } else {
+    if (uploaded) {
         
         // We had already uploaded the GPU
         glDeleteBuffers(buffer_count, buffer_ids);
@@ -146,14 +152,14 @@ void SModel::unload() {
 
 }
 
-void SModel::upload() {
+void SModelUpload::upload() {
 
     // Generate the array and the buffers
-    glGenVertexArrays(1, &array_id);
+    glGenVertexArrays(1, array_id);
     glGenBuffers(buffer_count, buffer_ids);
     
     // Bind the array and fill the buffers
-    glBindVertexArray(array_id);
+    glBindVertexArray(*array_id);
     
     glBindBuffer(GL_ARRAY_BUFFER, buffer_ids[buffer_position]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_count * 9, verts, GL_STATIC_DRAW);
@@ -178,13 +184,19 @@ void SModel::upload() {
     
     glBindVertexArray(0);
     
+    unload();
+
+    // Make sure we know if we uploaded
+    *uploaded = true;
+
+}
+
+void SModelUpload::unload() {
+    
     // Delete the buffers in regular RAM
     delete verts;
     delete normals;
     delete tex_coords;
     //delete indicies;
-
-    // Make sure we know if we uploaded
-    uploaded = true;
-
+    
 }

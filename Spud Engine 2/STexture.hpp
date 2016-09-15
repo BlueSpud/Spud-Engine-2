@@ -12,7 +12,26 @@
 #include <FreeImage.h>
 
 #include "SResourceManager.hpp"
-#include "SGL.hpp"
+#include "SGLUpload.hpp"
+
+/******************************************************************************
+ *  Definition for upload                                                     *
+ ******************************************************************************/
+
+struct STextureUpload : public SGLUpload {
+    
+    virtual void upload();
+    virtual void unload();
+    
+    FIBITMAP* bitmap;
+    BYTE* image_data;
+    
+    unsigned int width;
+    unsigned int height;
+    
+    GLuint* texture_id;
+    
+};
 
 /******************************************************************************
  *  Definition for texture                                                    *
@@ -31,8 +50,6 @@ class STexture : public SResource {
     
         virtual bool load(const SPath& path);
         virtual void unload();
-    
-        virtual void upload();
     
     private:
     

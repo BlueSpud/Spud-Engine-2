@@ -28,6 +28,8 @@ class SMesh : public SObject {
         virtual void render(double interpolation);
         virtual void update();
     
+        virtual bool shouldBeRendered();
+    
         STransform transform;
     
     protected:

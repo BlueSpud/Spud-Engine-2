@@ -14,7 +14,7 @@
 #include "object.hpp"
 #include "SKeyboardSystem.hpp"
 #include "SMesh.hpp"
-#include "SSceneGraph.hpp"
+#include "SRenderingPipline.hpp"
 #include "SCamera.hpp"
 
 double speed = 0.0;
@@ -27,27 +27,27 @@ void keyPress(int key) {
     switch (key) {
             
         case GLFW_KEY_W:
-            speed = 0.1;
+            speed += 0.1;
             break;
         
         case GLFW_KEY_S:
-            speed = -0.1;
+            speed += -0.1;
             break;
             
         case GLFW_KEY_D:
-            speed_x = 0.1;
+            speed_x += 0.1;
             break;
             
         case GLFW_KEY_A:
-            speed_x = -0.1;
+            speed_x += -0.1;
             break;
             
         case GLFW_KEY_LEFT:
-            speed_r = -0.05;
+            speed_r += -0.05;
             break;
             
         case GLFW_KEY_RIGHT:
-            speed_r = 0.05;
+            speed_r += 0.05;
             break;
     }
     
@@ -58,27 +58,27 @@ void keyRelease(int key) {
     switch (key) {
             
         case GLFW_KEY_W:
-            speed = 0;
+            speed -= 0.1;
             break;
             
         case GLFW_KEY_S:
-            speed = 0;
+            speed -= -0.1;
             break;
             
         case GLFW_KEY_D:
-            speed_x = 0;
+            speed_x -= 0.1;
             break;
             
         case GLFW_KEY_A:
-            speed_x = 0;
+            speed_x -= -0.1;
             break;
             
         case GLFW_KEY_LEFT:
-            speed_r = 0.0;
+            speed_r -= -0.05;
             break;
             
         case GLFW_KEY_RIGHT:
-            speed_r = 0.0;
+            speed_r -= 0.05;
             break;
     }
     
@@ -93,6 +93,8 @@ int main(int argc, char* argv[]) {
     SEventSystem::startup();
     
     SGL::startup();
+    SGLUploadSystem::startup();
+    SGLUploadSystem::setUploadLimitPerFrame(UPLOADS_INFINITE);
     
     SKeyboardSystem::startup();
     
@@ -128,6 +130,8 @@ int main(int argc, char* argv[]) {
     
     scene_graph.addObject(mesh);
     
+    SRenderingPipline forward_pipline;
+    
     SViewport3D viewport = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
     SGL::setUpViewport(viewport);
     
@@ -147,6 +151,10 @@ int main(int argc, char* argv[]) {
     listener.bind(&keyRelease, GLFW_KEY_RIGHT, KEY_ACTION_UP);
     
     listener.setHasFocus();
+    
+    // Clear all the uploads
+    SGLUploadSystem::processUploads();
+    SGLUploadSystem::setUploadLimitPerFrame(10);
     
     // END TEMP CODE
     
@@ -200,6 +208,9 @@ int main(int argc, char* argv[]) {
         
         profiler.start();
         
+        // Upload stuff to the GPU
+        SGLUploadSystem::processUploads();
+        
         double interpolation = loopElapsedTime / time_tick;
         
         /* Render here */
@@ -209,7 +220,7 @@ int main(int argc, char* argv[]) {
         
         SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
         
-        scene_graph.render(camera, interpolation);
+        forward_pipline.render(interpolation, camera, scene_graph);
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
         
@@ -245,6 +256,7 @@ int main(int argc, char* argv[]) {
     
     SKeyboardSystem::shutdown();
     
+    SGLUploadSystem::shutdown();
     SGL::shutdown();
     
     SEventSystem::shutdown();
