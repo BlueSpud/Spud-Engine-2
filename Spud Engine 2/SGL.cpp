@@ -35,7 +35,7 @@ void SGL::startup() {
 
 void SGL::shutdown() {
     
-    SLog::verboseLog(SVerbosityLevel::Debug, "SGL startup");
+    SLog::verboseLog(SVerbosityLevel::Debug, "SGL shutdown");
     
     // Shut down OpenGL
     glfwTerminate();

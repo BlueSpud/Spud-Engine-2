@@ -3,7 +3,7 @@ model:Model/material_test.obj
 mat:Material/test.mat
 
 tex_n:tex_albedo
-tex:Texture/material_test_color.png
+tex:Texture/material_test_albedo.png
 
 tex_n:tex_orm
 tex:Texture/material_test_orm.png

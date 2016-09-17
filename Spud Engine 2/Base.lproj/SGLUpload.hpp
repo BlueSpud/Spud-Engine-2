@@ -19,9 +19,13 @@
 
 struct SGLUpload {
     
+    virtual ~SGLUpload() {};
+    
     bool* uploaded = nullptr;
     virtual void upload() = 0;
     virtual void unload() = 0;
+    
+    bool canceled = false;
     
 };
 

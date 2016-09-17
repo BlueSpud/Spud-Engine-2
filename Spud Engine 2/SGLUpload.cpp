@@ -23,6 +23,15 @@ void SGLUploadSystem::startup() {
 
 void SGLUploadSystem::shutdown() {
     
+    // Delete uploads
+    while (!upload_queue.empty()) {
+        
+        // Delete the upload
+        delete upload_queue.front();
+        upload_queue.pop();
+        
+    }
+    
     SLog::verboseLog(SVerbosityLevel::Debug, "SGLUploadSystem shutdown");
 
 }
@@ -39,11 +48,19 @@ void SGLUploadSystem::processUploads() {
         
         // Perform upload
         SGLUpload* upload = upload_queue.front();
-        upload->upload();
         
-        // Tell whatever wanted an upload we are done
-        if (upload->uploaded != nullptr)
-            *upload->uploaded = true;
+        if (!upload->canceled) {
+        
+            upload->upload();
+        
+            // Tell whatever wanted an upload we are done
+            if (upload->uploaded != nullptr)
+                *upload->uploaded = true;
+            
+        }
+        
+        // Delete the upload
+        delete upload;
         
         upload_queue.pop();
         i++;

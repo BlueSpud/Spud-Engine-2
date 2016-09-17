@@ -17,6 +17,7 @@ std::hash<std::string>SResourceManager::hasher;
 
 SResource* SResource::allocate() { return nullptr; }
 SResource::~SResource() { /* stub */ }
+void SResource::hotload(const SPath& path) { /* stub */ }
 
 /******************************************************************************
  *  Functions for resource allocation manager                                 *
@@ -101,6 +102,10 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
                 
             }
             
+            // Save the time that the resource was modified
+            resource->modified_time = getModifiedTimeForFileAtPath(resource_path.getPathAsAbsolutePath().c_str());
+            resource->file_path = resource_path.getPathAsString();
+            
             loaded_resources[hash] = resource;
          
             return resource;
@@ -112,5 +117,16 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
     }
         
     return loaded_resources[hash];
+    
+}
+
+long SResourceManager::getModifiedTimeForFileAtPath(const char* path) {
+    
+    // Get the statistics for the file
+    struct stat stats;
+    stat(path, &stats);
+    
+    // Return the time in seconds
+    return stats.st_mtimespec.tv_sec;
     
 }

@@ -96,6 +96,10 @@ void SCubeMap::unload() {
 
 }
 
+/******************************************************************************
+ *  Functions for cube map upload                                             *
+ ******************************************************************************/
+
 void SCubeMapUpload::upload() {
 
     // Generate a texture

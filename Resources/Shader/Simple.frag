@@ -94,7 +94,7 @@ void main() {
     vec3 metalic_reflection = reflection_color * inverse_roughness;
     
     // Combine lighting and texture
-    vec3 color = tex_color * (fresnel_reflection + metalic_reflection + (lerp(specular, diffuse, max(metalic, 0.08))));
+    vec3 color = tex_color * (fresnel_reflection + metalic_reflection + (lerp(specular, diffuse, max(metalic, 0.08))) * occlusion);
     
     out_color = vec4(color, 1.0);
     

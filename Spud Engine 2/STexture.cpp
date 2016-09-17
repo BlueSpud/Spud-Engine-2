@@ -58,7 +58,7 @@ bool STexture::load(const SPath& path) {
         if (FreeImage_HasPixels(bitmap)) {
             
             // Create an upload and send it off
-            STextureUpload* upload = new STextureUpload();
+            upload = new STextureUpload();
             upload->image_data = FreeImage_GetBits(bitmap);
             upload->bitmap = bitmap;
             upload->width = FreeImage_GetWidth(bitmap);
@@ -86,6 +86,36 @@ void STexture::unload() {
         glDeleteTextures(1, &texture_id);
 
 }
+
+void STexture::hotload(const SPath& path) {
+    
+    // Delete the last texture
+    if (uploaded) {
+        
+        // Send a deletion command
+        STextureUnload* unload = new STextureUnload();
+        unload->texture_id = texture_id;
+        SGLUploadSystem::addUpload(unload);
+        
+    } else {
+        
+        // Cancel the upload we had already sent
+        upload->canceled = true;
+        
+        // Free the stuff we have
+        upload->unload();
+        
+    }
+    
+    
+    // Load the new texture
+    load(path);
+    
+}
+
+/******************************************************************************
+ *  Functions for texture upload                                              *
+ ******************************************************************************/
 
 void STextureUpload::upload() {
 
@@ -121,3 +151,12 @@ void STextureUpload::unload() {
     FreeImage_Unload(bitmap);
     
 }
+
+/******************************************************************************
+ *  Definition for texture safe detroy                                        *
+ ******************************************************************************/
+
+void STextureUnload::upload() { glDeleteTextures(1, &texture_id); }
+
+void STextureUnload::unload() { /* nothing */ }
+

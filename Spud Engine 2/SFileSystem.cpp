@@ -196,7 +196,7 @@ void SFileSystem::shutdown() {
         i++;
     }
 
-    SLog::verboseLog(SVerbosityLevel::Debug, "SFileSystem startup");
+    SLog::verboseLog(SVerbosityLevel::Debug, "SFileSystem shutdown");
 
 }
 

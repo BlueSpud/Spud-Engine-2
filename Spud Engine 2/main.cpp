@@ -6,9 +6,6 @@
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#include <iostream>
-#include <vector>
-#include <boost/thread.hpp>
 #include <btBulletDynamicsCommon.h>
 
 #include "object.hpp"
@@ -16,6 +13,7 @@
 #include "SMesh.hpp"
 #include "SRenderingPipline.hpp"
 #include "SCamera.hpp"
+#include "SHotLoadSystem.hpp"
 
 double speed = 0.0;
 double speed_x = 0.0;
@@ -101,9 +99,10 @@ int main(int argc, char* argv[]) {
     STime::startup();
     
     SFileSystem::startup();
-    SFileSystem::getDefaultRootDirectory(argv[0]);
+    SFileSystem::getDefaultRootDirectory("/Users/Logan/Desktop/Spud Engine 2/a/a/");
     
     SResourceManager::startup();
+    SHotLoadSystem::startup();
     
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -232,6 +231,7 @@ int main(int argc, char* argv[]) {
     glfwTerminate();
     
     // Subsystem shutdown
+    SHotLoadSystem::shutdown();
     SResourceManager::shutdown();
     
     // Write out the log to a file

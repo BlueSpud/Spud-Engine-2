@@ -9,6 +9,7 @@
 #ifndef SResourceManager_hpp
 #define SResourceManager_hpp
 
+#include <sys/stat.h>
 #include <iostream>
 #include <map>
 
@@ -16,6 +17,7 @@
 
 // Forward declarations
 class SResourceManager;
+class SHotLoadSystem;
 
 /******************************************************************************
  *  Definition for generic resource                                           *
@@ -24,6 +26,7 @@ class SResourceManager;
 class SResource {
     
     friend class SResourceManager;
+    friend class SHotLoadSystem;
     
     public:
     
@@ -34,8 +37,15 @@ class SResource {
     
         virtual bool load(const SPath& path) = 0;
         virtual void unload() = 0;
+        virtual void hotload(const SPath& path);
     
         bool uploaded = false;
+    
+    private:
+    
+        // Storage for hot reloading
+        long modified_time;
+        std::string file_path;
     
 };
 
@@ -63,6 +73,8 @@ class SResourceAllocatorManger {
 
 class SResourceManager : public SSubsystem {
     
+    friend class SHotLoadSystem;
+    
     public:
     
         static void startup();
@@ -72,6 +84,8 @@ class SResourceManager : public SSubsystem {
         static SResource* getResource(const SPath& resource_path);
     
     private:
+    
+        static long getModifiedTimeForFileAtPath(const char* path);
     
         static std::map<size_t, SResource*>loaded_resources;
         static std::hash<std::string>hasher;

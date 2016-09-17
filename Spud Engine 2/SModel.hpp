@@ -54,6 +54,20 @@ struct SModelUpload : public SGLUpload {
 };
 
 /******************************************************************************
+ *  Definition for unload                                                     *
+ ******************************************************************************/
+
+struct SModelUnload : public SGLUpload {
+  
+    virtual void upload();
+    virtual void unload();
+    
+    GLuint array_id;
+    GLuint buffer_ids[buffer_count];
+    
+};
+
+/******************************************************************************
  *  Definition for model                                                      *
  ******************************************************************************/
 
@@ -69,8 +83,11 @@ class SModel : public SResource {
     
         virtual bool load(const SPath& path);
         virtual void unload();
+        virtual void hotload(const SPath& path);
     
     private:
+    
+        SFile* file;
     
         // Storage for the data before we upload it
         float* verts;
@@ -86,6 +103,8 @@ class SModel : public SResource {
     
         // Storage for the VBOs
         GLuint buffer_ids[buffer_count];
+    
+        SModelUpload* upload;
     
 };
 

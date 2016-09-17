@@ -34,6 +34,19 @@ struct STextureUpload : public SGLUpload {
 };
 
 /******************************************************************************
+ *  Definition for safe detroy                                                *
+ ******************************************************************************/
+
+struct STextureUnload : public SGLUpload {
+  
+    virtual void upload();
+    virtual void unload();
+    
+    GLuint texture_id;
+    
+};
+
+/******************************************************************************
  *  Definition for texture                                                    *
  ******************************************************************************/
 
@@ -50,6 +63,7 @@ class STexture : public SResource {
     
         virtual bool load(const SPath& path);
         virtual void unload();
+        virtual void hotload(const SPath& path);
     
     private:
     
@@ -60,6 +74,8 @@ class STexture : public SResource {
         unsigned int height;
     
         GLuint texture_id;
+    
+        STextureUpload* upload;
     
 };
 

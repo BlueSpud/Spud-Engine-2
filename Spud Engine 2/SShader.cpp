@@ -165,6 +165,10 @@ void SShader::unload() {
     
 }
 
+/******************************************************************************
+ *  Functions for shader upload                                               *
+ ******************************************************************************/
+
 void SShaderUpload::upload() {
     
     // Regardless of if we fail, we uploaded

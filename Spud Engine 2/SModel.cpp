@@ -33,7 +33,7 @@ void SModel::render() {
 
 bool SModel::load(const SPath& path) {
     
-    SFile* file = SFileSystem::loadFile(path);
+    file = SFileSystem::loadFile(path);
     
     if (file != nullptr) {
     
@@ -119,7 +119,7 @@ bool SModel::load(const SPath& path) {
         }
         
         // Create an upload
-        SModelUpload* upload = new SModelUpload();
+        upload = new SModelUpload();
         upload->verts = verts;
         upload->normals = normals;
         upload->tex_coords = tex_coords;
@@ -151,6 +151,42 @@ void SModel::unload() {
     }
 
 }
+
+void SModel::hotload(const SPath& path) {
+    
+    // Delete the last texture
+    if (uploaded) {
+        
+        // Send a deletion command
+        SModelUnload* unload = new SModelUnload();
+        unload->array_id = array_id;
+        
+        // Copy the array
+        for (int i = 0; i < buffer_count; i++)
+            unload->buffer_ids[i] = buffer_ids[i];
+        
+        SGLUploadSystem::addUpload(unload);
+        
+    } else {
+        
+        // Cancel the upload we had already sent
+        upload->canceled = true;
+        
+        // Free the stuff we have
+        upload->unload();
+        
+    }
+    
+    
+    // Close the old file and then load the new one
+    SFileSystem::closeFile(file);
+    load(path);
+    
+}
+
+/******************************************************************************
+ *  Functions for model upload                                                *
+ ******************************************************************************/
 
 void SModelUpload::upload() {
 
@@ -200,3 +236,16 @@ void SModelUpload::unload() {
     //delete indicies;
     
 }
+
+/******************************************************************************
+ *  Functions for model unload                                                *
+ ******************************************************************************/
+
+void SModelUnload::upload() {
+    
+    // Delete model data
+    glDeleteBuffers(buffer_count, buffer_ids);
+    glDeleteVertexArrays(1, &array_id);
+}
+
+void SModelUnload::unload() { /* nothing */ }
