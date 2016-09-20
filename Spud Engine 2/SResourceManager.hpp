@@ -40,12 +40,8 @@ class SResource {
         virtual void hotload(const SPath& path);
     
         bool uploaded = false;
-    
-    private:
-    
-        // Storage for hot reloading
-        long modified_time;
-        std::string file_path;
+        std::vector<SPath> paths;
+        std::vector<long> modified_times;
     
 };
 

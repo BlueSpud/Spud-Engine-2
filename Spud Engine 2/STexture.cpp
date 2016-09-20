@@ -41,7 +41,7 @@ void STexture::bind(int texture_number) {
 }
 
 bool STexture::load(const SPath& path) {
-
+    
     // We dont use a file here because free image handles its own loading
     std::string absolute_path = path.getPathAsAbsolutePath();
     if (!path.getIsDirectory()) {

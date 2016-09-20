@@ -31,6 +31,18 @@ struct SShaderUpload : public SGLUpload {
 };
 
 /******************************************************************************
+ *  Definition for shader unload                                              *
+ ******************************************************************************/
+
+struct SShaderUnload : public SGLUpload {
+    
+    virtual void upload();
+    virtual void unload();
+    GLuint program_id;
+    
+};
+
+/******************************************************************************
  *  Definition for shader                                                     *
  ******************************************************************************/
 
@@ -53,8 +65,14 @@ class SShader : public SResource {
     
         virtual bool load(const SPath& path);
         virtual void unload();
+        virtual void hotload(const SPath& path);
+    
+        bool force_rebind = false;
     
     private:
+    
+        SFile* vert_file;
+        SFile* frag_file;
     
         char* vert_string;
         char* frag_string;
@@ -62,6 +80,8 @@ class SShader : public SResource {
         GLuint program_id;
 
         static SShader* bound_shader;
+    
+        SShaderUpload* upload;
     
     
 };

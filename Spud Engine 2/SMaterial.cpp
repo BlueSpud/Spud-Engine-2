@@ -28,15 +28,15 @@ void SMaterialInstance::useMaterial() {
         textures[i]->bind(i);
     
     // Get the currently bound shader
-    SShader* current_shader = SShader::getBoundShader();
-    if (current_shader != parent_mat->shader) {
+    //SShader* current_shader = SShader::getBoundShader();
+    //if (current_shader != parent_mat->shader) {
         
         // Bind the shader
         parent_mat->shader->bind();
         
         parent_mat->uploadTextureIDs();
         
-    }
+    //}
     
     // Bind the uniforms
     for (int i = 0; i < parent_mat->uniforms.size(); i++)

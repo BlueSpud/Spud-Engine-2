@@ -20,7 +20,7 @@ REGISTER_RESOURCE_CLASS(cube, SCubeMap);
  *  Functions for texture                                                     *
  ******************************************************************************/
 
-SResource* SCubeMap::allocate() { return new SCubeMap; }
+SResource* SCubeMap::allocate() { return new SCubeMap(); }
 
 void SCubeMap::bind() {
 
@@ -47,6 +47,10 @@ bool SCubeMap::load(const SPath& path) {
     for (int i = 0; i < 6; i++) {
     
         std::string file_path = absolute_path + "/" + side_names[i];
+        
+        // Save the path
+        SPath new_path = SPath(path.getPathAsString() + "/" + side_names[i]);
+        paths.push_back(new_path);
     
         if (!path.getIsDirectory()) {
         

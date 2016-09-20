@@ -23,6 +23,7 @@ enum SModelBuffers {
     buffer_position,
     buffer_normal,
     buffer_tex_coord,
+    buffer_tangent,
     //buffer_indicies
     
     buffer_count
@@ -40,6 +41,7 @@ struct SModelUpload : public SGLUpload {
     float* verts;
     float* normals;
     float* tex_coords;
+    float* tangents;
     
     unsigned int* indicies;
     
@@ -93,6 +95,7 @@ class SModel : public SResource {
         float* verts;
         float* normals;
         float* tex_coords;
+        float* tangents;
     
         unsigned int* indicies;
     

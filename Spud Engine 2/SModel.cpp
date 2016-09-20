@@ -93,6 +93,12 @@ bool SModel::load(const SPath& path) {
         verts = new float[_indicies.size() * 9];
         normals = new float[_indicies.size() * 9];
         tex_coords = new float[_indicies.size() * 6];
+        tangents = new float[_indicies.size() * 9];
+        
+        std::vector<glm::vec3>_tangents;
+        std::vector<glm::vec3>_tangents_indicies;
+        for (int i = 0; i < _verts.size(); i++)
+            _tangents.push_back(glm::vec3());
         
         // Save the number of faces we are going to have
         face_count = (unsigned int)_indicies.size();
@@ -104,25 +110,76 @@ bool SModel::load(const SPath& path) {
             sscanf(_indicies[i].c_str(), "f %i/%i/%i %i/%i/%i %i/%i/%i",&vi.x,&ti.x,&ni.x, &vi.y,&ti.y,&ni.y, &vi.z,&ti.z,&ni.z);
             
             // Fill all the float buffers
-            verts[i*9] = _verts[vi.x].x; verts[i*9 + 1] = _verts[vi.x].y; verts[i*9 + 2] = _verts[vi.x].z;
+            verts[i*9    ] = _verts[vi.x].x; verts[i*9 + 1] = _verts[vi.x].y; verts[i*9 + 2] = _verts[vi.x].z;
             verts[i*9 + 3] = _verts[vi.y].x; verts[i*9 + 4] = _verts[vi.y].y; verts[i*9 + 5] = _verts[vi.y].z;
             verts[i*9 + 6] = _verts[vi.z].x; verts[i*9 + 7] = _verts[vi.z].y; verts[i*9 + 8] = _verts[vi.z].z;
             
-            normals[i*9] = _normals[ni.x].x; normals[i*9 + 1] = _normals[ni.x].y; normals[i*9 + 2] = _normals[ni.x].z;
+            normals[i*9    ] = _normals[ni.x].x; normals[i*9 + 1] = _normals[ni.x].y; normals[i*9 + 2] = _normals[ni.x].z;
             normals[i*9 + 3] = _normals[ni.y].x; normals[i*9 + 4] = _normals[ni.y].y; normals[i*9 + 5] = _normals[ni.y].z;
             normals[i*9 + 6] = _normals[ni.z].x; normals[i*9 + 7] = _normals[ni.z].y; normals[i*9 + 8] = _normals[ni.z].z;
             
-            tex_coords[i*6] = _tex_coords[ti.x].x; tex_coords[i*6 + 1] = _tex_coords[ti.x].y;
+            tex_coords[i*6    ] = _tex_coords[ti.x].x; tex_coords[i*6 + 1] = _tex_coords[ti.x].y;
             tex_coords[i*6 + 2] = _tex_coords[ti.y].x; tex_coords[i*6 + 3] = _tex_coords[ti.y].y;
             tex_coords[i*6 + 4] = _tex_coords[ti.z].x; tex_coords[i*6 + 5] = _tex_coords[ti.z].y;
             
+            // Calculate the tangent
+            glm::vec3 edge1 = _verts[vi.y] - _verts[vi.x];
+            glm::vec3 edge2 = _verts[vi.z] - _verts[vi.x];
+            
+            glm::vec2 d_UV1 = _tex_coords[ti.y] - _tex_coords[ti.x];
+            glm::vec2 d_UV2 = _tex_coords[ti.z] - _tex_coords[ti.x];
+            
+            float f = 1.0f / (d_UV1.x * d_UV2.y - d_UV1.y * d_UV2.x);
+            
+            glm::vec3 tangent = glm::normalize((edge1 * d_UV2.y - edge2 * d_UV1.y) * f);
+            
+//            _tangents[vi.x] += tangent;
+//            _tangents[vi.y] += tangent;
+//            _tangents[vi.z] += tangent;
+//            
+//            _tangents_indicies.push_back(vi);
+            
+            tangents[i * 9    ] = tangent.x;
+            tangents[i * 9 + 1] = tangent.y;
+            tangents[i * 9 + 2] = tangent.z;
+            tangents[i * 9 + 3] = tangent.x;
+            tangents[i * 9 + 4] = tangent.y;
+            tangents[i * 9 + 5] = tangent.z;
+            tangents[i * 9 + 6] = tangent.x;
+            tangents[i * 9 + 7] = tangent.y;
+            tangents[i * 9 + 8] = tangent.z;
+            
         }
+        
+//        // Assemble the tangents
+//        for (int i = 0; i < _tangents_indicies.size(); i++) {
+//            
+//            glm::vec3 index = _tangents_indicies[i];
+//            
+//            // Get the tangents, normalize them
+//            glm::vec3 tangent = glm::normalize(_tangents[index.x]);
+//            tangents[i * 9] = tangent.x;
+//            tangents[i * 9 + 1] = tangent.y;
+//            tangents[i * 9 + 2] = tangent.z;
+//            
+//            tangent = glm::normalize(_tangents[index.y]);
+//            tangents[i * 9 + 3] = tangent.x;
+//            tangents[i * 9 + 4] = tangent.y;
+//            tangents[i * 9 + 5] = tangent.z;
+//            
+//            tangent = glm::normalize(_tangents[index.z]);
+//            tangents[i * 9 + 6] = tangent.x;
+//            tangents[i * 9 + 7] = tangent.y;
+//            tangents[i * 9 + 8] = tangent.z;
+//            
+//        }
         
         // Create an upload
         upload = new SModelUpload();
         upload->verts = verts;
         upload->normals = normals;
         upload->tex_coords = tex_coords;
+        upload->tangents = tangents;
         
         upload->face_count = face_count;
         upload->array_id = &array_id;
@@ -201,22 +258,29 @@ void SModelUpload::upload() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_count * 9, verts, GL_STATIC_DRAW);
     
     // Tell OpenGL how to read this
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(buffer_position);
+    glVertexAttribPointer(buffer_position, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffer_ids[buffer_normal]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_count * 9, normals, GL_STATIC_DRAW);
 
     // Tell OpenGL how to read this
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(buffer_normal);
+    glVertexAttribPointer(buffer_normal, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffer_ids[buffer_tex_coord]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_count * 6, tex_coords, GL_STATIC_DRAW);
     
     // Tell OpenGL how to read this
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(buffer_tex_coord);
+    glVertexAttribPointer(buffer_tex_coord, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    // Tell OpenGL how to read this
+    glBindBuffer(GL_ARRAY_BUFFER, buffer_ids[buffer_tangent]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_count * 9, tangents, GL_STATIC_DRAW);
+    
+    glEnableVertexAttribArray(buffer_tangent);
+    glVertexAttribPointer(buffer_tangent, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     
     glBindVertexArray(0);
     
@@ -233,6 +297,7 @@ void SModelUpload::unload() {
     delete verts;
     delete normals;
     delete tex_coords;
+    delete tangents;
     //delete indicies;
     
 }

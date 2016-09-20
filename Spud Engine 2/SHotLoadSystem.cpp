@@ -47,21 +47,27 @@ void SHotLoadSystem::checkForUpdates() {
         
             if (resource) {
             
-                // Get the time it was modified
-                SPath resource_path = SPath(resource->file_path);
-                long new_time = SResourceManager::getModifiedTimeForFileAtPath(resource_path.getPathAsAbsolutePath().c_str());
+                std::vector <SPath>& paths = resource->paths;
+                
+                for (int j = 0; j < paths.size(); j++) {
+                
+                    // Get the time it was modified
+                    SPath resource_path = paths[j];
+                    long new_time = SResourceManager::getModifiedTimeForFileAtPath(resource_path.getPathAsAbsolutePath().c_str());
             
-                if (new_time != resource->modified_time && SFileSystem::fileExitsAtPath(resource_path)) {
+                    if (new_time != resource->modified_times[j] && SFileSystem::fileExitsAtPath(resource_path)) {
                 
-                    // Tell the file that it needs to be reloaded
-                    SLog::verboseLog(SVerbosityLevel::Warning, "Hot reloading %s", resource_path.getPathAsAbsolutePath().c_str());
-                    resource->modified_time = new_time;
+                        // Tell the file that it needs to be reloaded
+                        SLog::verboseLog(SVerbosityLevel::Warning, "Hot reloading %s", resource_path.getPathAsAbsolutePath().c_str());
+                        resource->modified_times[j] = new_time;
                 
-                    // Hotload the resource
-                    resource->hotload(resource_path);
+                        // Hotload the resource
+                        resource->hotload(resource_path);
                 
+                    }
+            
                 }
-            
+                
             }
         
             i++;

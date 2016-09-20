@@ -2,6 +2,7 @@
 
 uniform sampler2D tex_albedo;
 uniform sampler2D tex_orm;
+uniform sampler2D tex_normal;
 
 uniform samplerCube tex_cube;
 
@@ -10,6 +11,8 @@ uniform vec3 view_position;
 in vec3 position0;
 in vec3 normal0;
 in vec2 tex_coord0;
+in vec3 tangent0;
+in mat3 tbn_matrix;
 
 out vec4 out_color;
 
@@ -49,6 +52,9 @@ void main() {
     float inverse_roughness = 1.0 - roughness;
     float metalic = properties.z;
     float occlusion = properties.x;
+    
+    // Get the normal from the map
+    vec3 normal_map = normalize(tbn_matrix * (255/128 * texture(tex_normal, tex_coord0).xyz - 1.0));
     
     vec3 L = normalize(-light_position);
     

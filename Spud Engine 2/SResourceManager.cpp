@@ -94,6 +94,9 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
             // Load the resource, upload it and keep it
             SResource* resource = SResourceAllocatorManger::instance()->allocators[resource_path.getExtension()]();
             
+            // Save the path that the resource was loaded from
+            resource->paths.push_back(resource_path);
+            
             // Make sure we have an allocator
             if (!resource->load(resource_path)) {
                 
@@ -102,9 +105,9 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
                 
             }
             
-            // Save the time that the resource was modified
-            resource->modified_time = getModifiedTimeForFileAtPath(resource_path.getPathAsAbsolutePath().c_str());
-            resource->file_path = resource_path.getPathAsString();
+            // Get the times it was modified
+            for (int i = 0; i < resource->paths.size(); i++)
+                resource->modified_times.push_back(getModifiedTimeForFileAtPath(resource->paths[i].getPathAsAbsolutePath().c_str()));
             
             loaded_resources[hash] = resource;
          

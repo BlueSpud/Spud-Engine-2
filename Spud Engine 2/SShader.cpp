@@ -24,10 +24,13 @@ SResource* SShader::allocate() { return new SShader(); }
 
 bool SShader::bind() {
     
-    if (bound_shader != this && uploaded) {
+    if ((bound_shader != this && uploaded) || (force_rebind && program_id != 0)) {
         
         bound_shader = this;
         glUseProgram(program_id);
+        
+        // Set force rebind to false
+        force_rebind = false;
         
         return true;
         
@@ -104,6 +107,9 @@ void SShader::bindUniform(SUniform* uniform) { bindUniform(uniform->value, unifo
 
 bool SShader::load(const SPath& path) {
     
+    // Make sure the program is clear, just in case this is a hot load and we are forcing a rebind
+    program_id = 0;
+    
     // Get two files, one for the frag and one for the vert
     std::string file_name = path.getFilename();
     
@@ -115,8 +121,16 @@ bool SShader::load(const SPath& path) {
     path_frag.removeLastPathComponent();
     path_frag.appendPathComponent(file_name + ".frag");
     
-    SFile* vert_file = SFileSystem::loadFile(path_vert);
-    SFile* frag_file = SFileSystem::loadFile(path_frag);
+    // Save the other path
+    if (paths.size() == 1) {
+        
+        paths.push_back(path_vert);
+        paths.push_back(path_frag);
+        
+    }
+    
+    vert_file = SFileSystem::loadFile(path_vert);
+    frag_file = SFileSystem::loadFile(path_frag);
     
     // Make sure that we were able to find the shader files
     if (!vert_file || !frag_file)
@@ -143,7 +157,7 @@ bool SShader::load(const SPath& path) {
     strcpy(frag_string, frag_string_r);
     
     // Make an upload
-    SShaderUpload* upload = new SShaderUpload();
+    upload = new SShaderUpload();
     
     upload->vert_string = vert_string;
     upload->frag_string = frag_string;
@@ -162,6 +176,36 @@ void SShader::unload() {
     // Delete the program if it was successfully made
     if (uploaded)
         glDeleteProgram(program_id);
+    
+}
+
+void SShader::hotload(const SPath& path) {
+    
+    // Delete the last texture
+    if (uploaded) {
+        
+        // Send a deletion command
+        SShaderUnload* unload = new SShaderUnload();
+        unload->program_id = program_id;
+        SGLUploadSystem::addUpload(unload);
+        
+    } else {
+        
+        // Cancel the upload we had already sent
+        upload->canceled = true;
+        
+        // Free the stuff we have
+        upload->unload();
+        
+    }
+    
+    
+    // Close the files and then load the shader again
+    SFileSystem::closeFile(vert_file);
+    SFileSystem::closeFile(frag_file);
+    
+    load(path);
+    force_rebind = true;
     
 }
 
@@ -245,6 +289,7 @@ void SShaderUpload::upload() {
     glBindAttribLocation(*program_id, 0, "position");
     glBindAttribLocation(*program_id, 1, "normal");
     glBindAttribLocation(*program_id, 2, "tex_coord");
+    glBindAttribLocation(*program_id, 3, "tangent");
     
     glLinkProgram(*program_id);
     
@@ -261,3 +306,11 @@ void SShaderUpload::unload() {
     delete frag_string;
     
 }
+
+/******************************************************************************
+ *  Functions for shader unload                                               *
+ ******************************************************************************/
+
+void SShaderUnload::upload() { glDeleteProgram(program_id); }
+
+void SShaderUnload::unload() { /* nothing */ }

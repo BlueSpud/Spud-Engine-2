@@ -85,6 +85,10 @@ class SGL : public SSubsystem {
         static void swapBuffers();
     
         static void setKeyCallback(GLFWkeyfun func);
+        static void setMouseMoveCallback(GLFWcursorposfun func);
+    
+        static void setMouseInputMode(int mode);
+        static void getMousePos(float* x_pos, float* y_pos);
     
 /******************************************************************************
 *  Definition for operations pertaining to graphics math                      *

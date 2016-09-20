@@ -10,6 +10,7 @@
 
 #include "object.hpp"
 #include "SKeyboardSystem.hpp"
+#include "SMouseSystem.hpp"
 #include "SMesh.hpp"
 #include "SRenderingPipline.hpp"
 #include "SCamera.hpp"
@@ -19,6 +20,8 @@ double speed = 0.0;
 double speed_x = 0.0;
 
 double speed_r = 0.0;
+
+SCamera camera;
 
 void keyPress(int key) {
     
@@ -82,6 +85,15 @@ void keyRelease(int key) {
     
 }
 
+void mouseMove(const SEvent& event) {
+    
+    // Add rotation to the camera
+    const SEventMouseMove& event_m = (SEventMouseMove&)event;
+    camera.transform.rotation.y += event_m.mouse_vel.x * 0.01;
+    camera.transform.rotation.x -= event_m.mouse_vel.y * 0.005;
+    
+}
+
 int main(int argc, char* argv[]) {
     
     // Set verbosity level
@@ -95,6 +107,7 @@ int main(int argc, char* argv[]) {
     SGLUploadSystem::setUploadLimitPerFrame(UPLOADS_INFINITE);
     
     SKeyboardSystem::startup();
+    SMouseSystem::startup();
     
     STime::startup();
     
@@ -112,20 +125,21 @@ int main(int argc, char* argv[]) {
     
     // TEMP CODE
     
-    SCamera camera;
+    SEventListener e_listener;
+    
     camera.transform.translation.y = 2.0;
-    camera.transform.translation.x = 3.0;
+    
+    e_listener.listenToEvent(EVENT_MOUSE_MOVE, &mouseMove);
     
     SSimpleSceneGraph scene_graph;
-    scene_graph.addObject(new SMesh(SPath("Mesh/machine.mesh")));
+    //scene_graph.addObject(new SMesh(SPath("Mesh/machine.mesh")));
+    
+//    SMesh* mesh = new SMesh(SPath("Mesh/tank.mesh"));
+//    mesh->transform.translation.y = 1.5;
+//    
+//    scene_graph.addObject(mesh);
     
     SMesh* mesh = new SMesh(SPath("Mesh/metal.mesh"));
-    mesh->transform.translation.x = 3.0;
-    
-    scene_graph.addObject(mesh);
-    
-    mesh = new SMesh(SPath("Mesh/plastic.mesh"));
-    mesh->transform.translation.x = 6.0;
     
     scene_graph.addObject(mesh);
     
@@ -194,11 +208,12 @@ int main(int argc, char* argv[]) {
             glm::vec3 strafe = glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0, -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
 
             camera.transform.translation += strafe + forward;
-            camera.transform.rotation.y += speed_r;
             
             loops++;
             
         }
+        
+        SGL::setMouseInputMode(GLFW_CURSOR_DISABLED);
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "Update took %fs", (float)profiler.stop());
         
@@ -254,6 +269,7 @@ int main(int argc, char* argv[]) {
     
     STime::shutdown();
     
+    SMouseSystem::shutdown();
     SKeyboardSystem::shutdown();
     
     SGLUploadSystem::shutdown();
