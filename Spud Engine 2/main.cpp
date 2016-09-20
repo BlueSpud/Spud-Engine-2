@@ -132,14 +132,17 @@ int main(int argc, char* argv[]) {
     e_listener.listenToEvent(EVENT_MOUSE_MOVE, &mouseMove);
     
     SSimpleSceneGraph scene_graph;
-    //scene_graph.addObject(new SMesh(SPath("Mesh/machine.mesh")));
+    SMesh* mesh;
+    scene_graph.addObject(new SMesh(SPath("Mesh/machine.mesh")));
     
-//    SMesh* mesh = new SMesh(SPath("Mesh/tank.mesh"));
-//    mesh->transform.translation.y = 1.5;
-//    
-//    scene_graph.addObject(mesh);
+    mesh = new SMesh(SPath("Mesh/metal.mesh"));
+    mesh->transform.translation.x = 3;
     
-    SMesh* mesh = new SMesh(SPath("Mesh/metal.mesh"));
+    scene_graph.addObject(mesh);
+    
+    mesh = new SMesh(SPath("Mesh/tank.mesh"));
+    mesh->transform.translation.x = 8;
+    mesh->transform.translation.y = 1.0;
     
     scene_graph.addObject(mesh);
     
@@ -206,8 +209,9 @@ int main(int argc, char* argv[]) {
             
             glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0, -cos(camera.transform.rotation.y) * speed);
             glm::vec3 strafe = glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0, -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
-
-            camera.transform.translation += strafe + forward;
+            glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
+            
+            camera.transform.translation += strafe + forward + fly;
             
             loops++;
             

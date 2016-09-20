@@ -48,9 +48,13 @@ bool SCubeMap::load(const SPath& path) {
     
         std::string file_path = absolute_path + "/" + side_names[i];
         
-        // Save the path
-        SPath new_path = SPath(path.getPathAsString() + "/" + side_names[i]);
-        paths.push_back(new_path);
+        // Save the path if we still have room
+        if (paths.size() < 7) {
+            
+            SPath new_path = SPath(path.getPathAsString() + "/" + side_names[i]);
+            paths.push_back(new_path);
+            
+        }
     
         if (!path.getIsDirectory()) {
         

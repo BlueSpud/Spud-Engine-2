@@ -133,12 +133,6 @@ bool SModel::load(const SPath& path) {
             
             glm::vec3 tangent = glm::normalize((edge1 * d_UV2.y - edge2 * d_UV1.y) * f);
             
-//            _tangents[vi.x] += tangent;
-//            _tangents[vi.y] += tangent;
-//            _tangents[vi.z] += tangent;
-//            
-//            _tangents_indicies.push_back(vi);
-            
             tangents[i * 9    ] = tangent.x;
             tangents[i * 9 + 1] = tangent.y;
             tangents[i * 9 + 2] = tangent.z;
@@ -150,29 +144,6 @@ bool SModel::load(const SPath& path) {
             tangents[i * 9 + 8] = tangent.z;
             
         }
-        
-//        // Assemble the tangents
-//        for (int i = 0; i < _tangents_indicies.size(); i++) {
-//            
-//            glm::vec3 index = _tangents_indicies[i];
-//            
-//            // Get the tangents, normalize them
-//            glm::vec3 tangent = glm::normalize(_tangents[index.x]);
-//            tangents[i * 9] = tangent.x;
-//            tangents[i * 9 + 1] = tangent.y;
-//            tangents[i * 9 + 2] = tangent.z;
-//            
-//            tangent = glm::normalize(_tangents[index.y]);
-//            tangents[i * 9 + 3] = tangent.x;
-//            tangents[i * 9 + 4] = tangent.y;
-//            tangents[i * 9 + 5] = tangent.z;
-//            
-//            tangent = glm::normalize(_tangents[index.z]);
-//            tangents[i * 9 + 6] = tangent.x;
-//            tangents[i * 9 + 7] = tangent.y;
-//            tangents[i * 9 + 8] = tangent.z;
-//            
-//        }
         
         // Create an upload
         upload = new SModelUpload();

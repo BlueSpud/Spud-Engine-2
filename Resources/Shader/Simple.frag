@@ -9,9 +9,7 @@ uniform samplerCube tex_cube;
 uniform vec3 view_position;
 
 in vec3 position0;
-in vec3 normal0;
 in vec2 tex_coord0;
-in vec3 tangent0;
 in mat3 tbn_matrix;
 
 out vec4 out_color;
@@ -54,18 +52,18 @@ void main() {
     float occlusion = properties.x;
     
     // Get the normal from the map
-    vec3 normal_map = normalize(tbn_matrix * (255/128 * texture(tex_normal, tex_coord0).xyz - 1.0));
+    vec3 normal_map = tbn_matrix * normalize((2.0 * texture(tex_normal, tex_coord0).xyz - 1.0));
     
     vec3 L = normalize(-light_position);
     
     // Diffuse intensity uses the Lambertian reflectance model
-    float diffuse = dot(-L, normal0) * light_intensity + 0.1;
+    float diffuse = dot(-L, normal_map) * light_intensity + 0.1;
     
     // Calculate fresnel term F
     float F0 = clamp(roughness, 0.05, 0.5);
     vec3 V = normalize(position0 - view_position);
     
-    float fresnel_pow = pow(1.0 - dot(normal0, -V), fresnel_pow);
+    float fresnel_pow = pow(1.0 - dot(normal_map, -V), fresnel_pow);
     float fresnel = F0 + (1.0 - F0) * fresnel_pow;
     
     // Get H
@@ -76,7 +74,7 @@ void main() {
     float a_sqrd = a * a;
     
     // Get G
-    float NDH = dot(normal0, -H);
+    float NDH = dot(normal_map, -H);
     float D_den = NDH * NDH * (a_sqrd - 1.0) + 1.0;
     D_den = D_den * D_den * 3.14159;
     
@@ -84,20 +82,20 @@ void main() {
     
     // Get G
     float k = 2.0 / sqrt(3.14159 * (a + 2));
-    float G = G1(dot(normal0, L), k) * G1(dot(normal0, V), k);
+    float G = G1(dot(normal_map, L), k) * G1(dot(normal_map, V), k);
     
     // Combine specular
-    float specular = (fresnel * G * D) / (4 * dot(normal0, L) * dot(normal0, V));
+    float specular = (fresnel * G * D) / (4 * dot(normal_map, L) * dot(normal_map, V));
     
     // Get the regular color
     vec3 tex_color = texture(tex_albedo, tex_coord0).xyz;
     
     // Get the reflection color
-    vec3 reflection = reflect(-V, normal0);
+    vec3 reflection = reflect(-V, normal_map);
     vec3 reflection_color = textureLod(tex_cube, reflection, roughness * 7.0).xyz;
     
     vec3 fresnel_reflection = reflection_color * fresnel_pow * inverse_roughness;
-    vec3 metalic_reflection = reflection_color * inverse_roughness;
+    vec3 metalic_reflection = reflection_color * inverse_roughness * max(metalic, 0.08);
     
     // Combine lighting and texture
     vec3 color = tex_color * (fresnel_reflection + metalic_reflection + (lerp(specular, diffuse, max(metalic, 0.08))) * occlusion);
