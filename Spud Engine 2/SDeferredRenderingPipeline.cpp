@@ -8,6 +8,10 @@
 
 #include "SDeferredRenderingPipeline.hpp"
 
+/******************************************************************************
+ * Functions for deferred rendering pipeline                                  *
+ ******************************************************************************/
+
 SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport3D* _viewport_3D) : SRenderingPipeline(_viewport_2D, _viewport_3D) {
     
     // Create the gbuffer and its attatchments
@@ -92,8 +96,8 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     texture = 4;
     lit_shader->bindUniform(&texture, "tex_cube", UNIFORM_INT, 1);
     
+    // Bind other uniforms needed for lighting
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
-    
     lit_shader->bindUniform(view_pos_u);
     
     // Bind the textures and then render
