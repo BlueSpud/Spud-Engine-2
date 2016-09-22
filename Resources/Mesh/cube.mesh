@@ -1,0 +1,15 @@
+model:Model/cube.obj
+
+mat:Material/test.mat
+
+tex_n:tex_albedo
+tex:Texture/bricks_albedo.png
+
+tex_n:tex_orm
+tex:Texture/bricks_orm.png
+
+tex_n:tex_normal
+tex:Texture/bricks_normal.png
+
+tex_n:tex_cube
+tex:Texture/sky.cube

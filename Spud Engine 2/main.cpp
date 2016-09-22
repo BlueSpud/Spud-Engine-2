@@ -12,9 +12,10 @@
 #include "SKeyboardSystem.hpp"
 #include "SMouseSystem.hpp"
 #include "SMesh.hpp"
-#include "SRenderingPipline.hpp"
+#include "SDeferredRenderingPipeline.hpp"
 #include "SCamera.hpp"
 #include "SHotLoadSystem.hpp"
+#include "SFramebuffer.hpp"
 
 double speed = 0.0;
 double speed_x = 0.0;
@@ -117,7 +118,6 @@ int main(int argc, char* argv[]) {
     SResourceManager::startup();
     SHotLoadSystem::startup();
     
-    glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glCullFace(GL_BACK);
     
@@ -140,16 +140,21 @@ int main(int argc, char* argv[]) {
     
     scene_graph.addObject(mesh);
     
+    mesh = new SMesh(SPath("Mesh/cube.mesh"));
+    mesh->transform.translation.x = 12;
+    
+    scene_graph.addObject(mesh);
+    
     mesh = new SMesh(SPath("Mesh/tank.mesh"));
     mesh->transform.translation.x = 8;
     mesh->transform.translation.y = 1.0;
     
     scene_graph.addObject(mesh);
     
-    SRenderingPipline forward_pipline;
+    SViewport viewport_2D = SViewport(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2());
+    SViewport3D viewport_3D = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
     
-    SViewport3D viewport = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
-    SGL::setUpViewport(viewport);
+    SDeferredRenderingPipleline deferred_pipeline = SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
     
     SKeyboardListener listener;
     listener.bind(&keyPress, GLFW_KEY_S, KEY_ACTION_DOWN);
@@ -232,13 +237,7 @@ int main(int argc, char* argv[]) {
         double interpolation = loopElapsedTime / time_tick;
         
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        glm::mat4 projection_matrix = SGL::getProjectionMatrix(viewport);
-        
-        SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
-        
-        forward_pipline.render(interpolation, camera, scene_graph);
+        deferred_pipeline.render(interpolation, camera, scene_graph);
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
         
@@ -247,7 +246,8 @@ int main(int argc, char* argv[]) {
         
     }
     
-    glfwTerminate();
+    // Clean up
+    deferred_pipeline.unload();
     
     // Subsystem shutdown
     SHotLoadSystem::shutdown();

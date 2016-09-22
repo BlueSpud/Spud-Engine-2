@@ -43,9 +43,11 @@
 		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
 		029865A11D84D0A4005EED43 /* SKeyboardSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0298659F1D84D0A4005EED43 /* SKeyboardSystem.cpp */; };
 		02A180A51D8E30F70032F2F0 /* SMouseSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A180A31D8E30F70032F2F0 /* SMouseSystem.cpp */; };
+		02A24C2A1D9317A00039F422 /* SFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A24C281D9317A00039F422 /* SFramebuffer.cpp */; };
 		02B947F81D89FF7200822957 /* SUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B947F61D89FF7200822957 /* SUniform.cpp */; };
+		02D295D11D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D295CF1D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp */; };
 		02D35A731D86217A00F62A7B /* SSceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D35A711D86217A00F62A7B /* SSceneGraph.cpp */; };
-		02DAB8C61D8A28F900A39E27 /* SRenderingPipline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02DAB8C41D8A28F900A39E27 /* SRenderingPipline.cpp */; };
+		02DAB8C61D8A28F900A39E27 /* SRenderingPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02DAB8C41D8A28F900A39E27 /* SRenderingPipeline.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -126,12 +128,16 @@
 		029865A01D84D0A4005EED43 /* SKeyboardSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SKeyboardSystem.hpp; sourceTree = "<group>"; };
 		02A180A31D8E30F70032F2F0 /* SMouseSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMouseSystem.cpp; sourceTree = "<group>"; };
 		02A180A41D8E30F70032F2F0 /* SMouseSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SMouseSystem.hpp; sourceTree = "<group>"; };
+		02A24C281D9317A00039F422 /* SFramebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFramebuffer.cpp; sourceTree = "<group>"; };
+		02A24C291D9317A00039F422 /* SFramebuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFramebuffer.hpp; sourceTree = "<group>"; };
 		02B947F61D89FF7200822957 /* SUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUniform.cpp; sourceTree = "<group>"; };
 		02B947F71D89FF7200822957 /* SUniform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUniform.hpp; sourceTree = "<group>"; };
+		02D295CF1D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDeferredRenderingPipeline.cpp; sourceTree = "<group>"; };
+		02D295D01D935E4F00CBF342 /* SDeferredRenderingPipeline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SDeferredRenderingPipeline.hpp; sourceTree = "<group>"; };
 		02D35A711D86217A00F62A7B /* SSceneGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSceneGraph.cpp; sourceTree = "<group>"; };
 		02D35A721D86217A00F62A7B /* SSceneGraph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSceneGraph.hpp; sourceTree = "<group>"; };
-		02DAB8C41D8A28F900A39E27 /* SRenderingPipline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRenderingPipline.cpp; sourceTree = "<group>"; };
-		02DAB8C51D8A28F900A39E27 /* SRenderingPipline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRenderingPipline.hpp; sourceTree = "<group>"; };
+		02DAB8C41D8A28F900A39E27 /* SRenderingPipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRenderingPipeline.cpp; sourceTree = "<group>"; };
+		02DAB8C51D8A28F900A39E27 /* SRenderingPipeline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRenderingPipeline.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -229,7 +235,7 @@
 		0251FC3D1D7DC62400B3E63E /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
-				02DAB8C31D8A28EB00A39E27 /* Pipline */,
+				02DAB8C31D8A28EB00A39E27 /* Pipeline */,
 				0298658D1D84A264005EED43 /* Objects */,
 				0298657E1D8460DC005EED43 /* SCamera.cpp */,
 				0298657F1D8460DC005EED43 /* SCamera.hpp */,
@@ -363,6 +369,15 @@
 			name = Shader;
 			sourceTree = "<group>";
 		};
+		02D295CE1D935E4100CBF342 /* Renderers */ = {
+			isa = PBXGroup;
+			children = (
+				02D295CF1D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp */,
+				02D295D01D935E4F00CBF342 /* SDeferredRenderingPipeline.hpp */,
+			);
+			name = Renderers;
+			sourceTree = "<group>";
+		};
 		02D35A701D86216000F62A7B /* Level */ = {
 			isa = PBXGroup;
 			children = (
@@ -372,13 +387,16 @@
 			name = Level;
 			sourceTree = "<group>";
 		};
-		02DAB8C31D8A28EB00A39E27 /* Pipline */ = {
+		02DAB8C31D8A28EB00A39E27 /* Pipeline */ = {
 			isa = PBXGroup;
 			children = (
-				02DAB8C41D8A28F900A39E27 /* SRenderingPipline.cpp */,
-				02DAB8C51D8A28F900A39E27 /* SRenderingPipline.hpp */,
+				02D295CE1D935E4100CBF342 /* Renderers */,
+				02DAB8C41D8A28F900A39E27 /* SRenderingPipeline.cpp */,
+				02DAB8C51D8A28F900A39E27 /* SRenderingPipeline.hpp */,
+				02A24C281D9317A00039F422 /* SFramebuffer.cpp */,
+				02A24C291D9317A00039F422 /* SFramebuffer.hpp */,
 			);
-			name = Pipline;
+			name = Pipeline;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -407,7 +425,7 @@
 		025903011D77933E00EA6372 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Logan Pazol";
 				TargetAttributes = {
 					025903081D77933E00EA6372 = {
@@ -456,12 +474,14 @@
 				025903311D77940400EA6372 /* object.cpp in Sources */,
 				02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */,
 				0228B8841D7A779200596526 /* SModel.cpp in Sources */,
+				02D295D11D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp in Sources */,
 				0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */,
 				025903301D77940400EA6372 /* main.cpp in Sources */,
 				0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */,
 				0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */,
+				02A24C2A1D9317A00039F422 /* SFramebuffer.cpp in Sources */,
 				022B19C41D8DD533004D9B18 /* SHotLoadSystem.cpp in Sources */,
-				02DAB8C61D8A28F900A39E27 /* SRenderingPipline.cpp in Sources */,
+				02DAB8C61D8A28F900A39E27 /* SRenderingPipeline.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,6 +517,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -544,6 +565,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

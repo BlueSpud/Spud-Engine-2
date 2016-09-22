@@ -12,6 +12,10 @@
 GLFWwindow* SGL::window;
 std::map<const char*, glm::mat4>SGL::matrices;
 
+
+GLuint SGL::rect_id;
+GLuint SGL::rect_buffers[2];
+
 /******************************************************************************
  *  Functions for OpenGL system                                               *
  ******************************************************************************/
@@ -30,12 +34,18 @@ void SGL::startup() {
     // Make the current context
     glfwMakeContextCurrent(window);
 
+    // Load the rect we use
+    loadRect();
+    
     
 }
 
 void SGL::shutdown() {
     
     SLog::verboseLog(SVerbosityLevel::Debug, "SGL shutdown");
+    
+    // Unload the rect we use for drawing
+    unloadRect();
     
     // Shut down OpenGL
     glfwTerminate();
@@ -108,15 +118,42 @@ glm::mat4 SGL::transformToMatrix(const STransform& transform) {
     
 }
 
-glm::mat4 SGL::getProjectionMatrix(const SViewport3D& viewport) { return glm::perspective(viewport.field_of_view,
+glm::mat4 SGL::getProjectionMatrix2D(const SViewport& viewport) { return glm::ortho(0.0f,
+                                                                                    viewport.screen_size.x,
+                                                                                    viewport.screen_size.y,
+                                                                                    0.0f, -100.0f, 100.0f); }
+
+glm::mat4 SGL::getProjectionMatrix3D(const SViewport3D& viewport) { return glm::perspective(viewport.field_of_view,
                                                                                           viewport.screen_size.x / viewport.screen_size.y,
                                                                                           viewport.planes.x,
                                                                                           viewport.planes.y); }
 
-void SGL::setUpViewport(const SViewport3D& viewport) { glViewport(viewport.screen_pos.x,
+void SGL::setUpViewport(const SViewport& viewport) { glViewport(viewport.screen_pos.x,
                                                                   viewport.screen_pos.y,
                                                                   viewport.screen_size.x,
                                                                   viewport.screen_size.y); }
+
+void SGL::drawRect(glm::vec2 position, glm::vec2 size) {
+    
+    // Make the matrix for the rect
+    glm::mat4 matrix = glm::mat4(1.0);
+    matrix = glm::translate(matrix, glm::vec3(position, 1.0));
+    matrix = glm::scale(matrix, glm::vec3(size.x, size.y, 1.0));
+    
+    // Load the modelview and flush the matricies
+    loadMatrix(matrix, MAT_MODEL_MATRIX);
+    clearMatrix(MAT_VIEW_MATRIX);
+    
+    flushMatrix(MAT_PROJECTION_MATRIX);
+    flushMatrix(MAT_VIEW_MATRIX);
+    flushMatrix(MAT_MODEL_MATRIX);
+    
+    // Draw the array
+    glBindVertexArray(rect_id);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
+    
+}
 
 /******************************************************************************
  *  Functions for the matrix stack                                            *
@@ -165,4 +202,58 @@ void SGL::flushMatrix(const char* mat_name) {
         
     }
     
+}
+
+/******************************************************************************
+ *  Arrays for simple quad drawing                                            *
+ ******************************************************************************/
+
+float rect_position[] = { 0.0, 1.0, 0.0,
+                          1.0, 1.0, 0.0,
+                          0.0, 0.0, 0.0,
+    
+                          0.0, 0.0, 0.0,
+                          1.0, 0.0, 0.0,
+                          1.0, 1.0, 0.0 };
+
+float rect_tex_coord[] = { 0.0, 0.0,
+                           1.0, 0.0,
+                           0.0, 1.0,
+    
+                           0.0, 1.0,
+                           1.0, 1.0,
+                           1.0, 0.0};
+
+void SGL::loadRect() {
+    
+    // Create a simple 1x1 square that we can use to draw rects to the screen
+    glGenVertexArrays(1, &rect_id);
+    
+    // Create the position buffer
+    glGenBuffers(2, rect_buffers);
+    glBindVertexArray(rect_id);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, rect_buffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 18, rect_position, GL_STATIC_DRAW);
+    
+    // Tell OpenGL how to read this
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, rect_buffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, rect_tex_coord, GL_STATIC_DRAW);
+    
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    glBindVertexArray(0);
+
+}
+
+void SGL::unloadRect() {
+
+    // Delete the buffers and array
+    glDeleteBuffers(2, rect_buffers);
+    glDeleteVertexArrays(1, &rect_id);
+
 }

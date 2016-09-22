@@ -23,6 +23,9 @@
 #define WINDOW_WIDTH 1440
 #define WINDOW_HEIGHT 900
 
+// Forward declarations
+class SGLUploadSystem;
+
 /******************************************************************************
  *  Definition for transform                                                  *
  ******************************************************************************/
@@ -44,22 +47,37 @@ struct STransform {
 #define MAT_PROJECTION_MATRIX "mat_projection"
 
 /******************************************************************************
- *  Definition for 3D viewport                                                *
+ *  Definition for 2D viewport                                                *
  ******************************************************************************/
 
-struct SViewport3D {
+struct SViewport {
     
     glm::vec2 screen_size;
     glm::vec2 screen_pos;
+    
+    // Should never be called
+    SViewport() { /* oops */ }
+    SViewport(glm::vec2 _screen_size, glm::vec2 _screen_pos) {
+        
+        screen_size = _screen_size;
+        screen_pos = _screen_pos;
+        
+    }
+    
+};
+
+/******************************************************************************
+ *  Definition for 3D viewport                                                *
+ ******************************************************************************/
+
+struct SViewport3D : public SViewport {
     
     float field_of_view;
     
     glm::vec2 planes;
     
-    SViewport3D(glm::vec2 _screen_size, glm::vec2 _screen_pos, float _field_of_view, glm::vec2 _planes) {
+    SViewport3D(glm::vec2 _screen_size, glm::vec2 _screen_pos, float _field_of_view, glm::vec2 _planes) : SViewport(_screen_size, _screen_pos) {
         
-        screen_size = _screen_size;
-        screen_pos = _screen_pos;
         field_of_view = _field_of_view;
         planes = _planes;
         
@@ -72,6 +90,8 @@ struct SViewport3D {
  ******************************************************************************/
 
 class SGL : public SSubsystem {
+    
+    friend class SGLUploadSystem;
     
     public:
     
@@ -96,8 +116,11 @@ class SGL : public SSubsystem {
     
         static glm::mat4 transformToMatrix(const STransform& transform);
     
-        static glm::mat4 getProjectionMatrix(const SViewport3D& viewport);
-        static void setUpViewport(const SViewport3D& viewport);
+        static glm::mat4 getProjectionMatrix2D(const SViewport& viewport);
+        static glm::mat4 getProjectionMatrix3D(const SViewport3D& viewport);
+        static void setUpViewport(const SViewport& viewport);
+    
+        static void drawRect(glm::vec2 position, glm::vec2 size);
     
 /******************************************************************************
 *  Definition for the matrix stack operations                                 *
@@ -114,6 +137,13 @@ class SGL : public SSubsystem {
         static std::map<const char*, glm::mat4>matrices;
     
         static GLFWwindow* window;
+    
+        static void loadRect();
+        static void unloadRect();
+    
+        static GLuint rect_id;
+        static GLuint rect_buffers[2];
+    
     
 };
 
