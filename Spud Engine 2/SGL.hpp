@@ -128,6 +128,7 @@ class SGL : public SSubsystem {
     
         static void loadMatrix(const glm::mat4& mat, const char* mat_name);
         static void mulMatrix(const glm::mat4& mat, const char* mat_name);
+        static glm::mat4 getMatrix(const char* mat_name);
         static void clearMatrix(const char* mat_name);
     
         static void flushMatrix(const char* mat_name);

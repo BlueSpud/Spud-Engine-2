@@ -26,6 +26,8 @@ struct SFramebufferAttatchment {
     int storage_type, id;
     int internal_format;
     
+    GLuint* texture_id;
+    
     /***************************************************************************************************
      *                                                                                                 *
      * attatchment_kind is how its attached to the framebuffer, FRAMEBUFFER_COLOR or FRAMEBUFFER_DEPTH *
@@ -61,7 +63,9 @@ struct SFramebufferUpload : public SGLUpload {
     unsigned int height;
     
     GLuint* framebuffer_id;
-    std::map<GLuint*, SFramebufferAttatchment*> attatchments;
+    std::vector<SFramebufferAttatchment*> attatchments; 
+    
+    GLenum** buffers_to_draw;
 
 };
 
@@ -76,6 +80,8 @@ struct SFramebufferUnload : public SGLUpload {
     
     GLuint framebuffer_id;
     std::map<int, GLuint>* textures;
+    
+    GLenum* buffers_to_draw;
     
 };
 
@@ -103,6 +109,8 @@ class SFramebuffer {
         std::map<int, GLuint> textures;
     
         SFramebufferUpload* upload;
+    
+        GLenum* buffers_to_draw;
     
 };
 

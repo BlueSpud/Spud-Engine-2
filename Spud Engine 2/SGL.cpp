@@ -184,6 +184,15 @@ void SGL::mulMatrix(const glm::mat4& mat, const char* mat_name) {
 
 }
 
+glm::mat4 SGL::getMatrix(const char* mat_name) {
+ 
+    // See if there is a matrix that exists by that name, otherwise return identity
+    if (matrices.count(mat_name))
+        return matrices[mat_name];
+    else return glm::mat4(1.0);
+    
+}
+
 void SGL::clearMatrix(const char* mat_name) {
     
     glm::mat4 mat_new = glm::mat4(1.0);

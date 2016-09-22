@@ -14,14 +14,19 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     std::vector<SFramebufferAttatchment*> attatchments;
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_FLOAT, GBUFFER_DEPTH));
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ALBEDO));
-    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_NORMAL));
+    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_FLOAT, GBUFFER_NORMAL));
+    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ORM));
     
     gbuffer = new SFramebuffer(attatchments, WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2);
     
-    std::cout << "Construction\n";
-    
     // Get the lighting shader
-    lit_shader = (SShader*)SResourceManager::getResource(SPath("Shader/Simple.glsl"));
+    lit_shader = (SShader*)SResourceManager::getResource(SPath("Shader/deferred_lighting.glsl"));
+    
+    // Get the cube map
+    environment_map =  (SCubeMap*)SResourceManager::getResource(SPath("Texture/sky.cube"));
+    
+    // Get the view pos
+    view_pos_u = SUniformManger::instance()->getUniformWithName("view_position");
     
 }
 
@@ -37,6 +42,7 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     
     // Render the 3D scene into the GBuffer
     gbuffer->bind();
+    glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     glm::mat4 projection_matrix = SGL::getProjectionMatrix3D(*viewport_3D);
@@ -49,8 +55,14 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     
     scene_graph.render(camera, interpolation);
     
+    // Get view matrix
+    glm::mat4 view_matrix = SGL::getMatrix(MAT_VIEW_MATRIX);
+    
+    glm::mat4 inverse_proj_view = glm::inverse(projection_matrix * view_matrix);
+    
     // Render the lit buffer to the screen
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(0.2, 0.2, 0.2, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Set up the new viewport
@@ -74,6 +86,16 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     texture = GBUFFER_NORMAL;
     lit_shader->bindUniform(&texture, "tex_normal", UNIFORM_INT, 1);
     
+    texture = GBUFFER_ORM;
+    lit_shader->bindUniform(&texture, "tex_orm", UNIFORM_INT, 1);
+    
+    texture = 4;
+    lit_shader->bindUniform(&texture, "tex_cube", UNIFORM_INT, 1);
+    
+    lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
+    
+    lit_shader->bindUniform(view_pos_u);
+    
     // Bind the textures and then render
     glActiveTexture(GL_TEXTURE0);
     gbuffer->bindTexture(GBUFFER_DEPTH);
@@ -81,6 +103,9 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     gbuffer->bindTexture(GBUFFER_ALBEDO);
     glActiveTexture(GL_TEXTURE2);
     gbuffer->bindTexture(GBUFFER_NORMAL);
+    glActiveTexture(GL_TEXTURE3);
+    gbuffer->bindTexture(GBUFFER_ORM);
+    environment_map->bind(4);
     
     SGL::drawRect(glm::vec2(0, 0), glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2));
 

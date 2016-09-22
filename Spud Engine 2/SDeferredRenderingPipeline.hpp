@@ -10,6 +10,7 @@
 #define SDeferredPipeline_hpp
 
 #include "SRenderingPipeline.hpp"
+#include "SCubeMap.hpp"
 #include "SFramebuffer.hpp"
 
 /******************************************************************************
@@ -19,6 +20,7 @@
 #define GBUFFER_DEPTH 0
 #define GBUFFER_ALBEDO 1
 #define GBUFFER_NORMAL 2
+#define GBUFFER_ORM 3
 
 /******************************************************************************
  *  Definition for deferred rendering pipeline                                *
@@ -35,8 +37,11 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
     private:
     
+    // Stuff for rendering
         SFramebuffer* gbuffer;
         SShader* lit_shader;
+        SCubeMap* environment_map;
+        SUniform* view_pos_u;
     
     
 };

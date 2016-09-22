@@ -183,8 +183,6 @@ int main(int argc, char* argv[]) {
     double time_tick = 1.0 / TICKS_PER_SECOND;
     int maxUpdateCount = 5;
     
-    glClearColor(0.2, 0.2, 0.2, 1.0);
-    
     SStopwatch stopwatch;
     stopwatch.start();
     

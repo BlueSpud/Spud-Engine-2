@@ -7,13 +7,11 @@ uniform mat4 mat_view;
 in vec3 position;
 in vec2 tex_coord;
 
-out vec3 position0;
 out vec2 tex_coord0;
 
 void main() {
     
-    position0 = (mat_model * vec4(position, 1.0)).xyz;
     tex_coord0 = tex_coord;
-    gl_Position = mat_projection * mat_view * vec4(position0, 1.0);
+    gl_Position = mat_projection * mat_view * mat_model * vec4(position, 1.0);
     
 }

@@ -1,6 +1,4 @@
-shader:Shader/PBR.glsl
+shader:Shader/gbuffer.glsl
 req:tex_albedo
 req:tex_orm
 req:tex_normal
-req:tex_cube
-u:view_position
