@@ -23,6 +23,20 @@ const vec3 light_position = vec3(2.0, 2.0, 2.0);
 
 const float fresnel_pow = 5.0;
 
+const vec3 lights[4] = vec3[](vec3(-1.0, 4.0, 1.0), vec3(-1.0, 1.0, 3.0), vec3(2.0, 1.0, -2.0), vec3(-2.2, 1.0, -2.0));
+
+/******************************************************************************
+ *  Values that only need to be computed once per pixel                       *
+ ******************************************************************************/
+
+vec3 normal;
+
+float NDH, NDV;
+float roughness, inverse_roughness, metalic;
+
+vec3 V;
+float fresnel;
+
 float G1(float NDV, float k) {
     
     float den = NDV * (1.0 - k) + k;
@@ -30,40 +44,14 @@ float G1(float NDV, float k) {
     
 }
 
-void main() {
-
-    vec4 albedo_s = texture(tex_albedo, tex_coord0);
-    if (albedo_s.w == 0)
-        discard;
-    
-    vec3 albedo = albedo_s.xyz;
-    
-    // Get the PBR properties
-    vec4 orm = texture(tex_orm, tex_coord0);
-    float roughness = orm.y;
-    float inverse_roughness = 1.0 - roughness;
-    float metalic = max(orm.z, 0.12);
-    float occlusion = orm.x;
-    
-    vec3 normal = texture(tex_normal, tex_coord0).xyz;
-    
-    // Get position from depth
-    float depth = texture(tex_depth, tex_coord0).x * 2.0 - 1.0;
-    vec4 position = vec4(tex_coord0 * 2.0 - 1.0, depth, 1.0);
-    position = inverse_proj_view * position;
-    position = position / position.w;
-    
-    vec3 L = normalize(-light_position);
+float getDiffuseTerm(float NDL) {
     
     // Diffuse intensity uses the Lambertian reflectance model
-    float diffuse = dot(-L, normal) * light_intensity * (1.0 - metalic) + 0.1;
+    return -NDL * (1.0 - metalic) + 0.1;
     
-    // Calculate fresnel term F
-    float F0 = clamp(roughness, 0.05, 0.5);
-    vec3 V = normalize(position.xyz - view_position);
-    
-    float fresnel_pow = pow(1.0 - dot(normal, -V), fresnel_pow);
-    float fresnel = F0 + (1.0 - F0) * fresnel_pow;
+}
+
+float getSpecularTerm(vec3 L, float NDL) {
     
     // Get H
     vec3 H = normalize(L + V);
@@ -73,7 +61,7 @@ void main() {
     float a_sqrd = a * a;
     
     // Get G
-    float NDH = dot(normal, -H);
+    NDH = dot(normal, -H);
     float D_den = NDH * NDH * (a_sqrd - 1.0) + 1.0;
     D_den = D_den * D_den * 3.14159;
     
@@ -81,10 +69,81 @@ void main() {
     
     // Get G
     float k = 2.0 / sqrt(3.14159 * (a + 2));
-    float G = G1(dot(normal, L), k) * G1(dot(normal, V), k);
+    float G = G1(NDL, k) * G1(NDV, k);
     
-    // Combine specular
-    float specular = (fresnel * G * D) / (4 * dot(normal, L) * dot(normal, V));
+    return (fresnel * D * G) / (4.0 * NDL * NDV);
+    
+}
+
+
+
+void main() {
+
+    // Get albedo and if we're transparent, discard
+    vec4 albedo_s = texture(tex_albedo, tex_coord0);
+    if (albedo_s.w == 0)
+        discard;
+    
+    vec3 albedo = albedo_s.xyz;
+    
+    // Get normal
+    normal = normalize(texture(tex_normal, tex_coord0).xyz);
+    
+    // Get the PBR properties
+    vec4 orm = texture(tex_orm, tex_coord0);
+    roughness = orm.y;
+    inverse_roughness = 1.0 - roughness;
+    metalic = max(orm.z, 0.12);
+    float occlusion = orm.x;
+    
+    // Get position from depth
+    float depth = texture(tex_depth, tex_coord0).x * 2.0 - 1.0;
+    vec4 position = vec4(tex_coord0 * 2.0 - 1.0, depth, 1.0);
+    position = inverse_proj_view * position;
+    position = position / position.w;
+    
+    vec3 L = normalize(-light_position);
+    float NDL = dot(L, normal);
+    
+    // Compute V
+    V = normalize(position.xyz - view_position);
+    NDV = dot(normal, V);
+    
+    // Calculate fresnel term F
+    float F0 = clamp(roughness, 0.05, 0.5);
+    float fresnel_pow = pow(1.0 + NDV, fresnel_pow);
+    fresnel = F0 + (1.0 - F0) * fresnel_pow;
+    
+    float att_acc;
+    
+    // Calculate lighting accumulation
+    float diffuse_acc, specular_acc;
+    
+    for (int i = 0; i < 4; i++) {
+     
+        // Get L
+        vec3 L = position.xyz - lights[i];
+        
+        // Get attenuation and then normalize the light vector
+        float att = length(L) / 2.0;
+        att = 1.0 / (att * att);
+        
+        L = normalize(L);
+        
+        // If attenuation is too low, why calcualte light?
+        if (att > 0.01) {
+        
+            // Get NDL
+            float NDL = dot(normal, L);
+        
+            // Accumulate the lighting
+            diffuse_acc += getDiffuseTerm(NDL) * att;
+            specular_acc += getSpecularTerm(L, NDL) * att;
+            att_acc += att;
+            
+        }
+        
+    }
     
     // Get the reflection color
     vec3 reflection = reflect(-V, normal);
@@ -94,7 +153,7 @@ void main() {
     vec3 metalic_reflection = reflection_color * inverse_roughness * metalic;
     
     // Combine lighting and texture
-    vec3 color = albedo * occlusion * (fresnel_reflection + metalic_reflection + diffuse + specular * metalic);
+    vec3 color = albedo * occlusion * (fresnel_reflection + metalic_reflection + diffuse_acc + specular_acc * roughness);
     
     out_color = vec4(color, 1.0);
 

@@ -8,7 +8,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include "object.hpp"
+#include "STime.hpp"
 #include "SKeyboardSystem.hpp"
 #include "SMouseSystem.hpp"
 #include "SMesh.hpp"
@@ -140,16 +140,21 @@ int main(int argc, char* argv[]) {
     
     scene_graph.addObject(mesh);
     
-    mesh = new SMesh(SPath("Mesh/cube.mesh"));
-    mesh->transform.translation.x = 12;
+    //mesh = new SMesh(SPath("Mesh/cube.mesh"));
+    //mesh->transform.translation.x = 12;
+    
+    //scene_graph.addObject(mesh);
+    
+    mesh = new SMesh(SPath("Mesh/plane.mesh"));
+    mesh->transform.translation.y = -0.5;
     
     scene_graph.addObject(mesh);
     
-    mesh = new SMesh(SPath("Mesh/tank.mesh"));
-    mesh->transform.translation.x = 8;
-    mesh->transform.translation.y = 1.0;
+    //mesh = new SMesh(SPath("Mesh/tank.mesh"));
+    //mesh->transform.translation.x = 8;
+    //mesh->transform.translation.y = 1.0;
     
-    scene_graph.addObject(mesh);
+    //scene_graph.addObject(mesh);
     
     SViewport viewport_2D = SViewport(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2());
     SViewport3D viewport_3D = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
