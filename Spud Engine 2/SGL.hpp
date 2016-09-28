@@ -127,6 +127,7 @@ class SGL : public SSubsystem {
 ******************************************************************************/
     
         static glm::mat4 transformToMatrix(const STransform& transform);
+        static glm::mat4 transformToMatrix(const STransform& transform, double interpolation);
     
         static glm::mat4 getProjectionMatrix2D(const SViewport& viewport);
         static glm::mat4 getProjectionMatrix3D(const SViewport3D& viewport);

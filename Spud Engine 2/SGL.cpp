@@ -116,6 +116,21 @@ glm::mat4 SGL::transformToMatrix(const STransform& transform) {
     
 }
 
+glm::mat4 SGL::transformToMatrix(const STransform& transform, double interpolation) {
+    
+    glm::mat4 to_return = glm::mat4(1.0);
+    
+    //Perform the operations on the matrix
+    to_return = glm::translate(to_return, transform.translation + transform.translation_velocity * (float)interpolation);
+    to_return = glm::rotate(to_return, transform.rotation.x + transform.rotation_velocity.x * (float)interpolation, x_axis);
+    to_return = glm::rotate(to_return, transform.rotation.y + transform.rotation_velocity.y * (float)interpolation, y_axis);
+    to_return = glm::rotate(to_return, transform.rotation.z + transform.rotation_velocity.z * (float)interpolation, z_axis);
+    to_return = glm::scale(to_return, transform.scale + transform.scale_velocity * (float)interpolation);
+    
+    return to_return;
+    
+}
+
 glm::mat4 SGL::getProjectionMatrix2D(const SViewport& viewport) { return glm::ortho(0.0f,
                                                                                     viewport.screen_size.x,
                                                                                     viewport.screen_size.y,

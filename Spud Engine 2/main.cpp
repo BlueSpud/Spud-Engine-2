@@ -132,18 +132,16 @@ int main(int argc, char* argv[]) {
     e_listener.listenToEvent(EVENT_MOUSE_MOVE, &mouseMove);
     
     SSimpleSceneGraph scene_graph;
-    SMesh* mesh;
-    scene_graph.addObject(new SMesh(SPath("Mesh/machine.mesh")));
-    
-    mesh = new SMesh(SPath("Mesh/metal.mesh"));
-    mesh->transform.translation.x = 3.0;
+    SMesh* mesh = new SMesh(SPath("Mesh/machine.mesh"));
+    mesh->transform.translation.z = -5.0;
     
     scene_graph.addObject(mesh);
     
-    //mesh = new SMesh(SPath("Mesh/cube.mesh"));
-    //mesh->transform.translation.x = 12.0;
+    mesh = new SMesh(SPath("Mesh/metal.mesh"));
+    mesh->transform.translation.x = 3.0;
+    mesh->transform.translation.z = -5.0;
     
-    //scene_graph.addObject(mesh);
+    scene_graph.addObject(mesh);
     
     mesh = new SMesh(SPath("Mesh/plane.mesh"));
     mesh->transform.translation.y = -0.5;
@@ -151,7 +149,7 @@ int main(int argc, char* argv[]) {
     scene_graph.addObject(mesh);
     
     mesh = new SMesh(SPath("Mesh/tank.mesh"));
-    mesh->transform.translation.x = -4.0;
+    //mesh->transform.translation.x = -4.0;
     mesh->transform.translation.y = 0.6;
     
     scene_graph.addObject(mesh);
@@ -193,6 +191,8 @@ int main(int argc, char* argv[]) {
     
     SStopwatch profiler;
     
+    SLog::verboseLog(SVerbosityLevel::Debug, "Startup complete\n");
+    
     /* Loop until the user closes the window */
     while (SGL::windowIsGood()) {
         
@@ -218,6 +218,9 @@ int main(int argc, char* argv[]) {
             glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
             
             camera.transform.translation_velocity = strafe + forward + fly;
+            
+            mesh->transform.update();
+            mesh->transform.rotation_velocity.y = 0.05;
             
             SEventTick e;
             SEventSystem::postEvent(EVENT_TICK, e);

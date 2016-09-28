@@ -23,14 +23,20 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     
     gbuffer = new SFramebuffer(attatchments, WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2);
     
-    // Get the lighting shader
-    lit_shader = (SShader*)SResourceManager::getResource(SPath("Shader/deferred_lighting.glsl"));
-    
     // Get the cube map
     environment_map =  (SCubeMap*)SResourceManager::getResource(SPath("Texture/room.cube"));
     
+    // Get the lighting shader
+    lit_shader = (SShader*)SResourceManager::getResource(SPath("Shader/deferred_lighting.glsl"));
+    simple_shader = (SShader*)SResourceManager::getResource(SPath("Shader/simple.glsl"));
+    
     // Get the view pos
     view_pos_u = SUniformManger::instance()->getUniformWithName("view_position");
+    
+    // Create a temporary light
+    light = new SDirectionalLight();
+    light->transform.translation.y = 2.0;
+    light->transform.translation.z = 8.0;
     
 }
 
@@ -40,9 +46,21 @@ void SDeferredRenderingPipleline::unload() {
     gbuffer->unload();
     delete gbuffer;
     
+    delete light;
+    
 }
 
 void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, SSceneGraph& scene_graph) {
+    
+    // The 3D world has culling enabled
+    glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+    
+    /******************************************************************************
+     * Shadow mapping updates                                                     *
+     ******************************************************************************/
+    
+    glm::mat4 light_matrix = light->renderShadowMap(scene_graph, interpolation);
     
     // Render the 3D scene into the GBuffer
     gbuffer->bind();
@@ -53,9 +71,6 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
     
     SGL::setUpViewport(*viewport_3D);
-    
-    // The 3D world has culling enabled
-    glEnable(GL_CULL_FACE);
     
     scene_graph.render(camera, interpolation);
     
@@ -75,8 +90,9 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
     SGL::clearMatrix(MAT_VIEW_MATRIX);
     
-    // No culling for this stage
+    // No culling or depth testing for this stage
     glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
     
     lit_shader->bind();
     
@@ -96,8 +112,12 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     texture = 4;
     lit_shader->bindUniform(&texture, "tex_cube", UNIFORM_INT, 1);
     
+    texture = 5;
+    lit_shader->bindUniform(&texture, "tex_shadow", UNIFORM_INT, 1);
+    
     // Bind other uniforms needed for lighting
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
+    lit_shader->bindUniform(&light_matrix, "light_matrix", UNIFORM_MAT4, 1);
     lit_shader->bindUniform(view_pos_u);
     
     // Bind the textures and then render
@@ -110,9 +130,9 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     glActiveTexture(GL_TEXTURE3);
     gbuffer->bindTexture(GBUFFER_ORM);
     environment_map->bind(4);
+    glActiveTexture(GL_TEXTURE5);
+    light->shadow_buffer->bindTexture(0);
     
     SGL::drawRect(glm::vec2(0, 0), glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2));
-
-    
     
 }

@@ -117,9 +117,22 @@ void SFramebufferUpload::upload() {
         SLog::verboseLog(SVerbosityLevel::Critical, "Framebuffer failed to be created! Check attatchment arguments!");
     
     // Make the buffer array
-    GLenum* _buffers_to_draw = new GLenum[attatchment - 1];
-    for (int i = 0; i < attatchment; i++)
-        _buffers_to_draw[i] = GL_COLOR_ATTACHMENT0 + i;
+    GLenum* _buffers_to_draw;
+    
+    if (attatchment) {
+        
+        // If there was some color attatchments we draw them
+        _buffers_to_draw = new GLenum[attatchment - 1];
+        for (int i = 0; i < attatchment; i++)
+            _buffers_to_draw[i] = GL_COLOR_ATTACHMENT0 + i;
+        
+    } else {
+        
+        // No color attatchments, only draw the depth buffer
+        _buffers_to_draw = new GLenum[1];
+        _buffers_to_draw[0] = GL_NONE;
+        
+    }
     
     *buffers_to_draw = _buffers_to_draw;
         

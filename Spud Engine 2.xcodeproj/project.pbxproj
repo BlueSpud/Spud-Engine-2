@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */; };
 		0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0202413D1D7C99130050E9D3 /* libboost_signals.a */; };
+		021B32B91D9C4B820032001D /* SLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 021B32B71D9C4B820032001D /* SLight.cpp */; };
 		0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B87E1D7A6BB100596526 /* SResourceManager.cpp */; };
 		0228B8841D7A779200596526 /* SModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B8821D7A779200596526 /* SModel.cpp */; };
 		022B19C41D8DD533004D9B18 /* SHotLoadSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022B19C21D8DD533004D9B18 /* SHotLoadSystem.cpp */; };
@@ -71,6 +72,8 @@
 		0202413B1D7C98D80050E9D3 /* SEventSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SEventSystem.hpp; sourceTree = "<group>"; };
 		0202413D1D7C99130050E9D3 /* libboost_signals.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_signals.a; path = ../../../../usr/local/lib/libboost_signals.a; sourceTree = "<group>"; };
 		0202415A1D7CECAD0050E9D3 /* SEvents.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SEvents.hpp; sourceTree = "<group>"; };
+		021B32B71D9C4B820032001D /* SLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLight.cpp; sourceTree = "<group>"; };
+		021B32B81D9C4B820032001D /* SLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLight.hpp; sourceTree = "<group>"; };
 		0228B87E1D7A6BB100596526 /* SResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SResourceManager.cpp; sourceTree = "<group>"; };
 		0228B87F1D7A6BB100596526 /* SResourceManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SResourceManager.hpp; sourceTree = "<group>"; };
 		0228B8821D7A779200596526 /* SModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SModel.cpp; sourceTree = "<group>"; };
@@ -171,6 +174,15 @@
 			name = Event;
 			sourceTree = "<group>";
 		};
+		021B32B61D9C4B780032001D /* Light */ = {
+			isa = PBXGroup;
+			children = (
+				021B32B71D9C4B820032001D /* SLight.cpp */,
+				021B32B81D9C4B820032001D /* SLight.hpp */,
+			);
+			name = Light;
+			sourceTree = "<group>";
+		};
 		0228B87D1D7A6BA200596526 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
@@ -232,6 +244,7 @@
 		0251FC3D1D7DC62400B3E63E /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
+				021B32B61D9C4B780032001D /* Light */,
 				02D35A701D86216000F62A7B /* Level */,
 				02DAB8C31D8A28EB00A39E27 /* Pipeline */,
 				0298658D1D84A264005EED43 /* Objects */,
@@ -475,6 +488,7 @@
 				0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */,
 				02A24C2A1D9317A00039F422 /* SFramebuffer.cpp in Sources */,
 				022B19C41D8DD533004D9B18 /* SHotLoadSystem.cpp in Sources */,
+				021B32B91D9C4B820032001D /* SLight.cpp in Sources */,
 				02DAB8C61D8A28F900A39E27 /* SRenderingPipeline.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

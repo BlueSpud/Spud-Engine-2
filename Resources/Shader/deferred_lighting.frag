@@ -23,7 +23,10 @@ const vec3 light_position = vec3(2.0, 2.0, 2.0);
 
 const float fresnel_pow = 5.0;
 
-const vec3 lights[4] = vec3[](vec3(-1.0, 4.0, 1.0), vec3(-1.0, 1.0, 3.0), vec3(2.0, 1.0, -2.0), vec3(2.2, 1.5, 3.0));
+const vec3 lights[4] = vec3[](vec3(0, 2.0, 8.0), vec3(-1.0, 1.0, 3.0), vec3(2.0, 1.0, -2.0), vec3(2.2, 1.5, 3.0));
+
+uniform mat4 light_matrix;
+uniform sampler2D tex_shadow;
 
 /******************************************************************************
  *  Values that only need to be computed once per pixel                       *
@@ -36,6 +39,19 @@ float roughness, inverse_roughness, metalic;
 
 vec3 V;
 float fresnel;
+
+float getShadowTerm(vec3 position) {
+    
+    // Get the position in the shadow map
+    vec4 position_shadow = light_matrix * vec4(position, 1.0);
+    position_shadow = position_shadow / position_shadow.w;
+    
+    float z = texture(tex_shadow, position_shadow.xy).r;
+    
+    return step(position_shadow.z - 0.001, z);
+    
+    
+}
 
 float G1(float NDV, float k) {
     
@@ -118,14 +134,15 @@ void main() {
     
     // Calculate lighting accumulation
     float diffuse_acc, specular_acc;
+    float shadow = getShadowTerm(position.xyz);
     
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 1; i++) {
      
         // Get L
         vec3 L = position.xyz - lights[i];
         
         // Get attenuation and then normalize the light vector
-        float att = length(L) / 2.0;
+        float att = length(L) / 6.0;
         att = 1.0 / (att * att);
         
         L = normalize(L);
@@ -137,8 +154,8 @@ void main() {
             float NDL = dot(normal, L);
         
             // Accumulate the lighting
-            diffuse_acc += getDiffuseTerm(NDL) * att;
-            specular_acc += getSpecularTerm(L, NDL) * att;
+            diffuse_acc += getDiffuseTerm(NDL) * att * shadow;
+            specular_acc += getSpecularTerm(L, NDL) * att * shadow;
             att_acc += att;
             
         }

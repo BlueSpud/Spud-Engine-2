@@ -86,7 +86,7 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
     size_t hash = hasher(resource_path.getPathAsString());
     
     // Check for loaded resource
-    if (!resource_path.getIsDirectory() && !loaded_resources.count(hash)) {
+    if (!loaded_resources.count(hash)) {
         
         // Check that we have the allocator that handles this type of resource
         if (SResourceAllocatorManger::instance()->allocators.count(resource_path.getExtension())) {
@@ -96,6 +96,8 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
             
             // Save the path that the resource was loaded from
             resource->paths.push_back(resource_path);
+            
+            SLog::verboseLog(SVerbosityLevel::Debug, "Loading resource %s", resource_path.getPathAsString().c_str());
             
             // Make sure we have an allocator
             if (!resource->load(resource_path)) {
@@ -110,15 +112,11 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
                 resource->modified_times.push_back(getModifiedTimeForFileAtPath(resource->paths[i].getPathAsAbsolutePath().c_str()));
             
             loaded_resources[hash] = resource;
-         
-            return resource;
             
-        }
-        
-        SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s! Resource had an extension that was not valid", resource_path.getPathAsString().c_str());
+        } else SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s! Resource had an extension that was not valid", resource_path.getPathAsString().c_str());
             
     }
-        
+    
     return loaded_resources[hash];
     
 }

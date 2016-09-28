@@ -85,7 +85,7 @@ void SMesh::render(double interpolation) {
     if (loaded) {
         
         // Get the matrix for the transform and upload it
-        glm::mat4 transform_matrix = SGL::transformToMatrix(transform);
+        glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
         SGL::mulMatrix(transform_matrix, MAT_MODEL_MATRIX);
     
         // Bind the material

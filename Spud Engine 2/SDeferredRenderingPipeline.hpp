@@ -11,7 +11,7 @@
 
 #include "SRenderingPipeline.hpp"
 #include "SCubeMap.hpp"
-#include "SFramebuffer.hpp"
+#include "SLight.hpp"
 
 /******************************************************************************
  *  Definition for gbuffer components                                         *
@@ -37,11 +37,17 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
     private:
     
-    // Stuff for rendering
+        // Stuff for rendering
         SFramebuffer* gbuffer;
+    
         SShader* lit_shader;
+        SShader* simple_shader;
+    
         SCubeMap* environment_map;
         SUniform* view_pos_u;
+    
+        // Temp stuff
+        SDirectionalLight* light;
     
     
 };

@@ -31,7 +31,7 @@ void SCubeMap::bind() {
 }
 
 void SCubeMap::bind(int texture_number) {
-
+    
     // Bind the cube map to the texture specified
     glActiveTexture(GL_TEXTURE0 + texture_number);
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
