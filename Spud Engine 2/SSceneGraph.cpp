@@ -14,32 +14,69 @@ void SSimpleSceneGraph::render(SCamera& camera, double interpolation) {
 
     // Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling
     SGL::clearMatrix(MAT_VIEW_MATRIX);
-    camera.translateToCameraSpace(interpolation);
+    glm::mat4 camera_matrix = camera.translateToCameraSpace(interpolation);
     
     // Make sure that anything we want to render is added to the reder que
-    std::vector<SObject*>rendered_objects;
+    // The array is sorted by z value of an object relative to the camera
+    std::list<SSortedObject>rendered_objects;
     
     std::list<SObject*>::iterator i = objects.begin();
+    std::list<SSortedObject>::iterator j;
+    
     while (i != objects.end()) {
         
         // Check if we should render this object
-        if ((*i)->shouldBeRendered())
-            rendered_objects.push_back(*i);
+        if ((*i)->shouldBeRendered()) {
+            
+            //Save the object and sort it based on how close its transform is to the camera to reduce overdraw
+            SSortedObject object_s;
+            object_s.object = *i;
+            
+            //Calculate z value
+            object_s.z_value = (camera_matrix * glm::vec4((object_s.object->transform.translation +
+                                                           object_s.object->transform.translation_velocity * (float)interpolation), 1.0)).z;
+            
+            // Do an insertion sort of the new object into the array
+            j = rendered_objects.begin();
+            bool added = false;
+            while (j != rendered_objects.end()) {
+                
+                // Check if the object has a z value greater than us
+                if ((*j).z_value < object_s.z_value) {
+                
+                    // Insert the object here and break
+                    rendered_objects.insert(j, object_s);
+                    added = true;
+                    break;
+                    
+                }
+                    
+                j++;
+            }
+            
+            // If it wasnt added, add it back
+            if (!added)
+                rendered_objects.push_back(object_s);
+            
+        }
         
         i++;
         
     }
     
     // Objects are collected, now they are rendered
-    for (int j = 0; j < rendered_objects.size(); j++) {
+    j = rendered_objects.begin();
+    while (j != rendered_objects.end()) {
         
         // Set up the matricies for this
         SGL::clearMatrix(MAT_MODEL_MATRIX);
         
-        rendered_objects[j]->render(interpolation);
+        // Render the object
+        (*j).object->render(interpolation);
+        
+        j++;
     }
     
-
 }
 
 void SSimpleSceneGraph::addObject(SObject* object) {

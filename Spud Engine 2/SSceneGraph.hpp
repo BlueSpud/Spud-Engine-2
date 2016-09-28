@@ -19,6 +19,17 @@
 #include "SObject.hpp"
 #include "SCamera.hpp"
 
+/******************************************************************************
+ *  Definition for scene graph draw order sorting                             *
+ ******************************************************************************/
+
+struct SSortedObject {
+    
+    SObject* object;
+    float z_value;
+    
+};
+
 class SSceneGraph {
     
     public:
