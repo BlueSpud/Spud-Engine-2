@@ -20,7 +20,7 @@ void SEventListener::listenToEvent(int event, const boost::function<void(const S
     
 }
 
-void SEventListener::stopListeningToEvent(int event, const boost::function<void(const SEvent&)>& function) {
+void SEventListener::stopListeningToEvent(int event) {
     
     // If we are already connected, disconnect
     if (connections.count(event))

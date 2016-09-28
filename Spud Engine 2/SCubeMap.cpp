@@ -8,7 +8,7 @@
 
 #include "SCubeMap.hpp"
 
-std::string side_names[] = {"right.png", "left.png", "bottom.png", "top.png", "front.png", "back.png"};
+std::string side_names[] = {"right.jpg", "left.jpg", "bottom.jpg", "top.jpg", "front.jpg", "back.jpg"};
 
 /******************************************************************************
  *  Registration for supported texture extensions                             *

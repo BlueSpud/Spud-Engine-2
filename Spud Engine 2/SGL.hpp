@@ -36,6 +36,19 @@ struct STransform {
     glm::vec3 rotation;
     glm::vec3 scale = glm::vec3(1.0);
     
+    glm::vec3 translation_velocity;
+    glm::vec3 rotation_velocity;
+    glm::vec3 scale_velocity;
+    
+    void update() {
+        
+        // Add the velocities on
+        translation += translation_velocity;
+        rotation += rotation_velocity;
+        scale += scale_velocity;
+        
+    }
+    
 };
 
 /******************************************************************************
@@ -105,7 +118,6 @@ class SGL : public SSubsystem {
         static void swapBuffers();
     
         static void setKeyCallback(GLFWkeyfun func);
-        static void setMouseMoveCallback(GLFWcursorposfun func);
     
         static void setMouseInputMode(int mode);
         static void getMousePos(float* x_pos, float* y_pos);

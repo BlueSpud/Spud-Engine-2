@@ -37,9 +37,14 @@ class SMouseSystem : public SSubsystem {
         static void startup();
         static void shutdown();
     
-        static void mouseMoveCallback(GLFWwindow* window, double xpos, double ypos);
+        static void moveMouse(const SEvent& event);
     
+        static glm::vec2 mouse_pos;
         static glm::vec2 last_mouse_pos;
+    
+    private:
+    
+        static SEventListener event_listener;
     
 };
 

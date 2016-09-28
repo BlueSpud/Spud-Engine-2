@@ -23,7 +23,7 @@ const vec3 light_position = vec3(2.0, 2.0, 2.0);
 
 const float fresnel_pow = 5.0;
 
-const vec3 lights[4] = vec3[](vec3(-1.0, 4.0, 1.0), vec3(-1.0, 1.0, 3.0), vec3(2.0, 1.0, -2.0), vec3(-2.2, 1.0, -2.0));
+const vec3 lights[4] = vec3[](vec3(-1.0, 4.0, 1.0), vec3(-1.0, 1.0, 3.0), vec3(2.0, 1.0, -2.0), vec3(2.2, 1.5, 3.0));
 
 /******************************************************************************
  *  Values that only need to be computed once per pixel                       *
@@ -150,7 +150,7 @@ void main() {
     vec3 reflection_color = textureLod(tex_cube, reflection, roughness * 7.0).xyz;
     
     vec3 fresnel_reflection = reflection_color * fresnel_pow * inverse_roughness;
-    vec3 metalic_reflection = reflection_color * inverse_roughness * metalic;
+    vec3 metalic_reflection = reflection_color * inverse_roughness * metalic * inverse_roughness;
     
     // Combine lighting and texture
     vec3 color = albedo * occlusion * (fresnel_reflection + metalic_reflection + diffuse_acc + specular_acc * roughness);

@@ -9,6 +9,9 @@
 #include "SMouseSystem.hpp"
 
 glm::vec2 SMouseSystem::last_mouse_pos;
+glm::vec2 SMouseSystem::mouse_pos;
+
+SEventListener SMouseSystem::event_listener;
 
 /******************************************************************************
  *  Functions for mouse system                                                *
@@ -16,8 +19,8 @@ glm::vec2 SMouseSystem::last_mouse_pos;
 
 void SMouseSystem::startup() {
     
-    SGL::setMouseMoveCallback(&SMouseSystem::mouseMoveCallback);
     SGL::setMouseInputMode(GLFW_CURSOR_DISABLED);
+    event_listener.listenToEvent(EVENT_TICK, &moveMouse);
     
     SGL::getMousePos(&last_mouse_pos.x, &last_mouse_pos.y);
     
@@ -27,21 +30,22 @@ void SMouseSystem::startup() {
 
 void SMouseSystem::shutdown() {
     
+    event_listener.stopListeningToEvent(EVENT_TICK);
     SLog::verboseLog(SVerbosityLevel::Debug, "SMouseSystem shutdown");
     
 }
 
-void SMouseSystem::mouseMoveCallback(GLFWwindow* window, double xpos, double ypos) {
+void SMouseSystem::moveMouse(const SEvent& event) {
     
-    // Calculate mouse velocity
-    SEventMouseMove event;
-    event.mouse_vel = glm::vec2(xpos, ypos) - last_mouse_pos;
+    // Save the old position as the last position
+    last_mouse_pos = mouse_pos;
     
-    // Save the new position as the last position
-    last_mouse_pos.x = xpos;
-    last_mouse_pos.y = ypos;
+    // Save the new position
+    SGL::getMousePos(&mouse_pos.x, &mouse_pos.y);
     
-    // Send out a mouse move event
-    SEventSystem::postEvent(EVENT_MOUSE_MOVE, event);
+    // Make an event and dispatch it
+    SEventMouseMove event_m;
+    event_m.mouse_vel = mouse_pos - last_mouse_pos;
+    SEventSystem::postEvent(EVENT_MOUSE_MOVE, event_m);
     
 }

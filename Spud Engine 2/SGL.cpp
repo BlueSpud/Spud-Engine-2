@@ -83,8 +83,6 @@ void SGL::swapBuffers() { glfwSwapBuffers(window); }
 
 void SGL::setKeyCallback(GLFWkeyfun func) { glfwSetKeyCallback(window, func); }
 
-void SGL::setMouseMoveCallback(GLFWcursorposfun func) { glfwSetCursorPosCallback(window, func); }
-
 void SGL::setMouseInputMode(int mode) { glfwSetInputMode(window, GLFW_CURSOR, mode); }
 
 void SGL::getMousePos(float* x_pos, float* y_pos) {

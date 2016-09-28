@@ -14,7 +14,7 @@ void SSimpleSceneGraph::render(SCamera& camera, double interpolation) {
 
     // Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling
     SGL::clearMatrix(MAT_VIEW_MATRIX);
-    camera.translateToCameraSpace();
+    camera.translateToCameraSpace(interpolation);
     
     // Make sure that anything we want to render is added to the reder que
     std::vector<SObject*>rendered_objects;

@@ -27,7 +27,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     lit_shader = (SShader*)SResourceManager::getResource(SPath("Shader/deferred_lighting.glsl"));
     
     // Get the cube map
-    environment_map =  (SCubeMap*)SResourceManager::getResource(SPath("Texture/sky.cube"));
+    environment_map =  (SCubeMap*)SResourceManager::getResource(SPath("Texture/room.cube"));
     
     // Get the view pos
     view_pos_u = SUniformManger::instance()->getUniformWithName("view_position");

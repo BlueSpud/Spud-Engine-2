@@ -25,7 +25,7 @@ class SEventListener {
     public:
     
         void listenToEvent(int event, const boost::function<void(const SEvent&)>& function);
-        void stopListeningToEvent(int event, const boost::function<void(const SEvent&)>& function);
+        void stopListeningToEvent(int event);
     
         ~SEventListener();
     

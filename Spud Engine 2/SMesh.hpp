@@ -30,8 +30,6 @@ class SMesh : public SObject {
     
         virtual bool shouldBeRendered();
     
-        STransform transform;
-    
     protected:
     
         bool loaded = false;

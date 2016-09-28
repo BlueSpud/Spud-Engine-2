@@ -23,7 +23,10 @@ class SCamera {
         STransform transform;
     
         glm::mat4 getCameraMatrix();
+        glm::mat4 getCameraMatrix(double interpolation);
+    
         void translateToCameraSpace();
+        void translateToCameraSpace(double interpolation);
     
         // Store the last camera position
         static glm::vec3 view_position;

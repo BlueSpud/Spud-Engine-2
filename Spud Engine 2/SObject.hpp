@@ -10,6 +10,7 @@
 #define SObject_hpp
 
 #include "SEventSystem.hpp"
+#include "SGL.hpp"
 
 /******************************************************************************
  *  Definition for generic renderable object                                  *
@@ -25,6 +26,8 @@ class SObject {
         virtual bool shouldBeRendered() { return true; }
     
         virtual ~SObject() { /* stub */ }
+    
+        STransform transform;
     
     private:
     

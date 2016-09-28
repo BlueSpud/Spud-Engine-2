@@ -29,19 +29,19 @@ void keyPress(int key) {
     switch (key) {
             
         case GLFW_KEY_W:
-            speed += 0.1;
+            speed += 0.4;
             break;
         
         case GLFW_KEY_S:
-            speed += -0.1;
+            speed += -0.4;
             break;
             
         case GLFW_KEY_D:
-            speed_x += 0.1;
+            speed_x += 0.4;
             break;
             
         case GLFW_KEY_A:
-            speed_x += -0.1;
+            speed_x += -0.4;
             break;
             
         case GLFW_KEY_LEFT:
@@ -60,19 +60,19 @@ void keyRelease(int key) {
     switch (key) {
             
         case GLFW_KEY_W:
-            speed -= 0.1;
+            speed -= 0.4;
             break;
             
         case GLFW_KEY_S:
-            speed -= -0.1;
+            speed -= -0.4;
             break;
             
         case GLFW_KEY_D:
-            speed_x -= 0.1;
+            speed_x -= 0.4;
             break;
             
         case GLFW_KEY_A:
-            speed_x -= -0.1;
+            speed_x -= -0.4;
             break;
             
         case GLFW_KEY_LEFT:
@@ -90,8 +90,8 @@ void mouseMove(const SEvent& event) {
     
     // Add rotation to the camera
     const SEventMouseMove& event_m = (SEventMouseMove&)event;
-    camera.transform.rotation.y += event_m.mouse_vel.x * 0.01;
-    camera.transform.rotation.x -= event_m.mouse_vel.y * 0.005;
+    camera.transform.rotation_velocity.y = event_m.mouse_vel.x * 0.01;
+    camera.transform.rotation_velocity.x = -event_m.mouse_vel.y * 0.005;
     
 }
 
@@ -136,12 +136,12 @@ int main(int argc, char* argv[]) {
     scene_graph.addObject(new SMesh(SPath("Mesh/machine.mesh")));
     
     mesh = new SMesh(SPath("Mesh/metal.mesh"));
-    mesh->transform.translation.x = 3;
+    mesh->transform.translation.x = 3.0;
     
     scene_graph.addObject(mesh);
     
     //mesh = new SMesh(SPath("Mesh/cube.mesh"));
-    //mesh->transform.translation.x = 12;
+    //mesh->transform.translation.x = 12.0;
     
     //scene_graph.addObject(mesh);
     
@@ -150,11 +150,11 @@ int main(int argc, char* argv[]) {
     
     scene_graph.addObject(mesh);
     
-    //mesh = new SMesh(SPath("Mesh/tank.mesh"));
-    //mesh->transform.translation.x = 8;
-    //mesh->transform.translation.y = 1.0;
+    mesh = new SMesh(SPath("Mesh/tank.mesh"));
+    mesh->transform.translation.x = -4.0;
+    mesh->transform.translation.y = 0.6;
     
-    //scene_graph.addObject(mesh);
+    scene_graph.addObject(mesh);
     
     SViewport viewport_2D = SViewport(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2());
     SViewport3D viewport_3D = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
@@ -206,20 +206,23 @@ int main(int argc, char* argv[]) {
         int loops = 0;
         profiler.start();
         while (loopElapsedTime >= time_tick && loops < maxUpdateCount) {
-
-            SEventTick e;
-            SEventSystem::postEvent(EVENT_TICK, e);
             
             /* Poll for and process events */
             glfwPollEvents();
             
-            loopElapsedTime -= time_tick;
+            // Update camera position and calculate new velocity
+            camera.transform.update();
             
             glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0, -cos(camera.transform.rotation.y) * speed);
             glm::vec3 strafe = glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0, -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
             glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
             
-            camera.transform.translation += strafe + forward + fly;
+            camera.transform.translation_velocity = strafe + forward + fly;
+            
+            SEventTick e;
+            SEventSystem::postEvent(EVENT_TICK, e);
+            
+            loopElapsedTime -= time_tick;
             
             loops++;
             
