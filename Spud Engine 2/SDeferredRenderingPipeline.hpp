@@ -11,7 +11,7 @@
 
 #include "SRenderingPipeline.hpp"
 #include "SCubeMap.hpp"
-#include "SLight.hpp"
+#include "SLightGraph.hpp"
 
 /******************************************************************************
  *  Definition for gbuffer components                                         *
@@ -48,6 +48,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
         // Temp stuff
         SDirectionalLight* light;
+        SSimpleLightGraph light_graph;
     
     
 };

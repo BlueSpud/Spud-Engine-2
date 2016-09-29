@@ -36,7 +36,22 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     // Create a temporary light
     light = new SDirectionalLight();
     light->transform.translation.y = 2.0;
-    light->transform.translation.z = 8.0;
+    light->transform.translation.z = 4.0;
+    
+    light_graph.addLight(light);
+    
+    light = new SDirectionalLight();
+    light->transform.translation.y = 1.0;
+    light->transform.translation.x = -5.0;
+    
+    light_graph.addLight(light);
+    
+    light = new SDirectionalLight();
+    light->transform.translation.y = 2.0;
+    light->transform.translation.z = -3.0;
+    light->transform.translation.x = 2.0;
+    
+    light_graph.addLight(light);
     
 }
 
@@ -46,21 +61,20 @@ void SDeferredRenderingPipleline::unload() {
     gbuffer->unload();
     delete gbuffer;
     
-    delete light;
-    
 }
 
 void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, SSceneGraph& scene_graph) {
     
     // The 3D world has culling enabled
     glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     
     /******************************************************************************
      * Shadow mapping updates                                                     *
      ******************************************************************************/
     
-    glm::mat4 light_matrix = light->renderShadowMap(scene_graph, interpolation);
+    light_graph.cullLights();
+    //light_graph.updateShadows(camera, scene_graph, interpolation);
     
     // Render the 3D scene into the GBuffer
     gbuffer->bind();
@@ -117,7 +131,15 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     
     // Bind other uniforms needed for lighting
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
-    lit_shader->bindUniform(&light_matrix, "light_matrix", UNIFORM_MAT4, 1);
+    
+    // Lighting uniforms
+    //lit_shader->bindUniform(&light->light_matrix, "light_matrix", UNIFORM_MAT4, 1);
+    int light_count = light_graph.getLightCount();
+    lit_shader->bindUniform(&light_count, "light_count", UNIFORM_INT, 1);
+    
+    glm::vec3* light_positions = light_graph.getLightPositions(interpolation);
+    lit_shader->bindUniform(light_positions, "light_positions", UNIFORM_VEC3, light_count);
+    
     lit_shader->bindUniform(view_pos_u);
     
     // Bind the textures and then render

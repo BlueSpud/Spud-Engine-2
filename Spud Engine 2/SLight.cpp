@@ -8,10 +8,10 @@
 
 #include "SLight.hpp"
 
-glm::mat4 bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
-                           0.0, 0.5, 0.0, 0.0,
-                           0.0, 0.0, 0.5, 0.0,
-                           0.5, 0.5, 0.5, 1.0);
+glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
+                                   0.0, 0.5, 0.0, 0.0,
+                                   0.0, 0.0, 0.5, 0.0,
+                                   0.5, 0.5, 0.5, 1.0);
 
 /******************************************************************************
  *  Functions for directional light                                           *
@@ -27,7 +27,7 @@ SDirectionalLight::SDirectionalLight() : shadow_viewport(glm::vec2(1024, 1024), 
     
 }
 
-glm::mat4 SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, double interpolation) {
+void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, double interpolation) {
     
     // Create a camera that we can use to render the scene
     SCamera camera;
@@ -47,6 +47,12 @@ glm::mat4 SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, double in
     // Render the scene from the camera
     scene_graph.render(camera, interpolation);
 
-    return bias * projection_matrix * camera.getCameraMatrix(interpolation);
+    light_matrix = SLight::bias * projection_matrix * camera.getCameraMatrix(interpolation);
     
+}
+
+bool SDirectionalLight::needsShadowUpdate() {
+    
+    // For now always return false
+    return false;
 }

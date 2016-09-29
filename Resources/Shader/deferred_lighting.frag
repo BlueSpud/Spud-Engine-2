@@ -17,13 +17,10 @@ out vec4 out_color;
  *  Lighting parameters                                                       *
  ******************************************************************************/
 
-const float light_intensity = 1.0;
-const vec3 light_color = vec3(1.0, 0.0, 0.0);
-const vec3 light_position = vec3(2.0, 2.0, 2.0);
-
 const float fresnel_pow = 5.0;
 
-const vec3 lights[4] = vec3[](vec3(0, 2.0, 8.0), vec3(-1.0, 1.0, 3.0), vec3(2.0, 1.0, -2.0), vec3(2.2, 1.5, 3.0));
+uniform int light_count;
+uniform vec3 light_positions[64];
 
 uniform mat4 light_matrix;
 uniform sampler2D tex_shadow;
@@ -118,9 +115,6 @@ void main() {
     position = inverse_proj_view * position;
     position = position / position.w;
     
-    vec3 L = normalize(-light_position);
-    float NDL = dot(L, normal);
-    
     // Compute V
     V = normalize(position.xyz - view_position);
     NDV = dot(normal, V);
@@ -134,16 +128,17 @@ void main() {
     
     // Calculate lighting accumulation
     float diffuse_acc, specular_acc;
-    float shadow = getShadowTerm(position.xyz);
+    //float shadow = getShadowTerm(position.xyz);
     
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < light_count; i++) {
      
         // Get L
-        vec3 L = position.xyz - lights[i];
+        vec3 L = position.xyz - light_positions[i];
+        float NDL = dot(L, normal);
         
         // Get attenuation and then normalize the light vector
-        float att = length(L) / 6.0;
-        att = 1.0 / (att * att);
+        float att = length(L) / 2.0;
+        clamp(att = 1.0 / (att * att), 0.0, 1.0);
         
         L = normalize(L);
         
@@ -154,8 +149,8 @@ void main() {
             float NDL = dot(normal, L);
         
             // Accumulate the lighting
-            diffuse_acc += getDiffuseTerm(NDL) * att * shadow;
-            specular_acc += getSpecularTerm(L, NDL) * att * shadow;
+            diffuse_acc += getDiffuseTerm(NDL) * att;
+            specular_acc += getSpecularTerm(L, NDL) * att;
             att_acc += att;
             
         }

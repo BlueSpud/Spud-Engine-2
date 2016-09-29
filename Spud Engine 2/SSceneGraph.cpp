@@ -10,6 +10,10 @@
 
 SSceneGraph::~SSceneGraph() { /* stub, destroy objects, scene graph manages memory for them */ }
 
+/******************************************************************************
+ *  Functions for basic scene graph                                           *
+ ******************************************************************************/
+
 void SSimpleSceneGraph::render(SCamera& camera, double interpolation) {
 
     // Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling

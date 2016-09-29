@@ -21,8 +21,15 @@ class SLight {
     
     public:
     
+        virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation) = 0;
+        virtual bool needsShadowUpdate() = 0;
+    
+        virtual ~SLight() { /* stub */ }
+    
         STransform transform;
-        virtual glm::mat4 renderShadowMap(SSceneGraph& scene_graph, double interpolation) = 0;
+        glm::mat4 light_matrix;
+    
+        static glm::mat4 bias;
     
     
 };
@@ -36,7 +43,9 @@ class SDirectionalLight : public SLight {
     public:
     
         SDirectionalLight();
-        virtual glm::mat4 renderShadowMap(SSceneGraph& scene_graph, double interpolation);
+    
+        virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation);
+        virtual bool needsShadowUpdate();
     
     //private:
     
