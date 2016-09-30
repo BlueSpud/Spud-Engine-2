@@ -47,7 +47,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         SUniform* view_pos_u;
     
         // Temp stuff
-        SDirectionalLight* light;
+        SLight* light;
         SSimpleLightGraph light_graph;
     
     

@@ -14,6 +14,28 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
                                    0.5, 0.5, 0.5, 1.0);
 
 /******************************************************************************
+ *  Functions for point light                                                 *
+ ******************************************************************************/
+
+SPointLight::SPointLight() : shadow_viewport(glm::vec2(1024, 1024), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0)) {
+    
+    // No initialization done
+    
+}
+
+void SPointLight::renderShadowMap(SSceneGraph& scene_graph, double interpolation) {
+    
+    // Shadows not supported currently!
+    
+}
+
+bool SPointLight::needsShadowUpdate() {
+    
+    // For now always return false
+    return false;
+}
+
+/******************************************************************************
  *  Functions for directional light                                           *
  ******************************************************************************/
 

@@ -34,19 +34,19 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     view_pos_u = SUniformManger::instance()->getUniformWithName("view_position");
     
     // Create a temporary light
-    light = new SDirectionalLight();
+    light = new SPointLight();
     light->transform.translation.y = 2.0;
     light->transform.translation.z = 4.0;
     
     light_graph.addLight(light);
     
-    light = new SDirectionalLight();
+    light = new SPointLight();
     light->transform.translation.y = 1.0;
     light->transform.translation.x = -5.0;
     
     light_graph.addLight(light);
     
-    light = new SDirectionalLight();
+    light = new SPointLight();
     light->transform.translation.y = 2.0;
     light->transform.translation.z = -3.0;
     light->transform.translation.x = 2.0;
@@ -152,8 +152,6 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     glActiveTexture(GL_TEXTURE3);
     gbuffer->bindTexture(GBUFFER_ORM);
     environment_map->bind(4);
-    glActiveTexture(GL_TEXTURE5);
-    light->shadow_buffer->bindTexture(0);
     
     SGL::drawRect(glm::vec2(0, 0), glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2));
     

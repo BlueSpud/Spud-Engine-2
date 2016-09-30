@@ -35,6 +35,25 @@ class SLight {
 };
 
 /******************************************************************************
+ *  Definition for point light                                                *
+ ******************************************************************************/
+
+class SPointLight : public SLight {
+    
+    public:
+    
+        SPointLight();
+    
+        virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation);
+        virtual bool needsShadowUpdate();
+    
+    private:
+    
+        SViewport3D shadow_viewport;
+    
+};
+
+/******************************************************************************
  *  Definition for directional light                                          *
  ******************************************************************************/
 

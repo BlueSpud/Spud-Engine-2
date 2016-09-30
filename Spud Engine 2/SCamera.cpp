@@ -63,7 +63,7 @@ glm::mat4 SCamera::translateToCameraSpace(double interpolation) {
     SGL::mulMatrix(mat, MAT_VIEW_MATRIX);
     
     // Store the view position where everyone can see it
-    view_position = transform.translation;
+    view_position = transform.translation + transform.translation_velocity * (float)interpolation;
     
     return mat;
     
