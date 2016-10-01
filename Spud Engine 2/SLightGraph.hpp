@@ -22,6 +22,9 @@ class SLightGraph {
     
     public:
     
+        SLightGraph();
+        virtual ~SLightGraph();
+    
         virtual void cullLights() = 0;
         virtual void updateShadows(SCamera& scene_camera, SSceneGraph& scene_graph, double interpolation) = 0;
     
@@ -31,7 +34,8 @@ class SLightGraph {
         virtual int getLightCount() = 0;
         virtual glm::vec3* getLightPositions(double interpolation) = 0;
     
-        virtual ~SLightGraph();
+        SFramebuffer* shadow_map_buffer;
+        bool** shadow_map_atlas;
     
 };
 
@@ -42,6 +46,8 @@ class SLightGraph {
 class SSimpleLightGraph : public SLightGraph {
     
     public:
+    
+        SSimpleLightGraph();
     
         virtual void cullLights();
         virtual void updateShadows(SCamera& scene_camera, SSceneGraph& scene_graph, double interpolation);

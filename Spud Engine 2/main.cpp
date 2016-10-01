@@ -149,13 +149,14 @@ int main(int argc, char* argv[]) {
     scene_graph.addObject(mesh);
     
     mesh = new SMesh(SPath("Mesh/tank.mesh"));
-    //mesh->transform.translation.x = -4.0;
     mesh->transform.translation.y = 0.6;
     
     scene_graph.addObject(mesh);
     
-    SViewport viewport_2D = SViewport(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2());
-    SViewport3D viewport_3D = SViewport3D(glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
+    glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
+    
+    SViewport viewport_2D = SViewport(window_framebuffer_size, glm::vec2());
+    SViewport3D viewport_3D = SViewport3D(window_framebuffer_size, glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
     
     SDeferredRenderingPipleline deferred_pipeline = SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
     
@@ -218,9 +219,6 @@ int main(int argc, char* argv[]) {
             glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
             
             camera.transform.translation_velocity = strafe + forward + fly;
-            
-            mesh->transform.update();
-            mesh->transform.rotation_velocity.y = 0.05;
             
             SEventTick e;
             SEventSystem::postEvent(EVENT_TICK, e);

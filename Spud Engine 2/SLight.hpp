@@ -12,6 +12,10 @@
 #include "SFramebuffer.hpp"
 #include "SSceneGraph.hpp"
 #include "SCamera.hpp"
+#include "SLightingConstants.h"
+
+// Forward declarations
+class SLightGraph;
 
 /******************************************************************************
  *  Definition for default kind of light                                      *
@@ -19,15 +23,20 @@
 
 class SLight {
     
+    friend class SLightGraph;
+    
     public:
+    
+        SLight() { /* stub */ };
+        virtual ~SLight() { /* stub */ }
     
         virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation) = 0;
         virtual bool needsShadowUpdate() = 0;
     
-        virtual ~SLight() { /* stub */ }
-    
         STransform transform;
         glm::mat4 light_matrix;
+    
+        glm::ivec2 shadow_map_position;
     
         static glm::mat4 bias;
     
@@ -42,14 +51,8 @@ class SPointLight : public SLight {
     
     public:
     
-        SPointLight();
-    
         virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation);
         virtual bool needsShadowUpdate();
-    
-    private:
-    
-        SViewport3D shadow_viewport;
     
 };
 
@@ -61,15 +64,8 @@ class SDirectionalLight : public SLight {
     
     public:
     
-        SDirectionalLight();
-    
         virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation);
         virtual bool needsShadowUpdate();
-    
-    //private:
-    
-        SViewport3D shadow_viewport;
-        SFramebuffer* shadow_buffer;
     
 };
 

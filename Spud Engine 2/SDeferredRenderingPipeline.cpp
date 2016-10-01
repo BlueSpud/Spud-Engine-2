@@ -21,7 +21,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_FLOAT, GBUFFER_NORMAL));
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ORM));
     
-    gbuffer = new SFramebuffer(attatchments, WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2);
+    gbuffer = new SFramebuffer(attatchments, viewport_3D->screen_size.x, viewport_3D->screen_size.y);
     
     // Get the cube map
     environment_map =  (SCubeMap*)SResourceManager::getResource(SPath("Texture/room.cube"));
@@ -33,25 +33,28 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     // Get the view pos
     view_pos_u = SUniformManger::instance()->getUniformWithName("view_position");
     
+    // Create the light graph
+    light_graph = new SSimpleLightGraph();
+    
     // Create a temporary light
     light = new SPointLight();
     light->transform.translation.y = 2.0;
     light->transform.translation.z = 4.0;
     
-    light_graph.addLight(light);
+    light_graph->addLight(light);
     
     light = new SPointLight();
     light->transform.translation.y = 1.0;
     light->transform.translation.x = -5.0;
     
-    light_graph.addLight(light);
+    light_graph->addLight(light);
     
     light = new SPointLight();
     light->transform.translation.y = 2.0;
     light->transform.translation.z = -3.0;
     light->transform.translation.x = 2.0;
     
-    light_graph.addLight(light);
+    light_graph->addLight(light);
     
 }
 
@@ -60,6 +63,8 @@ void SDeferredRenderingPipleline::unload() {
     // Unload the gbuffer
     gbuffer->unload();
     delete gbuffer;
+    
+    delete light_graph;
     
 }
 
@@ -72,13 +77,16 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     /******************************************************************************
      * Shadow mapping updates                                                     *
      ******************************************************************************/
+
+    light_graph->cullLights();
+    light_graph->updateShadows(camera, scene_graph, interpolation);
     
-    light_graph.cullLights();
-    //light_graph.updateShadows(camera, scene_graph, interpolation);
+    /******************************************************************************
+     * Gbuffer render                                                             *
+     ******************************************************************************/
     
     // Render the 3D scene into the GBuffer
     gbuffer->bind();
-    glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     glm::mat4 projection_matrix = SGL::getProjectionMatrix3D(*viewport_3D);
@@ -88,14 +96,16 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     
     scene_graph.render(camera, interpolation);
     
+    /******************************************************************************
+     * Lighting pass                                                              *
+     ******************************************************************************/
+    
     // Get view matrix
     glm::mat4 view_matrix = SGL::getMatrix(MAT_VIEW_MATRIX);
-    
     glm::mat4 inverse_proj_view = glm::inverse(projection_matrix * view_matrix);
     
     // Render the lit buffer to the screen
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(0.2, 0.2, 0.2, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Set up the new viewport
@@ -133,14 +143,17 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
     
     // Lighting uniforms
-    //lit_shader->bindUniform(&light->light_matrix, "light_matrix", UNIFORM_MAT4, 1);
-    int light_count = light_graph.getLightCount();
+    int light_count = light_graph->getLightCount();
     lit_shader->bindUniform(&light_count, "light_count", UNIFORM_INT, 1);
     
-    glm::vec3* light_positions = light_graph.getLightPositions(interpolation);
+    glm::vec3* light_positions = light_graph->getLightPositions(interpolation);
     lit_shader->bindUniform(light_positions, "light_positions", UNIFORM_VEC3, light_count);
     
     lit_shader->bindUniform(view_pos_u);
+    
+    /******************************************************************************
+     * GBuffer and shadow atlas texture bind                                      *
+     ******************************************************************************/
     
     // Bind the textures and then render
     glActiveTexture(GL_TEXTURE0);
@@ -153,6 +166,6 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     gbuffer->bindTexture(GBUFFER_ORM);
     environment_map->bind(4);
     
-    SGL::drawRect(glm::vec2(0, 0), glm::vec2(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2));
+    SGL::drawRect(glm::vec2(0, 0), glm::vec2(viewport_2D->screen_size.x, viewport_2D->screen_size.y));
     
 }

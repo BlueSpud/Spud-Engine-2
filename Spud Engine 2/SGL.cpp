@@ -60,9 +60,6 @@ void SGL::createWindow() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
-    // Turn of VSync by default
-    glfwSwapInterval(0);
-    
     if (!(window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Spud Engine 2", NULL, NULL))) {
         
         // For some reason we couldnt make the context, log it and then shutdown
@@ -74,6 +71,9 @@ void SGL::createWindow() {
     SLog::verboseLog(SVerbosityLevel::Debug, "Created a window with an OpenGL context version of: %i.%i",
                      glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR),
                      glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR));
+    
+    // Turn of VSync by default
+    glfwSwapInterval(0);
     
 }
 
@@ -95,6 +95,16 @@ void SGL::getMousePos(float* x_pos, float* y_pos) {
     *x_pos = (float)x_d;
     *y_pos = (float)y_d;
 
+}
+
+glm::ivec2 SGL::getWindowFramebufferSize() {
+    
+    // Get the size of the windows framebuffer
+    glm::ivec2 size;
+    glfwGetFramebufferSize(window, &size.x, &size.y);
+    
+    return size;
+    
 }
 
 /******************************************************************************

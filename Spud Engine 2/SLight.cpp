@@ -17,12 +17,6 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
  *  Functions for point light                                                 *
  ******************************************************************************/
 
-SPointLight::SPointLight() : shadow_viewport(glm::vec2(1024, 1024), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0)) {
-    
-    // No initialization done
-    
-}
-
 void SPointLight::renderShadowMap(SSceneGraph& scene_graph, double interpolation) {
     
     // Shadows not supported currently!
@@ -39,29 +33,19 @@ bool SPointLight::needsShadowUpdate() {
  *  Functions for directional light                                           *
  ******************************************************************************/
 
-SDirectionalLight::SDirectionalLight() : shadow_viewport(glm::vec2(1024, 1024), glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0)) {
-    
-    // Initialize the framebuffer
-    std::vector<SFramebufferAttatchment*> attatchments;
-    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_FLOAT, 0));
-    
-    shadow_buffer = new SFramebuffer(attatchments, 1024, 1024);
-    
-}
-
 void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, double interpolation) {
     
     // Create a camera that we can use to render the scene
     SCamera camera;
     camera.transform = transform;
     
+    SViewport3D viewport = SViewport3D(glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE), shadow_map_position * SHADOW_MAP_ATLAS_TILE_SIZE, 45.0f, glm::vec2(0.1, 1000.0));
+    
     // Bind the framebuffer and the viewport
-    glm::mat4 projection_matrix = SGL::getProjectionMatrix3D(shadow_viewport);
+    glm::mat4 projection_matrix = SGL::getProjectionMatrix3D(viewport);
     SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
     
-    SGL::setUpViewport(shadow_viewport);
-    
-    shadow_buffer->bind();
+    SGL::setUpViewport(viewport);
     
     // Clear the framebuffer and draw the scene
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -76,5 +60,5 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, double interpo
 bool SDirectionalLight::needsShadowUpdate() {
     
     // For now always return false
-    return false;
+    return true;
 }

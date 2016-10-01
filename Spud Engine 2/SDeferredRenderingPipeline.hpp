@@ -48,7 +48,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
         // Temp stuff
         SLight* light;
-        SSimpleLightGraph light_graph;
+        SSimpleLightGraph* light_graph;
     
     
 };

@@ -135,6 +135,7 @@
 		02A24C291D9317A00039F422 /* SFramebuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFramebuffer.hpp; sourceTree = "<group>"; };
 		02B947F61D89FF7200822957 /* SUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUniform.cpp; sourceTree = "<group>"; };
 		02B947F71D89FF7200822957 /* SUniform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUniform.hpp; sourceTree = "<group>"; };
+		02BED0A91DA016D200AFBE59 /* SLightingConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLightingConstants.h; sourceTree = "<group>"; };
 		02D295CF1D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDeferredRenderingPipeline.cpp; sourceTree = "<group>"; };
 		02D295D01D935E4F00CBF342 /* SDeferredRenderingPipeline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SDeferredRenderingPipeline.hpp; sourceTree = "<group>"; };
 		02D35A711D86217A00F62A7B /* SSceneGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSceneGraph.cpp; sourceTree = "<group>"; };
@@ -184,6 +185,7 @@
 				021B32B81D9C4B820032001D /* SLight.hpp */,
 				02064B0B1D9D663000D49D4A /* SLightGraph.cpp */,
 				02064B0C1D9D663000D49D4A /* SLightGraph.hpp */,
+				02BED0A91DA016D200AFBE59 /* SLightingConstants.h */,
 			);
 			name = Light;
 			sourceTree = "<group>";
