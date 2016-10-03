@@ -14,8 +14,24 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
                                    0.5, 0.5, 0.5, 1.0);
 
 /******************************************************************************
+ *  Functions for generic light                                               *
+ ******************************************************************************/
+
+void SLight::updateTransform() { /* stub */ }
+
+/******************************************************************************
  *  Functions for point light                                                 *
  ******************************************************************************/
+
+SPointLight::SPointLight() : bounding_box(glm::vec3(), glm::vec3()) { /* No initialization */ }
+
+void SPointLight::updateTransform() {
+    
+    // Change the bounding box's position
+    bounding_box.mins = transform.translation - 3.0f;
+    bounding_box.maxes = transform.translation + 3.0f;
+    
+}
 
 void SPointLight::renderShadowMap(SSceneGraph& scene_graph, double interpolation) {
     
@@ -27,6 +43,13 @@ bool SPointLight::needsShadowUpdate() {
     
     // For now always return false
     return false;
+}
+
+bool SPointLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
+    
+    // Project thhe bounding box
+    return bounding_box.frustrumCull(projection_view_matrix);
+    
 }
 
 /******************************************************************************
@@ -61,4 +84,11 @@ bool SDirectionalLight::needsShadowUpdate() {
     
     // For now always return false
     return true;
+}
+
+bool SDirectionalLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
+    
+    // Directional lights are always rendered as a full screen quad, never culled
+    return true;
+    
 }

@@ -41,12 +41,14 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     light->transform.translation.y = 2.0;
     light->transform.translation.z = 4.0;
     
+    light->updateTransform();
     light_graph->addLight(light);
     
     light = new SPointLight();
     light->transform.translation.y = 1.0;
     light->transform.translation.x = -5.0;
     
+    light->updateTransform();
     light_graph->addLight(light);
     
     light = new SPointLight();
@@ -54,6 +56,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     light->transform.translation.z = -3.0;
     light->transform.translation.x = 2.0;
     
+    light->updateTransform();
     light_graph->addLight(light);
     
 }
@@ -70,15 +73,26 @@ void SDeferredRenderingPipleline::unload() {
 
 void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, SSceneGraph& scene_graph) {
     
-    // The 3D world has culling enabled
+    /******************************************************************************
+     * 3D viewport setup                                                          *
+     ******************************************************************************/
+    
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    
+    glm::mat4 projection_matrix_3D = SGL::getProjectionMatrix3D(*viewport_3D);
+    SGL::loadMatrix(projection_matrix_3D, MAT_PROJECTION_MATRIX);
+    
+    glm::mat4 view_matrix = camera.getCameraMatrix(interpolation);
+    glm::mat4 projection_view_matrix = projection_matrix_3D * view_matrix;
+    
+    SGL::setUpViewport(*viewport_3D);
     
     /******************************************************************************
      * Shadow mapping updates                                                     *
      ******************************************************************************/
 
-    light_graph->cullLights();
+    light_graph->cullLights(projection_view_matrix);
     light_graph->updateShadows(camera, scene_graph, interpolation);
     
     /******************************************************************************
@@ -89,11 +103,6 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     gbuffer->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    glm::mat4 projection_matrix = SGL::getProjectionMatrix3D(*viewport_3D);
-    SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
-    
-    SGL::setUpViewport(*viewport_3D);
-    
     scene_graph.render(camera, interpolation);
     
     /******************************************************************************
@@ -101,8 +110,7 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
      ******************************************************************************/
     
     // Get view matrix
-    glm::mat4 view_matrix = SGL::getMatrix(MAT_VIEW_MATRIX);
-    glm::mat4 inverse_proj_view = glm::inverse(projection_matrix * view_matrix);
+    glm::mat4 inverse_proj_view = glm::inverse(projection_matrix_3D * view_matrix);
     
     // Render the lit buffer to the screen
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -110,8 +118,8 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     
     // Set up the new viewport
     SGL::setUpViewport(*viewport_2D);
-    projection_matrix = SGL::getProjectionMatrix2D(*viewport_2D);
-    SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
+    glm::mat4 projection_matrix_2D = SGL::getProjectionMatrix2D(*viewport_2D);
+    SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION_MATRIX);
     SGL::clearMatrix(MAT_VIEW_MATRIX);
     
     // No culling or depth testing for this stage

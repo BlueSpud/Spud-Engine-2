@@ -13,6 +13,7 @@
 #include "SSceneGraph.hpp"
 #include "SCamera.hpp"
 #include "SLightingConstants.h"
+#include "SBoundingBox.hpp"
 
 // Forward declarations
 class SLightGraph;
@@ -31,7 +32,12 @@ class SLight {
         virtual ~SLight() { /* stub */ }
     
         virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation) = 0;
+ 
+        virtual void updateTransform();
         virtual bool needsShadowUpdate() = 0;
+    
+        virtual bool shouldBeCulled(glm::mat4& projection_view_matrix) = 0;
+    
     
         STransform transform;
         glm::mat4 light_matrix;
@@ -51,8 +57,18 @@ class SPointLight : public SLight {
     
     public:
     
+        SPointLight();
+    
+        virtual void updateTransform();
+    
         virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation);
         virtual bool needsShadowUpdate();
+    
+        virtual bool shouldBeCulled(glm::mat4& projection_view_matrix);
+    
+    private:
+    
+        SBoundingBox bounding_box;
     
 };
 
@@ -66,6 +82,8 @@ class SDirectionalLight : public SLight {
     
         virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation);
         virtual bool needsShadowUpdate();
+    
+        virtual bool shouldBeCulled(glm::mat4& projection_view_matrix);
     
 };
 

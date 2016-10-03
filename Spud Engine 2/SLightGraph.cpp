@@ -49,7 +49,7 @@ SSimpleLightGraph::SSimpleLightGraph() : SLightGraph() {
 
 }
 
-void SSimpleLightGraph::cullLights() {
+void SSimpleLightGraph::cullLights(glm::mat4& projection_view_matrix) {
     
     /******************************************************************************
      *  Collects the lights who's shadow maps need updating                       *
@@ -64,7 +64,8 @@ void SSimpleLightGraph::cullLights() {
     while (i != lights.end()) {
         
         // Check if the light needs a shadow update and if we can see it in the frustrum
-        culled_lights.push_back(*i);
+        if ((*i)->shouldBeCulled(projection_view_matrix))
+            culled_lights.push_back(*i);
         
         i++;
     }

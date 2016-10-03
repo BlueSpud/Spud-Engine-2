@@ -95,6 +95,15 @@ void mouseMove(const SEvent& event) {
     
 }
 
+int frames_counted = 0;
+
+void FPS() {
+    
+    SLog::verboseLog(SVerbosityLevel::Debug, "Current FPS: %i", frames_counted);
+    frames_counted = 0;
+    
+}
+
 int main(int argc, char* argv[]) {
     
     // Set verbosity level
@@ -195,6 +204,10 @@ int main(int argc, char* argv[]) {
     SStopwatch stopwatch;
     stopwatch.start();
     
+    // Create a timer to display the FPS
+    STimer fps_timer = STimer(&FPS, 1.0, TIMER_LOOP_INFINITE);
+    
+    
     // Main loop start
     while (SGL::windowIsGood()) {
         
@@ -253,6 +266,9 @@ int main(int argc, char* argv[]) {
         
         // Swap back and front buffer to display
         SGL::swapBuffers();
+        
+        // Save that we drew a frame
+        frames_counted++;
         
     }
     
