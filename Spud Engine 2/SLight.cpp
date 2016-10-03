@@ -14,24 +14,10 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
                                    0.5, 0.5, 0.5, 1.0);
 
 /******************************************************************************
- *  Functions for generic light                                               *
- ******************************************************************************/
-
-void SLight::updateTransform() { /* stub */ }
-
-/******************************************************************************
  *  Functions for point light                                                 *
  ******************************************************************************/
 
-SPointLight::SPointLight() : bounding_box(glm::vec3(), glm::vec3()) { /* No initialization */ }
-
-void SPointLight::updateTransform() {
-    
-    // Change the bounding box's position
-    bounding_box.mins = transform.translation - 3.0f;
-    bounding_box.maxes = transform.translation + 3.0f;
-    
-}
+SPointLight::SPointLight() : bounding_box(glm::vec3(-3.0), glm::vec3(3.0), &transform) { /* No initialization */ }
 
 void SPointLight::renderShadowMap(SSceneGraph& scene_graph, double interpolation) {
     

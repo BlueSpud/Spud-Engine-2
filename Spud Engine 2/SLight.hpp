@@ -33,7 +33,6 @@ class SLight {
     
         virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation) = 0;
  
-        virtual void updateTransform();
         virtual bool needsShadowUpdate() = 0;
     
         virtual bool shouldBeCulled(glm::mat4& projection_view_matrix) = 0;
@@ -58,8 +57,6 @@ class SPointLight : public SLight {
     public:
     
         SPointLight();
-    
-        virtual void updateTransform();
     
         virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation);
         virtual bool needsShadowUpdate();

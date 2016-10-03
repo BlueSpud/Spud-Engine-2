@@ -12,15 +12,20 @@
  *  Functions for bounding box                                                *
  ******************************************************************************/
 
-SBoundingBox::SBoundingBox(glm::vec3 _mins, glm::vec3 _maxes) {
+SBoundingBox::SBoundingBox(glm::vec3 _mins, glm::vec3 _maxes, STransform* _transform) {
     
     // Save the extents of the bounding box
     mins = _mins;
     maxes = _maxes;
     
+    // Save the transform of the box
+    transform = _transform;
+    
 }
 
-void SBoundingBox::project(glm::mat4& matrix, bool homogonized) {
+void SBoundingBox::project(const glm::mat4& matrix, bool homogonized) {
+    
+    glm::mat4 model_matrix = SGL::transformToMatrix(*transform);
     
     // Make 8 points to project
     glm::vec4 points[8] = {
@@ -39,7 +44,7 @@ void SBoundingBox::project(glm::mat4& matrix, bool homogonized) {
     // Project all the points, also homogonize it
     for (int i  = 0; i < 8; i++) {
         
-        glm::vec4 point_projected = matrix * points[i];
+        glm::vec4 point_projected = matrix * model_matrix * points[i];
         
         if (homogonized)
             point_projected = point_projected / point_projected.w;
@@ -67,7 +72,7 @@ void SBoundingBox::project(glm::mat4& matrix, bool homogonized) {
     
 }
 
-bool SBoundingBox::frustrumCull(glm::mat4& projection_view_matrix) {
+bool SBoundingBox::frustrumCull(const glm::mat4& projection_view_matrix) {
     
     // Project ourselves
     project(projection_view_matrix, true);

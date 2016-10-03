@@ -41,14 +41,12 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     light->transform.translation.y = 2.0;
     light->transform.translation.z = 4.0;
     
-    light->updateTransform();
     light_graph->addLight(light);
     
     light = new SPointLight();
     light->transform.translation.y = 1.0;
     light->transform.translation.x = -5.0;
     
-    light->updateTransform();
     light_graph->addLight(light);
     
     light = new SPointLight();
@@ -56,7 +54,6 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     light->transform.translation.z = -3.0;
     light->transform.translation.x = 2.0;
     
-    light->updateTransform();
     light_graph->addLight(light);
     
 }

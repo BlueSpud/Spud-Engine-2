@@ -80,6 +80,8 @@ class SModel : public SResource {
         static SResource* allocate();
     
         void render();
+        void getModelExtents(glm::vec3& _mins, glm::vec3& _maxes);
+
     
     protected:
     
@@ -108,6 +110,10 @@ class SModel : public SResource {
         GLuint buffer_ids[buffer_count];
     
         SModelUpload* upload;
+    
+        // Min and maxes of the model
+        glm::vec3 mins;
+        glm::vec3 maxes;
     
 };
 

@@ -31,6 +31,14 @@ void SModel::render() {
     
 }
 
+void SModel::getModelExtents(glm::vec3& _mins, glm::vec3& _maxes) {
+    
+    // Save out the extents of the model
+    _mins = mins;
+    _maxes = maxes;
+    
+}
+
 bool SModel::load(const SPath& path) {
     
     file = SFileSystem::loadFile(path);
@@ -58,6 +66,16 @@ bool SModel::load(const SPath& path) {
                 
                 glm::vec3 v;
                 sscanf(line.c_str(), "v %f %f %f",&v.x,&v.y,&v.z);
+                
+                // Check this vertex against the min and max
+                mins.x = glm::min(v.x, mins.x);
+                mins.y = glm::min(v.y, mins.y);
+                mins.z = glm::min(v.z, mins.z);
+                
+                maxes.x = glm::max(v.x, maxes.x);
+                maxes.y = glm::max(v.y, maxes.y);
+                maxes.z = glm::max(v.z, maxes.z);
+                
                 
                 _verts.push_back(v);
             }

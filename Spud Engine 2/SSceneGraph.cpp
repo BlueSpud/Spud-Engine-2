@@ -18,7 +18,8 @@ void SSimpleSceneGraph::render(SCamera& camera, double interpolation) {
 
     // Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling
     SGL::clearMatrix(MAT_VIEW_MATRIX);
-    glm::mat4 camera_matrix = camera.translateToCameraSpace(interpolation);
+    glm::mat4 view_matrix = camera.translateToCameraSpace(interpolation);
+    glm::mat4 projection_view_matrix = SGL::getMatrix(MAT_PROJECTION_MATRIX) * view_matrix;
     
     // Make sure that anything we want to render is added to the reder que
     // The array is sorted by z value of an object relative to the camera
@@ -30,14 +31,14 @@ void SSimpleSceneGraph::render(SCamera& camera, double interpolation) {
     while (i != objects.end()) {
         
         // Check if we should render this object
-        if ((*i)->shouldBeRendered()) {
+        if ((*i)->shouldBeRendered(projection_view_matrix)) {
             
             //Save the object and sort it based on how close its transform is to the camera to reduce overdraw
             SSortedObject object_s;
             object_s.object = *i;
             
             //Calculate z value
-            object_s.z_value = (camera_matrix * glm::vec4((object_s.object->transform.translation +
+            object_s.z_value = (view_matrix * glm::vec4((object_s.object->transform.translation +
                                                            object_s.object->transform.translation_velocity * (float)interpolation), 1.0)).z;
             
             // Do an insertion sort of the new object into the array

@@ -12,7 +12,7 @@
  *  Functions for mesh                                                        *
  ******************************************************************************/
 
-SMesh::SMesh(const SPath& path) {
+SMesh::SMesh(const SPath& path) : bounding_box(glm::vec3(), glm::vec3(), & transform) {
     
     // Grab the file off of the disk
     SFile* file = SFileSystem::loadFile(path);
@@ -60,22 +60,40 @@ SMesh::SMesh(const SPath& path) {
         
         // Now that we have everything we need to make the material instance
         mat_instance = mat->createMaterialInstance(textures);
-        if (mat_instance == nullptr)
+        
+        if (mat_instance == nullptr) {
+            
             SLog::verboseLog(SVerbosityLevel::Critical, "Failed to get material instance for mesh: %s", path.getPathAsString().c_str());
-        else loaded = true;
+            
+        } else {
+            
+            // Creation completed!
+            loaded = true;
+            
+            // Make sure our bonding box is right
+            model->getModelExtents(bounding_box.mins, bounding_box.maxes);
+            
+        }
         
     } else SLog::verboseLog(SVerbosityLevel::Critical, "Failed to load mesh: %s", path.getPathAsString().c_str());
     
 }
 
-SMesh::SMesh(SModel* _model, SMaterialInstance* _mat_instance) {
+SMesh::SMesh(SModel* _model, SMaterialInstance* _mat_instance) : bounding_box(glm::vec3(), glm::vec3(), & transform) {
 
     // Save everything and check if we are valid
     model = _model;
     mat_instance = _mat_instance;
     
-    if (model && mat_instance)
+    if (model && mat_instance) {
+        
         loaded = true;
+        
+        // Make sure our bonding box is right
+        model->getModelExtents(bounding_box.mins, bounding_box.maxes);
+        
+    }
+    
     
 }
 
@@ -105,10 +123,9 @@ void SMesh::render(double interpolation) {
 
 void SMesh::update() { /* stub */ }
 
-bool SMesh::shouldBeRendered() {
+bool SMesh::shouldBeRendered(const glm::mat4& projection_view_matrix) {
     
     // Perform culling in here
-    
-    return true;
+    return bounding_box.frustrumCull(projection_view_matrix);
 
 }

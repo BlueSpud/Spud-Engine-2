@@ -80,10 +80,11 @@ void SPath::getFileInfo() {
     
     // Get the extension adn the file name
     std::getline(last_path_component_s, filename, '.');
-    std::getline(last_path_component_s, extension, '.');
+    std::getline(last_path_component_s, extension, '\n');
     
     if (!filename.length() && !extension.length())
         is_directory = true;
+    else is_directory = false;
     
 }
 

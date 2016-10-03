@@ -52,7 +52,6 @@ SSimpleLightGraph::SSimpleLightGraph() : SLightGraph() {
 void SSimpleLightGraph::cullLights(glm::mat4& projection_view_matrix) {
     
     /******************************************************************************
-     *  Collects the lights who's shadow maps need updating                       *
      *  Cull lights that cant be seen by the camera                               *
      *  Save light list so that we can use it for the lighting pass later         *
      ******************************************************************************/

@@ -23,7 +23,7 @@ class SObject {
         virtual void render(double interpolation) = 0;
         virtual void update() = 0;
     
-        virtual bool shouldBeRendered() { return true; }
+        virtual bool shouldBeRendered(const glm::mat4& projection_view_matrix) { return true; }
     
         virtual ~SObject() { /* stub */ }
     

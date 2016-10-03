@@ -12,6 +12,7 @@
 #include "SObject.hpp"
 
 #include "SModel.hpp"
+#include "SBoundingBox.hpp"
 #include "SMaterial.hpp"
 
 /******************************************************************************
@@ -28,13 +29,14 @@ class SMesh : public SObject {
         virtual void render(double interpolation);
         virtual void update();
     
-        virtual bool shouldBeRendered();
+        virtual bool shouldBeRendered(const glm::mat4& projection_view_matrix);
     
     protected:
     
         bool loaded = false;
     
         SModel* model;
+        SBoundingBox bounding_box;
         SMaterialInstance* mat_instance;
     
 };

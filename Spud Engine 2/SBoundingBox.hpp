@@ -17,10 +17,12 @@
 
 struct SBoundingBox {
     
-    SBoundingBox(glm::vec3 _mins, glm::vec3 _maxes);
+    SBoundingBox(glm::vec3 _mins, glm::vec3 _maxes, STransform* _transform);
     
-    void project(glm::mat4& matrix, bool homogonized);
-    bool frustrumCull(glm::mat4& projection_view_matrix);
+    void project(const glm::mat4& matrix, bool homogonized);
+    bool frustrumCull(const glm::mat4& projection_view_matrix);
+    
+    STransform* transform;
     
     glm::vec3 mins;
     glm::vec3 maxes;
