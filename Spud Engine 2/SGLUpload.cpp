@@ -19,6 +19,9 @@ void SGLUploadSystem::startup() {
 
     SLog::verboseLog(SVerbosityLevel::Debug, "SGLUploadSystem startup");
     
+    // By default allow for infinite uploads
+    num_uploads = UPLOADS_INFINITE;
+    
 }
 
 void SGLUploadSystem::shutdown() {

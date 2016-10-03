@@ -105,7 +105,6 @@ int main(int argc, char* argv[]) {
     
     SGL::startup();
     SGLUploadSystem::startup();
-    SGLUploadSystem::setUploadLimitPerFrame(UPLOADS_INFINITE);
     
     SKeyboardSystem::startup();
     SMouseSystem::startup();
@@ -177,24 +176,26 @@ int main(int argc, char* argv[]) {
     
     listener.setHasFocus();
     
+    // END TEMP CODE
+    
     // Clear all the uploads
     SGLUploadSystem::processUploads();
     SGLUploadSystem::setUploadLimitPerFrame(10);
     
-    // END TEMP CODE
-    
     double loopElapsedTime = 0.0;
     double time_tick = 1.0 / TICKS_PER_SECOND;
     int maxUpdateCount = 5;
-    
-    SStopwatch stopwatch;
-    stopwatch.start();
-    
+
     SStopwatch profiler;
     
     SLog::verboseLog(SVerbosityLevel::Debug, "Startup complete\n");
     
-    /* Loop until the user closes the window */
+    glClearColor(0.2, 0.2, 0.2, 0.0);
+    
+    SStopwatch stopwatch;
+    stopwatch.start();
+    
+    // Main loop start
     while (SGL::windowIsGood()) {
         
         // Manage elapsed time for the loop
@@ -208,7 +209,7 @@ int main(int argc, char* argv[]) {
         profiler.start();
         while (loopElapsedTime >= time_tick && loops < maxUpdateCount) {
             
-            /* Poll for and process events */
+            // Take in input events from user
             glfwPollEvents();
             
             // Update camera position and calculate new velocity
@@ -220,11 +221,12 @@ int main(int argc, char* argv[]) {
             
             camera.transform.translation_velocity = strafe + forward + fly;
             
+            // Post a tick event for everyone
             SEventTick e;
             SEventSystem::postEvent(EVENT_TICK, e);
             
+            // Record that a game update was done
             loopElapsedTime -= time_tick;
-            
             loops++;
             
         }
@@ -233,6 +235,7 @@ int main(int argc, char* argv[]) {
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "Update took %fs", (float)profiler.stop());
         
+        // If we were forced to stop updating the game and render a frame, we cant keep up
         if (loops == maxUpdateCount)
             SLog::verboseLog(SVerbosityLevel::Critical, "Cant keep up with %i ticks per second!", TICKS_PER_SECOND);
         
@@ -243,12 +246,12 @@ int main(int argc, char* argv[]) {
         
         double interpolation = loopElapsedTime / time_tick;
         
-        /* Render here */
+        // Render using a deferred rendering pipline
         deferred_pipeline.render(interpolation, camera, scene_graph);
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
         
-        /* Swap front and back buffers */
+        // Swap back and front buffer to display
         SGL::swapBuffers();
         
     }

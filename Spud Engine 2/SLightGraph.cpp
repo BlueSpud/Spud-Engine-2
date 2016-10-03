@@ -131,10 +131,11 @@ int SSimpleLightGraph::getLightCount() { return (int)culled_lights.size(); }
 
 glm::vec3* SSimpleLightGraph::getLightPositions(double interpolation) {
     
-    // Collect the positions of the lights in an array
+    // Make the array for light positions smaller
     delete light_positions;
     light_positions = new glm::vec3[getLightCount()];
     
+    // Collect the positions of the lights in an array
     for (int i = 0; i < culled_lights.size(); i++)
         light_positions[i] = culled_lights[i]->transform.translation + culled_lights[i]->transform.translation_velocity * (float)interpolation;
     
