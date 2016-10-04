@@ -140,13 +140,14 @@ int main(int argc, char* argv[]) {
     e_listener.listenToEvent(EVENT_MOUSE_MOVE, &mouseMove);
     
     SSimpleSceneGraph scene_graph;
-    SMesh* mesh = new SMesh(SPath("Mesh/machine.mesh"));
+    SMesh* mesh;
+    mesh = new SMesh(SPath("Mesh/machine.mesh"));
     mesh->transform.translation.z = -5.0;
     
     scene_graph.addObject(mesh);
     
     mesh = new SMesh(SPath("Mesh/metal.mesh"));
-    mesh->transform.translation.x = 3.0;
+     mesh->transform.translation.x = 3.0;
     mesh->transform.translation.z = -5.0;
     
     scene_graph.addObject(mesh);

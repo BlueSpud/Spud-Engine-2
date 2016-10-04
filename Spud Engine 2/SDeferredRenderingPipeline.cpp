@@ -173,4 +173,17 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     
     SGL::drawRect(glm::vec2(0, 0), glm::vec2(viewport_2D->screen_size.x, viewport_2D->screen_size.y));
     
+//    simple_shader->bind();
+//    
+//
+//    
+//    glm::vec2 origin = (glm::vec2)light->bounding_box.projected_mins;
+//    origin.y = -origin.y;
+//    origin = (origin + glm::vec2(1.0)) / glm::vec2(2.0);
+//    
+//    glm::vec2 end = (glm::vec2)light->bounding_box.projected_maxes;
+//    end.y = -end.y;
+//    end = (end + glm::vec2(1.0)) / glm::vec2(2.0);
+//    SGL::drawRect(origin * viewport_2D->screen_size, (end - origin) * viewport_2D->screen_size);
+    
 }

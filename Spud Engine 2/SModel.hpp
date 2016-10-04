@@ -14,6 +14,8 @@
 #include "SResourceManager.hpp"
 #include "SGLUpload.hpp"
 
+#define MODEL_BOUNDING_BOX_PADDING 0.1f
+
 /******************************************************************************
  *  Definition for enum for VBOs                                              *
  ******************************************************************************/

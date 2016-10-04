@@ -77,17 +77,17 @@ bool SBoundingBox::frustrumCull(const glm::mat4& projection_view_matrix) {
     // Project ourselves
     project(projection_view_matrix, true);
     
-    // Check if it is behind the camera 
-    if (projected_maxes.z <= 0.0)
+    // Check if it is behind the camera
+    if (projected_mins.z > 1.0)
         return false;
     
-    // Check X
-    if (projected_maxes.x <= -1.0 || projected_mins.x >= 1.0)
-        return false;
-    
-    // Check Y
-    if (projected_maxes.y <= -1.0 || projected_mins.y >= 1.0)
-        return false;
+//    // Check X
+//    if (projected_maxes.x < -1.0 || projected_mins.x > 1.0)
+//        return false;
+//    
+//    // Check Y
+//    if (projected_maxes.y < -1.0 || projected_mins.y > 1.0)
+//        return false;
     
     // If no condition was found to be true, then we were inside the camera frustrum
     return true;

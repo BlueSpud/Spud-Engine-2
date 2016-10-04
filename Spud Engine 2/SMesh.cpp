@@ -91,6 +91,7 @@ SMesh::SMesh(SModel* _model, SMaterialInstance* _mat_instance) : bounding_box(gl
         
         // Make sure our bonding box is right
         model->getModelExtents(bounding_box.mins, bounding_box.maxes);
+        std::cout << bounding_box.mins.x << std::endl;
         
     }
     
@@ -126,6 +127,7 @@ void SMesh::update() { /* stub */ }
 bool SMesh::shouldBeRendered(const glm::mat4& projection_view_matrix) {
     
     // Perform culling in here
+    return true;
     return bounding_box.frustrumCull(projection_view_matrix);
 
 }

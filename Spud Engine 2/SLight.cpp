@@ -17,7 +17,7 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
  *  Functions for point light                                                 *
  ******************************************************************************/
 
-SPointLight::SPointLight() : bounding_box(glm::vec3(-3.0), glm::vec3(3.0), &transform) { /* No initialization */ }
+SPointLight::SPointLight() : bounding_box(glm::vec3(-4.0), glm::vec3(4.0), &transform) { /* No initialization */ }
 
 void SPointLight::renderShadowMap(SSceneGraph& scene_graph, double interpolation) {
     
@@ -34,6 +34,7 @@ bool SPointLight::needsShadowUpdate() {
 bool SPointLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
     
     // Project thhe bounding box
+    return true;
     return bounding_box.frustrumCull(projection_view_matrix);
     
 }
