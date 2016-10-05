@@ -98,20 +98,24 @@ void SSimpleLightGraph::addLight(SLight* light) {
     // Add the light to the graph
     lights.push_back(light);
     
-    // Find a spot for the shadow map
-    for (int i = 0; i < SHADOW_MAP_ATLAS_TILE_COUNT; i++) {
-        for (int j = 0; j < SHADOW_MAP_ATLAS_TILE_COUNT; j++) {
+    if (light->casts_shadow) {
+    
+        // Find a spot for the shadow map
+        for (int i = 0; i < SHADOW_MAP_ATLAS_TILE_COUNT; i++) {
+            for (int j = 0; j < SHADOW_MAP_ATLAS_TILE_COUNT; j++) {
             
-            if (!shadow_map_atlas[i][j]) {
+                if (!shadow_map_atlas[i][j]) {
                 
-                // Save that we used this tile in the atlas and then return
-                shadow_map_atlas[i][j] = true;
-                light->shadow_map_position = glm::vec2(i, j);
-                return;
+                    // Save that we used this tile in the atlas and then return
+                    shadow_map_atlas[i][j] = true;
+                    light->shadow_map_position = glm::vec2(i, j);
+                    return;
                 
+                }
+            
             }
-            
         }
+        
     }
 
 }
@@ -119,7 +123,8 @@ void SSimpleLightGraph::addLight(SLight* light) {
 void SSimpleLightGraph::removeLight(SLight* light) {
 
     // Free up the spot in the shadow map atlas
-    shadow_map_atlas[light->shadow_map_position.x][light->shadow_map_position.y] = false;
+    if (light->casts_shadow)
+        shadow_map_atlas[light->shadow_map_position.x][light->shadow_map_position.y] = false;
     
     // Remove the light from the graph
     lights.remove(light);
@@ -129,18 +134,44 @@ void SSimpleLightGraph::removeLight(SLight* light) {
 
 int SSimpleLightGraph::getLightCount() { return (int)culled_lights.size(); }
 
-glm::vec3* SSimpleLightGraph::getLightPositions(double interpolation) {
+std::vector<glm::vec3> SSimpleLightGraph::getLightPositions(double interpolation) {
     
-    // Make the array for light positions smaller
-    delete light_positions;
-    light_positions = new glm::vec3[getLightCount()];
+    // Make a place we can store and return the positions
+    std::vector<glm::vec3> light_positions;
     
     // Collect the positions of the lights in an array
     for (int i = 0; i < culled_lights.size(); i++)
-        light_positions[i] = culled_lights[i]->transform.translation + culled_lights[i]->transform.translation_velocity * (float)interpolation;
+        light_positions.push_back(culled_lights[i]->transform.translation + culled_lights[i]->transform.translation_velocity * (float)interpolation);
     
     return light_positions;
     
+}
+
+std::vector<glm::mat4> SSimpleLightGraph::getShadowMatrices() {
+
+    // Make a place we can store and return the matrices
+    std::vector<glm::mat4> light_matrices;
+    
+    // Collect the light matricies for upload
+    for (int i = 0; i < culled_lights.size(); i++)
+        if (culled_lights[i]->casts_shadow)
+            light_matrices.push_back(culled_lights[i]->light_matrix);
+    
+    return light_matrices;
+
+}
+
+std::vector<int> SSimpleLightGraph::getShadowLights() {
+
+    // Make a place we can store and return the shadow bools
+    std::vector<int> lights_shadow;
+    
+    // Collect if the lights shadow
+    for (int i = 0; i < culled_lights.size(); i++)
+        lights_shadow.push_back(culled_lights[i]->casts_shadow);
+    
+    return lights_shadow;
+
 }
 
 SSimpleLightGraph::~SSimpleLightGraph() {

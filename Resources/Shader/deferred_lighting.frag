@@ -21,8 +21,9 @@ const float fresnel_pow = 5.0;
 
 uniform int light_count;
 uniform vec3 light_positions[64];
+uniform mat4 light_matrices[64];
+uniform int lights_shadow[64];
 
-uniform mat4 light_matrix;
 uniform sampler2D tex_shadow;
 
 /******************************************************************************
@@ -37,13 +38,17 @@ float roughness, inverse_roughness, metalic;
 vec3 V;
 float fresnel;
 
-float getShadowTerm(vec3 position) {
+vec3 position;
+
+float getShadowTerm(int matrix) {
 
     // Get the position in the shadow map
-    vec4 position_shadow = light_matrix * vec4(position, 1.0);
+    vec4 position_shadow = light_matrices[matrix] * vec4(position, 1.0);
     position_shadow = position_shadow / position_shadow.w;
 
-    float z = texture(tex_shadow, position_shadow.xy).r;
+    // Calculate the texture coordinates based off of the shadow atlas
+    vec2 tex_coord_shadow = position_shadow.xy / 16.0;
+    float z = texture(tex_shadow, tex_coord_shadow).r;
 
     return step(position_shadow.z - 0.001, z);
 
@@ -109,9 +114,9 @@ void main() {
 
     // Get position from depth
     float depth = texture(tex_depth, tex_coord0).x * 2.0 - 1.0;
-    vec4 position = vec4(tex_coord0 * 2.0 - 1.0, depth, 1.0);
-    position = inverse_proj_view * position;
-    position = position / position.w;
+    vec4 position_p = vec4(tex_coord0 * 2.0 - 1.0, depth, 1.0);
+    position_p = inverse_proj_view * position_p;
+    position = (position_p / position_p.w).xyz;
 
     // Compute V
     V = normalize(position.xyz - view_position);
@@ -126,25 +131,47 @@ void main() {
     float diffuse_acc, specular_acc;
     //float shadow = getShadowTerm(position.xyz);
 
+    // Save how many lights that we shadowed, arrays for shadow mapping only use shadow mapped lights
+    int shadow_light = 0;
+
     for (int i = 0; i < light_count; i++) {
 
         // Get L
-        vec3 L = position.xyz - light_positions[i];
+        vec3 L;
 
-        // Get attenuation and then normalize the light vector
-        float att = length(L) / 2.0;
-        clamp(att = 1.0 / (att * att), 0.0, 1.0);
+        float shadow = 1.0;
+        float att = 1.0;
+
+        if (lights_shadow[i] == 1) {
+
+            shadow = getShadowTerm(shadow_light);
+
+            // Right now all thats supported is directional lights
+            L = -light_positions[i];
+
+            shadow_light++;
+
+        } else {
+
+          // Standard point light
+          L = position.xyz - light_positions[i];
+
+          // Get attenuation and then normalize the light vector
+          att = length(L) / 2.0;
+          clamp(att = 1.0 / (att * att), 0.0, 1.0);
+
+        }
 
         // Make a threshhold for attenuation to be over to actualyl calculate light
-        if (att > 0.01) {
+        if (att * shadow > 0.01) {
 
             // Get NDL
             L = normalize(L);
             float NDL = dot(normal, L);
 
             // Accumulate the lighting
-            diffuse_acc += getDiffuseTerm(NDL) * att;
-            specular_acc += getSpecularTerm(L, NDL) * att;
+            diffuse_acc += getDiffuseTerm(NDL) * att * shadow;
+            specular_acc += getSpecularTerm(L, NDL) * att * shadow;
 
         }
 

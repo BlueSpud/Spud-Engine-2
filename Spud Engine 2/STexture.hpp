@@ -65,6 +65,8 @@ class STexture : public SResource {
         virtual void unload();
         virtual void hotload(const SPath& path);
     
+        static bool freeimage_initialized;
+    
     private:
     
         FIBITMAP* bitmap;

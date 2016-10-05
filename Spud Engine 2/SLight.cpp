@@ -68,9 +68,17 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, double interpo
 }
 
 bool SDirectionalLight::needsShadowUpdate() {
+   
+    // If we need an update, update oursleves
+    if (needs_shadow_update) {
+        
+        needs_shadow_update = false;
+        return true;
+        
+    }
     
-    // For now always return false
-    return true;
+    return false;
+   
 }
 
 bool SDirectionalLight::shouldBeCulled(glm::mat4& projection_view_matrix) {

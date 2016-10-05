@@ -59,6 +59,13 @@ bool SCubeMap::load(const SPath& path) {
         if (!path.getIsDirectory()) {
         
             // Initialize free image and prepare storage
+            if (!STexture::freeimage_initialized) {
+                
+                FreeImage_Initialise();
+                freeimage_initialized = true;
+                
+            }
+            
             FREE_IMAGE_FORMAT format;
         
             // Get the file format and load the image

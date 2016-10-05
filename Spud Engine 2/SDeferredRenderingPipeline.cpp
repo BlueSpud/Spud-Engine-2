@@ -39,20 +39,25 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     // Create a temporary light
     light = new SPointLight();
     light->transform.translation.y = 2.0;
-    light->transform.translation.z = 4.0;
+    light->transform.translation.z = -2.0;
+    light->transform.translation.x = 2.0;
     
     light_graph->addLight(light);
     
     light = new SPointLight();
     light->transform.translation.y = 1.0;
-    light->transform.translation.x = -5.0;
+    light->transform.translation.z = -5.0;
+    light->transform.translation.x = -3.0;
     
     light_graph->addLight(light);
     
-    light = new SPointLight();
-    light->transform.translation.y = 2.0;
-    light->transform.translation.z = -3.0;
-    light->transform.translation.x = 2.0;
+    light = new SDirectionalLight();
+    light->transform.translation.y = 10;
+    light->transform.translation.z = 3.0;
+    light->transform.translation.x = 0.0;
+    light->transform.rotation.x = -M_PI / 2.1;
+    
+    light->casts_shadow = true;
     
     light_graph->addLight(light);
     
@@ -78,12 +83,9 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     glEnable(GL_CULL_FACE);
     
     glm::mat4 projection_matrix_3D = SGL::getProjectionMatrix3D(*viewport_3D);
-    SGL::loadMatrix(projection_matrix_3D, MAT_PROJECTION_MATRIX);
     
     glm::mat4 view_matrix = camera.getCameraMatrix(interpolation);
     glm::mat4 projection_view_matrix = projection_matrix_3D * view_matrix;
-    
-    SGL::setUpViewport(*viewport_3D);
     
     /******************************************************************************
      * Shadow mapping updates                                                     *
@@ -95,6 +97,9 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     /******************************************************************************
      * Gbuffer render                                                             *
      ******************************************************************************/
+    
+    SGL::setUpViewport(*viewport_3D);
+    SGL::loadMatrix(projection_matrix_3D, MAT_PROJECTION_MATRIX);
     
     // Render the 3D scene into the GBuffer
     gbuffer->bind();
@@ -151,8 +156,11 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     int light_count = light_graph->getLightCount();
     lit_shader->bindUniform(&light_count, "light_count", UNIFORM_INT, 1);
     
-    glm::vec3* light_positions = light_graph->getLightPositions(interpolation);
-    lit_shader->bindUniform(light_positions, "light_positions", UNIFORM_VEC3, light_count);
+    lit_shader->bindUniform(light_graph->getLightPositions(interpolation).data(), "light_positions", UNIFORM_VEC3, light_count);
+    lit_shader->bindUniform(light_graph->getShadowLights().data(), "lights_shadow", UNIFORM_INT, light_count);
+    
+    std::vector<glm::mat4> light_matrices = light_graph->getShadowMatrices();
+    lit_shader->bindUniform(light_matrices.data(), "light_matrices", UNIFORM_MAT4, (int)light_matrices.size());
     
     lit_shader->bindUniform(view_pos_u);
     
@@ -169,11 +177,12 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     gbuffer->bindTexture(GBUFFER_NORMAL);
     glActiveTexture(GL_TEXTURE3);
     gbuffer->bindTexture(GBUFFER_ORM);
-    environment_map->bind(4);
+    environment_map->bind(ENVIRONMENT_MAP);
+    glActiveTexture(GL_TEXTURE5);
+    light_graph->shadow_map_buffer->bindTexture(0);
     
     SGL::drawRect(glm::vec2(0, 0), glm::vec2(viewport_2D->screen_size.x, viewport_2D->screen_size.y));
     
-//    simple_shader->bind();
 //    
 //
 //    

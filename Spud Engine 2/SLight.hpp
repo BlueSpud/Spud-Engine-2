@@ -36,12 +36,12 @@ class SLight {
         virtual bool needsShadowUpdate() = 0;
     
         virtual bool shouldBeCulled(glm::mat4& projection_view_matrix) = 0;
-    
-    
+
         STransform transform;
-        glm::mat4 light_matrix;
     
+        glm::mat4 light_matrix;
         glm::ivec2 shadow_map_position;
+        bool casts_shadow = false;
     
         static glm::mat4 bias;
     
@@ -81,6 +81,8 @@ class SDirectionalLight : public SLight {
         virtual bool needsShadowUpdate();
     
         virtual bool shouldBeCulled(glm::mat4& projection_view_matrix);
+    
+        bool needs_shadow_update = true;
     
 };
 

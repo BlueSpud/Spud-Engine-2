@@ -8,6 +8,8 @@
 
 #include "STexture.hpp"
 
+bool STexture::freeimage_initialized = false;
+
 /******************************************************************************
  *  Registration for supported texture extensions                             *
  ******************************************************************************/
@@ -47,7 +49,13 @@ bool STexture::load(const SPath& path) {
     if (!path.getIsDirectory()) {
         
         // Initialize free image and prepare storage
-        FreeImage_Initialise();
+        if (!freeimage_initialized){
+            
+            FreeImage_Initialise();
+            freeimage_initialized = true;
+            
+        }
+
         FREE_IMAGE_FORMAT format;
         
         // Get the file format and load the image
@@ -72,6 +80,8 @@ bool STexture::load(const SPath& path) {
             return true;
             
         }
+        
+        FreeImage_DeInitialise();
         
     }
 

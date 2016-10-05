@@ -32,7 +32,9 @@ class SLightGraph {
         virtual void removeLight(SLight* light) = 0;
     
         virtual int getLightCount() = 0;
-        virtual glm::vec3* getLightPositions(double interpolation) = 0;
+        virtual std::vector<glm::vec3> getLightPositions(double interpolation) = 0;
+        virtual std::vector<glm::mat4> getShadowMatrices() = 0;
+        virtual std::vector<int> getShadowLights() = 0;
     
         SFramebuffer* shadow_map_buffer;
         bool** shadow_map_atlas;
@@ -56,7 +58,9 @@ class SSimpleLightGraph : public SLightGraph {
         virtual void removeLight(SLight* light);
     
         virtual int getLightCount();
-        virtual glm::vec3* getLightPositions(double interpolation);
+        virtual std::vector<glm::vec3> getLightPositions(double interpolation);
+        virtual std::vector<glm::mat4> getShadowMatrices();
+        virtual std::vector<int> getShadowLights();
     
         virtual ~SSimpleLightGraph();
     

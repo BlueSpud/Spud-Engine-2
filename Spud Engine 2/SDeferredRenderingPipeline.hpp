@@ -21,6 +21,8 @@
 #define GBUFFER_ALBEDO 1
 #define GBUFFER_NORMAL 2
 #define GBUFFER_ORM 3
+#define ENVIRONMENT_MAP 4
+#define SHADOW_ATLAS 5
 
 /******************************************************************************
  *  Definition for deferred rendering pipeline                                *
@@ -47,7 +49,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         SUniform* view_pos_u;
     
         // Temp stuff
-        SPointLight* light;
+        SLight* light;
         SSimpleLightGraph* light_graph;
     
     

@@ -147,7 +147,7 @@ int main(int argc, char* argv[]) {
     scene_graph.addObject(mesh);
     
     mesh = new SMesh(SPath("Mesh/metal.mesh"));
-     mesh->transform.translation.x = 3.0;
+    mesh->transform.translation.x = 3.0;
     mesh->transform.translation.z = -5.0;
     
     scene_graph.addObject(mesh);
@@ -159,6 +159,7 @@ int main(int argc, char* argv[]) {
     
     mesh = new SMesh(SPath("Mesh/tank.mesh"));
     mesh->transform.translation.y = 0.6;
+    mesh->transform.rotation.y = 0.1;
     
     scene_graph.addObject(mesh);
     
