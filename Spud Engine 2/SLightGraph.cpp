@@ -79,17 +79,35 @@ void SSimpleLightGraph::updateShadows(SCamera& scene_camera, SSceneGraph& scene_
     for (int i= 0; i < culled_lights.size(); i++)
         if (culled_lights[i]->needsShadowUpdate()) {
             
+            
             // Check if we havent bound the shadow map buffer yet, if we have no lights we dont need to bind it
             if(!bound_shadow_map_buffer) {
                 
                 bound_shadow_map_buffer = true;
                 shadow_map_buffer->bind();
                 
+                // Enable to remove shadow mapping artifacts
+                glCullFace(GL_FRONT);
+                glEnable(GL_POLYGON_OFFSET_FILL);
+                glPolygonOffset(2.5f, 0.0);
+                
+                // Enable scissor testing
+                glEnable(GL_SCISSOR_TEST);
+                
             }
             
             culled_lights[i]->renderShadowMap(scene_graph, interpolation);
             
         }
+    
+    if (bound_shadow_map_buffer) {
+    
+        // Switch back to normal rendering
+        glCullFace(GL_BACK);
+        glDisable(GL_POLYGON_OFFSET_FILL);
+        glDisable(GL_SCISSOR_TEST);
+        
+    }
 
 }
 
@@ -159,6 +177,33 @@ std::vector<glm::mat4> SSimpleLightGraph::getShadowMatrices() {
     
     return light_matrices;
 
+}
+
+std::vector<glm::vec2> SSimpleLightGraph::getShadowMapCoordinates() {
+    
+    // Make a place we can store and return the shadow map coordinates
+    std::vector<glm::vec2> shadow_map_coordinates;
+    
+    // Collect the shadow map coordinates for upload
+    for (int i = 0; i < culled_lights.size(); i++)
+        if (culled_lights[i]->casts_shadow)
+            shadow_map_coordinates.push_back(culled_lights[i]->shadow_map_position);
+    
+    return shadow_map_coordinates;
+    
+}
+
+std::vector<glm::vec3> SSimpleLightGraph::getColors() {
+    
+    // Make a place we can store and return the color
+    std::vector<glm::vec3> light_colors;
+    
+    // Collect the color of the lights in an array
+    for (int i = 0; i < culled_lights.size(); i++)
+        light_colors.push_back(culled_lights[i]->light_color);
+    
+    return light_colors;
+    
 }
 
 std::vector<int> SSimpleLightGraph::getShadowLights() {

@@ -135,6 +135,9 @@ void SFramebufferUpload::upload() {
     }
     
     *buffers_to_draw = _buffers_to_draw;
+    
+    // Clear the framebuffer once
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
     // Finish up
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

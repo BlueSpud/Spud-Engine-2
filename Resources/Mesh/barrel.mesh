@@ -1,0 +1,13 @@
+model:Model/barrel.obj
+
+mat:Material/test.mat
+
+tex_n:tex_albedo
+tex:Texture/barrel/barrel_albedo.png
+
+tex_n:tex_orm
+tex:Texture/barrel/barrel_orm.png
+
+tex_n:tex_normal
+tex:Texture/barrel/barrel_normal.png
+

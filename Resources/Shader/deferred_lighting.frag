@@ -21,8 +21,12 @@ const float fresnel_pow = 5.0;
 
 uniform int light_count;
 uniform vec3 light_positions[64];
+uniform vec3 light_colors[64];
 uniform mat4 light_matrices[64];
+uniform vec2 shadow_map_coordinates[64];
 uniform int lights_shadow[64];
+
+const float tile_step = 1.0 / 16.0;
 
 uniform sampler2D tex_shadow;
 
@@ -47,10 +51,10 @@ float getShadowTerm(int matrix) {
     position_shadow = position_shadow / position_shadow.w;
 
     // Calculate the texture coordinates based off of the shadow atlas
-    vec2 tex_coord_shadow = position_shadow.xy / 16.0;
+    vec2 tex_coord_shadow = position_shadow.xy / 16.0 + vec2(tile_step, tile_step) * shadow_map_coordinates[matrix];
     float z = texture(tex_shadow, tex_coord_shadow).r;
 
-    return step(position_shadow.z - 0.001, z);
+    return step(position_shadow.z, z);
 
 
 }
@@ -128,7 +132,7 @@ void main() {
     fresnel = F0 + (1.0 - F0) * fresnel_pow;
 
     // Calculate lighting accumulation
-    float diffuse_acc, specular_acc;
+    vec3 diffuse_acc, specular_acc;
     //float shadow = getShadowTerm(position.xyz);
 
     // Save how many lights that we shadowed, arrays for shadow mapping only use shadow mapped lights
@@ -170,8 +174,8 @@ void main() {
             float NDL = dot(normal, L);
 
             // Accumulate the lighting
-            diffuse_acc += getDiffuseTerm(NDL) * att * shadow;
-            specular_acc += getSpecularTerm(L, NDL) * att * shadow;
+            diffuse_acc += light_colors[i] * getDiffuseTerm(NDL) * att * shadow;
+            specular_acc += light_colors[i] * getSpecularTerm(L, NDL) * att * shadow;
 
         }
 
@@ -186,7 +190,7 @@ void main() {
 
     // Combine lighting and texture
     vec3 color = albedo * occlusion * (fresnel_reflection + metalic_reflection + diffuse_acc + specular_acc * roughness);
-
+    
     out_color = vec4(color, 1.0);
 
 

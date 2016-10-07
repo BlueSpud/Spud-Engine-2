@@ -56,6 +56,7 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, double interpo
     SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
     
     SGL::setUpViewport(viewport);
+    glScissor(viewport.screen_pos.x, viewport.screen_pos.y, viewport.screen_size.x, viewport.screen_size.y);
     
     // Clear the framebuffer and draw the scene
     glClear(GL_DEPTH_BUFFER_BIT);

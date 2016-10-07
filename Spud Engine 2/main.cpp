@@ -142,24 +142,19 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph scene_graph;
     SMesh* mesh;
     mesh = new SMesh(SPath("Mesh/machine.mesh"));
-    mesh->transform.translation.z = -5.0;
+    mesh->transform.translation.z = -1.0;
+    mesh->transform.translation.x = -3.0;
     
     scene_graph.addObject(mesh);
     
     mesh = new SMesh(SPath("Mesh/metal.mesh"));
     mesh->transform.translation.x = 3.0;
-    mesh->transform.translation.z = -5.0;
+    mesh->transform.translation.z = -1.0;
     
     scene_graph.addObject(mesh);
     
     mesh = new SMesh(SPath("Mesh/plane.mesh"));
     mesh->transform.translation.y = -0.5;
-    
-    scene_graph.addObject(mesh);
-    
-    mesh = new SMesh(SPath("Mesh/tank.mesh"));
-    mesh->transform.translation.y = 0.6;
-    mesh->transform.rotation.y = 0.1;
     
     scene_graph.addObject(mesh);
     

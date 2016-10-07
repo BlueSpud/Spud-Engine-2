@@ -39,15 +39,21 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     // Create a temporary light
     light = new SPointLight();
     light->transform.translation.y = 2.0;
-    light->transform.translation.z = -2.0;
-    light->transform.translation.x = 2.0;
+    
+    light->light_color = glm::vec3(0.0, 1.0, 0.0);
     
     light_graph->addLight(light);
     
-    light = new SPointLight();
-    light->transform.translation.y = 1.0;
-    light->transform.translation.z = -5.0;
-    light->transform.translation.x = -3.0;
+    light = new SDirectionalLight();
+    light->transform.translation.y = 20;
+    light->transform.translation.z = 0.0;
+    light->transform.translation.x = -6.0;
+    light->transform.rotation.x = -M_PI / 3;
+    light->transform.rotation.y = M_PI / 2;
+    
+    light->light_color = glm::vec3(1.0, 0.0, 0.0);
+    
+    light->casts_shadow = true;
     
     light_graph->addLight(light);
     
@@ -55,7 +61,9 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     light->transform.translation.y = 10;
     light->transform.translation.z = 3.0;
     light->transform.translation.x = 0.0;
-    light->transform.rotation.x = -M_PI / 2.1;
+    light->transform.rotation.x = -M_PI / 3;
+    
+    light->light_color = glm::vec3(0.0, 0.0, 1.0);
     
     light->casts_shadow = true;
     
@@ -157,10 +165,13 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     lit_shader->bindUniform(&light_count, "light_count", UNIFORM_INT, 1);
     
     lit_shader->bindUniform(light_graph->getLightPositions(interpolation).data(), "light_positions", UNIFORM_VEC3, light_count);
+    lit_shader->bindUniform(light_graph->getColors().data(), "light_colors", UNIFORM_VEC3, light_count);
     lit_shader->bindUniform(light_graph->getShadowLights().data(), "lights_shadow", UNIFORM_INT, light_count);
     
     std::vector<glm::mat4> light_matrices = light_graph->getShadowMatrices();
     lit_shader->bindUniform(light_matrices.data(), "light_matrices", UNIFORM_MAT4, (int)light_matrices.size());
+    
+    lit_shader->bindUniform(light_graph->getShadowMapCoordinates().data(), "shadow_map_coordinates", UNIFORM_VEC2, (int)light_matrices.size());
     
     lit_shader->bindUniform(view_pos_u);
     
