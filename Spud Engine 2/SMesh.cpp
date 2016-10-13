@@ -91,14 +91,13 @@ SMesh::SMesh(SModel* _model, SMaterialInstance* _mat_instance) : bounding_box(gl
         
         // Make sure our bonding box is right
         model->getModelExtents(bounding_box.mins, bounding_box.maxes);
-        std::cout << bounding_box.mins.x << std::endl;
         
     }
     
     
 }
 
-void SMesh::render(double interpolation) {
+void SMesh::render(SShader* shader, double interpolation) {
 
     // Make sure that we are loaded in
     if (loaded) {
@@ -108,7 +107,7 @@ void SMesh::render(double interpolation) {
         SGL::mulMatrix(transform_matrix, MAT_MODEL_MATRIX);
     
         // Bind the material
-        mat_instance->useMaterial();
+        mat_instance->useMaterial(shader);
         
         // Force an upload of the matricies
         SGL::flushMatrix(MAT_PROJECTION_MATRIX);

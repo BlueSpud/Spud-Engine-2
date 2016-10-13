@@ -26,7 +26,7 @@ class SMesh : public SObject {
         SMesh(const SPath& path);
         SMesh(SModel* _model, SMaterialInstance* _mat_instance);
     
-        virtual void render(double interpolation);
+        virtual void render(SShader* shader, double interpolation);
         virtual void update();
     
         virtual bool shouldBeRendered(const glm::mat4& projection_view_matrix);

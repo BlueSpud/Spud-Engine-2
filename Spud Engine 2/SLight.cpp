@@ -13,6 +13,20 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
                                    0.0, 0.0, 0.5, 0.0,
                                    0.5, 0.5, 0.5, 1.0);
 
+SShader* SLight::shadow_shader;
+
+/******************************************************************************
+ *  Functions for generic light                                               *
+ ******************************************************************************/
+
+SLight::SLight() {
+    
+    // Get the shader for shadow mapping if we dont already have it
+    if (!SLight::shadow_shader)
+        SLight::shadow_shader = (SShader*)SResourceManager::getResource(SPath("Shader/simple.glsl"));
+    
+}
+
 /******************************************************************************
  *  Functions for point light                                                 *
  ******************************************************************************/
@@ -62,7 +76,7 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, double interpo
     glClear(GL_DEPTH_BUFFER_BIT);
     
     // Render the scene from the camera
-    scene_graph.render(camera, interpolation);
+    scene_graph.render(camera, SLight::shadow_shader, interpolation);
 
     light_matrix = SLight::bias * projection_matrix * camera.getCameraMatrix(interpolation);
     

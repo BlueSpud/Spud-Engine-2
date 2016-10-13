@@ -27,6 +27,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     environment_map =  (SCubeMap*)SResourceManager::getResource(SPath("Texture/room.cube"));
     
     // Get the lighting shader
+    gbuffer_shader = (SShader*)SResourceManager::getResource(SPath("Shader/gbuffer.glsl"));
     lit_shader = (SShader*)SResourceManager::getResource(SPath("Shader/deferred_lighting.glsl"));
     simple_shader = (SShader*)SResourceManager::getResource(SPath("Shader/simple.glsl"));
     
@@ -37,25 +38,25 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     light_graph = new SSimpleLightGraph();
     
     // Create a temporary light
-    light = new SPointLight();
-    light->transform.translation.y = 2.0;
-    
-    light->light_color = glm::vec3(0.0, 1.0, 0.0);
-    
-    light_graph->addLight(light);
-    
-    light = new SDirectionalLight();
-    light->transform.translation.y = 20;
-    light->transform.translation.z = 0.0;
-    light->transform.translation.x = -6.0;
-    light->transform.rotation.x = -M_PI / 3;
-    light->transform.rotation.y = M_PI / 2;
-    
-    light->light_color = glm::vec3(1.0, 0.0, 0.0);
-    
-    light->casts_shadow = true;
-    
-    light_graph->addLight(light);
+//    light = new SPointLight();
+//    light->transform.translation.y = 2.0;
+//    
+//    light->light_color = glm::vec3(0.0, 1.0, 0.0);
+//    
+//    light_graph->addLight(light);
+//    
+//    light = new SDirectionalLight();
+//    light->transform.translation.y = 20;
+//    light->transform.translation.z = 0.0;
+//    light->transform.translation.x = -6.0;
+//    light->transform.rotation.x = -M_PI / 3;
+//    light->transform.rotation.y = M_PI / 2;
+//    
+//    light->light_color = glm::vec3(1.0, 0.0, 0.0);
+//    
+//    light->casts_shadow = true;
+//    
+//    light_graph->addLight(light);
     
     light = new SDirectionalLight();
     light->transform.translation.y = 10;
@@ -63,7 +64,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     light->transform.translation.x = 0.0;
     light->transform.rotation.x = -M_PI / 3;
     
-    light->light_color = glm::vec3(0.0, 0.0, 1.0);
+    light->light_color = glm::vec3(1.0, 1.0, 1.0);
     
     light->casts_shadow = true;
     
@@ -113,7 +114,7 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     gbuffer->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    scene_graph.render(camera, interpolation);
+    scene_graph.render(camera, gbuffer_shader, interpolation);
     
     /******************************************************************************
      * Lighting pass                                                              *

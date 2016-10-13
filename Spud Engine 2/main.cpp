@@ -153,8 +153,9 @@ int main(int argc, char* argv[]) {
     
     scene_graph.addObject(mesh);
     
-    mesh = new SMesh(SPath("Mesh/plane.mesh"));
-    mesh->transform.translation.y = -0.5;
+    mesh = new SMesh(SPath("Mesh/barrel.mesh"));
+    mesh->transform.translation.y = 1.0;
+    mesh->transform.translation.z = -0.5;
     
     scene_graph.addObject(mesh);
     

@@ -28,7 +28,7 @@ class SLight {
     
     public:
     
-        SLight() { /* stub */ };
+        SLight();
         virtual ~SLight() { /* stub */ }
     
         virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation) = 0;
@@ -45,6 +45,7 @@ class SLight {
         bool casts_shadow = false;
     
         static glm::mat4 bias;
+        static SShader* shadow_shader;
     
         bool needs_shadow_update = true;
     

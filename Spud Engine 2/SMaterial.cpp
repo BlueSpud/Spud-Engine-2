@@ -21,27 +21,26 @@ REGISTER_RESOURCE_CLASS(mat, SMaterial);
  *  Functions for material instance                                           *
  ******************************************************************************/
 
-void SMaterialInstance::useMaterial() {
+void SMaterialInstance::useMaterial(SShader* shader) {
     
     // Bind the textures
     for (int i = 0; i < textures.size(); i++)
         textures[i]->bind(i);
     
     // Make sure the shader is bound
-    bool did_bind = parent_mat->shader->bind();
+    bool did_bind = shader->bind();
     
     // If the shader was bound, reupload texture IDs
     if (did_bind)
-        parent_mat->uploadTextureIDs();
+        parent_mat->uploadTextureIDs(shader);
     
     // Bind the uniforms
     for (int i = 0; i < parent_mat->uniforms.size(); i++)
-        parent_mat->shader->bindUniform(parent_mat->uniforms[i]);
+        shader->bindUniform(parent_mat->uniforms[i]);
     
 }
 
 long SMaterialInstance::getMaterialID() { return parent_mat->mat_id; }
-SShader* SMaterialInstance::getShader() { return parent_mat->shader; }
 
 SMaterialInstance::SMaterialInstance() { /* stub */ }
 
@@ -60,16 +59,6 @@ bool SMaterial::load(const SPath& path) {
         // Read line by line and figure out what we need to do for each line, there is not a required order
         std::string line;
         while (file->getNextTokenWithDeliminator('\n', line)) {
-            
-            if (line.compare(0, 7, "shader:") == 0) {
-                
-                // Load up the shader
-                std::string shader_path_s = line.substr(7, line.length() - 7);
-                SPath shader_path = SPath(shader_path_s);
-                
-                shader = (SShader*)SResourceManager::getResource(shader_path);
-                
-            }
             
             if (line.compare(0, 4, "req:") == 0) {
                 
@@ -138,9 +127,7 @@ SMaterialInstance* SMaterial::createMaterialInstance(std::map<std::string, SText
     
 }
 
-void SMaterial::uploadTextureIDs() {
-    
-    shader->bind();
+void SMaterial::uploadTextureIDs(SShader* shader) {
     
     // Go through the textures and assign Ids for them
     for (int i = 0; i < req_textures_count; i++)

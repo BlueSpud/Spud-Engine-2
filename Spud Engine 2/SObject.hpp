@@ -10,7 +10,7 @@
 #define SObject_hpp
 
 #include "SEventSystem.hpp"
-#include "SGL.hpp"
+#include "SShader.hpp"
 
 /******************************************************************************
  *  Definition for generic renderable object                                  *
@@ -20,7 +20,7 @@ class SObject {
     
     public:
     
-        virtual void render(double interpolation) = 0;
+        virtual void render(SShader* shader, double interpolation) = 0;
         virtual void update() = 0;
     
         virtual bool shouldBeRendered(const glm::mat4& projection_view_matrix) { return true; }

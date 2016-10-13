@@ -25,7 +25,7 @@ class SMaterialInstance {
     
     public:
     
-        void useMaterial();
+        void useMaterial(SShader* shader);
         long getMaterialID();
     
         SShader* getShader();
@@ -58,13 +58,12 @@ class SMaterial : public SResource {
         virtual bool load(const SPath& path);
         virtual void unload();
     
-        void uploadTextureIDs();
+        void uploadTextureIDs(SShader* shader);
     
         long mat_id;
     
     private:
-    
-        SShader* shader;
+
     
         std::vector<std::string>req_textures;
         std::vector<SUniform*>uniforms;
