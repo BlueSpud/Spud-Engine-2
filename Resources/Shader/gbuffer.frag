@@ -16,9 +16,9 @@ void main() {
 
     // Get the normal from the map
     vec3 normal_map = tbn_matrix * normalize((2.0 * texture(tex_normal, tex_coord0).xyz - 1.0));
-    
+
     albedo = texture(tex_albedo, tex_coord0);
-    normal = vec4(normal_map, 1.0);
+    normal = vec4(normalize(normal_map), 1.0);
     orm = texture(tex_orm, tex_coord0);
-    
+
 }

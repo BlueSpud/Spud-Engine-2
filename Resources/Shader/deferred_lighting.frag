@@ -107,7 +107,7 @@ void main() {
     vec3 albedo = albedo_s.xyz;
 
     // Get normal
-    normal = normalize(texture(tex_normal, tex_coord0).xyz);
+    normal = texture(tex_normal, tex_coord0).xyz;
 
     // Get the PBR properties
     vec4 orm = texture(tex_orm, tex_coord0);
@@ -190,7 +190,7 @@ void main() {
 
     // Combine lighting and texture
     vec3 color = albedo * occlusion * (fresnel_reflection + metalic_reflection + diffuse_acc + specular_acc * roughness);
-    
+
     out_color = vec4(color, 1.0);
 
 

@@ -35,6 +35,7 @@
 		025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025CB5AE1D83EB500059AF6C /* STexture.cpp */; };
 		025CB5B21D83EE5E0059AF6C /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025CB5B11D83EE5E0059AF6C /* libfreeimage.a */; };
 		0278C0F61DA2F6AB002F8B7D /* SBoundingBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0278C0F41DA2F6AB002F8B7D /* SBoundingBox.cpp */; };
+		029039671DB11CB30087B500 /* SAmbientOcclusionPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 029039651DB11CB30087B500 /* SAmbientOcclusionPass.cpp */; };
 		02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02956BCE1D8B0FFB0035733E /* SGLUpload.cpp */; };
 		029865801D8460DC005EED43 /* SCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0298657E1D8460DC005EED43 /* SCamera.cpp */; };
 		029865831D847429005EED43 /* SMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 029865811D847429005EED43 /* SMaterial.cpp */; };
@@ -118,6 +119,8 @@
 		025CB5B11D83EE5E0059AF6C /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = FreeImage/lib/libfreeimage.a; sourceTree = "<group>"; };
 		0278C0F41DA2F6AB002F8B7D /* SBoundingBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SBoundingBox.cpp; sourceTree = "<group>"; };
 		0278C0F51DA2F6AB002F8B7D /* SBoundingBox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SBoundingBox.hpp; sourceTree = "<group>"; };
+		029039651DB11CB30087B500 /* SAmbientOcclusionPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SAmbientOcclusionPass.cpp; sourceTree = "<group>"; };
+		029039661DB11CB30087B500 /* SAmbientOcclusionPass.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SAmbientOcclusionPass.hpp; sourceTree = "<group>"; };
 		02956BCE1D8B0FFB0035733E /* SGLUpload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGLUpload.cpp; sourceTree = "<group>"; };
 		0298657E1D8460DC005EED43 /* SCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SCamera.cpp; sourceTree = "<group>"; };
 		0298657F1D8460DC005EED43 /* SCamera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SCamera.hpp; sourceTree = "<group>"; };
@@ -365,6 +368,15 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
+		029039641DB11C9C0087B500 /* Effects */ = {
+			isa = PBXGroup;
+			children = (
+				029039651DB11CB30087B500 /* SAmbientOcclusionPass.cpp */,
+				029039661DB11CB30087B500 /* SAmbientOcclusionPass.hpp */,
+			);
+			name = Effects;
+			sourceTree = "<group>";
+		};
 		0298658D1D84A264005EED43 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
@@ -418,6 +430,7 @@
 		02DAB8C31D8A28EB00A39E27 /* Pipeline */ = {
 			isa = PBXGroup;
 			children = (
+				029039641DB11C9C0087B500 /* Effects */,
 				02D295CE1D935E4100CBF342 /* Renderers */,
 				02DAB8C41D8A28F900A39E27 /* SRenderingPipeline.cpp */,
 				02DAB8C51D8A28F900A39E27 /* SRenderingPipeline.hpp */,
@@ -502,6 +515,7 @@
 				022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */,
 				02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */,
 				0228B8841D7A779200596526 /* SModel.cpp in Sources */,
+				029039671DB11CB30087B500 /* SAmbientOcclusionPass.cpp in Sources */,
 				02D295D11D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp in Sources */,
 				0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */,
 				025903301D77940400EA6372 /* main.cpp in Sources */,

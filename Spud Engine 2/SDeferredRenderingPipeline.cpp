@@ -20,8 +20,10 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ALBEDO));
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_FLOAT, GBUFFER_NORMAL));
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ORM));
-    
     gbuffer = new SFramebuffer(attatchments, viewport_3D->screen_size.x, viewport_3D->screen_size.y);
+    
+    // Create an ambient occlusion pass
+    ambient_occlusion_pass = new SAmbientOcclusionPass((glm::ivec2)_viewport_2D->screen_size / 2);
     
     // Get the cube map
     environment_map =  (SCubeMap*)SResourceManager::getResource(SPath("Texture/room.cube"));
@@ -38,13 +40,18 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     light_graph = new SSimpleLightGraph();
     
     // Create a temporary light
-//    light = new SPointLight();
-//    light->transform.translation.y = 2.0;
-//    
-//    light->light_color = glm::vec3(0.0, 1.0, 0.0);
-//    
-//    light_graph->addLight(light);
-//    
+    light = new SPointLight();
+    light->transform.translation = glm::vec3(-4.0, 2.0, 2.0);
+    light_graph->addLight(light);
+    
+    light = new SPointLight();
+    light->transform.translation = glm::vec3(0.0, 2.0, 2.0);
+    light_graph->addLight(light);
+    
+    light = new SPointLight();
+    light->transform.translation = glm::vec3(4.0, 2.0, 2.0);
+    light_graph->addLight(light);
+//
 //    light = new SDirectionalLight();
 //    light->transform.translation.y = 20;
 //    light->transform.translation.z = 0.0;
@@ -58,17 +65,15 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
 //    
 //    light_graph->addLight(light);
     
-    light = new SDirectionalLight();
-    light->transform.translation.y = 10;
-    light->transform.translation.z = 3.0;
-    light->transform.translation.x = 0.0;
-    light->transform.rotation.x = -M_PI / 3;
-    
-    light->light_color = glm::vec3(1.0, 1.0, 1.0);
-    
-    light->casts_shadow = true;
-    
-    light_graph->addLight(light);
+//    light = new SDirectionalLight();
+//    light->transform.translation.y = 10;
+//    light->transform.translation.z = 3.0;
+//    light->transform.translation.x = 0.0;
+//    light->transform.rotation.x = -M_PI / 3;
+//    
+//    light->light_color = glm::vec3(1.0, 1.0, 1.0);
+//    
+//    light_graph->addLight(light);
     
 }
 
@@ -121,7 +126,8 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
      ******************************************************************************/
     
     // Get view matrix
-    glm::mat4 inverse_proj_view = glm::inverse(projection_matrix_3D * view_matrix);
+    glm::mat4 inverse_proj = glm::inverse(projection_matrix_3D);
+    glm::mat4 inverse_proj_view = glm::inverse(projection_view_matrix);
     
     // Render the lit buffer to the screen
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -194,6 +200,8 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     light_graph->shadow_map_buffer->bindTexture(0);
     
     SGL::drawRect(glm::vec2(0, 0), glm::vec2(viewport_2D->screen_size.x, viewport_2D->screen_size.y));
+    
+    ambient_occlusion_pass->renderAmbientOcclusion(GBUFFER_DEPTH, GBUFFER_NORMAL, GBUFFER_ORM, (glm::ivec2)viewport_2D->screen_size, projection_matrix_3D, inverse_proj, view_matrix);
     
 //    
 //

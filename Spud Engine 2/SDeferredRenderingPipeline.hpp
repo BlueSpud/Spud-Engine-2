@@ -12,6 +12,7 @@
 #include "SRenderingPipeline.hpp"
 #include "SCubeMap.hpp"
 #include "SLightGraph.hpp"
+#include "SAmbientOcclusionPass.hpp"
 
 /******************************************************************************
  *  Definition for gbuffer components                                         *
@@ -41,6 +42,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
         // Stuff for rendering
         SFramebuffer* gbuffer;
+        SAmbientOcclusionPass* ambient_occlusion_pass;
     
         SShader* gbuffer_shader;
         SShader* lit_shader;
