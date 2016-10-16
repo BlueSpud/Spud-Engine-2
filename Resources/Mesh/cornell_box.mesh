@@ -1,0 +1,12 @@
+model:Model/cornell_box.obj
+
+mat:Material/test.mat
+
+tex_n:tex_albedo
+tex:Texture/cornell_box/cornell_box_albedo.png
+
+tex_n:tex_orm
+tex:Texture/cornell_box/cornell_box_orm.png
+
+tex_n:tex_normal
+tex:Texture/normal_blank.png

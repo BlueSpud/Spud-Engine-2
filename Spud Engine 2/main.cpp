@@ -141,23 +141,21 @@ int main(int argc, char* argv[]) {
     
     SSimpleSceneGraph scene_graph;
     SMesh* mesh;
-    mesh = new SMesh(SPath("Mesh/machine.mesh"));
-    mesh->transform.translation.z = -1.0;
-    mesh->transform.translation.x = -3.0;
+    mesh = new SMesh(SPath("Mesh/cornell_box.mesh"));
+    //mesh->transform.translation.z = -1.0;
+    //mesh->transform.translation.x = -3.0;
     
     scene_graph.addObject(mesh);
     
-    mesh = new SMesh(SPath("Mesh/metal.mesh"));
-    mesh->transform.translation.x = 3.0;
-    mesh->transform.translation.z = -1.0;
+    //mesh = new SMesh(SPath("Mesh/metal.mesh"));
+    //mesh->transform.translation.x = 3.0;
+    //mesh->transform.translation.z = -1.0;
     
-    scene_graph.addObject(mesh);
+    //scene_graph.addObject(mesh);
     
-    mesh = new SMesh(SPath("Mesh/barrel.mesh"));
-    mesh->transform.translation.y = 1.0;
-    mesh->transform.translation.z = -0.5;
+    //mesh = new SMesh(SPath("Mesh/plane.mesh"));
     
-    scene_graph.addObject(mesh);
+    //scene_graph.addObject(mesh);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     

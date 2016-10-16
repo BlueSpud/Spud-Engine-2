@@ -24,6 +24,7 @@
 #define GBUFFER_ORM 3
 #define ENVIRONMENT_MAP 4
 #define SHADOW_ATLAS 5
+#define AMBIENT_OCCLUSION 6
 
 /******************************************************************************
  *  Definition for deferred rendering pipeline                                *

@@ -9,11 +9,11 @@ uniform mat4 mat_projection_scene;
 uniform mat4 inv_proj;
 
 in vec2 tex_coord0;
-vec2 tex_coord_scale = vec2(1440.0 / 4.0, 900.0 / 4);
+uniform vec2 tex_coord_scale;
 
-uniform vec3 kernel[8];
+uniform vec3 kernel[16];
 
-out vec4 albedo;
+out float occlusion_out;
 
 float linearizeDepth(float depth) {
     
@@ -44,11 +44,11 @@ void main() {
     float occlusion = 0.0;
     
     // Sample all the values
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 16; i++) {
         
         // Get the position of the sample
         vec3 sample_position = tbn_matrix * kernel[i];
-        sample_position = position + sample_position;
+        sample_position = position + sample_position * 0.3;
         
         // Get an offset
         vec4 offset = mat_projection_scene * vec4(sample_position, 1.0);
@@ -61,8 +61,8 @@ void main() {
         
     }
     
-    occlusion = 1.0 - occlusion / 8.0;
+    occlusion = 1.0 - occlusion / 16.0;
     
-    albedo = vec4(occlusion, occlusion, occlusion, 1.0);
+    occlusion_out = occlusion;
 
 }

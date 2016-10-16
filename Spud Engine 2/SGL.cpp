@@ -148,14 +148,14 @@ glm::mat4 SGL::getProjectionMatrix2D(const SViewport& viewport) { return glm::or
                                                                                     0.0f, -100.0f, 100.0f); }
 
 glm::mat4 SGL::getProjectionMatrix3D(const SViewport3D& viewport) { return glm::perspective(viewport.field_of_view,
-                                                                                          viewport.screen_size.x / viewport.screen_size.y,
-                                                                                          viewport.planes.x,
-                                                                                          viewport.planes.y); }
+                                                                                            viewport.screen_size.x / viewport.screen_size.y,
+                                                                                            viewport.planes.x,
+                                                                                            viewport.planes.y); }
 
 void SGL::setUpViewport(const SViewport& viewport) { glViewport(viewport.screen_pos.x,
-                                                                  viewport.screen_pos.y,
-                                                                  viewport.screen_size.x,
-                                                                  viewport.screen_size.y); }
+                                                                viewport.screen_pos.y,
+                                                                viewport.screen_size.x,
+                                                                viewport.screen_size.y); }
 
 void SGL::drawRect(glm::vec2 position, glm::vec2 size) {
     
