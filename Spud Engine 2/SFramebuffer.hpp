@@ -100,6 +100,8 @@ class SFramebuffer {
         void bind();
         void bindTexture(int id);
     
+        static void unbind();
+    
     private:
     
         unsigned int width;

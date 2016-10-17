@@ -28,8 +28,12 @@ class SAmbientOcclusionPass {
         SAmbientOcclusionPass(glm::vec2 main_framebuffer_size);
         void unload();
     
-        void renderAmbientOcclusion(int depth, int normal, int to_place_noise, glm::mat4& projection_matrix,
-                                     glm::mat4& inv_projection_matrix, glm::mat4& view_matrix);
+        void renderAmbientOcclusion(int depth, int normal, int to_place_noise,
+                                    SViewport3D& viewport_3D,
+                                    glm::mat4& projection_matrix,
+                                    glm::mat4& inv_projection_matrix,
+                                    glm::mat4& view_matrix);
+    
         void bindAmbientOcclusionTexture(int texture);
     
     private:

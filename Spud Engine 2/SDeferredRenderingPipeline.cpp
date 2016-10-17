@@ -16,7 +16,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     
     // Create the gbuffer and its attatchments
     std::vector<SFramebufferAttatchment*> attatchments;
-    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_FLOAT, GBUFFER_DEPTH));
+    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT, GBUFFER_DEPTH));
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ALBEDO));
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_FLOAT, GBUFFER_NORMAL));
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ORM));
@@ -42,6 +42,16 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     // Create a temporary light
     light = new SPointLight();
     light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
+    light->light_color = glm::vec3(0.4, 0.4, 0.4);
+    
+    light_graph->addLight(light);
+    
+    light = new SDirectionalLight();
+    light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
+    light->light_color = glm::vec3(0.4, 0.4, 0.4);
+    
+    light->casts_shadow = true;
+    
     light_graph->addLight(light);
     
 //
@@ -144,11 +154,11 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     
     // Render out the ambient occlusion and then bind it
     ambient_occlusion_pass->renderAmbientOcclusion(GBUFFER_DEPTH, GBUFFER_NORMAL, AMBIENT_OCCLUSION,
-                                                   projection_matrix_3D, inverse_proj, view_matrix);
+                                                   *viewport_3D, projection_matrix_3D, inverse_proj, view_matrix);
     ambient_occlusion_pass->bindAmbientOcclusionTexture(AMBIENT_OCCLUSION);
     
     // Render the lit buffer to the screen
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    SFramebuffer::unbind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Set up the new viewport

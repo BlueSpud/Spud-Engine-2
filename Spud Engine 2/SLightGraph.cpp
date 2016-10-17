@@ -16,7 +16,7 @@ SLightGraph::SLightGraph() {
     
     // Create a massive framebuffer for a bunch of shadow maps
     std::vector<SFramebufferAttatchment*> attatchments;
-    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_FLOAT, 0));
+    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT, 0));
     shadow_map_buffer = new SFramebuffer(attatchments, SHADOW_MAP_ATLAS_SIZE, SHADOW_MAP_ATLAS_SIZE);
     
     // Create the 2D array for the shadow maps
@@ -87,7 +87,7 @@ void SSimpleLightGraph::updateShadows(SCamera& scene_camera, SSceneGraph& scene_
                 shadow_map_buffer->bind();
                 
                 // Enable to remove shadow mapping artifacts
-                glCullFace(GL_FRONT);
+                glCullFace(GL_BACK);
                 glEnable(GL_POLYGON_OFFSET_FILL);
                 glPolygonOffset(2.5f, 0.0);
                 

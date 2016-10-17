@@ -14,7 +14,7 @@
  ******************************************************************************/
 
 #define SHADOW_MAP_ATLAS_SIZE 8192
-#define SHADOW_MAP_ATLAS_TILE_SIZE 512
+#define SHADOW_MAP_ATLAS_TILE_SIZE 1024
 #define SHADOW_MAP_ATLAS_TILE_COUNT SHADOW_MAP_ATLAS_SIZE / SHADOW_MAP_ATLAS_TILE_SIZE
 
 #endif /* SLightingConstants_h */

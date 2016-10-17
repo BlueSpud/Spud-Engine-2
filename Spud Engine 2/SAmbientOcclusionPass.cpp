@@ -88,6 +88,7 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
 }
 
 void SAmbientOcclusionPass::renderAmbientOcclusion(int depth, int normal, int to_place_noise,
+                                                   SViewport3D& viewport_3D,
                                                    glm::mat4& projection_matrix,
                                                    glm::mat4& inv_projection_matrix,
                                                    glm::mat4& view_matrix) {
@@ -119,6 +120,13 @@ void SAmbientOcclusionPass::renderAmbientOcclusion(int depth, int normal, int to
     int noise_size = sqrt(AO_NOISE_SIZE);
     glm::vec2 tex_coord_scale = viewport.screen_size / (float)noise_size;
     ambient_occlusion_shader->bindUniform(&tex_coord_scale, "tex_coord_scale", UNIFORM_VEC2, 1);
+    
+    // Bind the kernel size
+    int kernel_size = AO_KERNAL_SIZE;
+    ambient_occlusion_shader->bindUniform(&kernel_size, "kernel_size", UNIFORM_INT, 1);
+    
+    // Bind the near and far planes
+    ambient_occlusion_shader->bindUniform(&viewport_3D.planes, "planes", UNIFORM_VEC2, 1);
 
     // Bind the matrices
     ambient_occlusion_shader->bindUniform(&view_matrix, "mat_view_scene", UNIFORM_MAT4, 1);

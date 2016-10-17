@@ -27,7 +27,7 @@ uniform mat4 light_matrices[64];
 uniform vec2 shadow_map_coordinates[64];
 uniform int lights_shadow[64];
 
-const float tile_step = 1.0 / 16.0;
+const float tile_step = 1.0 / 8.0;
 
 uniform sampler2D tex_shadow;
 
@@ -52,7 +52,7 @@ float getShadowTerm(int matrix) {
     position_shadow = position_shadow / position_shadow.w;
 
     // Calculate the texture coordinates based off of the shadow atlas
-    vec2 tex_coord_shadow = position_shadow.xy / 16.0 + vec2(tile_step, tile_step) * shadow_map_coordinates[matrix];
+    vec2 tex_coord_shadow = position_shadow.xy / 8.0 + vec2(tile_step, tile_step) * shadow_map_coordinates[matrix];
     float z = texture(tex_shadow, tex_coord_shadow).r;
 
     return step(position_shadow.z, z);
@@ -70,7 +70,7 @@ float G1(float NDV, float k) {
 float getDiffuseTerm(float NDL) {
 
     // Diffuse intensity uses the Lambertian reflectance model, ambient is added here
-    return -NDL * (1.0 - metalic) + 0.1;
+    return clamp(-NDL * (1.0 - metalic), 0.0, 1.0);
 
 }
 
@@ -94,7 +94,7 @@ float getSpecularTerm(vec3 L, float NDL) {
     float k = 2.0 / sqrt(3.14159 * (a + 2));
     float G = G1(NDL, k) * G1(NDV, k);
 
-    return (fresnel * D * G) / (4.0 * NDL * NDV);
+    return clamp((fresnel * D * G) / (4.0 * NDL * NDV), 0.0, 1.0);
 
 }
 
@@ -190,7 +190,7 @@ void main() {
     vec3 metalic_reflection = reflection_color * inverse_roughness * metalic * inverse_roughness;
 
     // Combine lighting and texture
-    vec3 color = albedo * occlusion * (fresnel_reflection + metalic_reflection + diffuse_acc + specular_acc * roughness);
+    vec3 color = albedo * occlusion * (fresnel_reflection + metalic_reflection + diffuse_acc + specular_acc * roughness + 0.2 * roughness);
 
     out_color = vec4(color, 1.0);
 

@@ -11,14 +11,17 @@ uniform mat4 inv_proj;
 in vec2 tex_coord0;
 uniform vec2 tex_coord_scale;
 
-uniform vec3 kernel[16];
+uniform vec3 kernel[64];
+uniform int kernel_size;
+
+uniform vec2 planes;
 
 out float occlusion_out;
 
 float linearizeDepth(float depth) {
     
     depth = depth * 2.0 - 1.0;
-    return (2.0 * 0.1 * 1000.0) / (1000.0 + 0.1 - depth * (1000.0 - 0.1));
+    return (2.0 * planes.x * planes.y) / (planes.y + planes.x - depth * (planes.y - planes.x));
     
 }
 
@@ -44,7 +47,7 @@ void main() {
     float occlusion = 0.0;
     
     // Sample all the values
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < kernel_size; i++) {
         
         // Get the position of the sample
         vec3 sample_position = tbn_matrix * kernel[i];
@@ -61,7 +64,7 @@ void main() {
         
     }
     
-    occlusion = 1.0 - occlusion / 16.0;
+    occlusion = 1.0 - occlusion / kernel_size;
     
     occlusion_out = occlusion;
 

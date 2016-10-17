@@ -69,6 +69,8 @@ void SFramebuffer::bindTexture(int id) {
 
 }
 
+void SFramebuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); } 
+
 /******************************************************************************
  *  Functions for framebuffer upload                                          *
  ******************************************************************************/

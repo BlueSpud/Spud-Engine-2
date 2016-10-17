@@ -39,6 +39,8 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
         virtual void render(double interpolation, SCamera& camera, SSceneGraph& scene_graph);
     
+        SLight* light;
+    
     private:
     
         // Stuff for rendering
@@ -53,7 +55,6 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         SUniform* view_pos_u;
     
         // Temp stuff
-        SLight* light;
         SSimpleLightGraph* light_graph;
     
     

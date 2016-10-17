@@ -23,6 +23,15 @@ double speed_x = 0.0;
 double speed_r = 0.0;
 
 SCamera camera;
+SDeferredRenderingPipleline* deferred_pipeline;
+
+void moveLight(int key) {
+    
+    // Temp function
+    deferred_pipeline->light->transform = camera.transform;
+    deferred_pipeline->light->needs_shadow_update = true;
+    
+}
 
 void keyPress(int key) {
     
@@ -162,7 +171,7 @@ int main(int argc, char* argv[]) {
     SViewport viewport_2D = SViewport(window_framebuffer_size, glm::vec2());
     SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / 2, glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
     
-    SDeferredRenderingPipleline deferred_pipeline = SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
+    deferred_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
     
     SKeyboardListener listener;
     listener.bind(&keyPress, GLFW_KEY_S, KEY_ACTION_DOWN);
@@ -171,6 +180,8 @@ int main(int argc, char* argv[]) {
     listener.bind(&keyPress, GLFW_KEY_A, KEY_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_LEFT, KEY_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_RIGHT, KEY_ACTION_DOWN);
+    
+    listener.bind(&moveLight, GLFW_KEY_P, KEY_ACTION_DOWN);
     
     listener.bind(&keyRelease, GLFW_KEY_S, KEY_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_W, KEY_ACTION_UP);
@@ -256,7 +267,7 @@ int main(int argc, char* argv[]) {
         double interpolation = loopElapsedTime / time_tick;
         
         // Render using a deferred rendering pipline
-        deferred_pipeline.render(interpolation, camera, scene_graph);
+        deferred_pipeline->render(interpolation, camera, scene_graph);
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
         
@@ -269,7 +280,8 @@ int main(int argc, char* argv[]) {
     }
     
     // Clean up
-    deferred_pipeline.unload();
+    deferred_pipeline->unload();
+    delete deferred_pipeline;
     
     // Subsystem shutdown
     SHotLoadSystem::shutdown();
