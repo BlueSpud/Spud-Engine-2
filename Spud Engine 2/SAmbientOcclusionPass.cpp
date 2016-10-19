@@ -40,11 +40,13 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
                                                  random_distribution_xy(random_engine),
                                                  random_distribution_z(random_engine)));
         
+            // CURRENTLY NOT SCALING KERNAL, SEEMS TO LOOK BETTER WITHOUT IT
             // Scale the point so we get more samples closer to the origin
-            float scale = (float)i / (float)AO_KERNAL_SIZE;
-            scale = glm::mix(0.1, 1.0, scale * scale);
+            //float scale = (float)i / (float)AO_KERNAL_SIZE;
+            //scale = glm::mix(0.1, 1.0, scale * scale);
         
-            kernel[i] = kernel[i] * scale;
+            
+            //kernel[i] = kernel[i] * scale;
         
         }
     

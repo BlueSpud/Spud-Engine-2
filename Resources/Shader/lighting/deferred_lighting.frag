@@ -34,9 +34,6 @@ uniform sampler2D tex_shadow;
 /******************************************************************************
  *  Values that only need to be computed once per pixel                       *
  ******************************************************************************/
-
-vec3 normal;
-
 float NDH, NDV;
 float roughness, inverse_roughness, metalic;
 
@@ -44,11 +41,12 @@ vec3 V;
 float fresnel;
 
 vec3 position;
+vec3 normal;
 
 float getShadowTerm(int matrix) {
 
     // Get the position in the shadow map
-    vec4 position_shadow = light_matrices[matrix] * vec4(position, 1.0);
+    vec4 position_shadow = light_matrices[matrix] * vec4(position + normal * 0.01, 1.0);
     position_shadow = position_shadow / position_shadow.w;
 
     // Calculate the texture coordinates based off of the shadow atlas

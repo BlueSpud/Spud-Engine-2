@@ -23,7 +23,7 @@ SLight::SLight() {
     
     // Get the shader for shadow mapping if we dont already have it
     if (!SLight::shadow_shader)
-        SLight::shadow_shader = (SShader*)SResourceManager::getResource(SPath("Shader/simple.glsl"));
+        SLight::shadow_shader = (SShader*)SResourceManager::getResource(SPath("Shader/lighting/shadow.glsl"));
     
 }
 

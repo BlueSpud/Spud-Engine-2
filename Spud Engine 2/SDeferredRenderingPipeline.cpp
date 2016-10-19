@@ -30,7 +30,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     
     // Get the lighting shader
     gbuffer_shader = (SShader*)SResourceManager::getResource(SPath("Shader/gbuffer.glsl"));
-    lit_shader = (SShader*)SResourceManager::getResource(SPath("Shader/deferred_lighting.glsl"));
+    lit_shader = (SShader*)SResourceManager::getResource(SPath("Shader/lighting/deferred_lighting.glsl"));
     simple_shader = (SShader*)SResourceManager::getResource(SPath("Shader/simple.glsl"));
     
     // Get the view pos
@@ -44,7 +44,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
     light->light_color = glm::vec3(0.4, 0.4, 0.4);
     
-    light_graph->addLight(light);
+    //light_graph->addLight(light);
     
     light = new SDirectionalLight();
     light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
