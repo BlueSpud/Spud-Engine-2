@@ -32,6 +32,7 @@
 		025903371D7794B500EA6372 /* libLinearMath_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */; };
 		025CB5961D83CD880059AF6C /* SShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025CB5941D83CD880059AF6C /* SShader.cpp */; };
 		025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025CB5AE1D83EB500059AF6C /* STexture.cpp */; };
+		02716E3F1DC2A5DE00EFC656 /* SRectPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02716E3D1DC2A5DE00EFC656 /* SRectPacker.cpp */; };
 		0278C0F61DA2F6AB002F8B7D /* SBoundingBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0278C0F41DA2F6AB002F8B7D /* SBoundingBox.cpp */; };
 		029039671DB11CB30087B500 /* SAmbientOcclusionPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 029039651DB11CB30087B500 /* SAmbientOcclusionPass.cpp */; };
 		02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02956BCE1D8B0FFB0035733E /* SGLUpload.cpp */; };
@@ -114,6 +115,8 @@
 		025CB5951D83CD880059AF6C /* SShader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SShader.hpp; sourceTree = "<group>"; };
 		025CB5AE1D83EB500059AF6C /* STexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STexture.cpp; sourceTree = "<group>"; };
 		025CB5AF1D83EB500059AF6C /* STexture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = STexture.hpp; sourceTree = "<group>"; };
+		02716E3D1DC2A5DE00EFC656 /* SRectPacker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRectPacker.cpp; sourceTree = "<group>"; };
+		02716E3E1DC2A5DE00EFC656 /* SRectPacker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRectPacker.hpp; sourceTree = "<group>"; };
 		0278C0F41DA2F6AB002F8B7D /* SBoundingBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SBoundingBox.cpp; sourceTree = "<group>"; };
 		0278C0F51DA2F6AB002F8B7D /* SBoundingBox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SBoundingBox.hpp; sourceTree = "<group>"; };
 		029039651DB11CB30087B500 /* SAmbientOcclusionPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SAmbientOcclusionPass.cpp; sourceTree = "<group>"; };
@@ -237,8 +240,7 @@
 			isa = PBXGroup;
 			children = (
 				022ED15B1D79165A00DC1ECD /* SSubsystem.hpp */,
-				0251FC3A1D7DC57300B3E63E /* STime.cpp */,
-				0251FC3B1D7DC57300B3E63E /* STime.hpp */,
+				02716E3C1DC2A5C800EFC656 /* Utilities */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -353,6 +355,17 @@
 				029865971D84AD4D005EED43 /* Model */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		02716E3C1DC2A5C800EFC656 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				0251FC3A1D7DC57300B3E63E /* STime.cpp */,
+				0251FC3B1D7DC57300B3E63E /* STime.hpp */,
+				02716E3D1DC2A5DE00EFC656 /* SRectPacker.cpp */,
+				02716E3E1DC2A5DE00EFC656 /* SRectPacker.hpp */,
+			);
+			name = Utilities;
 			sourceTree = "<group>";
 		};
 		0278C0F31DA2F69B002F8B7D /* Utils */ = {
@@ -500,6 +513,7 @@
 				029865931D84A524005EED43 /* SMesh.cpp in Sources */,
 				029865801D8460DC005EED43 /* SCamera.cpp in Sources */,
 				025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */,
+				02716E3F1DC2A5DE00EFC656 /* SRectPacker.cpp in Sources */,
 				02D35A731D86217A00F62A7B /* SSceneGraph.cpp in Sources */,
 				02B947F81D89FF7200822957 /* SUniform.cpp in Sources */,
 				029865831D847429005EED43 /* SMaterial.cpp in Sources */,

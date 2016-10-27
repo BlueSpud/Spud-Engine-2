@@ -40,11 +40,12 @@ float roughness, inverse_roughness, metalic;
 vec3 V;
 float fresnel;
 
+float depth;
 vec3 position;
 vec3 normal;
 
-float getShadowTerm(int matrix) {
-
+float getShadowTerm(int matrix, vec3 L) {
+    
     // Get the position in the shadow map
     vec4 position_shadow = light_matrices[matrix] * vec4(position + normal * 0.01, 1.0);
     position_shadow = position_shadow / position_shadow.w;
@@ -116,8 +117,8 @@ void main() {
     float occlusion = orm.x * texture(tex_ambient_occlusion, tex_coord0).r;
 
     // Get position from depth
-    float depth = texture(tex_depth, tex_coord0).x * 2.0 - 1.0;
-    vec4 position_p = vec4(tex_coord0 * 2.0 - 1.0, depth, 1.0);
+    depth = texture(tex_depth, tex_coord0).x;
+    vec4 position_p = vec4(tex_coord0 * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
     position_p = inverse_proj_view * position_p;
     position = (position_p / position_p.w).xyz;
 
@@ -126,13 +127,12 @@ void main() {
     NDV = dot(normal, V);
 
     // Calculate fresnel term F
-    float F0 = clamp(roughness, 0.05, 0.5);
+    float F0 = clamp(roughness, 0.05, 1.0);
     float fresnel_pow = pow(1.0 + NDV, fresnel_pow);
     fresnel = F0 + (1.0 - F0) * fresnel_pow;
 
-    // Calculate lighting accumulation
+    // Storage lighting accumulation
     vec3 diffuse_acc, specular_acc;
-    //float shadow = getShadowTerm(position.xyz);
 
     // Save how many lights that we shadowed, arrays for shadow mapping only use shadow mapped lights
     int shadow_light = 0;
@@ -147,10 +147,10 @@ void main() {
 
         if (lights_shadow[i] == 1) {
 
-            shadow = getShadowTerm(shadow_light);
-
             // Right now all thats supported is directional lights
             L = -light_positions[i];
+            
+            shadow = getShadowTerm(shadow_light, L);
 
             shadow_light++;
 
@@ -166,15 +166,16 @@ void main() {
         }
 
         // Make a threshhold for attenuation to be over to actualyl calculate light
-        if (att * shadow > 0.01) {
+        att = att * shadow;
+        if (att > 0.01) {
 
             // Get NDL
             L = normalize(L);
             float NDL = dot(normal, L);
 
             // Accumulate the lighting
-            diffuse_acc += light_colors[i] * getDiffuseTerm(NDL) * att * shadow;
-            specular_acc += light_colors[i] * getSpecularTerm(L, NDL) * att * shadow;
+            diffuse_acc += light_colors[i] * getDiffuseTerm(NDL) * att;
+            specular_acc += light_colors[i] * getSpecularTerm(L, NDL) * att;
 
         }
 

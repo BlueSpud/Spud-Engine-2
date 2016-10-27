@@ -156,11 +156,11 @@ int main(int argc, char* argv[]) {
     
     scene_graph.addObject(mesh);
     
-    //mesh = new SMesh(SPath("Mesh/metal.mesh"));
-    //mesh->transform.translation.x = 3.0;
+    mesh = new SMesh(SPath("Mesh/metal.mesh"));
+    mesh->transform.translation.y = 2.0;
     //mesh->transform.translation.z = -1.0;
     
-    //scene_graph.addObject(mesh);
+    scene_graph.addObject(mesh);
     
     //mesh = new SMesh(SPath("Mesh/plane.mesh"));
     
@@ -169,7 +169,7 @@ int main(int argc, char* argv[]) {
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
     SViewport viewport_2D = SViewport(window_framebuffer_size, glm::vec2());
-    SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / 2, glm::vec2(0), 45.0f, glm::vec2(0.1, 1000.0));
+    SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / 2, glm::vec2(0), 45.0f, glm::vec2(0.1, 500.0));
     
     deferred_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
     

@@ -74,7 +74,7 @@ void SGL::createWindow() {
     
     // Turn of VSync by default
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(0);
+    //glfwSwapInterval(0);
     
 }
 
