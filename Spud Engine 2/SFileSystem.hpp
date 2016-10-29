@@ -74,9 +74,9 @@ class SFile {
     private:
     
         SFile();
-        SFile(const std::string& _path);
+        SFile(const std::string& _path, bool binary = false);
     
-        void load(const std::string& _path);
+        void load(const std::string& _path, bool binary = false);
         void close();
         void reset();
     
@@ -102,7 +102,7 @@ class SFileSystem : public SSubsystem {
         static void getDefaultRootDirectory(std::string argv_0);
         static void setRootDirectory(const SPath& _root_directory);
     
-        static SFile* loadFile(const SPath& path);
+        static SFile* loadFile(const SPath& path, bool binary = false);
         static void closeFile(SFile* file);
     
         static std::vector<SPath> listDirectory(SPath& path);

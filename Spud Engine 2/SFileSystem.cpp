@@ -102,17 +102,20 @@ bool SPath::getIsDirectory() const { return is_directory; }
 
 SFile::SFile() { /* default constructor, nothing*/ }
 
-SFile::SFile(const std::string& _path) {
+SFile::SFile(const std::string& _path, bool binary) {
     
     // Shortcut to load
-    load(_path);
+    load(_path, binary);
 
 }
 
-void SFile::load(const std::string& _path) {
+void SFile::load(const std::string& _path, bool binary) {
     
-    // Load it up from the file
-    in_stream = std::ifstream(_path);
+    // If we requested to load it from binary, use the binary flag
+    if (binary)
+        in_stream = std::ifstream(_path, std::ios::binary);
+    else
+        in_stream = std::ifstream(_path);
     
     // Save the path
     path = _path;
@@ -228,7 +231,7 @@ void SFileSystem::setRootDirectory(const SPath& _root_directory) {
     
 }
 
-SFile* SFileSystem::loadFile(const SPath& path) {
+SFile* SFileSystem::loadFile(const SPath& path, bool binary) {
     
     // We dont even bother with directories, they cant be loaded anyways
     if (!path.is_directory) {
@@ -240,7 +243,7 @@ SFile* SFileSystem::loadFile(const SPath& path) {
     
             // Create a new file, give the root directory to it
             std::string full_path = root_directory + path.path_str;
-            SFile* new_file = new SFile(full_path);
+            SFile* new_file = new SFile(full_path, binary);
     
             // Make sure that we are good
             if (fileExitsAtPath(path)) {
