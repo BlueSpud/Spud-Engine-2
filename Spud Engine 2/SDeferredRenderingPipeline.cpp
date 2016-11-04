@@ -40,15 +40,14 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     light_graph = new SSimpleLightGraph();
     
     // Create a temporary light
-    light = new SPointLight();
-    light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
-    light->light_color = glm::vec3(0.4, 0.4, 0.4);
+//    light = new SPointLight();
+//    light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
+//    light->light_color = glm::vec3(0.4, 0.4, 0.4);
     
     //light_graph->addLight(light);
     
     light = new SDirectionalLight();
     light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
-    light->light_color = glm::vec3(0.4, 0.4, 0.4);
     
     light->casts_shadow = true;
     
@@ -210,5 +209,5 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     lit_shader->bindUniform(view_pos_u);
     
     SGL::drawRect(glm::vec2(0, 0), glm::vec2(viewport_2D->screen_size.x, viewport_2D->screen_size.y));
-    
+
 }

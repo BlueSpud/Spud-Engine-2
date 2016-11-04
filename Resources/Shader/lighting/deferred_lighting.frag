@@ -44,6 +44,12 @@ float depth;
 vec3 position;
 vec3 normal;
 
+vec3 lerp(vec3 a, vec3 b, float percent) {
+    
+    return a * percent + b * (1.0 - percent);
+    
+}
+
 float getShadowTerm(int matrix, vec3 L) {
     
     // Get the position in the shadow map
@@ -69,7 +75,7 @@ float G1(float NDV, float k) {
 float getDiffuseTerm(float NDL) {
 
     // Diffuse intensity uses the Lambertian reflectance model, ambient is added here
-    return clamp(-NDL * (1.0 - metalic), 0.0, 1.0);
+    return clamp(-NDL, 0.0, 1.0);
 
 }
 
@@ -83,14 +89,14 @@ float getSpecularTerm(vec3 L, float NDL) {
     float a_sqrd = a * a;
 
     // Get G
-    NDH = dot(normal, -H);
+    NDH = dot(normal, H);
     float D_den = NDH * NDH * (a_sqrd - 1.0) + 1.0;
     D_den = D_den * D_den * 3.14159;
 
     float D = a_sqrd / D_den;
 
     // Get G
-    float k = 2.0 / sqrt(3.14159 * (a + 2));
+    float k = 2.0 / sqrt(3.14159 * (a + 2.0));
     float G = G1(NDL, k) * G1(NDV, k);
 
     return clamp((fresnel * D * G) / (4.0 * NDL * NDV), 0.0, 1.0);
@@ -113,7 +119,7 @@ void main() {
     vec4 orm = texture(tex_orm, tex_coord0);
     roughness = orm.y;
     inverse_roughness = 1.0 - roughness;
-    metalic = max(orm.z, 0.12);
+    metalic = orm.z;
     float occlusion = orm.x * texture(tex_ambient_occlusion, tex_coord0).r;
 
     // Get position from depth
@@ -127,7 +133,7 @@ void main() {
     NDV = dot(normal, V);
 
     // Calculate fresnel term F
-    float F0 = clamp(roughness, 0.05, 1.0);
+    float F0 = clamp(metalic, 0.05, 1.0);
     float fresnel_pow = pow(1.0 + NDV, fresnel_pow);
     fresnel = F0 + (1.0 - F0) * fresnel_pow;
 
@@ -183,15 +189,18 @@ void main() {
 
     // Get the reflection color
     vec3 reflection = reflect(-V, normal);
-    vec3 reflection_color = textureLod(tex_cube, reflection, roughness * 12.0).xyz;
+    
+    // Mip map selection is done with a cube root
+    float reflection_mip_map = (pow(roughness, 0.3333333)) * 12.0;
+    vec3 reflection_color = textureLod(tex_cube, reflection, reflection_mip_map).xyz;
 
-    vec3 fresnel_reflection = reflection_color * fresnel_pow * inverse_roughness;
-    vec3 metalic_reflection = reflection_color * inverse_roughness * metalic * inverse_roughness;
+    vec3 fresnel_reflection = reflection_color * fresnel_pow;
+    vec3 metalic_reflection = reflection_color * metalic;
 
     // Combine lighting and texture
-    vec3 color = albedo * occlusion * (fresnel_reflection + metalic_reflection + diffuse_acc + specular_acc * roughness + 0.2 * roughness);
-
-    out_color = vec4(color, 1.0);
+    vec3 color = albedo * (lerp(specular_acc, diffuse_acc, metalic) + 0.12) + fresnel_reflection * inverse_roughness + metalic_reflection * albedo * inverse_roughness;
+    
+    out_color = vec4(color * occlusion, 1.0);
 
 
 }

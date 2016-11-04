@@ -1,4 +1,4 @@
-model:Model/cornell_box.obj
+model:Model/cornell_box.smdl
 
 mat:Material/test.mat
 

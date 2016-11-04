@@ -71,6 +71,8 @@ class SFile {
         bool getNextTokenWithDeliminator(char deliminator, std::string& destination);
         bool bad();
     
+        void read(void* to_place, std::streamsize size);
+    
     private:
     
         SFile();

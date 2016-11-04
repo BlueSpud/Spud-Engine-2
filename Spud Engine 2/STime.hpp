@@ -35,7 +35,7 @@ class STime : public SSubsystem {
     
         static void update(const SEvent& event);
     
-    private:
+    //private:
     
         static double time_since_startup;
     

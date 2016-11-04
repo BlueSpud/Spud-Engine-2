@@ -150,17 +150,17 @@ int main(int argc, char* argv[]) {
     
     SSimpleSceneGraph scene_graph;
     SMesh* mesh;
-    mesh = new SMesh(SPath("Mesh/cornell_box.mesh"));
+    mesh = new SMesh(SPath("Mesh/kirov.mesh"));
     //mesh->transform.translation.z = -1.0;
     //mesh->transform.translation.x = -3.0;
     
     scene_graph.addObject(mesh);
     
-    mesh = new SMesh(SPath("Mesh/metal.mesh"));
-    mesh->transform.translation.y = 2.0;
+    //mesh = new SMesh(SPath("Mesh/machine.mesh"));
+    //mesh->transform.translation.y = 2.0;
     //mesh->transform.translation.z = -1.0;
     
-    scene_graph.addObject(mesh);
+    //scene_graph.addObject(mesh);
     
     //mesh = new SMesh(SPath("Mesh/plane.mesh"));
     

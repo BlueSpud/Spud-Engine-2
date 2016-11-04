@@ -170,6 +170,13 @@ bool SFile::bad() {
     return false;
 }
 
+void SFile::read(void* to_place, std::streamsize size) {
+    
+    // Read from the stream
+    in_stream.read((char*)to_place, size);
+    
+}
+
 /******************************************************************************
  *  Functions for the file system class                                       *
  ******************************************************************************/

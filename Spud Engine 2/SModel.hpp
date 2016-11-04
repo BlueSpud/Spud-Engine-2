@@ -26,7 +26,7 @@ enum SModelBuffers {
     buffer_normal,
     buffer_tex_coord,
     buffer_tangent,
-    //buffer_indicies
+    buffer_indicies,
     
     buffer_count
 };
@@ -40,14 +40,15 @@ struct SModelUpload : public SGLUpload {
     virtual void upload();
     virtual void unload();
     
-    float* verts;
-    float* normals;
-    float* tex_coords;
-    float* tangents;
+    glm::vec3* verts;
+    glm::vec3* normals;
+    glm::vec2* tex_coords;
+    glm::vec3* tangents;
     
-    unsigned int* indicies;
+    std::vector<glm::ivec3>* indicies;
     
     unsigned int face_count;
+    unsigned int vertex_count;
     
     // Storage for the VAO
     GLuint* array_id;
@@ -70,6 +71,13 @@ struct SModelUnload : public SGLUpload {
     GLuint buffer_ids[buffer_count];
     
 };
+
+/******************************************************************************
+ *  Declaration for tokens                                                    *
+ ******************************************************************************/
+
+#define END_OF_FILE_TOKEN 0x00
+#define NEW_MATERIAL_TOKEN 0xFF
 
 /******************************************************************************
  *  Definition for model                                                      *
@@ -96,14 +104,14 @@ class SModel : public SResource {
         SFile* file;
     
         // Storage for the data before we upload it
-        float* verts;
-        float* normals;
-        float* tex_coords;
-        float* tangents;
+        glm::vec3* verts;
+        glm::vec3* normals;
+        glm::vec2* tex_coords;
+        glm::vec3* tangents;
     
-        unsigned int* indicies;
+        std::vector<glm::ivec3>* indicies;
     
-        unsigned int face_count;
+        std::vector<unsigned int> draw_calls;
     
         // Storage for the VAO
         GLuint array_id;
