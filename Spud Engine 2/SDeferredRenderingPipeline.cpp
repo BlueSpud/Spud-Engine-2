@@ -89,7 +89,7 @@ void SDeferredRenderingPipleline::unload() {
     
 }
 
-void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, SSceneGraph& scene_graph) {
+void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& camera, double interpolation) {
     
     /******************************************************************************
      * 3D viewport setup                                                          *
@@ -103,12 +103,15 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     glm::mat4 view_matrix = camera.getCameraMatrix(interpolation);
     glm::mat4 projection_view_matrix = projection_matrix_3D * view_matrix;
     
+    // Calculate the view frustum
+    //glm::vec3* camera_frustum = SCamera::calculateFrustumWithPlanes(projection_view_matrix, 0.0, 1.0);
+    
     /******************************************************************************
      * Shadow mapping updates                                                     *
      ******************************************************************************/
 
     light_graph->cullLights(projection_view_matrix);
-    light_graph->updateShadows(camera, scene_graph, interpolation);
+    light_graph->updateShadows(scene_graph, projection_matrix_3D, view_matrix, interpolation);
     
     /******************************************************************************
      * Gbuffer render                                                             *
@@ -208,6 +211,6 @@ void SDeferredRenderingPipleline::render(double interpolation, SCamera& camera, 
     
     lit_shader->bindUniform(view_pos_u);
     
-    SGL::drawRect(glm::vec2(0, 0), glm::vec2(viewport_2D->screen_size.x, viewport_2D->screen_size.y));
+    SGL::drawRect(glm::vec2(0, 0), viewport_2D->screen_size);
 
 }

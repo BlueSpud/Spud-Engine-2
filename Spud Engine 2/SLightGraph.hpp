@@ -26,7 +26,7 @@ class SLightGraph {
         virtual ~SLightGraph();
     
         virtual void cullLights(glm::mat4& projection_view_matrix) = 0;
-        virtual void updateShadows(SCamera& scene_camera, SSceneGraph& scene_graph, double interpolation) = 0;
+        virtual void updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_matrix, glm::mat4& view_matrix, double interpolation) = 0;
     
         virtual void addLight(SLight* light) = 0;
         virtual void removeLight(SLight* light) = 0;
@@ -54,7 +54,7 @@ class SSimpleLightGraph : public SLightGraph {
         SSimpleLightGraph();
     
         virtual void cullLights(glm::mat4& projection_view_matrix);
-        virtual void updateShadows(SCamera& scene_camera, SSceneGraph& scene_graph, double interpolation);
+        virtual void updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_matrix, glm::mat4& view_matrix, double interpolation);
     
         virtual void addLight(SLight* light);
         virtual void removeLight(SLight* light);

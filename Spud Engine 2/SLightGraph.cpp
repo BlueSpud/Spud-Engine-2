@@ -71,9 +71,12 @@ void SSimpleLightGraph::cullLights(glm::mat4& projection_view_matrix) {
     
 }
 
-void SSimpleLightGraph::updateShadows(SCamera& scene_camera, SSceneGraph& scene_graph, double interpolation) {
+void SSimpleLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_matrix, glm::mat4& view_matrix, double interpolation) {
 
     bool bound_shadow_map_buffer = false;
+    
+    // Generate the cascades for shadow mapping
+    glm::vec3* close_frustum = SCamera::getFrustumWithPlanes(projection_matrix, view_matrix, 0.1, 15.0);
     
     // Take the list of lights that need to be updated and render their shadow maps
     for (int i= 0; i < culled_lights.size(); i++)
@@ -91,7 +94,7 @@ void SSimpleLightGraph::updateShadows(SCamera& scene_camera, SSceneGraph& scene_
                 
             }
             
-            culled_lights[i]->renderShadowMap(scene_graph, interpolation);
+            culled_lights[i]->renderShadowMap(scene_graph, close_frustum, interpolation);
             
         }
     
@@ -101,6 +104,9 @@ void SSimpleLightGraph::updateShadows(SCamera& scene_camera, SSceneGraph& scene_
         glDisable(GL_SCISSOR_TEST);
         
     }
+    
+    // Delete the cascandes
+    delete close_frustum;
 
 }
 

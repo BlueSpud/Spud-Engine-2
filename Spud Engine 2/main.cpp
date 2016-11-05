@@ -151,6 +151,8 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph scene_graph;
     SMesh* mesh;
     mesh = new SMesh(SPath("Mesh/kirov.mesh"));
+    
+    mesh->transform.scale = glm::vec3(10.0);
     //mesh->transform.translation.z = -1.0;
     //mesh->transform.translation.x = -3.0;
     
@@ -267,7 +269,7 @@ int main(int argc, char* argv[]) {
         double interpolation = loopElapsedTime / time_tick;
         
         // Render using a deferred rendering pipline
-        deferred_pipeline->render(interpolation, camera, scene_graph);
+        deferred_pipeline->render(scene_graph, camera, interpolation);
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
         

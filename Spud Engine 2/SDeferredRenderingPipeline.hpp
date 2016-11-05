@@ -37,7 +37,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport3D* _viewport_3D);
         void unload();
     
-        virtual void render(double interpolation, SCamera& camera, SSceneGraph& scene_graph);
+        virtual void render(SSceneGraph& scene_graph, SCamera& camera, double interpolation);
     
         SLight* light;
     

@@ -33,7 +33,7 @@ SLight::SLight() {
 
 SPointLight::SPointLight() : bounding_box(glm::vec3(-4.0), glm::vec3(4.0), &transform) { /* No initialization */ }
 
-void SPointLight::renderShadowMap(SSceneGraph& scene_graph, double interpolation) {
+void SPointLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
     
     // Shadows not supported currently!
     
@@ -57,20 +57,65 @@ bool SPointLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
  *  Functions for directional light                                           *
  ******************************************************************************/
 
-void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, double interpolation) {
+void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
     
     // Create a camera that we can use to render the scene
     SCamera camera;
     camera.transform = transform;
-    
+    camera.transform.translation = glm::vec3(0.0);
+
+    // Make a viewport and scissor so we only clear our part of the shadow atlas
     SViewport3D viewport = SViewport3D(glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE), shadow_map_position * SHADOW_MAP_ATLAS_TILE_SIZE, 45.0f, glm::vec2(0.1, 1000.0));
-    
-    // Bind the framebuffer and the viewport
-    glm::mat4 projection_matrix = SGL::getProjectionMatrix3D(viewport);
-    SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
-    
     SGL::setUpViewport(viewport);
     glScissor(viewport.screen_pos.x, viewport.screen_pos.y, viewport.screen_size.x, viewport.screen_size.y);
+
+    // Calculate the projection matrix, for directional lights we use orthographic projection
+    glm::mat4 projection_matrix = glm::ortho(1.0f, -1.0f, 1.0f, -1.0f, LIGHT_DIRECTIONAL_NEAR, LIGHT_DIRECTIONAL_FAR);
+    
+    // Generate a crop matrix to maximize shadow map resolution
+    // First project the frustum to light space and get a bounding box
+    glm::mat4 view_matrix = camera.getCameraMatrix(interpolation);
+    glm::mat4 light_projection_view_matrix = projection_matrix * view_matrix;
+    glm::vec2 mins, maxes;
+    
+    for (int i = 0; i < 8; i++) {
+        
+        glm::vec4 projected_point = light_projection_view_matrix * glm::vec4(close_frustum[i], 1.0);
+        
+        if (i == 0) {
+            
+            // The first point will always be the min and max
+            mins = (glm::vec2)projected_point;
+            maxes = (glm::vec2)projected_point;
+            
+        } else {
+        
+            // Check if this point makes up a min or a max on one cordinate
+            mins.x = glm::min(mins.x, projected_point.x);
+            mins.y = glm::min(mins.y, projected_point.y);
+        
+            maxes.x = glm::max(maxes.x, projected_point.x);
+            maxes.y = glm::max(maxes.y, projected_point.y);
+        
+        }
+        
+    }
+    
+    
+    // Now that we know where we need to crop to, we can make a crop matrix
+    glm::vec2 S = glm::vec2(2.0 / (maxes.x - mins.x), 2.0 / (maxes.y - mins.y));
+    glm::vec2 O = glm::vec2(-0.5 * (maxes.x + mins.x) * S.x, -0.5 * (maxes.y + mins.y) * S.y);
+    
+    glm::mat4 crop_matrix = glm::mat4(S.x,0,  0,  0,
+                                     0,  S.y,0,  0,
+                                     0,  0,  1.0,0,
+                                     O.x,O.y,0,  1);
+
+    // Make a new projection matrix and a new combined light matrix
+    projection_matrix = crop_matrix * projection_matrix;
+    SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
+    
+    light_projection_view_matrix = projection_matrix * view_matrix;
     
     // Clear the framebuffer and draw the scene
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -78,21 +123,15 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, double interpo
     // Render the scene from the camera
     scene_graph.render(camera, SLight::shadow_shader, interpolation);
 
-    light_matrix = SLight::bias * projection_matrix * camera.getCameraMatrix(interpolation);
+    light_matrix = SLight::bias * light_projection_view_matrix;
     
 }
 
 bool SDirectionalLight::needsShadowUpdate() {
    
-    // If we need an update, update oursleves
-    if (needs_shadow_update) {
-        
-        needs_shadow_update = false;
-        return true;
-        
-    }
-    
-    return false;
+    // Directional lights are now using perspective shadow mapping so they need to be updated every frame
+    // TODO give option to not use perspective shadow mapping so it doesnt need to be updated every frame
+    return true;
    
 }
 

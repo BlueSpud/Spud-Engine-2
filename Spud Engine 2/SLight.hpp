@@ -31,7 +31,7 @@ class SLight {
         SLight();
         virtual ~SLight() { /* stub */ }
     
-        virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation) = 0;
+    virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) = 0;
  
         virtual bool needsShadowUpdate() = 0;
     
@@ -62,7 +62,7 @@ class SPointLight : public SLight {
     
         SPointLight();
     
-        virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation);
+        virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation);
         virtual bool needsShadowUpdate();
     
         virtual bool shouldBeCulled(glm::mat4& projection_view_matrix);
@@ -81,7 +81,7 @@ class SDirectionalLight : public SLight {
     
     public:
     
-        virtual void renderShadowMap(SSceneGraph& scene_graph, double interpolation);
+        virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation);
         virtual bool needsShadowUpdate();
     
         virtual bool shouldBeCulled(glm::mat4& projection_view_matrix);

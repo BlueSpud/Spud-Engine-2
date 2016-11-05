@@ -28,6 +28,8 @@ class SCamera {
         glm::mat4 translateToCameraSpace();
         glm::mat4 translateToCameraSpace(double interpolation);
     
+        static glm::vec3* getFrustumWithPlanes(glm::mat4& projection_matrix, glm::mat4& view_matrix, float near_plane, float far_plane);
+    
         // Store the last camera position
         static glm::vec3 view_position;
     

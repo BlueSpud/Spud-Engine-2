@@ -34,7 +34,7 @@ class SRenderingPipeline {
     
         virtual void unload() = 0;
     
-        virtual void render(double interpolation, SCamera& camera, SSceneGraph& scene_graph) = 0;
+        virtual void render(SSceneGraph& scene_graph, SCamera& camera, double interpolation) = 0;
     
         void addPostProcessPass(SPostProcessPass pass);
     
