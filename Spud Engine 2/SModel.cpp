@@ -102,6 +102,16 @@ bool SModel::load(const SPath& path) {
             
             if (token == NEW_MATERIAL_TOKEN) {
                 
+                // Read the material name that we need
+                unsigned int material_name_length;
+                file->read((char*)&material_name_length, sizeof(unsigned int));
+                
+                char* material_path_s = new char[material_name_length];
+                file->read(material_path_s, sizeof(char) * material_name_length);
+                
+                SPath material_path = SPath(material_path_s);
+                std::cout << "Found material in model " << material_path.getPathAsAbsolutePath() << std::endl;
+                
                 // Read the index count
                 unsigned int index_count;
                 file->read((char*)&index_count, sizeof(unsigned int));

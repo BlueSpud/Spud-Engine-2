@@ -150,9 +150,8 @@ int main(int argc, char* argv[]) {
     
     SSimpleSceneGraph scene_graph;
     SMesh* mesh;
-    mesh = new SMesh(SPath("Mesh/kirov.mesh"));
-    
-    mesh->transform.scale = glm::vec3(10.0);
+    mesh = new SMesh(SPath("Mesh/metal.mesh"));
+
     //mesh->transform.translation.z = -1.0;
     //mesh->transform.translation.x = -3.0;
     
