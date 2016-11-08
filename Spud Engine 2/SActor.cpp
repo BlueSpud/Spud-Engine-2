@@ -8,6 +8,10 @@
 
 #include "SActor.hpp"
 
+/******************************************************************************
+ *  Functions for actor                                                       *
+ ******************************************************************************/
+
 SActor::SActor() {
     
     // Create a root component for the children to attatch to
@@ -19,7 +23,7 @@ void SActor::render(bool render_material, double interpolation) {
 
     // Get the transform matrix and make it the model matrix
     glm::mat4 model_matrix = SGL::transformToMatrix(transform);
-    SGL::loadMatrix(model_matrix, MAT_MODEL_MATRIX);
+    SGL::mulMatrix(model_matrix, MAT_MODEL_MATRIX);
     
     // Render the root component, the others should follow
     root_component->render(render_material, interpolation);

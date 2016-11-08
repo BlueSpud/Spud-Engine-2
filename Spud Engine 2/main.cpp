@@ -12,10 +12,12 @@
 #include "SKeyboardSystem.hpp"
 #include "SMouseSystem.hpp"
 #include "SDeferredRenderingPipeline.hpp"
-#include "SStaticMeshInstance.hpp"
 #include "SCamera.hpp"
 #include "SHotLoadSystem.hpp"
 #include "SFramebuffer.hpp"
+
+#include "SActor.hpp"
+#include "SStaticMeshComponent.hpp"
 
 double speed = 0.0;
 double speed_x = 0.0;
@@ -152,21 +154,17 @@ int main(int argc, char* argv[]) {
     
     // Access the mesh
     SPath mesh_path = SPath("Model/material_test.smdl");
+    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(mesh_path);
+    
+    SStaticMeshComponent* component = new SStaticMeshComponent();
+    component->setStaticMesh(mesh);
+    
+    SActor* test_actor = new SActor();
+    test_actor->root_component->attatchComponent(component);
+    
+    scene_graph.addObject(test_actor);
     scene_graph.addObject((SStaticMeshInstance*)SResourceManager::getResource(mesh_path));
     
-    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(mesh_path);
-    mesh->transform.translation.x = 5.0;
-    
-    SPath material_path = SPath("Material/machine_material_test.mat");
-    mesh->setMaterial((SMaterial*)SResourceManager::getResource(material_path), 0);
-    
-    scene_graph.addObject(mesh);
-    
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(mesh_path);
-    mesh->transform.translation.x = -4.0;
-    mesh->transform.translation.y = -4.0;
-    
-    scene_graph.addObject(mesh);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     

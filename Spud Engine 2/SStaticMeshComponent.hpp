@@ -1,34 +1,33 @@
 //
-//  SActor.hpp
+//  SStaticMeshComponent.hpp
 //  Spud Engine 2
 //
 //  Created by Logan Pazol on 11/8/16.
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#ifndef SActor_hpp
-#define SActor_hpp
+#ifndef SStaticMeshComponent_hpp
+#define SStaticMeshComponent_hpp
 
-#include "SObject.hpp"
 #include "SComponent.hpp"
+#include "SStaticMeshInstance.hpp"
 
 /******************************************************************************
- *  Definition for actor                                                      *
+ *  Definition for static mesh component                                      *
  ******************************************************************************/
 
-class SActor : public SObject {
+class SStaticMeshComponent : public SComponent {
     
     public:
     
-        SActor();
-    
         virtual void render(bool render_material, double interpolation);
-        virtual void update();
+        void setStaticMesh(SStaticMeshInstance* new_mesh_instance);
     
-    //protected:
+    private:
     
-        SComponent* root_component;
+        SStaticMeshInstance* mesh_instance;
+    
     
 };
 
-#endif /* SActor_hpp */
+#endif /* SStaticMeshComponent_hpp */

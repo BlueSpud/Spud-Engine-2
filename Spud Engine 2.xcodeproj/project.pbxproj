@@ -52,6 +52,7 @@
 		02E7A7751DD2325E00F3164F /* SActor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02E7A7731DD2325E00F3164F /* SActor.cpp */; };
 		02E7A7791DD232CA00F3164F /* SComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02E7A7771DD232CA00F3164F /* SComponent.cpp */; };
 		02E7FC831DB545D600955052 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E7FC821DB545D600955052 /* libfreeimage.a */; };
+		02F547B31DD271EB005DAB0D /* SStaticMeshComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02F547B11DD271EB005DAB0D /* SStaticMeshComponent.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -152,6 +153,8 @@
 		02E7A7771DD232CA00F3164F /* SComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SComponent.cpp; sourceTree = "<group>"; };
 		02E7A7781DD232CA00F3164F /* SComponent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SComponent.hpp; sourceTree = "<group>"; };
 		02E7FC821DB545D600955052 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = FreeImage/lib/libfreeimage.a; sourceTree = "<group>"; };
+		02F547B11DD271EB005DAB0D /* SStaticMeshComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SStaticMeshComponent.cpp; sourceTree = "<group>"; };
+		02F547B21DD271EB005DAB0D /* SStaticMeshComponent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMeshComponent.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -465,12 +468,22 @@
 		02E7A7761DD2329B00F3164F /* Component Based */ = {
 			isa = PBXGroup;
 			children = (
+				02F547B01DD270C5005DAB0D /* Components */,
 				02E7A7731DD2325E00F3164F /* SActor.cpp */,
 				02E7A7741DD2325E00F3164F /* SActor.hpp */,
 				02E7A7771DD232CA00F3164F /* SComponent.cpp */,
 				02E7A7781DD232CA00F3164F /* SComponent.hpp */,
 			);
 			name = "Component Based";
+			sourceTree = "<group>";
+		};
+		02F547B01DD270C5005DAB0D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				02F547B11DD271EB005DAB0D /* SStaticMeshComponent.cpp */,
+				02F547B21DD271EB005DAB0D /* SStaticMeshComponent.hpp */,
+			);
+			name = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -533,6 +546,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				029865801D8460DC005EED43 /* SCamera.cpp in Sources */,
+				02F547B31DD271EB005DAB0D /* SStaticMeshComponent.cpp in Sources */,
 				02328BEF1DD185E70083B0BB /* SStaticMeshInstance.cpp in Sources */,
 				025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */,
 				02716E3F1DC2A5DE00EFC656 /* SRectPacker.cpp in Sources */,
