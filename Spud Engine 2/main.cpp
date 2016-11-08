@@ -11,8 +11,8 @@
 #include "STime.hpp"
 #include "SKeyboardSystem.hpp"
 #include "SMouseSystem.hpp"
-#include "SMesh.hpp"
 #include "SDeferredRenderingPipeline.hpp"
+#include "SStaticMeshInstance.hpp"
 #include "SCamera.hpp"
 #include "SHotLoadSystem.hpp"
 #include "SFramebuffer.hpp"
@@ -149,23 +149,24 @@ int main(int argc, char* argv[]) {
     e_listener.listenToEvent(EVENT_MOUSE_MOVE, &mouseMove);
     
     SSimpleSceneGraph scene_graph;
-    SMesh* mesh;
-    mesh = new SMesh(SPath("Mesh/metal.mesh"));
-
-    //mesh->transform.translation.z = -1.0;
-    //mesh->transform.translation.x = -3.0;
+    
+    // Access the mesh
+    SPath mesh_path = SPath("Model/material_test.smdl");
+    scene_graph.addObject((SStaticMeshInstance*)SResourceManager::getResource(mesh_path));
+    
+    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(mesh_path);
+    mesh->transform.translation.x = 5.0;
+    
+    SPath material_path = SPath("Material/machine_material_test.mat");
+    mesh->setMaterial((SMaterial*)SResourceManager::getResource(material_path), 0);
     
     scene_graph.addObject(mesh);
     
-    //mesh = new SMesh(SPath("Mesh/machine.mesh"));
-    //mesh->transform.translation.y = 2.0;
-    //mesh->transform.translation.z = -1.0;
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(mesh_path);
+    mesh->transform.translation.x = -4.0;
+    mesh->transform.translation.y = -4.0;
     
-    //scene_graph.addObject(mesh);
-    
-    //mesh = new SMesh(SPath("Mesh/plane.mesh"));
-    
-    //scene_graph.addObject(mesh);
+    scene_graph.addObject(mesh);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     

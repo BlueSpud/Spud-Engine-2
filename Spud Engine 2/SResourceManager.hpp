@@ -39,6 +39,8 @@ class SResource {
         virtual void unload() = 0;
         virtual void hotload(const SPath& path);
     
+        virtual SResource* resource();
+    
         bool uploaded = false;
         std::vector<SPath> paths;
         std::vector<long> modified_times;

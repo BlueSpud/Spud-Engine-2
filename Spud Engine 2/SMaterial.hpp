@@ -12,46 +12,16 @@
 #include "SShader.hpp"
 #include "STexture.hpp"
 
-// Forward declarations
-class SMaterial;
-
-/******************************************************************************
- *  Definition for material instance                                          *
- ******************************************************************************/
-
-class SMaterialInstance {
-    
-    friend class SMaterial;
-    
-    public:
-    
-        void useMaterial(SShader* shader);
-        long getMaterialID();
-    
-        SShader* getShader();
-    
-    private:
-    
-        SMaterialInstance();
-        SMaterial* parent_mat;
-    
-        std::vector<STexture*>textures;
-    
-};
-
 /******************************************************************************
  *  Definition for material                                                   *
  ******************************************************************************/
 
 class SMaterial : public SResource {
     
-    friend class SMaterialInstance;
-    
     public:
     
         static SResource* allocate();
-    
-        SMaterialInstance* createMaterialInstance(std::map<std::string, STexture*>& _textures);
+        void bind();
     
     protected:
     
@@ -60,21 +30,14 @@ class SMaterial : public SResource {
     
         void uploadTextureIDs(SShader* shader);
     
-        long mat_id;
-    
     private:
 
+        SShader* shader;
     
-        std::vector<std::string>req_textures;
+        std::map<std::string, STexture*>textures;
         std::vector<SUniform*>uniforms;
     
-        int req_textures_count;
-    
-        std::vector<SMaterialInstance*>instances;
-    
-        static long next_mat_id;
-        static long current_mat_id;
-    
+        static SMaterial* currently_bound_material;
     
 };
 

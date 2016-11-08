@@ -34,7 +34,7 @@ class SSceneGraph {
     
     public:
     
-        virtual void render(SCamera& camera, SShader* shader,  double interpolation) = 0;
+        virtual void render(SCamera& camera, bool render_material,  double interpolation) = 0;
     
         virtual void addObject(SObject* object) = 0;
         virtual void removeObject(SObject* object) = 0;
@@ -51,7 +51,7 @@ class SSimpleSceneGraph : public SSceneGraph {
     
     public:
     
-        virtual void render(SCamera& camera, SShader* shader, double interpolation);
+        virtual void render(SCamera& camera, bool render_material, double interpolation);
     
         virtual void addObject(SObject* object);
         virtual void removeObject(SObject* object);

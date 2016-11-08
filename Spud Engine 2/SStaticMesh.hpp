@@ -1,26 +1,30 @@
 //
-//  SModel.hpp
+//  SStaticMesh.hpp
 //  Spud Engine 2
 //
 //  Created by Logan Pazol on 9/2/16.
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#ifndef SModel_hpp
-#define SModel_hpp
+#ifndef SStaticMesh_hpp
+#define SStaticMesh_hpp
 
 #include <glm/glm.hpp>
 
 #include "SResourceManager.hpp"
 #include "SGLUpload.hpp"
+#include "SMaterial.hpp"
 
 #define MODEL_BOUNDING_BOX_PADDING 0.1f
+
+// Forward declarations
+class SStaticMeshInstance;
 
 /******************************************************************************
  *  Definition for enum for VBOs                                              *
  ******************************************************************************/
 
-enum SModelBuffers {
+enum SStaticMeshBuffers {
     
     buffer_position,
     buffer_normal,
@@ -35,7 +39,7 @@ enum SModelBuffers {
  *  Definition for upload                                                     *
  ******************************************************************************/
 
-struct SModelUpload : public SGLUpload {
+struct SStaticMeshUpload : public SGLUpload {
     
     virtual void upload();
     virtual void unload();
@@ -62,7 +66,7 @@ struct SModelUpload : public SGLUpload {
  *  Definition for unload                                                     *
  ******************************************************************************/
 
-struct SModelUnload : public SGLUpload {
+struct SStaticMeshUnload : public SGLUpload {
   
     virtual void upload();
     virtual void unload();
@@ -80,16 +84,19 @@ struct SModelUnload : public SGLUpload {
 #define NEW_MATERIAL_TOKEN 0xFF
 
 /******************************************************************************
- *  Definition for model                                                      *
+ *  Definition for static mesh                                                *
  ******************************************************************************/
 
-class SModel : public SResource {
+class SStaticMesh : public SResource {
+    
+    friend class SStaticMeshInstance;
     
     public:
     
         static SResource* allocate();
+        virtual SResource* resource();
     
-        void render();
+    void render(bool render_material, const std::vector<SMaterial*>& instance_material);
         void getModelExtents(glm::vec3& _mins, glm::vec3& _maxes);
 
     
@@ -111,6 +118,7 @@ class SModel : public SResource {
     
         std::vector<glm::ivec3>* indicies;
     
+        std::vector<SMaterial*> materials;
         std::vector<unsigned int> draw_calls;
     
         // Storage for the VAO
@@ -119,7 +127,7 @@ class SModel : public SResource {
         // Storage for the VBOs
         GLuint buffer_ids[buffer_count];
     
-        SModelUpload* upload;
+        SStaticMeshUpload* upload;
     
         // Min and maxes of the model
         glm::vec3 mins;
@@ -127,4 +135,4 @@ class SModel : public SResource {
     
 };
 
-#endif /* SModel_hpp */
+#endif /* SStaticMesh_hpp */

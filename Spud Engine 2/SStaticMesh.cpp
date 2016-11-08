@@ -1,26 +1,33 @@
 //
-//  SModel.cpp
+//  SStaticMesh.cpp
 //  Spud Engine 2
 //
 //  Created by Logan Pazol on 9/2/16.
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#include "SModel.hpp"
+#include "SStaticMesh.hpp"
+#include "SStaticMeshInstance.hpp"
 
 /******************************************************************************
  *  Registration for supported model extensions                               *
  ******************************************************************************/
 
-REGISTER_RESOURCE_CLASS(smdl, SModel);
+REGISTER_RESOURCE_CLASS(smdl, SStaticMesh);
 
 /******************************************************************************
  *  Functions for model                                                       *
  ******************************************************************************/
 
-SResource* SModel::allocate() { return new SModel(); }
+SResource* SStaticMesh::allocate() { return new SStaticMesh(); }
 
-void SModel::render() {
+SResource* SStaticMesh::resource() {
+    
+    return new SStaticMeshInstance(this);
+
+}
+
+void SStaticMesh::render(bool render_material, const std::vector<SMaterial*>& instance_material) {
     
     // Bind the array and then draw
     glBindVertexArray(array_id);
@@ -28,6 +35,14 @@ void SModel::render() {
     
     int sum = 0;
     for (int i = 0; i < draw_calls.size(); i++) {
+        
+        if (render_material)
+            instance_material[i]->bind();
+        
+        // Force an upload of the matricies, needs to be done for every material just in case there is a shader change
+        SGL::flushMatrix(MAT_PROJECTION_MATRIX);
+        SGL::flushMatrix(MAT_MODEL_MATRIX);
+        SGL::flushMatrix(MAT_VIEW_MATRIX);
         
         // Draw the array with an offset based on what we have already drawn
         glDrawElements(GL_TRIANGLES, draw_calls[i], GL_UNSIGNED_INT, (GLubyte*)(sizeof(unsigned int) * sum));
@@ -40,7 +55,7 @@ void SModel::render() {
     
 }
 
-void SModel::getModelExtents(glm::vec3& _mins, glm::vec3& _maxes) {
+void SStaticMesh::getModelExtents(glm::vec3& _mins, glm::vec3& _maxes) {
     
     // Save out the extents of the model
     _mins = mins;
@@ -48,7 +63,7 @@ void SModel::getModelExtents(glm::vec3& _mins, glm::vec3& _maxes) {
     
 }
 
-bool SModel::load(const SPath& path) {
+bool SStaticMesh::load(const SPath& path) {
     
     file = SFileSystem::loadFile(path, true);
     
@@ -106,11 +121,16 @@ bool SModel::load(const SPath& path) {
                 unsigned int material_name_length;
                 file->read((char*)&material_name_length, sizeof(unsigned int));
                 
-                char* material_path_s = new char[material_name_length];
+                // Get the path of the material
+                char* material_path_s = new char[material_name_length + 1];
                 file->read(material_path_s, sizeof(char) * material_name_length);
                 
-                SPath material_path = SPath(material_path_s);
-                std::cout << "Found material in model " << material_path.getPathAsAbsolutePath() << std::endl;
+                std::string material_path_std = material_path_s;
+                material_path_std = material_path_std.substr(0, material_name_length);
+                delete[] material_path_s;
+                
+                SPath material_path = SPath(material_path_std);
+                materials.push_back((SMaterial*)SResourceManager::getResource(material_path));
                 
                 // Read the index count
                 unsigned int index_count;
@@ -131,7 +151,7 @@ bool SModel::load(const SPath& path) {
         }
         
         // Create an upload
-        upload = new SModelUpload();
+        upload = new SStaticMeshUpload();
         upload->verts = verts;
         upload->normals = normals;
         upload->tex_coords = tex_coords;
@@ -155,7 +175,7 @@ bool SModel::load(const SPath& path) {
     
 }
 
-void SModel::unload() {
+void SStaticMesh::unload() {
 
     // Check if we havent already deleted these already, we might not have uploaded it yet
     if (uploaded) {
@@ -168,13 +188,13 @@ void SModel::unload() {
 
 }
 
-void SModel::hotload(const SPath& path) {
+void SStaticMesh::hotload(const SPath& path) {
     
     // Delete the last texture
     if (uploaded) {
         
         // Send a deletion command
-        SModelUnload* unload = new SModelUnload();
+        SStaticMeshUnload* unload = new SStaticMeshUnload();
         unload->array_id = array_id;
         
         // Copy the array
@@ -204,7 +224,7 @@ void SModel::hotload(const SPath& path) {
  *  Functions for model upload                                                *
  ******************************************************************************/
 
-void SModelUpload::upload() {
+void SStaticMeshUpload::upload() {
 
     // Generate the buffer for indicies
     
@@ -257,7 +277,7 @@ void SModelUpload::upload() {
 
 }
 
-void SModelUpload::unload() {
+void SStaticMeshUpload::unload() {
     
     // Delete the buffers in regular RAM
     delete verts;
@@ -272,11 +292,11 @@ void SModelUpload::unload() {
  *  Functions for model unload                                                *
  ******************************************************************************/
 
-void SModelUnload::upload() {
+void SStaticMeshUnload::upload() {
     
     // Delete model data
     glDeleteBuffers(buffer_count, buffer_ids);
     glDeleteVertexArrays(1, &array_id);
 }
 
-void SModelUnload::unload() { /* nothing */ }
+void SStaticMeshUnload::unload() { /* nothing */ }

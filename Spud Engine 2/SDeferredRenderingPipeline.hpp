@@ -56,6 +56,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
         // Temp stuff
         SSimpleLightGraph* light_graph;
+        STexture* test;
     
     
 };

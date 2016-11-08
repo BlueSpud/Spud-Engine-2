@@ -76,7 +76,7 @@ void SSimpleLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& proje
     bool bound_shadow_map_buffer = false;
     
     // Generate the cascades for shadow mapping
-    glm::vec3* close_frustum = SCamera::getFrustumWithPlanes(projection_matrix, view_matrix, 0.1, 15.0);
+    glm::vec3* close_frustum = SCamera::getFrustumWithPlanes(projection_matrix, view_matrix, 0.1, 10.0);
     
     // Take the list of lights that need to be updated and render their shadow maps
     for (int i= 0; i < culled_lights.size(); i++)
@@ -91,6 +91,9 @@ void SSimpleLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& proje
                 
                 // Enable scissor testing
                 glEnable(GL_SCISSOR_TEST);
+                
+                // Bind the shader
+                SLight::shadow_shader->bind();
                 
             }
             

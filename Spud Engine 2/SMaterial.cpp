@@ -8,41 +8,13 @@
 
 #include "SMaterial.hpp"
 
-long SMaterial::next_mat_id = 0;
-long SMaterial::current_mat_id = -1;
+SMaterial* SMaterial::currently_bound_material;
 
 /******************************************************************************
  *  Registration for supported material extensions                            *
  ******************************************************************************/
 
 REGISTER_RESOURCE_CLASS(mat, SMaterial);
-
-/******************************************************************************
- *  Functions for material instance                                           *
- ******************************************************************************/
-
-void SMaterialInstance::useMaterial(SShader* shader) {
-    
-    // Bind the textures
-    for (int i = 0; i < textures.size(); i++)
-        textures[i]->bind(i);
-    
-    // Make sure the shader is bound
-    bool did_bind = shader->bind();
-    
-    // If the shader was bound, reupload texture IDs
-    if (did_bind)
-        parent_mat->uploadTextureIDs(shader);
-    
-    // Bind the uniforms
-    for (int i = 0; i < parent_mat->uniforms.size(); i++)
-        shader->bindUniform(parent_mat->uniforms[i]);
-    
-}
-
-long SMaterialInstance::getMaterialID() { return parent_mat->mat_id; }
-
-SMaterialInstance::SMaterialInstance() { /* stub */ }
 
 /******************************************************************************
  *  Functions for material                                                    *
@@ -60,29 +32,29 @@ bool SMaterial::load(const SPath& path) {
         std::string line;
         while (file->getNextTokenWithDeliminator('\n', line)) {
             
-            if (line.compare(0, 4, "req:") == 0) {
+            if (line.compare(0, 2, "t:") == 0) {
                 
-                // We found a required texture
-                std::string tex_name = line.substr(4, line.length() - 4);
-                req_textures.push_back(tex_name);
+                // A texture was specifed, get the name of the texture and the path
+                std::string texture_name_and_path = line.substr(2, line.length() - 2);
+                int split_index = (int)texture_name_and_path.find(":");
+                
+                std::string texture_name = texture_name_and_path.substr(0, split_index);
+                SPath texture_path = SPath(texture_name_and_path.substr(split_index + 1, texture_name_and_path.length() - split_index));
+                
+                textures[texture_name] = (STexture*)SResourceManager::getResource(texture_path);
                 
             }
             
-            if (line.compare(0, 2, "u:") == 0) {
+            if (line.compare(0, 2, "s:") == 0) {
                 
-                // We found a required texture
-                std::string uniform_name = line.substr(2, line.length() - 2);
-                uniforms.push_back(SUniformManger::instance()->getUniformWithName(uniform_name));
+                // Get the path of the shader and load it up
+                SPath shader_path = SPath(line.substr(2, line.length() - 2));
+                shader = (SShader*)SResourceManager::getResource(shader_path);
                 
             }
+
             
         }
-        
-        req_textures_count = (int)req_textures.size();
-        
-        // Get a unique id for this material
-        mat_id = next_mat_id;
-        next_mat_id++;
         
         return true;
         
@@ -92,54 +64,57 @@ bool SMaterial::load(const SPath& path) {
 
 }
 
-SMaterialInstance* SMaterial::createMaterialInstance(std::map<std::string, STexture*>& _textures) {
+void SMaterial::bind() {
     
-    // Make sure we have enough textures
-    if (_textures.size() >= req_textures_count) {
+    // Check if this is already the currently bound material
+    //if (currently_bound_material != this) {
         
-        // Create an instance of this material, so we can use it
-        SMaterialInstance* instance = new SMaterialInstance();
-        instance->parent_mat = this;
+        currently_bound_material = this;
         
-        // Make sure what we had is what we need
-        for (int i = 0; i < req_textures_count; i++) {
+        // Bind the textures
+        std::map<std::string, STexture*>::iterator i = textures.begin();
+        int texture = 0;
+        
+        while (i != textures.end()) {
             
-            if (!_textures.count(req_textures[i])) {
-                
-                // Clean up
-                delete instance;
-                
-                SLog::verboseLog(SVerbosityLevel::Critical, "Attempted to create material instance with enough, but not the proper textures! Missing: %s", req_textures[i].c_str());
-                return nullptr;
-                
-            } else instance->textures.push_back(_textures[req_textures[i]]);
+            i->second->bind(texture);
+            
+            texture++;
+            i++;
             
         }
-    
-        instances.push_back(instance);
-    
-        return instance;
         
-    }
-    
-    SLog::verboseLog(SVerbosityLevel::Critical, "Attempted to create material instance without enough textures!");
-    return nullptr;
+        // Make sure the shader is bound
+        bool did_bind = shader->bind();
+        
+        // If the shader was bound, reupload texture IDs
+        if (did_bind)
+            uploadTextureIDs(shader);
+        
+        // Bind the uniforms
+        for (int i = 0; i < uniforms.size(); i++)
+            shader->bindUniform(uniforms[i]);
+        
+    // }
     
 }
 
 void SMaterial::uploadTextureIDs(SShader* shader) {
     
     // Go through the textures and assign Ids for them
-    for (int i = 0; i < req_textures_count; i++)
-        glUniform1i(SShader::getUniformLocation(shader, req_textures[i]), i);
+    std::map<std::string, STexture*>::iterator i = textures.begin();
+    int texture = 0;
+    
+    while (i != textures.end()) {
+        
+        glUniform1i(SShader::getUniformLocation(shader, i->first), texture);
+        
+        texture++;
+        i++;
+        
+    }
     
     
 }
 
-void SMaterial::unload() {
-
-    // Delete all the instances that we made
-    for (int i = 0; i < instances.size(); i++)
-        delete instances[i];
-
-}
+void SMaterial::unload() { /* stub */ }

@@ -77,6 +77,9 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
 //    
 //    light_graph->addLight(light);
     
+    SPath test_path = SPath("Texture/bricks_albedo.png");
+    test = (STexture*)SResourceManager::getResource(test_path);
+    
 }
 
 void SDeferredRenderingPipleline::unload() {
@@ -124,7 +127,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
     gbuffer->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    scene_graph.render(camera, gbuffer_shader, interpolation);
+    scene_graph.render(camera, true, interpolation);
     
     /******************************************************************************
      * Lighting pass                                                              *

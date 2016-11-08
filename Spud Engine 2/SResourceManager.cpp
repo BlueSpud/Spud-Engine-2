@@ -18,6 +18,7 @@ std::hash<std::string>SResourceManager::hasher;
 SResource* SResource::allocate() { return nullptr; }
 SResource::~SResource() { /* stub */ }
 void SResource::hotload(const SPath& path) { /* stub */ }
+SResource* SResource::resource() { return this; }
 
 /******************************************************************************
  *  Functions for resource allocation manager                                 *
@@ -117,7 +118,7 @@ SResource* SResourceManager::getResource(const SPath& resource_path) {
             
     }
     
-    return loaded_resources[hash];
+    return loaded_resources[hash]->resource();
     
 }
 

@@ -14,7 +14,7 @@ SSceneGraph::~SSceneGraph() { /* stub, destroy objects, scene graph manages memo
  *  Functions for basic scene graph                                           *
  ******************************************************************************/
 
-void SSimpleSceneGraph::render(SCamera& camera, SShader* shader, double interpolation) {
+void SSimpleSceneGraph::render(SCamera& camera, bool render_material, double interpolation) {
 
     // Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling
     SGL::clearMatrix(MAT_VIEW_MATRIX);
@@ -77,7 +77,7 @@ void SSimpleSceneGraph::render(SCamera& camera, SShader* shader, double interpol
         SGL::clearMatrix(MAT_MODEL_MATRIX);
         
         // Render the object
-        (*j).object->render(shader, interpolation);
+        (*j).object->render(render_material, interpolation);
         
         j++;
     }

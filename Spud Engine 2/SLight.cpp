@@ -121,7 +121,7 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* clo
     glClear(GL_DEPTH_BUFFER_BIT);
     
     // Render the scene from the camera
-    scene_graph.render(camera, SLight::shadow_shader, interpolation);
+    scene_graph.render(camera, false, interpolation);
 
     light_matrix = SLight::bias * light_projection_view_matrix;
     
