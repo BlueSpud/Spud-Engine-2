@@ -69,8 +69,11 @@ bool STexture::load(const SPath& path) {
             upload = new STextureUpload();
             upload->image_data = FreeImage_GetBits(bitmap);
             upload->bitmap = bitmap;
+            
+            // Get width and height for the upload and save it for ourselves
             upload->width = FreeImage_GetWidth(bitmap);
             upload->height =  FreeImage_GetHeight(bitmap);
+            size = glm::ivec2(upload->width, upload->height);
             
             upload->texture_id = &texture_id;
             upload->uploaded = &uploaded;

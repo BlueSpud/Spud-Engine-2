@@ -216,4 +216,6 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
     
     SGL::drawRect(glm::vec2(0, 0), viewport_2D->screen_size);
 
+    simple_shader->bind();
+    
 }

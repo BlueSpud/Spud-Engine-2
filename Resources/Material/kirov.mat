@@ -1,0 +1,4 @@
+s:Shader/gbuffer.glsl
+t:tex_albedo:Texture/kirov/kirov_albedo.png
+t:tex_orm:Texture/kirov/kirov_orm.png
+t:tex_normal:Texture/kirov/kirov_normal.png

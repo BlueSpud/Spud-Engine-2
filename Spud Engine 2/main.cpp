@@ -16,6 +16,8 @@
 #include "SHotLoadSystem.hpp"
 #include "SFramebuffer.hpp"
 
+#include "STextRenderer.hpp"
+
 #include "SActor.hpp"
 #include "SStaticMeshComponent.hpp"
 
@@ -124,12 +126,16 @@ int main(int argc, char* argv[]) {
     SEventSystem::startup();
     
     SGL::startup();
+    STime::startup();
+    
     SGLUploadSystem::startup();
+    
+    STextRenderer::startup();
     
     SKeyboardSystem::startup();
     SMouseSystem::startup();
     
-    STime::startup();
+
     
     SFileSystem::startup();
     SFileSystem::getDefaultRootDirectory("/Users/Logan/Desktop/Spud Engine 2/a/a/");
@@ -153,18 +159,15 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph scene_graph;
     
     // Access the mesh
-    SPath mesh_path = SPath("Model/material_test.smdl");
+    SPath mesh_path = SPath("Model/shapes.smdl");
     SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(mesh_path);
     
-    SStaticMeshComponent* component = new SStaticMeshComponent();
-    component->setStaticMesh(mesh);
+    mesh->transform.scale = glm::vec3(2.0);
     
-    SActor* test_actor = new SActor();
-    test_actor->root_component->attatchComponent(component);
+    scene_graph.addObject(mesh);
     
-    scene_graph.addObject(test_actor);
-    scene_graph.addObject((SStaticMeshInstance*)SResourceManager::getResource(mesh_path));
-    
+    SPath font_path = SPath("Font/Arial.font");
+    SFont* test_font = (SFont*)SResourceManager::getResource(font_path);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
@@ -269,6 +272,8 @@ int main(int argc, char* argv[]) {
         // Render using a deferred rendering pipline
         deferred_pipeline->render(scene_graph, camera, interpolation);
         
+        STextRenderer::renderText("Here is some pretty nice text \n123456789!@#$%^&*()-=+[]<>\n", test_font);
+        
         //SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
         
         // Swap back and front buffer to display
@@ -305,12 +310,14 @@ int main(int argc, char* argv[]) {
     
     SFileSystem::shutdown();
     
-    STime::shutdown();
-    
     SMouseSystem::shutdown();
     SKeyboardSystem::shutdown();
     
+    STextRenderer::shutdown();
+    
     SGLUploadSystem::shutdown();
+    
+    STime::shutdown();
     SGL::shutdown();
     
     SEventSystem::shutdown();

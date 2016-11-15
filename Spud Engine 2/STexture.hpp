@@ -54,6 +54,8 @@ class STexture : public SResource {
     
     public:
     
+        glm::ivec2 size;
+    
         static SResource* allocate();
     
         virtual void bind();
