@@ -24,7 +24,7 @@ class STextRenderer : public SSubsystem {
         static void startup();
         static void shutdown();
     
-        static void renderText(std::string text, SFont* font);
+    static void renderText(std::string text, SFont* font, float font_size, glm::vec2 screen_pos);
     
     private:
     

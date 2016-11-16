@@ -43,6 +43,7 @@ class SFont : public SResource {
     public:
     
         static SResource* allocate();
+        
     
     protected:
     
@@ -54,6 +55,7 @@ class SFont : public SResource {
         STexture* font_atlas;
         std::map<char, SFontCharacter> characters;
     
+        float font_size;
         int line_height;
     
 };

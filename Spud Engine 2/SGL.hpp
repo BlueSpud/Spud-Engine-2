@@ -123,6 +123,7 @@ class SGL : public SSubsystem {
         static void getMousePos(float* x_pos, float* y_pos);
     
         static glm::ivec2 getWindowFramebufferSize();
+        static float getScreenScale();
     
 /******************************************************************************
 *  Definition for operations pertaining to graphics math                      *

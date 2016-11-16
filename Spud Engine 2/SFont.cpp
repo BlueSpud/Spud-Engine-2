@@ -33,12 +33,27 @@ bool SFont::load(const SPath& path) {
             
             std::string line;
             
-            // First read the first line, contains somme information we dont care about
+            // Read the first line so that we can find the font size IN PIXELS
             font_file->getNextTokenWithDeliminator('\n', line);
+            int size_position = (int)line.find("size=");
+            
+            // Get the point size
+            int font_size_pixels;
+            sscanf(line.substr(size_position, line.length() - size_position).c_str(), "size=%i", &font_size_pixels);
+            font_size = (float)font_size_pixels / SGL::getScreenScale();
+            
+            // Find where the padding is
+            int padding_position = (int)line.find("padding=");
+            
+            // We assume the padding was square for simplicity and we accoutn for a little extra
+            int padding;
+            sscanf(line.substr(padding_position, line.length() - padding_position).c_str(), "padding=%i", &padding);
+            padding = padding * 1.7;
             
             // Read the second line which we do care about
             font_file->getNextTokenWithDeliminator('\n', line);
             sscanf(line.c_str(), "common lineHeight=%i", &line_height);
+            line_height = line_height - padding;
             
             while (font_file->getNextTokenWithDeliminator('\n', line)) {
                 
@@ -61,7 +76,7 @@ bool SFont::load(const SPath& path) {
                 character.size = glm::vec2(width, height) / (glm::vec2)font_atlas->size;
                 character.offset = glm::vec2(x_offset, y_offset);
                 
-                character.x_advance = x_advance;
+                character.x_advance = x_advance - padding;
                 
                 // Set it into the map based on the character id
                 characters[char_id] = character;
@@ -79,8 +94,4 @@ bool SFont::load(const SPath& path) {
     
 }
 
-void SFont::unload() {
-    
-    
-    
-}
+void SFont::unload() {}

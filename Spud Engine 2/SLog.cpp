@@ -59,3 +59,5 @@ void SLog::writeLogToFile() {
     SFileSystem::writeStringToFile(log_path, log_str);
     
 }
+
+std::string SLog::getLogAsString() { return log_stream.str(); }

@@ -31,7 +31,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     // Get the lighting shader
     gbuffer_shader = (SShader*)SResourceManager::getResource(SPath("Shader/gbuffer.glsl"));
     lit_shader = (SShader*)SResourceManager::getResource(SPath("Shader/lighting/deferred_lighting.glsl"));
-    simple_shader = (SShader*)SResourceManager::getResource(SPath("Shader/simple.glsl"));
+    simple_shader = (SShader*)SResourceManager::getResource(SPath("Shader/simple/simple_texture.glsl"));
     
     // Get the view pos
     view_pos_u = SUniformManger::instance()->getUniformWithName("view_position");
@@ -215,7 +215,5 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
     lit_shader->bindUniform(view_pos_u);
     
     SGL::drawRect(glm::vec2(0, 0), viewport_2D->screen_size);
-
-    simple_shader->bind();
     
 }

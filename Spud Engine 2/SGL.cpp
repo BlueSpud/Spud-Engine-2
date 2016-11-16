@@ -108,6 +108,8 @@ glm::ivec2 SGL::getWindowFramebufferSize() {
     
 }
 
+float SGL::getScreenScale() { return getWindowFramebufferSize().x / WINDOW_WIDTH; }
+
 /******************************************************************************
  *  Functions for operations pertaining to graphics math                      *
  ******************************************************************************/

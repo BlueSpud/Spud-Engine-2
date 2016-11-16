@@ -36,6 +36,8 @@ class SLog {
     
         static void writeLogToFile();
     
+        static std::string getLogAsString();
+    
     private:
     
         static std::stringstream log_stream;

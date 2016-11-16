@@ -16,7 +16,7 @@
 #include "SHotLoadSystem.hpp"
 #include "SFramebuffer.hpp"
 
-#include "STextRenderer.hpp"
+#include "SConsole.hpp"
 
 #include "SActor.hpp"
 #include "SStaticMeshComponent.hpp"
@@ -112,7 +112,7 @@ int frames_counted = 0;
 
 void FPS() {
     
-    SLog::verboseLog(SVerbosityLevel::Debug, "Current FPS: %i", frames_counted);
+    //SLog::verboseLog(SVerbosityLevel::Debug, "Current FPS: %i", frames_counted);
     frames_counted = 0;
     
 }
@@ -130,8 +130,6 @@ int main(int argc, char* argv[]) {
     
     SGLUploadSystem::startup();
     
-    STextRenderer::startup();
-    
     SKeyboardSystem::startup();
     SMouseSystem::startup();
     
@@ -142,6 +140,9 @@ int main(int argc, char* argv[]) {
     
     SResourceManager::startup();
     SHotLoadSystem::startup();
+    
+    STextRenderer::startup();
+    SConsole::startup();
     
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glCullFace(GL_BACK);
@@ -167,7 +168,6 @@ int main(int argc, char* argv[]) {
     scene_graph.addObject(mesh);
     
     SPath font_path = SPath("Font/Arial.font");
-    SFont* test_font = (SFont*)SResourceManager::getResource(font_path);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
@@ -185,6 +185,7 @@ int main(int argc, char* argv[]) {
     listener.bind(&keyPress, GLFW_KEY_RIGHT, KEY_ACTION_DOWN);
     
     listener.bind(&moveLight, GLFW_KEY_P, KEY_ACTION_DOWN);
+    listener.bind(&SConsole::activate, GLFW_KEY_GRAVE_ACCENT, KEY_ACTION_DOWN);
     
     listener.bind(&keyRelease, GLFW_KEY_S, KEY_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_W, KEY_ACTION_UP);
@@ -272,7 +273,14 @@ int main(int argc, char* argv[]) {
         // Render using a deferred rendering pipline
         deferred_pipeline->render(scene_graph, camera, interpolation);
         
-        STextRenderer::renderText("Here is some pretty nice text \n123456789!@#$%^&*()-=+[]<>\n", test_font);
+        
+        // Temp enable blending function
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        
+        SConsole::render();
+        
+        glDisable(GL_BLEND);
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
         
@@ -289,6 +297,9 @@ int main(int argc, char* argv[]) {
     delete deferred_pipeline;
     
     // Subsystem shutdown
+    SConsole::shutdown();
+    STextRenderer::shutdown();
+    
     SHotLoadSystem::shutdown();
     SResourceManager::shutdown();
     
@@ -305,6 +316,7 @@ int main(int argc, char* argv[]) {
     
     #endif
     
+    
     SFileSystem::setRootDirectory(log_root_path);
     SLog::writeLogToFile();
     
@@ -312,8 +324,6 @@ int main(int argc, char* argv[]) {
     
     SMouseSystem::shutdown();
     SKeyboardSystem::shutdown();
-    
-    STextRenderer::shutdown();
     
     SGLUploadSystem::shutdown();
     
