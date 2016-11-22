@@ -10,7 +10,7 @@
 #define SLog_hpp
 
 #include <iostream>
-#include <sstream>
+#include <vector>
 #include <cstdarg>
 
 #define MAX_ARG_CHAR_LENGTH 1024;
@@ -33,14 +33,16 @@ class SLog {
     
         static void setVerbosityLevel(SVerbosityLevel level);
         static void verboseLog(SVerbosityLevel verbosity, const char* format, ...);
+        static void log(const char* format, ...);
     
         static void writeLogToFile();
     
-        static std::string getLogAsString();
+        static int getLineCount();
+        static std::string& getLine(int line_number);
     
     private:
     
-        static std::stringstream log_stream;
+        static std::vector<std::string> log_lines;
         static SVerbosityLevel verbosity_level;
     
     

@@ -9,9 +9,7 @@
 #ifndef SKeyboardSystem_hpp
 #define SKeyboardSystem_hpp
 
-#include <boost/function.hpp>
-
-#include "SSubsystem.hpp"
+#include "SEventSystem.hpp"
 #include "SGL.hpp"
 
 #define KEY_ACTION_DOWN GLFW_PRESS
@@ -33,14 +31,18 @@ class SKeyboardListener {
         void bind(boost::function<void(int)> function, int key, int action);
         void unbind(int key, int action);
     
+        void setCharCallback(boost::function<void(int)> function);
+    
         void setHasFocus();
     
-    private:
+    protected:
     
         std::map<int, boost::function<void(int)>>key_down_funcs;
         std::map<int, boost::function<void(int)>>key_up_funcs;
     
-        void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        virtual void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    
+        boost::function<void(int)> char_func;
 
 };
 
@@ -57,12 +59,15 @@ class SKeyboardSystem : public SSubsystem {
         static void startup();
         static void shutdown();
     
-        static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        static void setLastKeyboardListenerHasFocus();
     
     private:
     
-        static SKeyboardListener* current_keyboard_listener;
+        static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        static void charCallback(GLFWwindow* window, unsigned int unicode_value);
     
+        static SKeyboardListener* current_keyboard_listener;
+        static SKeyboardListener* last_keyboard_listener;
     
 };
 

@@ -8,10 +8,24 @@
 
 #include "SConsole.hpp"
 
-SShader* SConsole::color_shader;
-SFont* SConsole::console_font;
+/******************************************************************************
+ *  Console static members                                                    *
+ ******************************************************************************/
+
+SUIRect SConsole::consoleFrame;
 
 bool SConsole::console_active = false;
+
+SFont* SConsole::console_font;
+SUITextField* SConsole::text_field;
+
+std::hash<std::string> SConsoleCommandRegistry::hasher;
+
+/******************************************************************************
+ *  Console command registry static members                                   *
+ ******************************************************************************/
+
+std::map<size_t, void(*)()> SConsoleCommandRegistry::commands;
 
 /******************************************************************************
  *  Functions for console                                                     *
@@ -22,8 +36,25 @@ void SConsole::startup() {
     // Load up the shader that we use for text rendering
     SLog::verboseLog(SVerbosityLevel::Debug, "SConsole startup");
     
-    color_shader = (SShader*)SResourceManager::getResource(SPath("Shader/simple/simple_color.glsl"));
     console_font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
+    
+    text_field = new SUITextField();
+    text_field->font = console_font;
+    text_field->font_size = 15.0;
+    text_field->background_color = glm::vec4(0.0, 0.0, 0.0, 1.0);
+    
+    // Set up the text field callbacks
+    text_field->escape_function = &deactivateConsole;
+    text_field->return_function = &commitCommand;
+    
+    // Make the frame for the console
+    glm::vec2 console_size = SGL::getWindowFramebufferSize();
+    console_size.y = console_size.y * 0.75;
+    consoleFrame.size = console_size;
+    
+    // Make the text field frame
+    text_field->frame.origin = glm::vec2(0.0, console_size.y);
+    text_field->frame.size = glm::vec2(console_size.x, console_font->getLineHeight(15.0) + 10.0);
     
 }
 
@@ -31,15 +62,27 @@ void SConsole::shutdown() {
     
     SLog::verboseLog(SVerbosityLevel::Debug, "SConsole shutdown");
     
+    delete SConsoleCommandRegistry::instance();
+    
 }
 
 void SConsole::activate(int arg) {
     
     // Give control of the keyboard to the text field
-    
+    text_field->startEditing();
     
     // Show that the console is active
     console_active = true;
+    
+}
+
+void SConsole::deactivateConsole() {
+    
+    // Tell the text field to stop editing
+    text_field->stopEditing();
+    
+    // Console is no longer active
+    console_active = false;
     
 }
 
@@ -49,19 +92,87 @@ void SConsole::render() {
     if (console_active) {
     
         // First render an entirely black quad
-        glm::vec2 console_size = SGL::getWindowFramebufferSize();
-        console_size.y = console_size.y * 0.75;
-    
-        color_shader->bind();
-    
-        glm::vec4 black_color = glm::vec4(0.0, 0.0, 0.0, 1.0);
-        color_shader->bindUniform(&black_color, "color", UNIFORM_VEC4, 1);
-    
-        SGL::drawRect(glm::vec2(0.0), console_size);
-    
+        SUI::drawRect(consoleFrame, glm::vec4(0.0, 0.0, 0.0, 1.0));
+        
+        // Get the number of lines in the log and the size of a line
+        int line_count = SLog::getLineCount();
+        float line_size = console_font->getLineHeight(15.0);
+        
+        // Figure out how many lines will fit
+        int lines_displayed = floor((consoleFrame.size.y - 10.0) / line_size);
+        
+        // Get the overall string of what needs to be written
+        std::string displayed_lines;
+        
+        int start = line_count - lines_displayed + 1;
+        if (start < 0)
+            start = 0;
+        
+        for (int i = start; i < line_count; i++)
+            displayed_lines = displayed_lines + SLog::getLine(i) + "\n";
+        
         // Draw some text over it
-        STextRenderer::renderText(SLog::getLogAsString(), console_font, 15.0, glm::vec2(10.0, 10.0));
+        STextRenderer::renderText(displayed_lines, console_font, 15.0, glm::vec2(10.0, 10.0));
+        
+        // Render the text field
+        text_field->render(0.0);
         
     }
+    
+}
+
+void SConsole::commitCommand() {
+    
+    // Get the command out of the text field
+    std::string& command = text_field->getText();
+    
+    if (command.length()) {
+    
+        SLog::log("[Console] %s", command.c_str());
+    
+        // Get the name of the command
+        std::string command_name;
+        std::stringstream command_stream = std::stringstream(command);
+        std::getline(command_stream, command_name, ' ');
+        
+        // Hash the command so we can get it from the map
+        size_t command_hash = SConsoleCommandRegistry::hasher(command_name);
+        
+        if (SConsoleCommandRegistry::instance()->commands.count(command_hash)) {
+            
+            // Call the function
+            SConsoleCommandRegistry::instance()->commands[command_hash]();
+            
+        } else SLog::log("[Console] Command not found");
+    
+        // Reset the text inside of the text field
+        text_field->setText("");
+        
+    }
+    
+}
+
+/******************************************************************************
+ *  Functions for console command registry                                    *
+ ******************************************************************************/
+
+bool SConsoleCommandRegistry::registerCommand(const std::string& command_name,  void (*function)()) {
+    
+    // Hash the name of the command and keep the function
+    size_t command_hash = SConsoleCommandRegistry::hasher(command_name);
+    commands[command_hash] = function;
+    
+    return true;
+
+}
+
+SConsoleCommandRegistry* SConsoleCommandRegistry::instance() {
+
+    // Return a static instace of the manager
+    static SConsoleCommandRegistry* _instance = NULL;
+    if (_instance == NULL)
+        _instance = new SConsoleCommandRegistry();
+    
+    return _instance;
     
 }

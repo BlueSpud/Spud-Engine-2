@@ -85,8 +85,6 @@ class SFile {
         std::ifstream in_stream;
         std::string path;
     
-        std::uint8_t hash;
-    
 };
 
 /******************************************************************************
@@ -114,8 +112,8 @@ class SFileSystem : public SSubsystem {
     
     private:
     
-        static std::map<size_t, SFile*>loaded_files;
-        static std::hash<std::string>hasher;
+        static std::map<size_t, SFile*> loaded_files;
+        static std::hash<std::string> hasher;
     
 };
 

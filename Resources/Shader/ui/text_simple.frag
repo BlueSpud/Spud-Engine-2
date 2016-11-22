@@ -10,7 +10,7 @@ in vec2 tex_coord0;
 out vec4 final_color;
 
 float a = 0.47;
-float b = 0.02;
+float b = 0.05;
 
 void main() {
 

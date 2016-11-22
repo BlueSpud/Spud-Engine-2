@@ -83,6 +83,8 @@ bool SGL::windowIsGood() { return !glfwWindowShouldClose(window); }
 void SGL::swapBuffers() { glfwSwapBuffers(window); }
 
 void SGL::setKeyCallback(GLFWkeyfun func) { glfwSetKeyCallback(window, func); }
+void SGL::setCharCallback(GLFWcharfun func) { glfwSetCharCallback(window, func); }
+
 
 void SGL::setMouseInputMode(int mode) { glfwSetInputMode(window, GLFW_CURSOR, mode); }
 

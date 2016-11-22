@@ -41,7 +41,7 @@ void STime::update(const SEvent& event) {
 }
 
 /******************************************************************************
- *  Functions for stopwatch                                                   *
+ *  Functions for timer                                                   *
  ******************************************************************************/
 
 STimer::STimer(boost::function<void()> _func, double duration, bool _loops) {
@@ -58,14 +58,22 @@ STimer::STimer(boost::function<void()> _func, double duration, bool _loops) {
     
 }
 
+// Timer control functions
+void STimer::start() { running = true; }
+void STimer::stop() { running = false; }
+void STimer::reset() { ticks_elapsed = 0; }
+
 void STimer::update(const SEvent& event) {
     
-    //SEventTick* event_t = (SEventTick*)event;
+    // If the timer is running, add a tick on and if we have reached the duration we fire
+    if (running) {
+        
+        ticks_elapsed++;
     
-    ticks_elapsed++;
-    
-    if (ticks_elapsed >= duration_ticks)
-        fire();
+        if (ticks_elapsed >= duration_ticks)
+            fire();
+        
+    }
     
 }
 

@@ -37,6 +37,15 @@ void moveLight(int key) {
     
 }
 
+void hello() {
+    
+    // Test command
+    SLog::verboseLog(SVerbosityLevel::Debug, "Howdy!");
+    
+}
+
+REGISTER_COMMAND(hello, &hello);
+
 void keyPress(int key) {
     
     switch (key) {
@@ -142,6 +151,8 @@ int main(int argc, char* argv[]) {
     SHotLoadSystem::startup();
     
     STextRenderer::startup();
+    SUI::startup();
+    
     SConsole::startup();
     
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -160,14 +171,18 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph scene_graph;
     
     // Access the mesh
-    SPath mesh_path = SPath("Model/shapes.smdl");
-    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(mesh_path);
-    
+    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
     mesh->transform.scale = glm::vec3(2.0);
+    scene_graph.addObject(mesh);
+    
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
+    mesh->transform.scale = glm::vec3(2.0);
+    mesh->transform.translation.z = 5.7;
     
     scene_graph.addObject(mesh);
     
-    SPath font_path = SPath("Font/Arial.font");
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
+    scene_graph.addObject(mesh);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
@@ -185,7 +200,7 @@ int main(int argc, char* argv[]) {
     listener.bind(&keyPress, GLFW_KEY_RIGHT, KEY_ACTION_DOWN);
     
     listener.bind(&moveLight, GLFW_KEY_P, KEY_ACTION_DOWN);
-    listener.bind(&SConsole::activate, GLFW_KEY_GRAVE_ACCENT, KEY_ACTION_DOWN);
+    listener.bind(&SConsole::activate, GLFW_KEY_GRAVE_ACCENT, KEY_ACTION_UP);
     
     listener.bind(&keyRelease, GLFW_KEY_S, KEY_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_W, KEY_ACTION_UP);
@@ -261,7 +276,7 @@ int main(int argc, char* argv[]) {
         
         // If we were forced to stop updating the game and render a frame, we cant keep up
         if (loops == maxUpdateCount)
-            SLog::verboseLog(SVerbosityLevel::Critical, "Cant keep up with %i ticks per second!", TICKS_PER_SECOND);
+            SLog::verboseLog(SVerbosityLevel::Critical, "Unable to perform %i updates per second", TICKS_PER_SECOND);
         
         profiler.start();
         
@@ -298,6 +313,8 @@ int main(int argc, char* argv[]) {
     
     // Subsystem shutdown
     SConsole::shutdown();
+    
+    SUI::shutdown();
     STextRenderer::shutdown();
     
     SHotLoadSystem::shutdown();

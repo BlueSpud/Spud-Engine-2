@@ -53,6 +53,10 @@ class STimer {
     
         STimer(boost::function<void()> _func, double duration, bool _loops);
     
+        void start();
+        void stop();
+        void reset();
+    
     private:
     
         SEventListener event_listener;
@@ -62,6 +66,7 @@ class STimer {
     
         bool loops;
         bool has_fired = false;
+        bool running = true;
     
         void update(const SEvent& event);
         void fire();

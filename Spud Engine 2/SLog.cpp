@@ -13,7 +13,7 @@
 std::string verbosity_strs[] = {"Critical", "Warning", "Debug"};
 
 SVerbosityLevel SLog::verbosity_level = SVerbosityLevel::Critical;
-std::stringstream SLog::log_stream;
+std::vector<std::string> SLog::log_lines;
 
 /******************************************************************************
  *  Functions for logging system                                              *
@@ -42,7 +42,7 @@ void SLog::verboseLog(SVerbosityLevel verbosity, const char* format, ...) {
         // Output the message to the log stream, if we're in debug, output to cout as well
         std::string final_output = "[" + verbosity_strs[verbosity] + "] " + buffer;
         
-        log_stream << final_output << std::endl;
+        log_lines.push_back(final_output);
         if (verbosity_level == SVerbosityLevel::Debug)
             std::cout << final_output << std::endl;
         
@@ -50,14 +50,46 @@ void SLog::verboseLog(SVerbosityLevel verbosity, const char* format, ...) {
     
 }
 
-void SLog::writeLogToFile() {
+void SLog::log(const char* format, ...) {
     
-    // Write out everything we have logged
-    std::string log_str = log_stream.str();
-    SPath log_path = SPath("Spud Engine.log");
+    // Calculate length as string length + a max value we specify
+    size_t length = strlen(format) + MAX_ARG_CHAR_LENGTH;
     
-    SFileSystem::writeStringToFile(log_path, log_str);
+    // Get an array for args
+    va_list args;
+    va_start(args, format);
+    
+    // Write to the buffer
+    char buffer[length];
+    vsnprintf(buffer, length, format, args);
+    
+    va_end(args);
+
+    // Write the buffer
+    log_lines.push_back(buffer);
+    if (verbosity_level == SVerbosityLevel::Debug)
+        std::cout << buffer << std::endl;
     
 }
 
-std::string SLog::getLogAsString() { return log_stream.str(); }
+void SLog::writeLogToFile() {
+    
+    // Write out everything we have logged by concainating all the strings
+    std::string final_log;
+    for (int i = 0; i < log_lines.size(); i++)
+        final_log = final_log + log_lines[i] + "\n";
+    
+    SPath log_path = SPath("Spud Engine.log");
+    
+    SFileSystem::writeStringToFile(log_path, final_log);
+    
+}
+
+int SLog::getLineCount() { return (int)log_lines.size(); }
+
+std::string& SLog::getLine(int line_number) {
+
+    // Read a line from the log and return it
+    return log_lines[line_number];
+    
+}

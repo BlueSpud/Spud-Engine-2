@@ -20,6 +20,8 @@ REGISTER_RESOURCE_CLASS(font, SFont);
 
 SResource* SFont::allocate() { return new SFont(); }
 
+float SFont::getLineHeight(float _font_size) { return ((float)line_height / font_size * _font_size); }
+
 bool SFont::load(const SPath& path) {
     
     // Load in the font
@@ -48,7 +50,7 @@ bool SFont::load(const SPath& path) {
             // We assume the padding was square for simplicity and we accoutn for a little extra
             int padding;
             sscanf(line.substr(padding_position, line.length() - padding_position).c_str(), "padding=%i", &padding);
-            padding = padding * 1.7;
+            padding = padding * 1.8;
             
             // Read the second line which we do care about
             font_file->getNextTokenWithDeliminator('\n', line);

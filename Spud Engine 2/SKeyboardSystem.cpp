@@ -9,9 +9,10 @@
 #include "SKeyboardSystem.hpp"
 
 SKeyboardListener* SKeyboardSystem::current_keyboard_listener;
+SKeyboardListener* SKeyboardSystem::last_keyboard_listener;
 
 /******************************************************************************
- *  Functions for keyboard listener                                            *
+ *  Functions for keyboard listener                                           *
  ******************************************************************************/
 
 void SKeyboardListener::bind(boost::function<void(int)> function, int key, int action) {
@@ -27,6 +28,7 @@ void SKeyboardListener::bind(boost::function<void(int)> function, int key, int a
 
 void SKeyboardListener::unbind(int key, int action) {
     
+    // Rempve the key function for the correct action
     if (action == KEY_ACTION_DOWN)
         key_down_funcs.erase(key);
     
@@ -35,7 +37,12 @@ void SKeyboardListener::unbind(int key, int action) {
     
 }
 
-void SKeyboardListener::setHasFocus() { SKeyboardSystem::current_keyboard_listener = this; }
+void SKeyboardListener::setHasFocus() {
+    
+    // Keep track of the last listener and make us the current one
+    SKeyboardSystem::last_keyboard_listener = SKeyboardSystem::current_keyboard_listener;
+    SKeyboardSystem::current_keyboard_listener = this;
+}
 
 void SKeyboardListener::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     
@@ -63,6 +70,8 @@ void SKeyboardListener::keyCallback(GLFWwindow* window, int key, int scancode, i
     }
 }
 
+void SKeyboardListener::setCharCallback(boost::function<void(int)> _char_func) { char_func = _char_func; }
+
 /******************************************************************************
  *  Functions for keyboard system                                             *
  ******************************************************************************/
@@ -71,8 +80,9 @@ void SKeyboardSystem::startup() {
 
     SLog::verboseLog(SVerbosityLevel::Debug, "SKeyboardSystem startup");
     
-    // Set the key callback
+    // Set the key callbacks
     SGL::setKeyCallback(keyCallback);
+    SGL::setCharCallback(charCallback);
 
 }
 
@@ -82,10 +92,26 @@ void SKeyboardSystem::shutdown() {
 
 }
 
+void SKeyboardSystem::setLastKeyboardListenerHasFocus() {
+  
+    // Set the current keyboard listener to the last one
+    if (last_keyboard_listener)
+        current_keyboard_listener = last_keyboard_listener;
+    
+}
+
 void SKeyboardSystem::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     
     // Send out the key message to the client that currently has input
     if (current_keyboard_listener)
         current_keyboard_listener->keyCallback(window, key, scancode, action, mods);
+    
+}
+
+void SKeyboardSystem::charCallback(GLFWwindow* window, unsigned int unicode_value) {
+    
+    // Send out the key message to the client that currently has input
+    if (current_keyboard_listener && current_keyboard_listener->char_func)
+        current_keyboard_listener->char_func(unicode_value);
     
 }

@@ -201,7 +201,7 @@ void main() {
     vec3 metalic_reflection = reflection_color * metalic;
 
     // Combine lighting and texture
-    vec3 color = albedo * (lerp(specular_acc, diffuse_acc, metalic) + 0.12) + fresnel_reflection * inverse_roughness + metalic_reflection * albedo * inverse_roughness;
+    vec3 color = albedo * (lerp(specular_acc, diffuse_acc, metalic) + 0.2) + fresnel_reflection * inverse_roughness + metalic_reflection * albedo * inverse_roughness;
     
     out_color = vec4(color * occlusion, 1.0);
 

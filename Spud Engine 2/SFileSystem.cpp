@@ -13,7 +13,7 @@
  ******************************************************************************/
 
 std::map<unsigned long, SFile*> SFileSystem::loaded_files;
-std::hash<std::string>SFileSystem::hasher;
+std::hash<std::string> SFileSystem::hasher;
 
 std::string root_directory;
 
@@ -133,7 +133,7 @@ void SFile::reset() {
     
     // Go back to the beginning of the file in case we want to use it again
     in_stream.clear();
-    in_stream.seekg(0, std::ios::beg) ;
+    in_stream.seekg(0, std::ios::beg);
     
 }
 
@@ -254,9 +254,6 @@ SFile* SFileSystem::loadFile(const SPath& path, bool binary) {
     
             // Make sure that we are good
             if (fileExitsAtPath(path)) {
-        
-                // Add it to the registry of loaded files
-                new_file->hash = hash;
         
                 loaded_files[hash] = new_file;
             

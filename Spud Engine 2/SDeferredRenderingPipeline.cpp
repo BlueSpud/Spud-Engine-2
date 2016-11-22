@@ -77,9 +77,6 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
 //    
 //    light_graph->addLight(light);
     
-    SPath test_path = SPath("Texture/bricks_albedo.png");
-    test = (STexture*)SResourceManager::getResource(test_path);
-    
 }
 
 void SDeferredRenderingPipleline::unload() {

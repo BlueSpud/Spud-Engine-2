@@ -51,6 +51,8 @@
 		02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B6B7DF1DDB40270068FCBA /* STextRenderer.cpp */; };
 		02B6B7E61DDBAE990068FCBA /* SConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B6B7E41DDBAE990068FCBA /* SConsole.cpp */; };
 		02B947F81D89FF7200822957 /* SUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B947F61D89FF7200822957 /* SUniform.cpp */; };
+		02C35AE01DDE2E26007C361C /* SUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C35ADE1DDE2E26007C361C /* SUI.cpp */; };
+		02C427C41DDCAC620088039F /* SUITextField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C427C21DDCAC620088039F /* SUITextField.cpp */; };
 		02D295D11D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D295CF1D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp */; };
 		02D35A731D86217A00F62A7B /* SSceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D35A711D86217A00F62A7B /* SSceneGraph.cpp */; };
 		02DAB8C61D8A28F900A39E27 /* SRenderingPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02DAB8C41D8A28F900A39E27 /* SRenderingPipeline.cpp */; };
@@ -156,6 +158,11 @@
 		02B947F61D89FF7200822957 /* SUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUniform.cpp; sourceTree = "<group>"; };
 		02B947F71D89FF7200822957 /* SUniform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUniform.hpp; sourceTree = "<group>"; };
 		02BED0A91DA016D200AFBE59 /* SLightingConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLightingConstants.h; sourceTree = "<group>"; };
+		02C35ADE1DDE2E26007C361C /* SUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUI.cpp; sourceTree = "<group>"; };
+		02C35ADF1DDE2E26007C361C /* SUI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUI.hpp; sourceTree = "<group>"; };
+		02C427C21DDCAC620088039F /* SUITextField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUITextField.cpp; sourceTree = "<group>"; };
+		02C427C31DDCAC620088039F /* SUITextField.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUITextField.hpp; sourceTree = "<group>"; };
+		02C427C61DDCACE60088039F /* SUIWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUIWidget.hpp; sourceTree = "<group>"; };
 		02D295CF1D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDeferredRenderingPipeline.cpp; sourceTree = "<group>"; };
 		02D295D01D935E4F00CBF342 /* SDeferredRenderingPipeline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SDeferredRenderingPipeline.hpp; sourceTree = "<group>"; };
 		02D35A711D86217A00F62A7B /* SSceneGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSceneGraph.cpp; sourceTree = "<group>"; };
@@ -391,6 +398,9 @@
 		026915C51DDB386000A06D4C /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				02C35ADE1DDE2E26007C361C /* SUI.cpp */,
+				02C35ADF1DDE2E26007C361C /* SUI.hpp */,
+				02C427C11DDCAC510088039F /* Widgets */,
 				02B6B7E31DDBAE8F0068FCBA /* Console */,
 				02B6B7E21DDBA8FF0068FCBA /* Text */,
 			);
@@ -477,6 +487,16 @@
 				02B947F71D89FF7200822957 /* SUniform.hpp */,
 			);
 			name = Shader;
+			sourceTree = "<group>";
+		};
+		02C427C11DDCAC510088039F /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				02C427C61DDCACE60088039F /* SUIWidget.hpp */,
+				02C427C21DDCAC620088039F /* SUITextField.cpp */,
+				02C427C31DDCAC620088039F /* SUITextField.hpp */,
+			);
+			name = Widgets;
 			sourceTree = "<group>";
 		};
 		02D295CE1D935E4100CBF342 /* Renderers */ = {
@@ -611,6 +631,7 @@
 				02E7A7751DD2325E00F3164F /* SActor.cpp in Sources */,
 				02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */,
 				0228B8841D7A779200596526 /* SStaticMesh.cpp in Sources */,
+				02C35AE01DDE2E26007C361C /* SUI.cpp in Sources */,
 				02B6B7E61DDBAE990068FCBA /* SConsole.cpp in Sources */,
 				029039671DB11CB30087B500 /* SAmbientOcclusionPass.cpp in Sources */,
 				02D295D11D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp in Sources */,
@@ -618,6 +639,7 @@
 				025903301D77940400EA6372 /* main.cpp in Sources */,
 				0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */,
 				0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */,
+				02C427C41DDCAC620088039F /* SUITextField.cpp in Sources */,
 				0278C0F61DA2F6AB002F8B7D /* SBoundingBox.cpp in Sources */,
 				02A24C2A1D9317A00039F422 /* SFramebuffer.cpp in Sources */,
 				022B19C41D8DD533004D9B18 /* SHotLoadSystem.cpp in Sources */,
