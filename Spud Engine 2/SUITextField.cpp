@@ -20,8 +20,14 @@ SUITextField::SUITextField() : cursor_blink_timer(boost::bind(&SUITextField::bli
     // Listen for some special characters
     keyboard_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_BACKSPACE, KEY_ACTION_DOWN);
     
+    keyboard_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_RIGHT, KEY_ACTION_DOWN);
+    keyboard_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_LEFT, KEY_ACTION_DOWN);
+    
     keyboard_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_ENTER, KEY_ACTION_DOWN);
     keyboard_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_ESCAPE, KEY_ACTION_DOWN);
+    
+    // For text input, the keyboard listener repeats
+    keyboard_listener.repeats = true;
     
 }
 
@@ -30,25 +36,21 @@ void SUITextField::render(double interpolation) {
     // Render a background
     SUI::drawRect(frame, background_color);
     
+    // Calculate the padding in the y direction
+    float y_padding = (frame.size.y - font->getLineHeight(font_size)) / 2.0;
+    
     // Render the text field. give a slight x indent
     // If the cursor is shown we use the function with the cursor showing
     if (cursor_shown)
-        STextRenderer::renderTextWithCursor(text, cursor_head, font, font_size, glm::vec2(frame.origin.x + font_size, frame.origin.y));
-    else STextRenderer::renderText(text, font, font_size, glm::vec2(frame.origin.x + font_size, frame.origin.y));
+        STextRenderer::renderTextWithCursor(text, cursor_head, font, font_size, glm::vec2(frame.origin.x + font_size, frame.origin.y + y_padding));
+    else STextRenderer::renderText(text, font, font_size, glm::vec2(frame.origin.x + font_size, frame.origin.y + y_padding));
     
 }
 
 void SUITextField::startEditing() {
     
     // Enable the keybaord listener
-    keyboard_listener.setHasFocus();
-    
-}
-
-void SUITextField::stopEditing() {
-    
-    // Tell the keyboard system to return the last keyboard listener
-    SKeyboardSystem::setLastKeyboardListenerHasFocus();
+    keyboard_listener.setHasFocusUI();
     
 }
 
@@ -72,9 +74,7 @@ void SUITextField::charCallback(unsigned int key) {
     text.insert(cursor_head, 1, new_char);
     cursor_head++;
     
-    // Reset the timer and make the cursor visible
-    cursor_blink_timer.reset();
-    cursor_shown = true;
+    resetCursorBlink();
     
 }
 
@@ -91,6 +91,30 @@ void SUITextField::pressSpecialKey(int key) {
                     cursor_head--;
                 
                 }
+            
+                resetCursorBlink();
+            
+            break;
+            
+            case GLFW_KEY_RIGHT:
+            
+                // Move the cursor head over to the right
+                cursor_head++;
+                if (cursor_head > text.length())
+                    cursor_head = (int)text.length();
+            
+                resetCursorBlink();
+            
+            break;
+            
+            case GLFW_KEY_LEFT:
+            
+                // Move the cursor head over to the left
+                cursor_head--;
+                if (cursor_head < 0)
+                    cursor_head = 0;
+            
+                resetCursorBlink();
             
             break;
             
@@ -116,3 +140,12 @@ void SUITextField::pressSpecialKey(int key) {
 }
 
 void SUITextField::blinkCursor() { cursor_shown = !cursor_shown; }
+
+void SUITextField::resetCursorBlink() {
+    
+    // Reset the timer and make the cursor visible
+    cursor_blink_timer.reset();
+    cursor_shown = true;
+    
+    
+}

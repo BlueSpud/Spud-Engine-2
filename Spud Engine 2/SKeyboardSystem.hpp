@@ -13,7 +13,15 @@
 #include "SGL.hpp"
 
 #define KEY_ACTION_DOWN GLFW_PRESS
+#define KEY_ACTION_REPEAT GLFW_REPEAT
 #define KEY_ACTION_UP GLFW_RELEASE
+
+enum SKeyboardMode {
+    
+    SKeyboardModeGame,
+    SKeyboardModeUI
+    
+};
 
 // Forward declarations
 class SKeyboardSystem;
@@ -34,6 +42,9 @@ class SKeyboardListener {
         void setCharCallback(boost::function<void(int)> function);
     
         void setHasFocus();
+        void setHasFocusUI();
+    
+        bool repeats = false;
     
     protected:
     
@@ -59,7 +70,7 @@ class SKeyboardSystem : public SSubsystem {
         static void startup();
         static void shutdown();
     
-        static void setLastKeyboardListenerHasFocus();
+        static SKeyboardMode keyboard_mode;
     
     private:
     
@@ -67,7 +78,7 @@ class SKeyboardSystem : public SSubsystem {
         static void charCallback(GLFWwindow* window, unsigned int unicode_value);
     
         static SKeyboardListener* current_keyboard_listener;
-        static SKeyboardListener* last_keyboard_listener;
+        static SKeyboardListener* current_keyboard_listener_ui;
     
 };
 

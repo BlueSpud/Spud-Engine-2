@@ -11,6 +11,9 @@
 
 #include "SUITextField.hpp"
 
+#define CONSOLE_FONT_SIZE 15.0f
+#define CONSOLE_INDENT 15.0f
+
 /******************************************************************************
  *  Definition for console                                                    *
  ******************************************************************************/
@@ -50,12 +53,12 @@ class SConsoleCommandRegistry {
     
     public:
     
-        bool registerCommand(const std::string& command_name,  void (*function)());
+    bool registerCommand(const std::string& command_name,  void (*function)(const std::vector<std::string>&));
         static SConsoleCommandRegistry* instance();
     
     private:
     
-        static std::map<size_t, void(*)()> commands;
+        static std::map<size_t, void(*)(const std::vector<std::string>&)> commands;
         static std::hash<std::string> hasher;
     
     

@@ -25,7 +25,7 @@ std::hash<std::string> SConsoleCommandRegistry::hasher;
  *  Console command registry static members                                   *
  ******************************************************************************/
 
-std::map<size_t, void(*)()> SConsoleCommandRegistry::commands;
+std::map<size_t, void(*)(const std::vector<std::string>&)> SConsoleCommandRegistry::commands;
 
 /******************************************************************************
  *  Functions for console                                                     *
@@ -40,8 +40,8 @@ void SConsole::startup() {
     
     text_field = new SUITextField();
     text_field->font = console_font;
-    text_field->font_size = 15.0;
-    text_field->background_color = glm::vec4(0.0, 0.0, 0.0, 1.0);
+    text_field->font_size = CONSOLE_FONT_SIZE;
+    text_field->background_color = glm::vec4(0.1, 0.1, 0.1, 1.0);
     
     // Set up the text field callbacks
     text_field->escape_function = &deactivateConsole;
@@ -54,7 +54,7 @@ void SConsole::startup() {
     
     // Make the text field frame
     text_field->frame.origin = glm::vec2(0.0, console_size.y);
-    text_field->frame.size = glm::vec2(console_size.x, console_font->getLineHeight(15.0) + 10.0);
+    text_field->frame.size = glm::vec2(console_size.x, console_font->getLineHeight(CONSOLE_FONT_SIZE) + CONSOLE_INDENT);
     
 }
 
@@ -70,6 +70,7 @@ void SConsole::activate(int arg) {
     
     // Give control of the keyboard to the text field
     text_field->startEditing();
+    SKeyboardSystem::keyboard_mode = SKeyboardModeUI;
     
     // Show that the console is active
     console_active = true;
@@ -78,8 +79,8 @@ void SConsole::activate(int arg) {
 
 void SConsole::deactivateConsole() {
     
-    // Tell the text field to stop editing
-    text_field->stopEditing();
+    // Give keyboard control back to the game
+    SKeyboardSystem::keyboard_mode = SKeyboardModeGame;
     
     // Console is no longer active
     console_active = false;
@@ -96,10 +97,10 @@ void SConsole::render() {
         
         // Get the number of lines in the log and the size of a line
         int line_count = SLog::getLineCount();
-        float line_size = console_font->getLineHeight(15.0);
+        float line_size = console_font->getLineHeight(CONSOLE_FONT_SIZE);
         
         // Figure out how many lines will fit
-        int lines_displayed = floor((consoleFrame.size.y - 10.0) / line_size);
+        int lines_displayed = floor((consoleFrame.size.y - CONSOLE_INDENT) / line_size);
         
         // Get the overall string of what needs to be written
         std::string displayed_lines;
@@ -112,7 +113,7 @@ void SConsole::render() {
             displayed_lines = displayed_lines + SLog::getLine(i) + "\n";
         
         // Draw some text over it
-        STextRenderer::renderText(displayed_lines, console_font, 15.0, glm::vec2(10.0, 10.0));
+        STextRenderer::renderText(displayed_lines, console_font, CONSOLE_FONT_SIZE, glm::vec2(CONSOLE_INDENT));
         
         // Render the text field
         text_field->render(0.0);
@@ -140,8 +141,15 @@ void SConsole::commitCommand() {
         
         if (SConsoleCommandRegistry::instance()->commands.count(command_hash)) {
             
+            // Parse the arguments
+            std::vector<std::string> arguments;
+            std::string arg_srt;
+            
+            while (std::getline(command_stream, arg_srt, ' '))
+                arguments.push_back(arg_srt);
+            
             // Call the function
-            SConsoleCommandRegistry::instance()->commands[command_hash]();
+            SConsoleCommandRegistry::instance()->commands[command_hash](arguments);
             
         } else SLog::log("[Console] Command not found");
     
@@ -156,7 +164,7 @@ void SConsole::commitCommand() {
  *  Functions for console command registry                                    *
  ******************************************************************************/
 
-bool SConsoleCommandRegistry::registerCommand(const std::string& command_name,  void (*function)()) {
+bool SConsoleCommandRegistry::registerCommand(const std::string& command_name, void (*function)(const std::vector<std::string>&)) {
     
     // Hash the name of the command and keep the function
     size_t command_hash = SConsoleCommandRegistry::hasher(command_name);

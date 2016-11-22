@@ -25,7 +25,6 @@ class SUITextField : public SUIWidget {
         void render(double interpolation);
     
         void startEditing();
-        void stopEditing();
     
         void pressSpecialKey(int key);
     
@@ -53,6 +52,7 @@ class SUITextField : public SUIWidget {
         bool cursor_shown = true;
         STimer cursor_blink_timer;
         void blinkCursor();
+        void resetCursorBlink();
     
     
 };

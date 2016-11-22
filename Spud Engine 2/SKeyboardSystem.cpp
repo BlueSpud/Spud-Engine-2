@@ -8,8 +8,10 @@
 
 #include "SKeyboardSystem.hpp"
 
+SKeyboardMode SKeyboardSystem::keyboard_mode;
+
 SKeyboardListener* SKeyboardSystem::current_keyboard_listener;
-SKeyboardListener* SKeyboardSystem::last_keyboard_listener;
+SKeyboardListener* SKeyboardSystem::current_keyboard_listener_ui;
 
 /******************************************************************************
  *  Functions for keyboard listener                                           *
@@ -37,17 +39,13 @@ void SKeyboardListener::unbind(int key, int action) {
     
 }
 
-void SKeyboardListener::setHasFocus() {
-    
-    // Keep track of the last listener and make us the current one
-    SKeyboardSystem::last_keyboard_listener = SKeyboardSystem::current_keyboard_listener;
-    SKeyboardSystem::current_keyboard_listener = this;
-}
+void SKeyboardListener::setHasFocus() { SKeyboardSystem::current_keyboard_listener = this; }
+void SKeyboardListener::setHasFocusUI() { SKeyboardSystem::current_keyboard_listener_ui = this; }
 
 void SKeyboardListener::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     
     // Send the action to the corret map and function
-    if (action == KEY_ACTION_DOWN) {
+    if (action == KEY_ACTION_DOWN || (action == KEY_ACTION_REPEAT && repeats)) {
         
         if (key_down_funcs.count(key)) {
             
@@ -92,26 +90,27 @@ void SKeyboardSystem::shutdown() {
 
 }
 
-void SKeyboardSystem::setLastKeyboardListenerHasFocus() {
-  
-    // Set the current keyboard listener to the last one
-    if (last_keyboard_listener)
-        current_keyboard_listener = last_keyboard_listener;
-    
-}
-
 void SKeyboardSystem::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     
     // Send out the key message to the client that currently has input
-    if (current_keyboard_listener)
-        current_keyboard_listener->keyCallback(window, key, scancode, action, mods);
+    if (keyboard_mode == SKeyboardModeGame) {
+        
+        if (current_keyboard_listener)
+            current_keyboard_listener->keyCallback(window, key, scancode, action, mods);
+    } else  if (current_keyboard_listener_ui)
+            current_keyboard_listener_ui->keyCallback(window, key, scancode, action, mods);
     
 }
 
 void SKeyboardSystem::charCallback(GLFWwindow* window, unsigned int unicode_value) {
     
     // Send out the key message to the client that currently has input
+    if (keyboard_mode == SKeyboardModeGame) {
+        
     if (current_keyboard_listener && current_keyboard_listener->char_func)
         current_keyboard_listener->char_func(unicode_value);
+        
+    } else if (current_keyboard_listener_ui && current_keyboard_listener_ui->char_func)
+        current_keyboard_listener_ui->char_func(unicode_value);
     
 }

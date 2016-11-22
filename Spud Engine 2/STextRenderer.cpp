@@ -93,7 +93,7 @@ void STextRenderer::renderTextWithCursor(std::string text, int cursor_pos, SFont
                 // Draw it
                 SUIRect cursor_frame;
                 cursor_frame.origin = cursor_head;
-                cursor_frame.size = glm::vec2(2.0f, font->line_height * font_size_multiplier);
+                cursor_frame.size = glm::vec2(CURSOR_WIDTH, font->line_height * font_size_multiplier);
                 
                 SUI::drawRect(cursor_frame, glm::vec4(1.0));
                 
@@ -121,7 +121,7 @@ void STextRenderer::renderTextWithCursor(std::string text, int cursor_pos, SFont
         
         SUIRect cursor_frame;
         cursor_frame.origin = cursor_head;
-        cursor_frame.size = glm::vec2(2.0f, font->line_height * font_size_multiplier);
+        cursor_frame.size = glm::vec2(CURSOR_WIDTH, font->line_height * font_size_multiplier);
         
         SUI::drawRect(cursor_frame, glm::vec4(1.0));
         

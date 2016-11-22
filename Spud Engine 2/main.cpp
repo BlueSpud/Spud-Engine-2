@@ -37,7 +37,7 @@ void moveLight(int key) {
     
 }
 
-void hello() {
+void hello(const std::vector<std::string>& args) {
     
     // Test command
     SLog::verboseLog(SVerbosityLevel::Debug, "Howdy!");
@@ -319,6 +319,7 @@ int main(int argc, char* argv[]) {
     
     SHotLoadSystem::shutdown();
     SResourceManager::shutdown();
+    
     
     // Write out the log to a file
     #ifdef __APPLE__
