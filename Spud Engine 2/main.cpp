@@ -9,8 +9,7 @@
 #include <btBulletDynamicsCommon.h>
 
 #include "STime.hpp"
-#include "SKeyboardSystem.hpp"
-#include "SMouseSystem.hpp"
+#include "SInputSystem.hpp"
 #include "SDeferredRenderingPipeline.hpp"
 #include "SCamera.hpp"
 #include "SHotLoadSystem.hpp"
@@ -108,12 +107,17 @@ void keyRelease(int key) {
     
 }
 
-void mouseMove(const SEvent& event) {
+void mouseClick(int button) {
+    
+    SLog::verboseLog(SVerbosityLevel::Debug, "MOUSE CLICK");
+    
+}
+
+void mouseMove(glm::vec2 mouse_vel) {
     
     // Add rotation to the camera
-    const SEventMouseMove& event_m = (SEventMouseMove&)event;
-    camera.transform.rotation_velocity.y = event_m.mouse_vel.x * 0.01;
-    camera.transform.rotation_velocity.x = -event_m.mouse_vel.y * 0.005;
+    camera.transform.rotation_velocity.y = mouse_vel.x * 0.01;
+    camera.transform.rotation_velocity.x = -mouse_vel.y * 0.005;
     
 }
 
@@ -139,11 +143,8 @@ int main(int argc, char* argv[]) {
     
     SGLUploadSystem::startup();
     
-    SKeyboardSystem::startup();
-    SMouseSystem::startup();
-    
+    SInputSystem::startup();
 
-    
     SFileSystem::startup();
     SFileSystem::getDefaultRootDirectory("/Users/Logan/Desktop/Spud Engine 2/a/a/");
     
@@ -162,12 +163,7 @@ int main(int argc, char* argv[]) {
     
     // TEMP CODE
     
-    SEventListener e_listener;
-    
     camera.transform.translation.y = 2.0;
-    
-    e_listener.listenToEvent(EVENT_MOUSE_MOVE, &mouseMove);
-    
     SSimpleSceneGraph scene_graph;
     
     // Access the mesh
@@ -191,23 +187,27 @@ int main(int argc, char* argv[]) {
     
     deferred_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
     
-    SKeyboardListener listener;
-    listener.bind(&keyPress, GLFW_KEY_S, KEY_ACTION_DOWN);
-    listener.bind(&keyPress, GLFW_KEY_W, KEY_ACTION_DOWN);
-    listener.bind(&keyPress, GLFW_KEY_D, KEY_ACTION_DOWN);
-    listener.bind(&keyPress, GLFW_KEY_A, KEY_ACTION_DOWN);
-    listener.bind(&keyPress, GLFW_KEY_LEFT, KEY_ACTION_DOWN);
-    listener.bind(&keyPress, GLFW_KEY_RIGHT, KEY_ACTION_DOWN);
+    SInputListener listener;
+    listener.bind(&keyPress, GLFW_KEY_S, INPUT_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_W, INPUT_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_D, INPUT_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_A, INPUT_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_LEFT, INPUT_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_RIGHT, INPUT_ACTION_DOWN);
     
-    listener.bind(&moveLight, GLFW_KEY_P, KEY_ACTION_DOWN);
-    listener.bind(&SConsole::activate, GLFW_KEY_GRAVE_ACCENT, KEY_ACTION_UP);
+    listener.bind(&moveLight, GLFW_KEY_P, INPUT_ACTION_DOWN);
+    listener.bind(&SConsole::activate, GLFW_KEY_GRAVE_ACCENT, INPUT_ACTION_UP);
     
-    listener.bind(&keyRelease, GLFW_KEY_S, KEY_ACTION_UP);
-    listener.bind(&keyRelease, GLFW_KEY_W, KEY_ACTION_UP);
-    listener.bind(&keyRelease, GLFW_KEY_D, KEY_ACTION_UP);
+    listener.bind(&keyRelease, GLFW_KEY_S, INPUT_ACTION_UP);
+    listener.bind(&keyRelease, GLFW_KEY_W, INPUT_ACTION_UP);
+    listener.bind(&keyRelease, GLFW_KEY_D, INPUT_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_A, KEY_ACTION_UP);
-    listener.bind(&keyRelease, GLFW_KEY_LEFT, KEY_ACTION_UP);
+    listener.bind(&keyRelease, GLFW_KEY_LEFT, INPUT_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_RIGHT, KEY_ACTION_UP);
+    
+    listener.bind(&mouseClick, GLFW_MOUSE_BUTTON_1, INPUT_ACTION_DOWN);
+    
+    listener.mouse_move_func = mouseMove;
     
     listener.setHasFocus();
     
@@ -340,8 +340,7 @@ int main(int argc, char* argv[]) {
     
     SFileSystem::shutdown();
     
-    SMouseSystem::shutdown();
-    SKeyboardSystem::shutdown();
+    SInputSystem::shutdown();
     
     SGLUploadSystem::shutdown();
     

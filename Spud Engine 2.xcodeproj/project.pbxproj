@@ -44,7 +44,6 @@
 		029865981D84AD52005EED43 /* Model in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865971D84AD4D005EED43 /* Model */; };
 		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
 		029865A11D84D0A4005EED43 /* SKeyboardSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0298659F1D84D0A4005EED43 /* SKeyboardSystem.cpp */; };
-		02A180A51D8E30F70032F2F0 /* SMouseSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A180A31D8E30F70032F2F0 /* SMouseSystem.cpp */; };
 		02A24C2A1D9317A00039F422 /* SFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A24C281D9317A00039F422 /* SFramebuffer.cpp */; };
 		02B6B7DD1DDB39A80068FCBA /* Shader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 020604711DB7982800B6268F /* Shader */; };
 		02B6B7DE1DDB39AD0068FCBA /* Font in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02B6B7DC1DDB399B0068FCBA /* Font */; };
@@ -56,6 +55,7 @@
 		02D295D11D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D295CF1D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp */; };
 		02D35A731D86217A00F62A7B /* SSceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D35A711D86217A00F62A7B /* SSceneGraph.cpp */; };
 		02DAB8C61D8A28F900A39E27 /* SRenderingPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02DAB8C41D8A28F900A39E27 /* SRenderingPipeline.cpp */; };
+		02E178D31DE6718200D80D5B /* SInputSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02E178D11DE6718200D80D5B /* SInputSystem.cpp */; };
 		02E7A7751DD2325E00F3164F /* SActor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02E7A7731DD2325E00F3164F /* SActor.cpp */; };
 		02E7A7791DD232CA00F3164F /* SComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02E7A7771DD232CA00F3164F /* SComponent.cpp */; };
 		02E7FC831DB545D600955052 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E7FC821DB545D600955052 /* libfreeimage.a */; };
@@ -146,8 +146,6 @@
 		0298659A1D84C38D005EED43 /* Texture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Texture; path = Resources/Texture; sourceTree = "<group>"; };
 		0298659F1D84D0A4005EED43 /* SKeyboardSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKeyboardSystem.cpp; sourceTree = "<group>"; };
 		029865A01D84D0A4005EED43 /* SKeyboardSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SKeyboardSystem.hpp; sourceTree = "<group>"; };
-		02A180A31D8E30F70032F2F0 /* SMouseSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMouseSystem.cpp; sourceTree = "<group>"; };
-		02A180A41D8E30F70032F2F0 /* SMouseSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SMouseSystem.hpp; sourceTree = "<group>"; };
 		02A24C281D9317A00039F422 /* SFramebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFramebuffer.cpp; sourceTree = "<group>"; };
 		02A24C291D9317A00039F422 /* SFramebuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFramebuffer.hpp; sourceTree = "<group>"; };
 		02B6B7DC1DDB399B0068FCBA /* Font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Font; path = Resources/Font; sourceTree = "<group>"; };
@@ -169,6 +167,8 @@
 		02D35A721D86217A00F62A7B /* SSceneGraph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSceneGraph.hpp; sourceTree = "<group>"; };
 		02DAB8C41D8A28F900A39E27 /* SRenderingPipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRenderingPipeline.cpp; sourceTree = "<group>"; };
 		02DAB8C51D8A28F900A39E27 /* SRenderingPipeline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRenderingPipeline.hpp; sourceTree = "<group>"; };
+		02E178D11DE6718200D80D5B /* SInputSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SInputSystem.cpp; sourceTree = "<group>"; };
+		02E178D21DE6718200D80D5B /* SInputSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SInputSystem.hpp; sourceTree = "<group>"; };
 		02E7A7731DD2325E00F3164F /* SActor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SActor.cpp; sourceTree = "<group>"; };
 		02E7A7741DD2325E00F3164F /* SActor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SActor.hpp; sourceTree = "<group>"; };
 		02E7A7771DD232CA00F3164F /* SComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SComponent.cpp; sourceTree = "<group>"; };
@@ -452,8 +452,8 @@
 			children = (
 				0298659F1D84D0A4005EED43 /* SKeyboardSystem.cpp */,
 				029865A01D84D0A4005EED43 /* SKeyboardSystem.hpp */,
-				02A180A31D8E30F70032F2F0 /* SMouseSystem.cpp */,
-				02A180A41D8E30F70032F2F0 /* SMouseSystem.hpp */,
+				02E178D11DE6718200D80D5B /* SInputSystem.cpp */,
+				02E178D21DE6718200D80D5B /* SInputSystem.hpp */,
 			);
 			name = Input;
 			sourceTree = "<group>";
@@ -619,7 +619,6 @@
 				02D35A731D86217A00F62A7B /* SSceneGraph.cpp in Sources */,
 				02B947F81D89FF7200822957 /* SUniform.cpp in Sources */,
 				029865831D847429005EED43 /* SMaterial.cpp in Sources */,
-				02A180A51D8E30F70032F2F0 /* SMouseSystem.cpp in Sources */,
 				025CB5961D83CD880059AF6C /* SShader.cpp in Sources */,
 				029865A11D84D0A4005EED43 /* SKeyboardSystem.cpp in Sources */,
 				02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */,
@@ -634,6 +633,7 @@
 				02C35AE01DDE2E26007C361C /* SUI.cpp in Sources */,
 				02B6B7E61DDBAE990068FCBA /* SConsole.cpp in Sources */,
 				029039671DB11CB30087B500 /* SAmbientOcclusionPass.cpp in Sources */,
+				02E178D31DE6718200D80D5B /* SInputSystem.cpp in Sources */,
 				02D295D11D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp in Sources */,
 				0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */,
 				025903301D77940400EA6372 /* main.cpp in Sources */,

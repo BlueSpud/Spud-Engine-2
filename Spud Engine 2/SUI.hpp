@@ -14,8 +14,10 @@
 #include "SFramebuffer.hpp"
 
 #include "STextRenderer.hpp"
-#include "SMouseSystem.hpp"
 #include "SKeyboardSystem.hpp"
+
+// Forward declatations
+class SUIWidget;
 
 /******************************************************************************
  *  Definition for ui rect                                                    *
@@ -55,6 +57,14 @@ class SUI : public SSubsystem {
     
         static SShader* simple_shader_color;
         static SShader* simple_shader_texture;
+    
+        /******************************************************************************
+         *  Input functions                                                           *
+         ******************************************************************************/
+    
+        static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        static void charCallback(GLFWwindow* window, unsigned int unicode_value);
+        static void mouseCallback(GLFWwindow* window, int button, int action, int mods);
     
     
 };

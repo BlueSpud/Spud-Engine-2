@@ -41,3 +41,9 @@ void SUI::drawRect(SUIRect& rect, glm::vec4 color) {
     SGL::drawRect(rect.origin, rect.size);
     
 }
+
+void SUI::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {}
+
+void SUI::charCallback(GLFWwindow* window, unsigned int unicode_value) {}
+
+void SUI::mouseCallback(GLFWwindow* window, int button, int action, int mods) {}

@@ -16,6 +16,10 @@
 #define KEY_ACTION_REPEAT GLFW_REPEAT
 #define KEY_ACTION_UP GLFW_RELEASE
 
+/******************************************************************************
+ *  Definition for keyboard modes                                             *
+ ******************************************************************************/
+
 enum SKeyboardMode {
     
     SKeyboardModeGame,

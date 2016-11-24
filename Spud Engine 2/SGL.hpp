@@ -119,6 +119,7 @@ class SGL : public SSubsystem {
     
         static void setKeyCallback(GLFWkeyfun func);
         static void setCharCallback(GLFWcharfun func);
+        static void setMouseCallback(GLFWmousebuttonfun func);
     
         static void setMouseInputMode(int mode);
         static void getMousePos(float* x_pos, float* y_pos);

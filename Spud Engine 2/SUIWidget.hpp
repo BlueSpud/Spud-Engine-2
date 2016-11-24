@@ -17,6 +17,8 @@
 
 class SUIWidget {
     
+    friend class SUI;
+    
     public:
     
         virtual void render(double interpolation) = 0;

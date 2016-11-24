@@ -20,7 +20,7 @@ void main() {
         for (int j = blur_start; j < blur_end; j++)
             final_result += texture(tex_occlusion, tex_coord0 + vec2(float(i), float(j)) * tex_coord_step).r;
     
-    final_result = final_result / (noise_size * noise_size);
+    final_result = final_result / float(noise_size * noise_size);
     
     // Output the blurred result
     blurred_occlusion = final_result;
