@@ -14,7 +14,6 @@
 #include "SFramebuffer.hpp"
 
 #include "STextRenderer.hpp"
-#include "SKeyboardSystem.hpp"
 
 // Forward declatations
 class SUIWidget;
@@ -65,6 +64,10 @@ class SUI : public SSubsystem {
         static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
         static void charCallback(GLFWwindow* window, unsigned int unicode_value);
         static void mouseCallback(GLFWwindow* window, int button, int action, int mods);
+    
+        static void moveMouse();
+    
+        static SUIWidget* current_widget_input;
     
     
 };

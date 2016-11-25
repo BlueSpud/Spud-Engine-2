@@ -102,6 +102,42 @@ void SInputSystem::shutdown() {
 
 }
 
+void SInputSystem::setInputMode(SInputMode _input_mode) {
+    
+    // We only need to switch input modes if we arent in the same mode
+    if (input_mode != _input_mode) {
+        
+        // Save the input mode
+        SInputMode old_mode = input_mode;
+        input_mode = _input_mode;
+        
+        // We need to send release on everything for the last keybaord listener so input doesnt get stuck
+        if (old_mode == SInputModeGame) {
+        
+            if (current_input_listener) {
+        
+                std::map<int, boost::function<void(int)>>::iterator i = current_input_listener->up_funcs.begin();
+                while (i != current_input_listener->up_funcs.end()) {
+                    
+                    // We only need to tell the old keyboard listener that the key is up if it is down
+                    if (SGL::getKeyState(i->first) == INPUT_ACTION_DOWN)
+                        i->second(i->first);
+                    i++;
+                
+                }
+            
+                // We also need to stop the mouse movement
+                if (current_input_listener->mouse_move_func)
+                    current_input_listener->mouse_move_func(glm::vec2(0.0));
+            
+            }
+        
+        }
+        
+    }
+    
+}
+
 void SInputSystem::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     
     // Send out the key message to the client that currently has input
@@ -153,6 +189,6 @@ void SInputSystem::moveMouse(const SEvent& event) {
         if (current_input_listener && current_input_listener->mouse_move_func)
             current_input_listener->mouse_move_func(mouse_pos - last_mouse_pos);
         
-    } else { /* Send input to UI */ }
+    } else { SUI::moveMouse(); }
     
 }

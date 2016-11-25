@@ -43,7 +43,6 @@
 		029865851D84771F005EED43 /* Material in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865841D84771A005EED43 /* Material */; };
 		029865981D84AD52005EED43 /* Model in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865971D84AD4D005EED43 /* Model */; };
 		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
-		029865A11D84D0A4005EED43 /* SKeyboardSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0298659F1D84D0A4005EED43 /* SKeyboardSystem.cpp */; };
 		02A24C2A1D9317A00039F422 /* SFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A24C281D9317A00039F422 /* SFramebuffer.cpp */; };
 		02B6B7DD1DDB39A80068FCBA /* Shader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 020604711DB7982800B6268F /* Shader */; };
 		02B6B7DE1DDB39AD0068FCBA /* Font in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02B6B7DC1DDB399B0068FCBA /* Font */; };
@@ -144,8 +143,6 @@
 		0298658F1D84A26E005EED43 /* SObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SObject.hpp; sourceTree = "<group>"; };
 		029865971D84AD4D005EED43 /* Model */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Model; path = Resources/Model; sourceTree = "<group>"; };
 		0298659A1D84C38D005EED43 /* Texture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Texture; path = Resources/Texture; sourceTree = "<group>"; };
-		0298659F1D84D0A4005EED43 /* SKeyboardSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKeyboardSystem.cpp; sourceTree = "<group>"; };
-		029865A01D84D0A4005EED43 /* SKeyboardSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SKeyboardSystem.hpp; sourceTree = "<group>"; };
 		02A24C281D9317A00039F422 /* SFramebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFramebuffer.cpp; sourceTree = "<group>"; };
 		02A24C291D9317A00039F422 /* SFramebuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFramebuffer.hpp; sourceTree = "<group>"; };
 		02B6B7DC1DDB399B0068FCBA /* Font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Font; path = Resources/Font; sourceTree = "<group>"; };
@@ -450,8 +447,6 @@
 		0298659E1D84D08D005EED43 /* Input */ = {
 			isa = PBXGroup;
 			children = (
-				0298659F1D84D0A4005EED43 /* SKeyboardSystem.cpp */,
-				029865A01D84D0A4005EED43 /* SKeyboardSystem.hpp */,
 				02E178D11DE6718200D80D5B /* SInputSystem.cpp */,
 				02E178D21DE6718200D80D5B /* SInputSystem.hpp */,
 			);
@@ -620,7 +615,6 @@
 				02B947F81D89FF7200822957 /* SUniform.cpp in Sources */,
 				029865831D847429005EED43 /* SMaterial.cpp in Sources */,
 				025CB5961D83CD880059AF6C /* SShader.cpp in Sources */,
-				029865A11D84D0A4005EED43 /* SKeyboardSystem.cpp in Sources */,
 				02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */,
 				025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */,
 				0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */,

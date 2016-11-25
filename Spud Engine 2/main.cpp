@@ -64,14 +64,7 @@ void keyPress(int key) {
         case GLFW_KEY_A:
             speed_x += -0.4;
             break;
-            
-        case GLFW_KEY_LEFT:
-            speed_r += -0.05;
-            break;
-            
-        case GLFW_KEY_RIGHT:
-            speed_r += 0.05;
-            break;
+
     }
     
 }
@@ -95,14 +88,7 @@ void keyRelease(int key) {
         case GLFW_KEY_A:
             speed_x -= -0.4;
             break;
-            
-        case GLFW_KEY_LEFT:
-            speed_r -= -0.05;
-            break;
-            
-        case GLFW_KEY_RIGHT:
-            speed_r -= 0.05;
-            break;
+        
     }
     
 }
@@ -201,12 +187,9 @@ int main(int argc, char* argv[]) {
     listener.bind(&keyRelease, GLFW_KEY_S, INPUT_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_W, INPUT_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_D, INPUT_ACTION_UP);
-    listener.bind(&keyRelease, GLFW_KEY_A, KEY_ACTION_UP);
-    listener.bind(&keyRelease, GLFW_KEY_LEFT, INPUT_ACTION_UP);
-    listener.bind(&keyRelease, GLFW_KEY_RIGHT, KEY_ACTION_UP);
+    listener.bind(&keyRelease, GLFW_KEY_A, INPUT_ACTION_UP);
     
     listener.bind(&mouseClick, GLFW_MOUSE_BUTTON_1, INPUT_ACTION_DOWN);
-    
     listener.mouse_move_func = mouseMove;
     
     listener.setHasFocus();

@@ -70,7 +70,7 @@ void SConsole::activate(int arg) {
     
     // Give control of the keyboard to the text field
     text_field->startEditing();
-    SKeyboardSystem::keyboard_mode = SKeyboardModeUI;
+    SInputSystem::setInputMode(SInputModeUI);
     
     // Show that the console is active
     console_active = true;
@@ -80,7 +80,7 @@ void SConsole::activate(int arg) {
 void SConsole::deactivateConsole() {
     
     // Give keyboard control back to the game
-    SKeyboardSystem::keyboard_mode = SKeyboardModeGame;
+    SInputSystem::setInputMode(SInputModeGame);
     
     // Console is no longer active
     console_active = false;

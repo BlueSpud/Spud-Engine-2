@@ -10,6 +10,7 @@
 #define SUIWidget_hpp
 
 #include "SUI.hpp"
+#include "SInputSystem.hpp"
 
 /******************************************************************************
  *  Definition for generic ui widget                                          *
@@ -22,8 +23,18 @@ class SUIWidget {
     public:
     
         virtual void render(double interpolation) = 0;
-    
         SUIRect frame;
+    
+    protected:
+    
+        // Booleans for events captured
+        bool has_event_pressed = false;
+        bool has_event_released = false;
+        bool has_event_hover = false;
+    
+        bool captures_pressed = false;
+    
+        SInputListener input_listener;
     
 };
 

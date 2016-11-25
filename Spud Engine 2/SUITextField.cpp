@@ -15,19 +15,19 @@
 SUITextField::SUITextField() : cursor_blink_timer(boost::bind(&SUITextField::blinkCursor, this), 0.5, TIMER_LOOP_INFINITE) {
     
     // Start listening for various things in the keyboard listener
-    keyboard_listener.setCharCallback(boost::bind(&SUITextField::charCallback, this, _1));
+    input_listener.char_func = boost::bind(&SUITextField::charCallback, this, _1);
     
     // Listen for some special characters
-    keyboard_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_BACKSPACE, KEY_ACTION_DOWN);
+    input_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_BACKSPACE, INPUT_ACTION_DOWN);
     
-    keyboard_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_RIGHT, KEY_ACTION_DOWN);
-    keyboard_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_LEFT, KEY_ACTION_DOWN);
+    input_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_RIGHT, INPUT_ACTION_DOWN);
+    input_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_LEFT, INPUT_ACTION_DOWN);
     
-    keyboard_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_ENTER, KEY_ACTION_DOWN);
-    keyboard_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_ESCAPE, KEY_ACTION_DOWN);
+    input_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_ENTER, INPUT_ACTION_DOWN);
+    input_listener.bind(boost::bind(&SUITextField::pressSpecialKey, this, _1), GLFW_KEY_ESCAPE, INPUT_ACTION_DOWN);
     
     // For text input, the keyboard listener repeats
-    keyboard_listener.repeats = true;
+    input_listener.repeats = true;
     
 }
 
@@ -50,7 +50,7 @@ void SUITextField::render(double interpolation) {
 void SUITextField::startEditing() {
     
     // Enable the keybaord listener
-    keyboard_listener.setHasFocusUI();
+    SUI::current_widget_input = this;
     
 }
 

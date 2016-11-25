@@ -38,6 +38,7 @@ enum SInputMode {
 class SInputListener {
     
     friend class SInputSystem;
+    friend class SUI;
     
     public:
     
@@ -72,7 +73,7 @@ class SInputSystem : public SSubsystem {
         static void startup();
         static void shutdown();
     
-        static SInputMode input_mode;
+        static void setInputMode(SInputMode _input_mode);
     
     private:
     
@@ -87,8 +88,8 @@ class SInputSystem : public SSubsystem {
     
         static SInputListener* current_input_listener;
         static SEventListener event_listener;
-        
     
+        static SInputMode input_mode;
     
 };
 

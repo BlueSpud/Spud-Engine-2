@@ -44,8 +44,6 @@ class SUITextField : public SUIWidget {
     
         virtual void charCallback(unsigned int key);
     
-        SKeyboardListener keyboard_listener;
-    
         int cursor_head = 0;
         std::string text;
     
