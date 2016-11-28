@@ -9,6 +9,8 @@
 #ifndef SUI_hpp
 #define SUI_hpp
 
+#include <list>
+
 #include "STexture.hpp"
 #include "SShader.hpp"
 #include "SFramebuffer.hpp"
@@ -17,6 +19,7 @@
 
 // Forward declatations
 class SUIWidget;
+class SUI;
 
 /******************************************************************************
  *  Definition for ui rect                                                    *
@@ -38,7 +41,31 @@ struct SUIRect {
 };
 
 /******************************************************************************
- *  Definition main ui class                                                  *
+ *  Definition for ui graph                                                   *
+ ******************************************************************************/
+
+class SUIGraph {
+    
+    friend class SUI;
+    
+    public:
+    
+        ~SUIGraph();
+    
+        void addWidget(SUIWidget* widget);
+        void removeWidget(SUIWidget* widget);
+    
+        void render(double interpolation);
+    
+    private:
+    
+        std::list<SUIWidget*> widgets;
+    
+    
+};
+
+/******************************************************************************
+ *  Definition for main ui class                                              *
  ******************************************************************************/
 
 class SUI : public SSubsystem {
@@ -51,6 +78,8 @@ class SUI : public SSubsystem {
         /******************************************************************************
          *  Drawing functions                                                         *
          ******************************************************************************/
+    
+        static void renderUI(double interpolation);
     
         static void drawRect(SUIRect& rect, glm::vec4 color);
     
@@ -68,6 +97,11 @@ class SUI : public SSubsystem {
         static void moveMouse();
     
         static SUIWidget* current_widget_input;
+        static SUIGraph* current_ui_graph;
+    
+    private:
+    
+        static SUIWidget* hovering_widget;
     
     
 };

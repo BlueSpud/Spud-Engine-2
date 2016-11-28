@@ -20,7 +20,7 @@ REGISTER_RESOURCE_CLASS(font, SFont);
 
 SResource* SFont::allocate() { return new SFont(); }
 
-float SFont::getLineHeight(float _font_size) { return ((float)line_height / font_size * _font_size); }
+float SFont::getLineHeight(float _font_size) { return ((float)line_height / font_size * _font_size) / SGL::getScreenScale(); }
 
 bool SFont::load(const SPath& path) {
     

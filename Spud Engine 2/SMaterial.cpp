@@ -67,20 +67,16 @@ bool SMaterial::load(const SPath& path) {
 void SMaterial::bind() {
     
     // Check if this is already the currently bound material
-    //if (currently_bound_material != this) {
+    if (currently_bound_material != this) {
         
         currently_bound_material = this;
         
         // Bind the textures
-        std::map<std::string, STexture*>::iterator i = textures.begin();
         int texture = 0;
+        for (std::map<std::string, STexture*>::iterator i = textures.begin(); i != textures.end(); i++) {
         
-        while (i != textures.end()) {
-            
             i->second->bind(texture);
-            
             texture++;
-            i++;
             
         }
         
@@ -95,26 +91,22 @@ void SMaterial::bind() {
         for (int i = 0; i < uniforms.size(); i++)
             shader->bindUniform(uniforms[i]);
         
-    // }
+     }
     
 }
 
 void SMaterial::uploadTextureIDs(SShader* shader) {
     
     // Go through the textures and assign Ids for them
-    std::map<std::string, STexture*>::iterator i = textures.begin();
     int texture = 0;
-    
-    while (i != textures.end()) {
+    for (std::map<std::string, STexture*>::iterator i = textures.begin(); i != textures.end(); i++) {
         
         glUniform1i(SShader::getUniformLocation(shader, i->first), texture);
-        
         texture++;
-        i++;
         
     }
     
     
 }
 
-void SMaterial::unload() { /* stub */ }
+void SMaterial::unload() { /* intentionally empty */ }

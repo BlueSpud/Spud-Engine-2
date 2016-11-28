@@ -64,6 +64,10 @@ void keyPress(int key) {
         case GLFW_KEY_A:
             speed_x += -0.4;
             break;
+            
+        case GLFW_KEY_G:
+            SGL::setMouseInputMode(GLFW_CURSOR_NORMAL);
+            break;
 
     }
     
@@ -182,6 +186,7 @@ int main(int argc, char* argv[]) {
     listener.bind(&keyPress, GLFW_KEY_RIGHT, INPUT_ACTION_DOWN);
     
     listener.bind(&moveLight, GLFW_KEY_P, INPUT_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_G, INPUT_ACTION_DOWN);
     listener.bind(&SConsole::activate, GLFW_KEY_GRAVE_ACCENT, INPUT_ACTION_UP);
     
     listener.bind(&keyRelease, GLFW_KEY_S, INPUT_ACTION_UP);
@@ -193,6 +198,19 @@ int main(int argc, char* argv[]) {
     listener.mouse_move_func = mouseMove;
     
     listener.setHasFocus();
+    
+    SUIGraph* ui_graph = new SUIGraph();
+    
+    SUITextField* text_field = new SUITextField();
+    text_field->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
+    text_field->font_size = CONSOLE_FONT_SIZE;
+    text_field->background_color = glm::vec4(1.0, 0.0, 0.0, 1.0);
+    
+    text_field->frame.size = glm::vec2(200.0, 25.0);
+    
+    ui_graph->addWidget(text_field);
+    SUI::current_ui_graph = ui_graph;
+    
     
     // END TEMP CODE
     
@@ -216,6 +234,8 @@ int main(int argc, char* argv[]) {
     // Create a timer to display the FPS
     STimer fps_timer = STimer(&FPS, 1.0, TIMER_LOOP_INFINITE);
     
+    // Disable the cursor by default
+    SGL::setMouseInputMode(GLFW_CURSOR_DISABLED);
     
     // Main loop start
     while (SGL::windowIsGood()) {
@@ -253,8 +273,6 @@ int main(int argc, char* argv[]) {
             
         }
         
-        SGL::setMouseInputMode(GLFW_CURSOR_DISABLED);
-        
         //SLog::verboseLog(SVerbosityLevel::Debug, "Update took %fs", (float)profiler.stop());
         
         // If we were forced to stop updating the game and render a frame, we cant keep up
@@ -271,14 +289,7 @@ int main(int argc, char* argv[]) {
         // Render using a deferred rendering pipline
         deferred_pipeline->render(scene_graph, camera, interpolation);
         
-        
-        // Temp enable blending function
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        
-        SConsole::render();
-        
-        glDisable(GL_BLEND);
+        SUI::renderUI(interpolation);
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
         

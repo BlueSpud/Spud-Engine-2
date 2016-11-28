@@ -12,7 +12,7 @@
 #include "SUITextField.hpp"
 
 #define CONSOLE_FONT_SIZE 15.0f
-#define CONSOLE_INDENT 15.0f
+#define CONSOLE_INDENT 7.5f
 
 /******************************************************************************
  *  Definition for console                                                    *

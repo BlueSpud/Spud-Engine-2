@@ -13,7 +13,7 @@
 #include "SFont.hpp"
 #include "SShader.hpp"
 
-#define CURSOR_WIDTH 3.0f
+#define CURSOR_WIDTH 1.5f
 
 /******************************************************************************
  *  Definition for text renderer                                              *
@@ -31,9 +31,10 @@ class STextRenderer : public SSubsystem {
     
     private:
     
+        static void render_cursor(SFont* font, float font_size_multiplier, const glm::vec2& position);
+    
         static SFont* default_font;
         static SShader* text_shader;
-    
     
 };
 

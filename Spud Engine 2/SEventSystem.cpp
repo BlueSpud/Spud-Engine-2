@@ -31,13 +31,8 @@ void SEventListener::stopListeningToEvent(int event) {
 SEventListener::~SEventListener() {
     
     // Disconnect from all of the slots
-    std::map<int, boost::signals2::connection>::iterator i = connections.begin();
-    
-    while (i != connections.end()) {
-    
+    for (std::map<int, boost::signals2::connection>::iterator i = connections.begin(); i != connections.end(); i++)
         i->second.disconnect();
-        i++;
-    }
 }
 
 /******************************************************************************

@@ -25,6 +25,8 @@ class SUIWidget {
         virtual void render(double interpolation) = 0;
         SUIRect frame;
     
+        virtual ~SUIWidget() { /* intentionally empty */ }
+    
     protected:
     
         // Booleans for events captured

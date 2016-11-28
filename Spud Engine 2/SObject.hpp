@@ -25,7 +25,7 @@ class SObject {
     
         virtual bool shouldBeRendered(const glm::mat4& projection_view_matrix) { return true; }
     
-        virtual ~SObject() { /* stub */ }
+        virtual ~SObject() { /* intentionally empty */ }
     
         STransform transform;
     

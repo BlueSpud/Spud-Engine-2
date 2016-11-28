@@ -116,13 +116,13 @@ void SInputSystem::setInputMode(SInputMode _input_mode) {
         
             if (current_input_listener) {
         
-                std::map<int, boost::function<void(int)>>::iterator i = current_input_listener->up_funcs.begin();
-                while (i != current_input_listener->up_funcs.end()) {
+                for (std::map<int, boost::function<void(int)>>::iterator i = current_input_listener->up_funcs.begin();
+                       i != current_input_listener->up_funcs.end();
+                       i++) {
                     
                     // We only need to tell the old keyboard listener that the key is up if it is down
                     if (SGL::getKeyState(i->first) == INPUT_ACTION_DOWN)
                         i->second(i->first);
-                    i++;
                 
                 }
             

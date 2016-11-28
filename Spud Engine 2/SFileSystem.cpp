@@ -190,9 +190,7 @@ void SFileSystem::startup() {
 void SFileSystem::shutdown() {
 
     // Delete all the loaded files
-    std::map<unsigned long, SFile*>::iterator i = loaded_files.begin();
-    
-    while (i != loaded_files.end()) {
+    for (std::map<unsigned long, SFile*>::iterator i = loaded_files.begin(); i != loaded_files.end(); i++) {
         
         SFile* file = i->second;
         
@@ -204,7 +202,6 @@ void SFileSystem::shutdown() {
             
         }
         
-        i++;
     }
 
     SLog::verboseLog(SVerbosityLevel::Debug, "SFileSystem shutdown");
@@ -278,14 +275,11 @@ SFile* SFileSystem::loadFile(const SPath& path, bool binary) {
 void SFileSystem::closeFile(SFile* file) {
     
     // Find the file and delete it
-    std::map<unsigned long, SFile*>::iterator i = loaded_files.begin();
-    
-    while (i != loaded_files.end()) {
+    std::map<unsigned long, SFile*>::iterator i;
+    for (i = loaded_files.begin(); i != loaded_files.end(); i++) {
         
         if (i->second == file)
             break;
-        
-        i++;
         
     }
 

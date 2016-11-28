@@ -156,13 +156,8 @@ void SFramebufferUpload::unload() { /* nothing */ }
 void SFramebufferUnload::upload() {
     
     // Delete the textures
-    std::map<int, GLuint>::iterator i = textures->begin();
-    while (i != textures->end()) {
-
+    for (std::map<int, GLuint>::iterator i = textures->begin(); i != textures->end(); i++)
         glDeleteTextures(1, &i->second);
-        i++;
-        
-    }
     
     // Delete the framebuffer
     glDeleteFramebuffers(1, &framebuffer_id);

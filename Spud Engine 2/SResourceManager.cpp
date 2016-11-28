@@ -16,8 +16,8 @@ std::hash<std::string>SResourceManager::hasher;
  ******************************************************************************/
 
 SResource* SResource::allocate() { return nullptr; }
-SResource::~SResource() { /* stub */ }
-void SResource::hotload(const SPath& path) { /* stub */ }
+SResource::~SResource() { /* intentionally empty */ }
+void SResource::hotload(const SPath& path) { /* intentionally empty */ }
 SResource* SResource::resource() { return this; }
 
 /******************************************************************************
@@ -56,9 +56,7 @@ void SResourceManager::startup() {
 void SResourceManager::shutdown() {
     
     // Delete all the loaded resources
-    std::map<size_t, SResource*>::iterator i = loaded_resources.begin();
-    
-    while (i != loaded_resources.end()) {
+    for (std::map<size_t, SResource*>::iterator i = loaded_resources.begin(); i != loaded_resources.end(); i++) {
         
         SResource* resource = i->second;
         
@@ -69,8 +67,6 @@ void SResourceManager::shutdown() {
             delete loaded_resources[i->first];
             
         }
-        
-        i++;
     }
 
     

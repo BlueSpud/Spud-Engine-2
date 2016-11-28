@@ -25,10 +25,9 @@ void SSimpleSceneGraph::render(SCamera& camera, bool render_material, double int
     // The array is sorted by z value of an object relative to the camera
     std::list<SSortedObject>rendered_objects;
     
-    std::list<SObject*>::iterator i = objects.begin();
     std::list<SSortedObject>::iterator j;
     
-    while (i != objects.end()) {
+    for (std::list<SObject*>::iterator i = objects.begin(); i != objects.end(); i++) {
         
         // Check if we should render this object
         if ((*i)->shouldBeRendered(projection_view_matrix)) {
@@ -42,9 +41,8 @@ void SSimpleSceneGraph::render(SCamera& camera, bool render_material, double int
                                                            object_s.object->transform.translation_velocity * (float)interpolation), 1.0)).z;
             
             // Do an insertion sort of the new object into the array
-            j = rendered_objects.begin();
             bool added = false;
-            while (j != rendered_objects.end()) {
+            for (j = rendered_objects.begin(); j != rendered_objects.end(); j++) {
                 
                 // Check if the object has a z value greater than us
                 if ((*j).z_value < object_s.z_value) {
@@ -55,8 +53,7 @@ void SSimpleSceneGraph::render(SCamera& camera, bool render_material, double int
                     break;
                     
                 }
-                    
-                j++;
+                
             }
             
             // If it wasnt added, add it back
@@ -65,21 +62,16 @@ void SSimpleSceneGraph::render(SCamera& camera, bool render_material, double int
             
         }
         
-        i++;
-        
     }
     
     // Objects are collected, now they are rendered
-    j = rendered_objects.begin();
-    while (j != rendered_objects.end()) {
+    for (j = rendered_objects.begin(); j != rendered_objects.end(); j++) {
         
         // Set up the matricies for this
         SGL::clearMatrix(MAT_MODEL_MATRIX);
         
         // Render the object
         (*j).object->render(render_material, interpolation);
-        
-        j++;
     }
     
 }
@@ -102,15 +94,8 @@ SSimpleSceneGraph::~SSimpleSceneGraph() {
     
     // Delete all the objects from memory
     std::vector<SObject*>rendered_objects;
-    
-    std::list<SObject*>::iterator i = objects.begin();
-    while (i != objects.end()) {
-        
-        delete *i;
-        
-        i++;
-        
-    }
 
+    for (std::list<SObject*>::iterator i = objects.begin(); i != objects.end(); i++)
+        delete *i;
     
 }

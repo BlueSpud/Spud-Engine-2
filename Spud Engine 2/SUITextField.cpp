@@ -42,8 +42,11 @@ void SUITextField::render(double interpolation) {
     // Render the text field. give a slight x indent
     // If the cursor is shown we use the function with the cursor showing
     if (cursor_shown)
-        STextRenderer::renderTextWithCursor(text, cursor_head, font, font_size, glm::vec2(frame.origin.x + font_size, frame.origin.y + y_padding));
-    else STextRenderer::renderText(text, font, font_size, glm::vec2(frame.origin.x + font_size, frame.origin.y + y_padding));
+        STextRenderer::renderTextWithCursor(text, cursor_head, font, font_size,
+                                            glm::vec2(frame.origin.x + font_size / 2.0, frame.origin.y + y_padding));
+    
+    else STextRenderer::renderText(text, font, font_size,
+                                   glm::vec2(frame.origin.x + font_size / 2.0, frame.origin.y + y_padding));
     
 }
 

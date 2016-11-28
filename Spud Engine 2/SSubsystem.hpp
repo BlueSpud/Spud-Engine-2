@@ -17,9 +17,9 @@ class SSubsystem {
     
     public:
     
-        static void startup() { /* stub */}
+        static void startup() { /* intentionally empty */}
     
-        static void shutdown() { /* stub */}
+        static void shutdown() { /* intentionally empty */}
     
 };
 

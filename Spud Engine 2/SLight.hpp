@@ -29,7 +29,7 @@ class SLight {
     public:
     
         SLight();
-        virtual ~SLight() { /* stub */ }
+        virtual ~SLight() { /* intentionally empty */ }
     
     virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) = 0;
  

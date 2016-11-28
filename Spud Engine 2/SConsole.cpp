@@ -48,8 +48,7 @@ void SConsole::startup() {
     text_field->return_function = &commitCommand;
     
     // Make the frame for the console
-    glm::vec2 console_size = SGL::getWindowFramebufferSize();
-    console_size.y = console_size.y * 0.75;
+    glm::vec2 console_size = glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT * 0.75);
     consoleFrame.size = console_size;
     
     // Make the text field frame

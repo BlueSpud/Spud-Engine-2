@@ -59,14 +59,12 @@ void SSimpleLightGraph::cullLights(glm::mat4& projection_view_matrix) {
     // Clear the old list of lights
     culled_lights.clear();
     
-    std::list<SLight*>::iterator i = lights.begin();
-    while (i != lights.end()) {
+    for (std::list<SLight*>::iterator i = lights.begin(); i != lights.end(); i++) {
         
         // Check if the light needs a shadow update and if we can see it in the frustrum
         if ((*i)->shouldBeCulled(projection_view_matrix))
             culled_lights.push_back(*i);
         
-        i++;
     }
     
 }
@@ -224,14 +222,8 @@ std::vector<int> SSimpleLightGraph::getShadowLights() {
 SSimpleLightGraph::~SSimpleLightGraph() {
     
     // Delete all the lights in the graph
-    std::list<SLight*>::iterator i = lights.begin();
-    while (i != lights.end()) {
-        
+    for (std::list<SLight*>::iterator i = lights.begin(); i != lights.end(); i++)
         delete *i;
-        
-        i++;
-        
-    }
     
     // Delete the light position array
     delete light_positions;
