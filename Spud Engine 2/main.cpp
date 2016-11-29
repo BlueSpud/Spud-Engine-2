@@ -16,6 +16,7 @@
 #include "SFramebuffer.hpp"
 
 #include "SConsole.hpp"
+#include "SUIButton.hpp"
 
 #include "SActor.hpp"
 #include "SStaticMeshComponent.hpp"
@@ -66,7 +67,10 @@ void keyPress(int key) {
             break;
             
         case GLFW_KEY_G:
+            
+            SInputSystem::setInputMode(SInputModeUI);
             SGL::setMouseInputMode(GLFW_CURSOR_NORMAL);
+            
             break;
 
     }
@@ -194,7 +198,7 @@ int main(int argc, char* argv[]) {
     listener.bind(&keyRelease, GLFW_KEY_D, INPUT_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_A, INPUT_ACTION_UP);
     
-    listener.bind(&mouseClick, GLFW_MOUSE_BUTTON_1, INPUT_ACTION_DOWN);
+    listener.bind(&mouseClick, GLFW_MOUSE_BUTTON_LEFT, INPUT_ACTION_DOWN);
     listener.mouse_move_func = mouseMove;
     
     listener.setHasFocus();
@@ -206,9 +210,26 @@ int main(int argc, char* argv[]) {
     text_field->font_size = CONSOLE_FONT_SIZE;
     text_field->background_color = glm::vec4(1.0, 0.0, 0.0, 1.0);
     
-    text_field->frame.size = glm::vec2(200.0, 25.0);
+    text_field->frame.origin = text_field->frame.size = glm::vec2(200.0, 25.0);
     
     ui_graph->addWidget(text_field);
+    
+    SUIButton* button = new SUIButton();
+    
+    button->standard_color = glm::vec4(0.0, 0.0, 0.0, 1.0);
+    button->hover_color = glm::vec4(0.0, 0.0, 0.2, 1.0);
+    button->press_color = glm::vec4(1.0);
+    
+    button->frame.origin = glm::vec2(400.0, 400.0);
+    button->frame.size = glm::vec2(200.0, 50.0);
+    
+    //button->font = text_field->font;
+    //button->label = "PRESS ME";
+    
+    button->press_func = &mouseClick;
+    
+    ui_graph->addWidget(button);
+    
     SUI::current_ui_graph = ui_graph;
     
     

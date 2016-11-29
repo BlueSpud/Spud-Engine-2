@@ -1,0 +1,46 @@
+//
+//  SUIButton.hpp
+//  Spud Engine 2
+//
+//  Created by Logan Pazol on 11/28/16.
+//  Copyright © 2016 Logan Pazol. All rights reserved.
+//
+
+#ifndef SUIButton_hpp
+#define SUIButton_hpp
+
+#include "SUIWidget.hpp"
+
+/******************************************************************************
+ *  Definition for simple button widget                                       *
+ ******************************************************************************/
+
+class SUIButton : public SUIWidget {
+    
+    public:
+    
+        SUIButton();
+    
+        virtual void render(double interpolation);
+    
+        std::string label;
+        SFont* font;
+    
+        glm::vec4 standard_color;
+        glm::vec4 hover_color;
+        glm::vec4 press_color;
+    
+        boost::function<void(int)> press_func;
+        boost::function<void(int)> release_func;
+    
+    protected:
+    
+        virtual void onHover();
+        virtual void onPress(int button);
+        virtual void onRelease(int button);
+    
+        bool pressed = false;
+    
+};
+
+#endif /* SUIButton_hpp */

@@ -16,6 +16,8 @@ SShader* SUI::simple_shader_texture;
 SUIWidget* SUI::current_widget_input;
 SUIGraph* SUI::current_ui_graph;
 
+SUIWidget* SUI::hovering_widget;
+
 /******************************************************************************
  *  Fucntions for ui graph                                                    *
  ******************************************************************************/
@@ -121,7 +123,22 @@ void SUI::charCallback(GLFWwindow* window, unsigned int unicode_value) {
 
 }
 
-void SUI::mouseCallback(GLFWwindow* window, int button, int action, int mods) {}
+void SUI::mouseCallback(GLFWwindow* window, int button, int action, int mods) {
+
+    // The hovering widget is the widget we would click, so if we have it, ask it to click
+    if (hovering_widget) {
+        
+        // Logic for press
+        if (action == INPUT_ACTION_DOWN && hovering_widget->has_event_pressed)
+            hovering_widget->onPress(button);
+        
+        // Logic for release
+        if (action == INPUT_ACTION_UP && hovering_widget->has_event_released)
+            hovering_widget->onRelease(button);
+        
+    }
+
+}
 
 void SUI::moveMouse() {
 
@@ -129,7 +146,36 @@ void SUI::moveMouse() {
     glm::vec2 mouse_position;
     SGL::getMousePos(&mouse_position.x, &mouse_position.y);
     
-    SLog::verboseLog(SVerbosityLevel::Debug, "Mouse position: %f %f", mouse_position.x, mouse_position.y);
-
-
+    
+    // Go through the widgets in reverse order and see if we're hovering on any
+    SUIWidget* new_hover_widget = nullptr;
+    
+    if (current_ui_graph)
+        for (std::list<SUIWidget*>::reverse_iterator i = current_ui_graph->widgets.rbegin(); i != current_ui_graph->widgets.rend(); i++) {
+            
+            if ((*i)->frame.origin.x > mouse_position.x || (*i)->frame.origin.y > mouse_position.y ||
+                (*i)->frame.origin.x + (*i)->frame.size.x < mouse_position.x || (*i)->frame.origin.y + (*i)->frame.size.y < mouse_position.y)
+                    continue;
+            
+            new_hover_widget = *i;
+            break;
+    
+    }
+    
+    // We set the old hovering widget to false so when we leave it it will no longer be hovering
+    if (hovering_widget)
+        hovering_widget->hovering = false;
+    
+    // If we hovered over one, we need to do some stuff to it
+    if (new_hover_widget) {
+     
+        new_hover_widget->hovering = true;
+        hovering_widget = new_hover_widget;
+        
+        // If there is an event for hovering over the widget, call it
+        if (hovering_widget->has_event_hover)
+            hovering_widget->onHover();
+    
+    } else hovering_widget = nullptr;
+    
 }

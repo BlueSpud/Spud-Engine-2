@@ -33,8 +33,12 @@ class SUIWidget {
         bool has_event_pressed = false;
         bool has_event_released = false;
         bool has_event_hover = false;
+        bool hovering = false;
     
-        bool captures_pressed = false;
+        virtual void onHover() { /* intentionally empty */ }
+        virtual void onPress(int button) { /* intentionally empty */ }
+        virtual void onRelease(int button) { /* intentionally empty */ }
+
     
         SInputListener input_listener;
     

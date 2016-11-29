@@ -59,6 +59,7 @@
 		02E7A7791DD232CA00F3164F /* SComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02E7A7771DD232CA00F3164F /* SComponent.cpp */; };
 		02E7FC831DB545D600955052 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E7FC821DB545D600955052 /* libfreeimage.a */; };
 		02F547B31DD271EB005DAB0D /* SStaticMeshComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02F547B11DD271EB005DAB0D /* SStaticMeshComponent.cpp */; };
+		02F669331DEC7ADA0042F8D6 /* SUIButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02F669311DEC7ADA0042F8D6 /* SUIButton.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -173,6 +174,8 @@
 		02E7FC821DB545D600955052 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = FreeImage/lib/libfreeimage.a; sourceTree = "<group>"; };
 		02F547B11DD271EB005DAB0D /* SStaticMeshComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SStaticMeshComponent.cpp; sourceTree = "<group>"; };
 		02F547B21DD271EB005DAB0D /* SStaticMeshComponent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMeshComponent.hpp; sourceTree = "<group>"; };
+		02F669311DEC7ADA0042F8D6 /* SUIButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUIButton.cpp; sourceTree = "<group>"; };
+		02F669321DEC7ADA0042F8D6 /* SUIButton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUIButton.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -490,6 +493,8 @@
 				02C427C61DDCACE60088039F /* SUIWidget.hpp */,
 				02C427C21DDCAC620088039F /* SUITextField.cpp */,
 				02C427C31DDCAC620088039F /* SUITextField.hpp */,
+				02F669311DEC7ADA0042F8D6 /* SUIButton.cpp */,
+				02F669321DEC7ADA0042F8D6 /* SUIButton.hpp */,
 			);
 			name = Widgets;
 			sourceTree = "<group>";
@@ -608,6 +613,7 @@
 				029865801D8460DC005EED43 /* SCamera.cpp in Sources */,
 				02F547B31DD271EB005DAB0D /* SStaticMeshComponent.cpp in Sources */,
 				02328BEF1DD185E70083B0BB /* SStaticMeshInstance.cpp in Sources */,
+				02F669331DEC7ADA0042F8D6 /* SUIButton.cpp in Sources */,
 				025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */,
 				026915C81DDB386C00A06D4C /* SFont.cpp in Sources */,
 				02716E3F1DC2A5DE00EFC656 /* SRectPacker.cpp in Sources */,
