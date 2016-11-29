@@ -24,11 +24,16 @@ class SUIButton : public SUIWidget {
         virtual void render(double interpolation);
     
         std::string label;
-        SFont* font;
+        SFont* font = nullptr;
+        float font_size = 15.0;
     
-        glm::vec4 standard_color;
-        glm::vec4 hover_color;
-        glm::vec4 press_color;
+//        glm::vec4 standard_color;
+//        glm::vec4 hover_color;
+//        glm::vec4 press_color;
+    
+        STexture* background_image;
+        STexture* hover_image;
+        STexture* press_image;
     
         boost::function<void(int)> press_func;
         boost::function<void(int)> release_func;

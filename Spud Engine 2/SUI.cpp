@@ -107,6 +107,17 @@ void SUI::drawRect(SUIRect& rect, glm::vec4 color) {
     
 }
 
+void SUI::drawRect(SUIRect& rect, STexture* texture) {
+    
+     // Bind the simple color shader and the texture
+    simple_shader_texture->bind();
+    texture->bind(0);
+    
+    // Draw the rect with opengl
+    SGL::drawRect(rect.origin * SGL::getScreenScale(), rect.size * SGL::getScreenScale());
+    
+}
+
 void SUI::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
     // If we have a widget that can take keybaord input, we send it off

@@ -24,20 +24,28 @@ SUIButton::SUIButton() {
 void SUIButton::render(double interpolation) {
 
     // If we are hovering change the color
-    glm::vec4 draw_color = standard_color;
+    //glm::vec4 draw_color = standard_color;
+    STexture* draw_image = background_image;
     
     // Figure out which color we should be using
-    if (hovering)
-        draw_color = hover_color;
+    //if (hovering)
+    //    draw_color = hover_color;
+    if (hovering && hover_image)
+        draw_image = hover_image;
     
-    if (pressed)
-        draw_color = press_color;
+    if (pressed && press_image)
+        draw_image = press_image;
     
-    SUI::drawRect(frame, draw_color);
+    SUI::drawRect(frame, draw_image);
     
     // Draw the label on top of it
-    if (font)
-        STextRenderer::renderText(label, font, 15.0, frame.origin);
+    if (font) {
+        
+        // Get the padding
+        float y_padding = (frame.size.y - font->getLineHeight(font_size)) / 2.0;
+        
+        STextRenderer::renderTextCentered(label, font, font_size, glm::vec2(frame.origin.x, frame.origin.y + y_padding), frame.size.x);
+    }
 
 }
 

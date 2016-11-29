@@ -205,26 +205,35 @@ int main(int argc, char* argv[]) {
     
     SUIGraph* ui_graph = new SUIGraph();
     
-    SUITextField* text_field = new SUITextField();
-    text_field->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
-    text_field->font_size = CONSOLE_FONT_SIZE;
-    text_field->background_color = glm::vec4(1.0, 0.0, 0.0, 1.0);
-    
-    text_field->frame.origin = text_field->frame.size = glm::vec2(200.0, 25.0);
-    
-    ui_graph->addWidget(text_field);
-    
     SUIButton* button = new SUIButton();
     
-    button->standard_color = glm::vec4(0.0, 0.0, 0.0, 1.0);
-    button->hover_color = glm::vec4(0.0, 0.0, 0.2, 1.0);
-    button->press_color = glm::vec4(1.0);
+    button->background_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_normal.png"));
+    button->hover_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_hover.png"));
+    button->press_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_press.png"));
     
-    button->frame.origin = glm::vec2(400.0, 400.0);
-    button->frame.size = glm::vec2(200.0, 50.0);
+    button->frame.origin = glm::vec2(5.0, 5.0);
+    button->frame.size = glm::vec2(279, 37.5);
     
-    //button->font = text_field->font;
-    //button->label = "PRESS ME";
+    button->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
+    button->label = "PRESS BUTTON";
+    button->font_size = 12.0;
+    
+    button->press_func = &mouseClick;
+    
+    ui_graph->addWidget(button);
+    
+    button = new SUIButton();
+    
+    button->background_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_normal.png"));
+    button->hover_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_hover.png"));
+    button->press_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_press.png"));
+    
+    button->frame.origin = glm::vec2(5.0, 47.5);
+    button->frame.size = glm::vec2(279, 37.5);
+    
+    button->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
+    button->label = "PRESS ME TOO!";
+    button->font_size = 12.0;
     
     button->press_func = &mouseClick;
     

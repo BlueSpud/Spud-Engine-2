@@ -16,6 +16,17 @@
 #define CURSOR_WIDTH 1.5f
 
 /******************************************************************************
+ *  Definition of character draw call for centered text                       *
+ ******************************************************************************/
+
+struct SCharacterDrawCall {
+    
+    char character;
+    glm::vec2 position;
+    
+};
+
+/******************************************************************************
  *  Definition for text renderer                                              *
  ******************************************************************************/
 
@@ -27,11 +38,14 @@ class STextRenderer : public SSubsystem {
         static void shutdown();
     
         static void renderText(std::string text, SFont* font, float font_size, glm::vec2 screen_pos);
+        static void renderTextCentered(std::string text, SFont* font, float font_size, glm::vec2 screen_pos, float width);
         static void renderTextWithCursor(std::string text, int cursor_pos, SFont* font, float font_size, glm::vec2 screen_pos);
     
     private:
     
-        static void render_cursor(SFont* font, float font_size_multiplier, const glm::vec2& position);
+        static void renderCursor(SFont* font, float font_size_multiplier, const glm::vec2& position);
+        static void renderCenteredTextLine(std::vector<SCharacterDrawCall>& character_draw_calls, SFont* font,
+                                           float font_size_multiplier, float& line_length, float width);
     
         static SFont* default_font;
         static SShader* text_shader;

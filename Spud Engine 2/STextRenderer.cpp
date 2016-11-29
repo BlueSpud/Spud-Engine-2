@@ -66,6 +66,54 @@ void STextRenderer::renderText(std::string text, SFont* font, float font_size, g
     
 }
 
+void STextRenderer::renderTextCentered(std::string text, SFont* font, float font_size, glm::vec2 screen_pos, float width) {
+    
+    text_shader->bind();
+    font->font_atlas->bind();
+    
+    glm::vec2 cursor_head = screen_pos * SGL::getScreenScale();
+    float font_size_multiplier = 1.0 / font->font_size * font_size;
+    
+    // Create a place to store all the characters on the line so we can center it once we know its length
+    std::vector<SCharacterDrawCall> character_draw_calls;
+    float line_length = 0.0;
+    
+    for (int i = 0; i < text.length(); i++) {
+        
+        char& current_character = text.at(i);
+        
+        // If we were a new line we need to do a carriage return
+        if (current_character == '\n') {
+            
+            cursor_head = glm::vec2(screen_pos.x * SGL::getScreenScale(), cursor_head.y + font->line_height * font_size_multiplier);
+            
+            // Render the centered text
+            renderCenteredTextLine(character_draw_calls, font, font_size_multiplier, line_length, width);
+
+            
+        } else {
+            
+            // Create a new character draw call
+            character_draw_calls.push_back(SCharacterDrawCall());
+            SCharacterDrawCall& character_draw_call = character_draw_calls.back();
+            character_draw_call.character = current_character;
+            character_draw_call.position = cursor_head + font->characters[current_character].offset * font_size_multiplier;
+            
+            line_length = line_length + font->characters[current_character].x_advance * font_size_multiplier;
+            
+            // Add the x-stride to the cursor
+            cursor_head.x = cursor_head.x + font->characters[current_character].x_advance * font_size_multiplier;
+            
+        }
+        
+    }
+    
+    // If there was a line that didnt have a carriage return at the end, draw it too
+    if (character_draw_calls.size())
+        renderCenteredTextLine(character_draw_calls, font, font_size_multiplier, line_length, width);
+
+}
+
 void STextRenderer::renderTextWithCursor(std::string text, int cursor_pos, SFont* font, float font_size, glm::vec2 screen_pos) {
     
     text_shader->bind();
@@ -89,7 +137,7 @@ void STextRenderer::renderTextWithCursor(std::string text, int cursor_pos, SFont
             
             // Check if we need to draw the cursor
             if (i == cursor_pos)
-                render_cursor(font, font_size_multiplier, cursor_head);
+                renderCursor(font, font_size_multiplier, cursor_head);
             
             text_shader->bind();
             
@@ -108,16 +156,39 @@ void STextRenderer::renderTextWithCursor(std::string text, int cursor_pos, SFont
     
     // If the cursor hasnt been drawn, draw it
     if (!has_drawn_cursor)
-        render_cursor(font, font_size_multiplier, cursor_head);
+        renderCursor(font, font_size_multiplier, cursor_head);
     
 }
 
-void STextRenderer::render_cursor(SFont* font, float font_size_multiplier, const glm::vec2& position) {
+void STextRenderer::renderCursor(SFont* font, float font_size_multiplier, const glm::vec2& position) {
     
     SUIRect cursor_frame;
     cursor_frame.origin = position / SGL::getScreenScale();
     cursor_frame.size = glm::vec2(CURSOR_WIDTH, font->line_height * font_size_multiplier / SGL::getScreenScale());
     
     SUI::drawRect(cursor_frame, glm::vec4(1.0));
+    
+}
+
+void STextRenderer::renderCenteredTextLine(std::vector<SCharacterDrawCall>& character_draw_calls, SFont* font,
+                                           float font_size_multiplier, float& line_length, float width) {
+    
+    // Get the offset on the x to center the line
+    float offset_x = (width * 2.0 - line_length) / 2.0;
+    
+    // Draw the centered line
+    for (int j = 0; j < character_draw_calls.size(); j++) {
+        
+        // Upload some uniforms
+        text_shader->bindUniform(&font->characters[character_draw_calls[j].character].size, "size", UNIFORM_VEC2, 1);
+        text_shader->bindUniform(&font->characters[character_draw_calls[j].character].position, "start", UNIFORM_VEC2, 1);
+        
+        SGL::drawRect(glm::vec2(character_draw_calls[j].position.x + offset_x, character_draw_calls[j].position.y),
+                      font->characters[character_draw_calls[j].character].size * (glm::vec2)font->font_atlas->size * font_size_multiplier);
+        
+    }
+    
+    character_draw_calls.clear();
+    line_length = 0.0;
     
 }

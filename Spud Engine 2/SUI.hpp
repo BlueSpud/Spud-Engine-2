@@ -82,6 +82,7 @@ class SUI : public SSubsystem {
         static void renderUI(double interpolation);
     
         static void drawRect(SUIRect& rect, glm::vec4 color);
+        static void drawRect(SUIRect& rect, STexture* texture);
     
         static SShader* simple_shader_color;
         static SShader* simple_shader_texture;
