@@ -197,7 +197,7 @@ void main() {
     float reflection_mip_map = (pow(roughness, 0.3333333)) * 12.0;
     vec3 reflection_color = textureLod(tex_cube, reflection, reflection_mip_map).xyz;
 
-    vec3 fresnel_reflection = reflection_color * fresnel_pow;
+    vec3 fresnel_reflection = reflection_color * fresnel_pow * inverse_roughness;
     vec3 metalic_reflection = reflection_color * metalic;
 
     // Combine lighting and texture

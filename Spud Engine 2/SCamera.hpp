@@ -33,6 +33,8 @@ class SCamera {
         // Store the last camera position
         static glm::vec3 view_position;
     
+        static SCamera* current_camera;
+    
 };
 
 #endif /* SCamera_hpp */

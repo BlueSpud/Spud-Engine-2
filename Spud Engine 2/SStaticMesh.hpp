@@ -96,7 +96,7 @@ class SStaticMesh : public SResource {
         static SResource* allocate();
         virtual SResource* resource();
     
-    void render(bool render_material, const std::vector<SMaterial*>& instance_material);
+        void render(bool render_material, const std::vector<SMaterial*>& instance_material);
         void getModelExtents(glm::vec3& _mins, glm::vec3& _maxes);
 
     

@@ -21,6 +21,9 @@
 #include "SActor.hpp"
 #include "SStaticMeshComponent.hpp"
 
+#include "SSoundSystem.hpp"
+#include "SSoundInstance.hpp"
+
 double speed = 0.0;
 double speed_x = 0.0;
 
@@ -28,6 +31,7 @@ double speed_r = 0.0;
 
 SCamera camera;
 SDeferredRenderingPipleline* deferred_pipeline;
+SSoundInstance* sound;
 
 void moveLight(int key) {
     
@@ -103,7 +107,9 @@ void keyRelease(int key) {
 
 void mouseClick(int button) {
     
-    SLog::verboseLog(SVerbosityLevel::Debug, "MOUSE CLICK");
+    if (button == GLFW_MOUSE_BUTTON_1)
+        sound->pause();
+    else sound->play();
     
 }
 
@@ -132,6 +138,7 @@ int main(int argc, char* argv[]) {
     // Subsystem startup
     SEventSystem::startup();
     
+    SSoundSystem::startup();
     SGL::startup();
     STime::startup();
     
@@ -157,7 +164,13 @@ int main(int argc, char* argv[]) {
     
     // TEMP CODE
     
+    sound = (SSoundInstance*)SResourceManager::getResource(SPath("Sound/Birds.wav"));
+    sound->play();
+    sound->setLoops(true);
+    
     camera.transform.translation.y = 2.0;
+    SCamera::current_camera = &camera;
+    
     SSimpleSceneGraph scene_graph;
     
     // Access the mesh
@@ -199,6 +212,7 @@ int main(int argc, char* argv[]) {
     listener.bind(&keyRelease, GLFW_KEY_A, INPUT_ACTION_UP);
     
     listener.bind(&mouseClick, GLFW_MOUSE_BUTTON_LEFT, INPUT_ACTION_DOWN);
+    listener.bind(&mouseClick, GLFW_MOUSE_BUTTON_RIGHT, INPUT_ACTION_DOWN);
     listener.mouse_move_func = mouseMove;
     
     listener.setHasFocus();
@@ -316,6 +330,9 @@ int main(int argc, char* argv[]) {
         
         double interpolation = loopElapsedTime / time_tick;
         
+        // Before we render we set where the listener is
+        SSoundSystem::updateListenerPosition(interpolation);
+        
         // Render using a deferred rendering pipline
         deferred_pipeline->render(scene_graph, camera, interpolation);
         
@@ -370,6 +387,7 @@ int main(int argc, char* argv[]) {
     
     STime::shutdown();
     SGL::shutdown();
+    SSoundSystem::shutdown();
     
     SEventSystem::shutdown();
     

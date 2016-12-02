@@ -20,12 +20,7 @@ REGISTER_RESOURCE_CLASS(smdl, SStaticMesh);
  ******************************************************************************/
 
 SResource* SStaticMesh::allocate() { return new SStaticMesh(); }
-
-SResource* SStaticMesh::resource() {
-    
-    return new SStaticMeshInstance(this);
-
-}
+SResource* SStaticMesh::resource() { return new SStaticMeshInstance(this); }
 
 void SStaticMesh::render(bool render_material, const std::vector<SMaterial*>& instance_material) {
     

@@ -139,8 +139,6 @@ void STextRenderer::renderTextWithCursor(std::string text, int cursor_pos, SFont
             if (i == cursor_pos)
                 renderCursor(font, font_size_multiplier, cursor_head);
             
-            text_shader->bind();
-            
             // Upload some uniforms
             text_shader->bindUniform(&font->characters[current_character].size, "size", UNIFORM_VEC2, 1);
             text_shader->bindUniform(&font->characters[current_character].position, "start", UNIFORM_VEC2, 1);

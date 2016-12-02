@@ -43,8 +43,8 @@ void SUIButton::render(double interpolation) {
         
         // Get the padding
         float y_padding = (frame.size.y - font->getLineHeight(font_size)) / 2.0;
-        
         STextRenderer::renderTextCentered(label, font, font_size, glm::vec2(frame.origin.x, frame.origin.y + y_padding), frame.size.x);
+        
     }
 
 }

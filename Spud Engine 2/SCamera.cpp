@@ -11,6 +11,8 @@
 glm::vec3 SCamera::view_position;
 REGISTER_UNIFORM(&SCamera::view_position, "view_position", UNIFORM_VEC3, 1);
 
+SCamera* SCamera::current_camera;;
+
 /******************************************************************************
  *  Functions for camera                                                      *
  ******************************************************************************/

@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0201C77F1DEF4A9A00AA0B24 /* libopenal.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0201C77E1DEF4A9A00AA0B24 /* libopenal.1.dylib */; };
+		0201C7811DEF4ACB00AA0B24 /* libopenal.1.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 0201C77E1DEF4A9A00AA0B24 /* libopenal.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		0201C7851DEF4B0F00AA0B24 /* SSoundSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0201C7831DEF4B0F00AA0B24 /* SSoundSystem.cpp */; };
+		0201C78A1DEF4C1100AA0B24 /* SSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0201C7881DEF4C1100AA0B24 /* SSound.cpp */; };
+		0201C78E1DEF547400AA0B24 /* SSoundInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0201C78C1DEF547400AA0B24 /* SSoundInstance.cpp */; };
 		0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */; };
 		0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0202413D1D7C99130050E9D3 /* libboost_signals.a */; };
 		02064B0D1D9D663000D49D4A /* SLightGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02064B0B1D9D663000D49D4A /* SLightGraph.cpp */; };
@@ -63,6 +68,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		0201C7801DEF4AC200AA0B24 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0201C7811DEF4ACB00AA0B24 /* libopenal.1.dylib in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		025CB59E1D83D5CC0059AF6C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
@@ -80,6 +96,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0201C77E1DEF4A9A00AA0B24 /* libopenal.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopenal.1.dylib; path = OpenAL/lib/libopenal.1.dylib; sourceTree = "<group>"; };
+		0201C7831DEF4B0F00AA0B24 /* SSoundSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSoundSystem.cpp; sourceTree = "<group>"; };
+		0201C7841DEF4B0F00AA0B24 /* SSoundSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSoundSystem.hpp; sourceTree = "<group>"; };
+		0201C7881DEF4C1100AA0B24 /* SSound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSound.cpp; sourceTree = "<group>"; };
+		0201C7891DEF4C1100AA0B24 /* SSound.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSound.hpp; sourceTree = "<group>"; };
+		0201C78B1DEF50FA00AA0B24 /* Sound */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sound; path = Resources/Sound; sourceTree = "<group>"; };
+		0201C78C1DEF547400AA0B24 /* SSoundInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSoundInstance.cpp; sourceTree = "<group>"; };
+		0201C78D1DEF547400AA0B24 /* SSoundInstance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSoundInstance.hpp; sourceTree = "<group>"; };
 		0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SEventSystem.cpp; sourceTree = "<group>"; };
 		0202413B1D7C98D80050E9D3 /* SEventSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SEventSystem.hpp; sourceTree = "<group>"; };
 		0202413D1D7C99130050E9D3 /* libboost_signals.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_signals.a; path = ../../../../usr/local/lib/libboost_signals.a; sourceTree = "<group>"; };
@@ -192,6 +216,7 @@
 				025903351D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a in Frameworks */,
 				025903291D7793EA00EA6372 /* IOKit.framework in Frameworks */,
 				0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */,
+				0201C77F1DEF4A9A00AA0B24 /* libopenal.1.dylib in Frameworks */,
 				02E7FC831DB545D600955052 /* libfreeimage.a in Frameworks */,
 				025903281D7793EA00EA6372 /* CoreVideo.framework in Frameworks */,
 				025903371D7794B500EA6372 /* libLinearMath_gmake_x64_release.a in Frameworks */,
@@ -201,6 +226,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0201C7821DEF4B0000AA0B24 /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				0201C7831DEF4B0F00AA0B24 /* SSoundSystem.cpp */,
+				0201C7841DEF4B0F00AA0B24 /* SSoundSystem.hpp */,
+			);
+			name = Sound;
+			sourceTree = "<group>";
+		};
+		0201C7861DEF4B4C00AA0B24 /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				025CB5AE1D83EB500059AF6C /* STexture.cpp */,
+				025CB5AF1D83EB500059AF6C /* STexture.hpp */,
+				025536521D8993B5003D04EE /* SCubeMap.cpp */,
+				025536531D8993B5003D04EE /* SCubeMap.hpp */,
+				029865811D847429005EED43 /* SMaterial.cpp */,
+				029865821D847429005EED43 /* SMaterial.hpp */,
+			);
+			name = Rendering;
+			sourceTree = "<group>";
+		};
+		0201C7871DEF4B5600AA0B24 /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				0201C7881DEF4C1100AA0B24 /* SSound.cpp */,
+				0201C7891DEF4C1100AA0B24 /* SSound.hpp */,
+				0201C78C1DEF547400AA0B24 /* SSoundInstance.cpp */,
+				0201C78D1DEF547400AA0B24 /* SSoundInstance.hpp */,
+			);
+			name = Sound;
+			sourceTree = "<group>";
+		};
 		020241581D7CEC930050E9D3 /* Event */ = {
 			isa = PBXGroup;
 			children = (
@@ -241,14 +299,10 @@
 		0228B8811D7A778300596526 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0201C7871DEF4B5600AA0B24 /* Sound */,
+				0201C7861DEF4B4C00AA0B24 /* Rendering */,
 				02328BEC1DD185B70083B0BB /* Static Mesh */,
 				02B947F51D89FF2500822957 /* Shader */,
-				025CB5AE1D83EB500059AF6C /* STexture.cpp */,
-				025CB5AF1D83EB500059AF6C /* STexture.hpp */,
-				025536521D8993B5003D04EE /* SCubeMap.cpp */,
-				025536531D8993B5003D04EE /* SCubeMap.hpp */,
-				029865811D847429005EED43 /* SMaterial.cpp */,
-				029865821D847429005EED43 /* SMaterial.hpp */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -332,6 +386,7 @@
 				020241581D7CEC930050E9D3 /* Event */,
 				022ED1551D78FA2400DC1ECD /* File */,
 				0251FC3D1D7DC62400B3E63E /* Rendering */,
+				0201C7821DEF4B0000AA0B24 /* Sound */,
 				0228B87D1D7A6BA200596526 /* Resource */,
 				0259032C1D77940400EA6372 /* driver.hpp */,
 				0259032D1D77940400EA6372 /* main.cpp */,
@@ -343,6 +398,7 @@
 		0259031D1D7793CF00EA6372 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0201C77E1DEF4A9A00AA0B24 /* libopenal.1.dylib */,
 				02E7FC821DB545D600955052 /* libfreeimage.a */,
 				025903391D7794EC00EA6372 /* Boost */,
 				025903381D7794E500EA6372 /* Bullet */,
@@ -390,6 +446,7 @@
 				0298659A1D84C38D005EED43 /* Texture */,
 				029865841D84771A005EED43 /* Material */,
 				020604711DB7982800B6268F /* Shader */,
+				0201C78B1DEF50FA00AA0B24 /* Sound */,
 				029865971D84AD4D005EED43 /* Model */,
 			);
 			name = Resources;
@@ -561,6 +618,7 @@
 				025903051D77933E00EA6372 /* Sources */,
 				025903061D77933E00EA6372 /* Frameworks */,
 				025CB59E1D83D5CC0059AF6C /* CopyFiles */,
+				0201C7801DEF4AC200AA0B24 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
@@ -621,10 +679,12 @@
 				02B947F81D89FF7200822957 /* SUniform.cpp in Sources */,
 				029865831D847429005EED43 /* SMaterial.cpp in Sources */,
 				025CB5961D83CD880059AF6C /* SShader.cpp in Sources */,
+				0201C78E1DEF547400AA0B24 /* SSoundInstance.cpp in Sources */,
 				02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */,
 				025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */,
 				0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */,
 				02064B0D1D9D663000D49D4A /* SLightGraph.cpp in Sources */,
+				0201C78A1DEF4C1100AA0B24 /* SSound.cpp in Sources */,
 				0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */,
 				022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */,
 				02E7A7751DD2325E00F3164F /* SActor.cpp in Sources */,
@@ -636,6 +696,7 @@
 				02E178D31DE6718200D80D5B /* SInputSystem.cpp in Sources */,
 				02D295D11D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp in Sources */,
 				0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */,
+				0201C7851DEF4B0F00AA0B24 /* SSoundSystem.cpp in Sources */,
 				025903301D77940400EA6372 /* main.cpp in Sources */,
 				0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */,
 				0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */,
@@ -764,6 +825,7 @@
 					"$(PROJECT_DIR)/Bullet/include",
 					"$(PROJECT_DIR)/glm",
 					"$(PROJECT_DIR)/FreeImage/include",
+					"$(PROJECT_DIR)/OpenAL/include",
 				);
 				INFOPLIST_FILE = "Spud Engine 2/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -771,6 +833,7 @@
 					/usr/local/lib,
 					"$(PROJECT_DIR)/Bullet/lib",
 					"$(PROJECT_DIR)/FreeImage/lib",
+					"$(PROJECT_DIR)/OpenAL/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.thinkworkx.Spud-Engine-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -789,6 +852,7 @@
 					"$(PROJECT_DIR)/Bullet/include",
 					"$(PROJECT_DIR)/glm",
 					"$(PROJECT_DIR)/FreeImage/include",
+					"$(PROJECT_DIR)/OpenAL/include",
 				);
 				INFOPLIST_FILE = "Spud Engine 2/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -796,6 +860,7 @@
 					/usr/local/lib,
 					"$(PROJECT_DIR)/Bullet/lib",
 					"$(PROJECT_DIR)/FreeImage/lib",
+					"$(PROJECT_DIR)/OpenAL/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.thinkworkx.Spud-Engine-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
