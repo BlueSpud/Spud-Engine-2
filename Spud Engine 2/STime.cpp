@@ -33,15 +33,13 @@ double STime::getHighResolutionTime() { return glfwGetTime(); }
 
 void STime::update(const SEvent& event) {
     
-    //SEventTick* event_t = (SEventTick*)event;
-    
     // Acumulate time since startup
     time_since_startup += getHighResolutionTime();
     
 }
 
 /******************************************************************************
- *  Functions for timer                                                   *
+ *  Functions for timer                                                       *
  ******************************************************************************/
 
 STimer::STimer(boost::function<void()> _func, double duration, bool _loops) {

@@ -10,6 +10,18 @@
 #define SSoundInstance_hpp
 
 #include "SSound.hpp"
+#include "SSoundSystem.hpp"
+
+/******************************************************************************
+ *  Definition for positional sound modes                                     *
+ ******************************************************************************/
+
+enum SSoundPositionMode {
+    
+    SSoundPositionMode3D,
+    SSoundPositionMode2D
+    
+};
 
 /******************************************************************************
  *  Definition for sound instance                                             *
@@ -20,6 +32,8 @@ class SSoundInstance : public SResource {
     friend class SSound;
     
     public:
+    
+        SSoundPositionMode sound_position_mode;
     
         void play();
         void stop();
@@ -36,6 +50,9 @@ class SSoundInstance : public SResource {
         virtual void unload();
     
     private:
+    
+        void updateSoundPosition(const SEvent& event);
+        SEventListener event_listener;
     
         bool playing = false;
     

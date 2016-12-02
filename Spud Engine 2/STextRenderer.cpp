@@ -172,7 +172,7 @@ void STextRenderer::renderCenteredTextLine(std::vector<SCharacterDrawCall>& char
                                            float font_size_multiplier, float& line_length, float width) {
     
     // Get the offset on the x to center the line
-    float offset_x = (width * 2.0 - line_length) / 2.0;
+    float offset_x = (width * SGL::getScreenScale() - line_length) / 2.0;
     
     // Draw the centered line
     for (int j = 0; j < character_draw_calls.size(); j++) {

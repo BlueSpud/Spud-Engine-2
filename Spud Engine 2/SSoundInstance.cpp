@@ -13,6 +13,9 @@ SSoundInstance::SSoundInstance(SSound* _parent_sound) {
     // Keep the parent
     parent_sound = _parent_sound;
     
+    // Listen for the listener changing position
+    event_listener.listenToEvent(EVENT_SOUND_SOUND_LISTENER_MOVE, boost::bind(&SSoundInstance::updateSoundPosition, this, _1));
+    
     // Generate a sound source
     alGenSources(1, &source);
 
@@ -62,6 +65,19 @@ void SSoundInstance::setLoops(bool loops) {
     
     // Set if the sound loops
     alSourcei(source, AL_LOOPING, loops);
+    
+}
+
+void SSoundInstance::updateSoundPosition(const SEvent& event) {
+    
+    // Based on the mode that this sound is in, update the OpenAL position and sound accordingly
+    if (sound_position_mode == SSoundPositionMode2D) {
+        
+        // The sound is following the camera, set the same position and velocity as the camera
+        alSourcefv(source, AL_POSITION, &SSoundSystem::getListenerPosition()[0]);
+        alSourcefv(source, AL_VELOCITY, &SSoundSystem::getListenerVelocity()[0]);
+        
+    }
     
 }
 

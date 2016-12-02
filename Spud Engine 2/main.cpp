@@ -167,6 +167,7 @@ int main(int argc, char* argv[]) {
     sound = (SSoundInstance*)SResourceManager::getResource(SPath("Sound/Birds.wav"));
     sound->play();
     sound->setLoops(true);
+    sound->sound_position_mode = SSoundPositionMode2D;
     
     camera.transform.translation.y = 2.0;
     SCamera::current_camera = &camera;
@@ -190,7 +191,9 @@ int main(int argc, char* argv[]) {
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
     SViewport viewport_2D = SViewport(window_framebuffer_size, glm::vec2());
-    SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / 2, glm::vec2(0), 45.0f, glm::vec2(0.1, 500.0));
+    SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2(0), 45.0f, glm::vec2(0.1, 500.0));
+    
+    std::cout << "Screen scale of " << SGL::getScreenScale() << std::endl;
     
     deferred_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
     

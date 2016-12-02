@@ -107,7 +107,7 @@
 		0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SEventSystem.cpp; sourceTree = "<group>"; };
 		0202413B1D7C98D80050E9D3 /* SEventSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SEventSystem.hpp; sourceTree = "<group>"; };
 		0202413D1D7C99130050E9D3 /* libboost_signals.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_signals.a; path = ../../../../usr/local/lib/libboost_signals.a; sourceTree = "<group>"; };
-		0202415A1D7CECAD0050E9D3 /* SEvents.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SEvents.hpp; sourceTree = "<group>"; };
+		0202415A1D7CECAD0050E9D3 /* SEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SEvents.h; sourceTree = "<group>"; };
 		020604711DB7982800B6268F /* Shader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shader; path = Resources/Shader; sourceTree = "<group>"; };
 		02064B0B1D9D663000D49D4A /* SLightGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLightGraph.cpp; sourceTree = "<group>"; };
 		02064B0C1D9D663000D49D4A /* SLightGraph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLightGraph.hpp; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 			isa = PBXGroup;
 			children = (
 				0298659E1D84D08D005EED43 /* Input */,
-				0202415A1D7CECAD0050E9D3 /* SEvents.hpp */,
+				0202415A1D7CECAD0050E9D3 /* SEvents.h */,
 				0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */,
 				0202413B1D7C98D80050E9D3 /* SEventSystem.hpp */,
 			);

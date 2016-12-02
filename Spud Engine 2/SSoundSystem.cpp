@@ -56,5 +56,11 @@ void SSoundSystem::updateListenerPosition(double interpolation) {
     alListenerfv(AL_POSITION, &listener_position[0]);
     alListenerfv(AL_VELOCITY, &listener_velocity[0]);
     
+    // Send out an event so the sound emitters can update their position if they are following the camera
+    SSoundEventListenerMove event;
+    SEventSystem::postEvent(EVENT_SOUND_SOUND_LISTENER_MOVE, event);
     
 }
+
+glm::vec3 SSoundSystem::getListenerPosition() { return listener_position; }
+glm::vec3 SSoundSystem::getListenerVelocity() { return listener_velocity; }

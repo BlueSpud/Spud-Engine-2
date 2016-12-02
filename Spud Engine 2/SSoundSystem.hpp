@@ -12,8 +12,16 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
-#include "SSubsystem.hpp"
+#include "SEventSystem.hpp"
 #include "SGL.hpp"
+
+/******************************************************************************
+ *  Definition for sound events                                               *
+ ******************************************************************************/
+
+#define EVENT_SOUND_SOUND_LISTENER_MOVE 50
+
+struct SSoundEventListenerMove : public SEvent {};
 
 /******************************************************************************
  *  Definition for sound system                                               *
@@ -27,6 +35,9 @@ class SSoundSystem : public SSubsystem {
         static void shutdown();
     
         static void updateListenerPosition(double interpolation);
+    
+        static glm::vec3 getListenerPosition();
+        static glm::vec3 getListenerVelocity();
     
     private:
     
