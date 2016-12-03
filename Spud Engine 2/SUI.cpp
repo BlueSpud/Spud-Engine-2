@@ -174,8 +174,16 @@ void SUI::moveMouse() {
     }
     
     // We set the old hovering widget to false so when we leave it it will no longer be hovering
-    if (hovering_widget)
+    if (hovering_widget) {
+        
         hovering_widget->hovering = false;
+        
+        // If the new hovering widget is not equal to the old one we need to call release on the mouse buttons for it so it doesnt get stuck
+        if (hovering_widget != new_hover_widget && hovering_widget->has_event_released)
+            for (int i = GLFW_MOUSE_BUTTON_1; i < GLFW_MOUSE_BUTTON_8; i++)
+                hovering_widget->onRelease(i);
+
+    }
     
     // If we hovered over one, we need to do some stuff to it
     if (new_hover_widget) {

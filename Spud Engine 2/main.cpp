@@ -107,9 +107,7 @@ void keyRelease(int key) {
 
 void mouseClick(int button) {
     
-    if (button == GLFW_MOUSE_BUTTON_1)
-        sound->pause();
-    else sound->play();
+    SLog::verboseLog(SVerbosityLevel::Debug, "CLICK");
     
 }
 
@@ -232,10 +230,10 @@ int main(int argc, char* argv[]) {
     button->frame.size = glm::vec2(279, 37.5);
     
     button->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
-    button->label = "PRESS BUTTON";
+    button->label = "FUNCTION CALLED ON RELEASE";
     button->font_size = 12.0;
     
-    button->press_func = &mouseClick;
+    button->release_func = &mouseClick;
     
     ui_graph->addWidget(button);
     
@@ -249,7 +247,7 @@ int main(int argc, char* argv[]) {
     button->frame.size = glm::vec2(279, 37.5);
     
     button->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
-    button->label = "PRESS ME TOO!";
+    button->label = "FUNCTION CALLED ON PRESS";
     button->font_size = 12.0;
     
     button->press_func = &mouseClick;

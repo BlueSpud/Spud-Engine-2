@@ -66,7 +66,7 @@ void SUIButton::onRelease(int button) {
     pressed = false;
     
     // Call the designated function for release
-    if (release_func)
+    if (release_func && hovering)
         release_func(button);
 
 }
