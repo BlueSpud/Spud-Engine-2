@@ -42,6 +42,7 @@ class SUITextField : public SUIWidget {
     
     protected:
     
+        virtual void onPress(int button);
         virtual void charCallback(unsigned int key);
     
         int cursor_head = 0;

@@ -136,8 +136,15 @@ void STextRenderer::renderTextWithCursor(std::string text, int cursor_pos, SFont
         } else {
             
             // Check if we need to draw the cursor
-            if (i == cursor_pos)
+            if (i == cursor_pos) {
+                
                 renderCursor(font, font_size_multiplier, cursor_head);
+                has_drawn_cursor = true;
+                
+                // Rebind the text shader
+                text_shader->bind();
+                
+            }
             
             // Upload some uniforms
             text_shader->bindUniform(&font->characters[current_character].size, "size", UNIFORM_VEC2, 1);

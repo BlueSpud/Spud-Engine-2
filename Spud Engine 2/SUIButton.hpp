@@ -19,17 +19,11 @@ class SUIButton : public SUIWidget {
     
     public:
     
-        SUIButton();
-    
         virtual void render(double interpolation);
     
         std::string label;
         SFont* font = nullptr;
         float font_size = 15.0;
-    
-//        glm::vec4 standard_color;
-//        glm::vec4 hover_color;
-//        glm::vec4 press_color;
     
         STexture* background_image;
         STexture* hover_image;

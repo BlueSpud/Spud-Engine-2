@@ -41,7 +41,7 @@ void SUITextField::render(double interpolation) {
     
     // Render the text field. give a slight x indent
     // If the cursor is shown we use the function with the cursor showing
-    if (cursor_shown)
+    if (cursor_shown && SUI::current_widget_input == this)
         STextRenderer::renderTextWithCursor(text, cursor_head, font, font_size,
                                             glm::vec2(frame.origin.x + font_size / 2.0, frame.origin.y + y_padding));
     
@@ -81,6 +81,8 @@ void SUITextField::charCallback(unsigned int key) {
     
 }
 
+void SUITextField::onPress(int button) { startEditing(); }
+
 void SUITextField::pressSpecialKey(int key) {
     
     switch (key) {
@@ -90,7 +92,7 @@ void SUITextField::pressSpecialKey(int key) {
                 if (text.length()) {
                 
                     // The cursor is where we would place the next character, so we delete the one behind it
-                    text.erase(cursor_head - 1);
+                    text.erase(cursor_head - 1, 1);
                     cursor_head--;
                 
                 }
@@ -124,8 +126,10 @@ void SUITextField::pressSpecialKey(int key) {
             case GLFW_KEY_ENTER:
             
                 // Call the return function if we have one
+                // Defaults to stopping input
                 if (return_function)
                     return_function();
+                else SUI::current_widget_input = nullptr;
             
             break;
             
@@ -133,8 +137,10 @@ void SUITextField::pressSpecialKey(int key) {
             case GLFW_KEY_ESCAPE:
             
                 // Call the escape function if we have one
+                // Defaults to stopping input
                 if (escape_function)
                     escape_function();
+                else SUI::current_widget_input = nullptr;
             
             break;
             

@@ -140,11 +140,11 @@ void SUI::mouseCallback(GLFWwindow* window, int button, int action, int mods) {
     if (hovering_widget) {
         
         // Logic for press
-        if (action == INPUT_ACTION_DOWN && hovering_widget->has_event_pressed)
+        if (action == INPUT_ACTION_DOWN)
             hovering_widget->onPress(button);
         
         // Logic for release
-        if (action == INPUT_ACTION_UP && hovering_widget->has_event_released)
+        if (action == INPUT_ACTION_UP)
             hovering_widget->onRelease(button);
         
     }
@@ -179,7 +179,7 @@ void SUI::moveMouse() {
         hovering_widget->hovering = false;
         
         // If the new hovering widget is not equal to the old one we need to call release on the mouse buttons for it so it doesnt get stuck
-        if (hovering_widget != new_hover_widget && hovering_widget->has_event_released)
+        if (hovering_widget != new_hover_widget)
             for (int i = GLFW_MOUSE_BUTTON_1; i < GLFW_MOUSE_BUTTON_8; i++)
                 hovering_widget->onRelease(i);
 
@@ -191,9 +191,8 @@ void SUI::moveMouse() {
         new_hover_widget->hovering = true;
         hovering_widget = new_hover_widget;
         
-        // If there is an event for hovering over the widget, call it
-        if (hovering_widget->has_event_hover)
-            hovering_widget->onHover();
+        // Call the hovering event
+        hovering_widget->onHover();
     
     } else hovering_widget = nullptr;
     

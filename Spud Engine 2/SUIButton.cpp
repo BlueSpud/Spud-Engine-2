@@ -12,15 +12,6 @@
  *  Functions for simple button widget                                        *
  ******************************************************************************/
 
-SUIButton::SUIButton() {
-    
-    // Set that we have hover, press and release
-    has_event_pressed = true;
-    has_event_released = true;
-    has_event_hover = true;
-    
-}
-
 void SUIButton::render(double interpolation) {
 
     // Figure out which image we should be using

@@ -191,8 +191,6 @@ int main(int argc, char* argv[]) {
     SViewport viewport_2D = SViewport(window_framebuffer_size, glm::vec2());
     SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2(0), 45.0f, glm::vec2(0.1, 500.0));
     
-    std::cout << "Screen scale of " << SGL::getScreenScale() << std::endl;
-    
     deferred_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
     
     SInputListener listener;
@@ -253,6 +251,18 @@ int main(int argc, char* argv[]) {
     button->press_func = &mouseClick;
     
     ui_graph->addWidget(button);
+    
+    SUITextField* text_field = new SUITextField();
+    
+    text_field->font = button->font;
+    text_field->font_size = CONSOLE_FONT_SIZE;
+    
+    text_field->background_color = glm::vec4(0.1, 0.1, 0.1, 1.0);
+    
+    text_field->frame.origin = glm::vec2(5.0, 95);
+    text_field->frame.size = glm::vec2(279, 37.5);
+    
+    ui_graph->addWidget(text_field);
     
     SUI::current_ui_graph = ui_graph;
     

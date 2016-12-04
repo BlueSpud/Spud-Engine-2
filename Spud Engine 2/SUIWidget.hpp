@@ -30,9 +30,6 @@ class SUIWidget {
     protected:
     
         // Booleans for events captured
-        bool has_event_pressed = false;
-        bool has_event_released = false;
-        bool has_event_hover = false;
         bool hovering = false;
     
         virtual void onHover() { /* intentionally empty */ }
