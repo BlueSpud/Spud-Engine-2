@@ -23,13 +23,9 @@ SUIButton::SUIButton() {
 
 void SUIButton::render(double interpolation) {
 
-    // If we are hovering change the color
-    //glm::vec4 draw_color = standard_color;
+    // Figure out which image we should be using
     STexture* draw_image = background_image;
     
-    // Figure out which color we should be using
-    //if (hovering)
-    //    draw_color = hover_color;
     if (hovering && hover_image)
         draw_image = hover_image;
     

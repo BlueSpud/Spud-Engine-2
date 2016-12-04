@@ -229,6 +229,8 @@
 		0201C7821DEF4B0000AA0B24 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				0201C78C1DEF547400AA0B24 /* SSoundInstance.cpp */,
+				0201C78D1DEF547400AA0B24 /* SSoundInstance.hpp */,
 				0201C7831DEF4B0F00AA0B24 /* SSoundSystem.cpp */,
 				0201C7841DEF4B0F00AA0B24 /* SSoundSystem.hpp */,
 			);
@@ -253,8 +255,6 @@
 			children = (
 				0201C7881DEF4C1100AA0B24 /* SSound.cpp */,
 				0201C7891DEF4C1100AA0B24 /* SSound.hpp */,
-				0201C78C1DEF547400AA0B24 /* SSoundInstance.cpp */,
-				0201C78D1DEF547400AA0B24 /* SSoundInstance.hpp */,
 			);
 			name = Sound;
 			sourceTree = "<group>";

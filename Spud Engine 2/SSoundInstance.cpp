@@ -14,7 +14,7 @@ SSoundInstance::SSoundInstance(SSound* _parent_sound) {
     parent_sound = _parent_sound;
     
     // Listen for the listener changing position
-    event_listener.listenToEvent(EVENT_SOUND_SOUND_LISTENER_MOVE, boost::bind(&SSoundInstance::updateSoundPosition, this, _1));
+    event_listener.listenToEvent(EVENT_SOUND_SOUND_LISTENER_MOVE, EVENT_MEMBER(SSoundInstance::updateSoundPosition));
     
     // Generate a sound source
     alGenSources(1, &source);

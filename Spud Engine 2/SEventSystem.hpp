@@ -62,4 +62,7 @@ class SEventSystem : public SSubsystem {
     
 };
 
+// Define a macro to bind a function
+#define EVENT_MEMBER(F) boost::bind(&F, this, _1)
+
 #endif /* SEventSystem_hpp */

@@ -49,7 +49,7 @@ STimer::STimer(boost::function<void()> _func, double duration, bool _loops) {
     loops = _loops;
     
     // Get ready for updating
-    event_listener.listenToEvent(EVENT_TICK, boost::bind(&STimer::update, this, _1));
+    event_listener.listenToEvent(EVENT_TICK, EVENT_MEMBER(STimer::update));
     
     duration_ticks = ceil(duration * TICKS_PER_SECOND);
     ticks_elapsed = 0;
