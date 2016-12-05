@@ -22,7 +22,7 @@
 #include "SStaticMeshComponent.hpp"
 
 #include "SSoundSystem.hpp"
-#include "SSoundInstance.hpp"
+#include "SSoundEmitter.hpp"
 
 double speed = 0.0;
 double speed_x = 0.0;
@@ -31,7 +31,7 @@ double speed_r = 0.0;
 
 SCamera camera;
 SDeferredRenderingPipleline* deferred_pipeline;
-SSoundInstance* sound;
+SSoundEmitter* sound_emitter;
 
 void moveLight(int key) {
     
@@ -107,7 +107,8 @@ void keyRelease(int key) {
 
 void mouseClick(int button) {
     
-    SLog::verboseLog(SVerbosityLevel::Debug, "CLICK");
+    SInputSystem::setInputMode(SInputModeGame);
+    SGL::setMouseInputMode(GLFW_CURSOR_DISABLED);
     
 }
 
@@ -162,13 +163,15 @@ int main(int argc, char* argv[]) {
     
     // TEMP CODE
     
-    sound = (SSoundInstance*)SResourceManager::getResource(SPath("Sound/Birds.wav"));
-    sound->play();
-    sound->setLoops(true);
-    sound->sound_position_mode = SSoundPositionMode2D;
-    
     camera.transform.translation.y = 2.0;
     SCamera::current_camera = &camera;
+    
+    SSound* sound = (SSound*)SResourceManager::getResource(SPath("Sound/Birds.wav"));
+    sound_emitter = new SSoundEmitter();
+    sound_emitter->setSound(sound);
+    sound_emitter->play();
+    sound_emitter->setLoops(true);
+    sound_emitter->transform.translation = camera.transform.translation;
     
     SSimpleSceneGraph scene_graph;
     
@@ -224,14 +227,17 @@ int main(int argc, char* argv[]) {
     button->hover_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_hover.png"));
     button->press_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_press.png"));
     
+    button->hover_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_hover.wav"));
+    button->press_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_press.wav"));
+    
     button->frame.origin = glm::vec2(5.0, 5.0);
     button->frame.size = glm::vec2(279, 37.5);
     
     button->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
-    button->label = "FUNCTION CALLED ON RELEASE";
-    button->font_size = 12.0;
+    button->label = "Button 1";
+    button->font_size = 13.0;
     
-    button->release_func = &mouseClick;
+    button->action = &mouseClick;
     
     ui_graph->addWidget(button);
     
@@ -241,14 +247,17 @@ int main(int argc, char* argv[]) {
     button->hover_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_hover.png"));
     button->press_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_press.png"));
     
+    button->hover_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_hover.wav"));
+    button->press_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_press.wav"));
+    
     button->frame.origin = glm::vec2(5.0, 47.5);
     button->frame.size = glm::vec2(279, 37.5);
     
     button->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
-    button->label = "FUNCTION CALLED ON PRESS";
-    button->font_size = 12.0;
+    button->label = "Button 2";
+    button->font_size = 13.0;
     
-    button->press_func = &mouseClick;
+    button->action = &mouseClick;
     
     ui_graph->addWidget(button);
     

@@ -12,6 +12,14 @@
  *  Functions for simple button widget                                        *
  ******************************************************************************/
 
+SUIButton::SUIButton() {
+    
+    // Create the sound emitter and make sure it is 2D
+    sound_emitter = new SSoundEmitter();
+    sound_emitter->sound_position_mode = SSoundPositionMode2D;
+    
+}
+
 void SUIButton::render(double interpolation) {
 
     // Figure out which image we should be using
@@ -36,24 +44,38 @@ void SUIButton::render(double interpolation) {
 
 }
 
-void SUIButton::onHover() { /* intentionally blank */ }
+void SUIButton::onHover() {
 
-void SUIButton::onPress(int button) {
-
-    pressed = true;
+    // If there was a hover sound, we play it
+    if (hover_sound) {
+        
+        sound_emitter->setSound(hover_sound);
+        sound_emitter->reset();
+        sound_emitter->play();
+        
+    }
     
-    // Call the designated fuction for press
-    if (press_func)
-        press_func(button);
-
 }
+
+void SUIButton::onPress(int button) { pressed = true; }
 
 void SUIButton::onRelease(int button) {
 
     pressed = false;
-    
-    // Call the designated function for release
-    if (release_func && hovering)
-        release_func(button);
 
+    // If there is an aciton, call it, assiming we are hovering
+    if (action && hovering) {
+        
+        action(button);
+
+        // If there was a hover sound, we play it
+        if (press_sound) {
+            
+            sound_emitter->setSound(press_sound);
+            sound_emitter->reset();
+            sound_emitter->play();
+            
+        }
+        
+    }
 }

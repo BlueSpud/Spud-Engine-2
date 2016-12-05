@@ -189,11 +189,28 @@ void SUI::moveMouse() {
     if (new_hover_widget) {
      
         new_hover_widget->hovering = true;
-        hovering_widget = new_hover_widget;
         
         // Call the hovering event
-        hovering_widget->onHover();
+        if (hovering_widget != new_hover_widget)
+            new_hover_widget->onHover();
+        
+        hovering_widget = new_hover_widget;
     
     } else hovering_widget = nullptr;
+    
+}
+
+void SUI::onLoseInput() {
+    
+    // Get rid of the hovering widget
+    if (hovering_widget) {
+        
+        hovering_widget->hovering = false;
+        hovering_widget = nullptr;
+        
+    }
+    
+    // Get rid of the widget with input
+    current_widget_input = nullptr;
     
 }

@@ -7,7 +7,6 @@
 //
 
 #include "SSound.hpp"
-#include "SSoundInstance.hpp"
 
 /******************************************************************************
  *  Registration for supported sound extensions                               *
@@ -20,7 +19,6 @@ REGISTER_RESOURCE_CLASS(wav, SSound);
  ******************************************************************************/
 
 SResource* SSound::allocate() { return new SSound(); }
-SResource* SSound::resource() { return new SSoundInstance(this); }
 
 bool SSound::load(const SPath& path) {
     
@@ -33,25 +31,12 @@ bool SSound::load(const SPath& path) {
     
         // Read the header
         // ALL VALUES ARE IN BYTES ACCORDING TO THE WAV SPECIFICATION
-        // Check if this was a riff file
+        // Get RIFF header
         wav_file->read(&string_array[0], 4);
-        if (!strcmp(string_array, "RIFF")) {
-        
-            SLog::verboseLog(SVerbosityLevel::Critical, "%s was not a riff file!", path.getPathAsString().c_str());
-            return false;
-        
-        }
     
+        // Get WAVE header
         wav_file->read(&wav_header.riff_chunk_size, 4);
-    
-        // Check if we have a wave header too
         wav_file->read(&string_array[0], 4);
-        if (!strcmp(string_array, "WAVE")) {
-        
-            SLog::verboseLog(SVerbosityLevel::Critical, "%s was not a wave file!", path.getPathAsString().c_str());
-            return false;
-        
-        }
     
         wav_file->read(&wav_header.wav_chunk_size, 4);
         wav_file->read(&wav_header.header_length, 4);
@@ -72,15 +57,8 @@ bool SSound::load(const SPath& path) {
         wav_file->read(&wav_header.bits_channels, 2);
         wav_file->read(&wav_header.bits_per_sample, 2);
         
-        // Read the data
+        // Read the data header
         wav_file->read(&string_array[0], 4);
-        if (!strcmp(string_array, "data")) {
-        
-            SLog::verboseLog(SVerbosityLevel::Critical, "%s did not have any data", path.getPathAsString().c_str());
-            return false;
-        
-        }
-    
         wav_file->read(&wav_header.data_length, 4);
     
         // Create an array for all the data and read it
@@ -122,10 +100,4 @@ bool SSound::load(const SPath& path) {
     
 }
 
-void SSound::unload() {
-    
-    //if (uploaded)
-    alDeleteBuffers(1, &buffer);
-    //else delete data;
-
-}
+void SSound::unload() { alDeleteBuffers(1, &buffer); }

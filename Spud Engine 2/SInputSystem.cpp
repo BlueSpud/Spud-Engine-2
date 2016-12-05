@@ -132,6 +132,10 @@ void SInputSystem::setInputMode(SInputMode _input_mode) {
             
             }
         
+        } else {
+            
+            // We need to let the UI know that we are going back to the game and it needs to get rid of its last input and hover
+            SUI::onLoseInput();
         }
         
     }

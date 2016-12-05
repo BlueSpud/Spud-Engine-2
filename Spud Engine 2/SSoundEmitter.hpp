@@ -1,13 +1,15 @@
 //
-//  SSoundInstance.hpp
+//  SSoundEmitter.hpp
 //  Spud Engine 2
 //
 //  Created by Logan Pazol on 11/30/16.
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#ifndef SSoundInstance_hpp
-#define SSoundInstance_hpp
+#ifndef SSoundEmitter_hpp
+#define SSoundEmitter_hpp
+
+#include "SObject.hpp"
 
 #include "SSound.hpp"
 #include "SSoundSystem.hpp"
@@ -24,16 +26,23 @@ enum SSoundPositionMode {
 };
 
 /******************************************************************************
- *  Definition for sound instance                                             *
+ *  Definition for sound emitter                                              *
  ******************************************************************************/
 
-class SSoundInstance : public SResource {
+class SSoundEmitter : public SObject {
     
     friend class SSound;
     
     public:
     
-        SSoundPositionMode sound_position_mode;
+        SSoundEmitter();
+        SSoundEmitter(SSound* _sound);
+        virtual ~SSoundEmitter();
+    
+        void setSound(SSound* _sound);
+    
+        virtual void render(bool render_material, double interpolation) { /* intentionally blank */ };
+        virtual void update() { /* intentionally blank */ };
     
         void play();
         void stop();
@@ -43,23 +52,19 @@ class SSoundInstance : public SResource {
     
         void setLoops(bool loops);
     
-    protected:
-    
-        // FUNCTIONS SHOULD NEVER BE CALLED
-        virtual bool load(const SPath& path);
-        virtual void unload();
+        SSoundPositionMode sound_position_mode = SSoundPositionMode3D;
     
     private:
+    
+        void unload();
     
         void updateSoundPosition(const SEvent& event);
         SEventListener event_listener;
     
         bool playing = false;
-    
-        SSoundInstance(SSound* _parent_sound);
-        SSound* parent_sound;
         ALuint source;
+        SSound* sound;
     
 };
 
-#endif /* SSoundInstance_hpp */
+#endif /* SSoundEmitter_hpp */

@@ -11,7 +11,7 @@
 		0201C7811DEF4ACB00AA0B24 /* libopenal.1.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 0201C77E1DEF4A9A00AA0B24 /* libopenal.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		0201C7851DEF4B0F00AA0B24 /* SSoundSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0201C7831DEF4B0F00AA0B24 /* SSoundSystem.cpp */; };
 		0201C78A1DEF4C1100AA0B24 /* SSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0201C7881DEF4C1100AA0B24 /* SSound.cpp */; };
-		0201C78E1DEF547400AA0B24 /* SSoundInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0201C78C1DEF547400AA0B24 /* SSoundInstance.cpp */; };
+		0201C78E1DEF547400AA0B24 /* SSoundEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0201C78C1DEF547400AA0B24 /* SSoundEmitter.cpp */; };
 		0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */; };
 		0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0202413D1D7C99130050E9D3 /* libboost_signals.a */; };
 		02064B0D1D9D663000D49D4A /* SLightGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02064B0B1D9D663000D49D4A /* SLightGraph.cpp */; };
@@ -102,8 +102,8 @@
 		0201C7881DEF4C1100AA0B24 /* SSound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSound.cpp; sourceTree = "<group>"; };
 		0201C7891DEF4C1100AA0B24 /* SSound.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSound.hpp; sourceTree = "<group>"; };
 		0201C78B1DEF50FA00AA0B24 /* Sound */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sound; path = Resources/Sound; sourceTree = "<group>"; };
-		0201C78C1DEF547400AA0B24 /* SSoundInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSoundInstance.cpp; sourceTree = "<group>"; };
-		0201C78D1DEF547400AA0B24 /* SSoundInstance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSoundInstance.hpp; sourceTree = "<group>"; };
+		0201C78C1DEF547400AA0B24 /* SSoundEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSoundEmitter.cpp; sourceTree = "<group>"; };
+		0201C78D1DEF547400AA0B24 /* SSoundEmitter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSoundEmitter.hpp; sourceTree = "<group>"; };
 		0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SEventSystem.cpp; sourceTree = "<group>"; };
 		0202413B1D7C98D80050E9D3 /* SEventSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SEventSystem.hpp; sourceTree = "<group>"; };
 		0202413D1D7C99130050E9D3 /* libboost_signals.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_signals.a; path = ../../../../usr/local/lib/libboost_signals.a; sourceTree = "<group>"; };
@@ -229,8 +229,8 @@
 		0201C7821DEF4B0000AA0B24 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
-				0201C78C1DEF547400AA0B24 /* SSoundInstance.cpp */,
-				0201C78D1DEF547400AA0B24 /* SSoundInstance.hpp */,
+				0201C78C1DEF547400AA0B24 /* SSoundEmitter.cpp */,
+				0201C78D1DEF547400AA0B24 /* SSoundEmitter.hpp */,
 				0201C7831DEF4B0F00AA0B24 /* SSoundSystem.cpp */,
 				0201C7841DEF4B0F00AA0B24 /* SSoundSystem.hpp */,
 			);
@@ -679,7 +679,7 @@
 				02B947F81D89FF7200822957 /* SUniform.cpp in Sources */,
 				029865831D847429005EED43 /* SMaterial.cpp in Sources */,
 				025CB5961D83CD880059AF6C /* SShader.cpp in Sources */,
-				0201C78E1DEF547400AA0B24 /* SSoundInstance.cpp in Sources */,
+				0201C78E1DEF547400AA0B24 /* SSoundEmitter.cpp in Sources */,
 				02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */,
 				025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */,
 				0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */,

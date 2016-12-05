@@ -13,7 +13,7 @@
 #include "SFont.hpp"
 #include "SShader.hpp"
 
-#define CURSOR_WIDTH 1.5f
+#define CURSOR_WIDTH 1.0f
 
 /******************************************************************************
  *  Definition of character draw call for centered text                       *

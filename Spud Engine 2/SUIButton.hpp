@@ -10,6 +10,7 @@
 #define SUIButton_hpp
 
 #include "SUIWidget.hpp"
+#include "SSoundEmitter.hpp"
 
 /******************************************************************************
  *  Definition for simple button widget                                       *
@@ -18,6 +19,8 @@
 class SUIButton : public SUIWidget {
     
     public:
+    
+        SUIButton();
     
         virtual void render(double interpolation);
     
@@ -29,8 +32,10 @@ class SUIButton : public SUIWidget {
         STexture* hover_image;
         STexture* press_image;
     
-        boost::function<void(int)> press_func;
-        boost::function<void(int)> release_func;
+        SSound* hover_sound;
+        SSound* press_sound;
+    
+        boost::function<void(int)> action;
     
     protected:
     
@@ -39,6 +44,8 @@ class SUIButton : public SUIWidget {
         virtual void onRelease(int button);
     
         bool pressed = false;
+    
+        SSoundEmitter* sound_emitter;
     
 };
 

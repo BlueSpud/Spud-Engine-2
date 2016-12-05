@@ -97,6 +97,8 @@ class SUI : public SSubsystem {
     
         static void moveMouse();
     
+        static void onLoseInput();
+    
         static SUIWidget* current_widget_input;
         static SUIGraph* current_ui_graph;
     

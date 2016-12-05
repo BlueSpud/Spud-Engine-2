@@ -15,7 +15,7 @@
 #include "SResourceManager.hpp"
 
 // Forward declarations
-class SSoundInstance;
+class SSoundEmitter;
 
 /******************************************************************************
  *  Definition for .wav header                                                *
@@ -37,12 +37,11 @@ struct SSoundWAVHeader {
 
 class SSound : public SResource {
     
-    friend class SSoundInstance;
+    friend class SSoundEmitter;
     
     public:
     
         static SResource* allocate();
-        virtual SResource* resource();
     
     protected:
     
