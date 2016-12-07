@@ -49,12 +49,12 @@ bool STexture::load(const SPath& path) {
     if (!path.getIsDirectory()) {
         
         // Initialize free image and prepare storage
-        if (!freeimage_initialized){
+        //if (!freeimage_initialized){
             
-            FreeImage_Initialise();
-            freeimage_initialized = true;
+        FreeImage_Initialise();
+        //    freeimage_initialized = true;
             
-        }
+        //}
 
         FREE_IMAGE_FORMAT format;
         
@@ -84,7 +84,7 @@ bool STexture::load(const SPath& path) {
             
         }
         
-        FreeImage_DeInitialise();
+        //FreeImage_DeInitialise();
         
     }
 

@@ -17,6 +17,7 @@
 
 #include "SConsole.hpp"
 #include "SUIButton.hpp"
+#include "SCursor.hpp"
 
 #include "SActor.hpp"
 #include "SStaticMeshComponent.hpp"
@@ -274,6 +275,9 @@ int main(int argc, char* argv[]) {
     ui_graph->addWidget(text_field);
     
     SUI::current_ui_graph = ui_graph;
+    
+    SCursor* cursor = (SCursor*)SResourceManager::getResource(SPath("/Texture/ui/cursor/pointer.cur"));
+    cursor->bind();
     
     
     // END TEMP CODE

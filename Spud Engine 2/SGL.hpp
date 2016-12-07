@@ -25,6 +25,7 @@
 
 // Forward declarations
 class SGLUploadSystem;
+class SCursor;
 
 /******************************************************************************
  *  Definition for transform                                                  *
@@ -105,6 +106,7 @@ struct SViewport3D : public SViewport {
 class SGL : public SSubsystem {
     
     friend class SGLUploadSystem;
+    friend class SCursor;
     
     public:
     

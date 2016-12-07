@@ -37,7 +37,6 @@ void SGL::startup() {
     // Load the rect we use
     loadRect();
     
-    
 }
 
 void SGL::shutdown() {

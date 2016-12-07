@@ -56,6 +56,7 @@
 		02B947F81D89FF7200822957 /* SUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B947F61D89FF7200822957 /* SUniform.cpp */; };
 		02C35AE01DDE2E26007C361C /* SUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C35ADE1DDE2E26007C361C /* SUI.cpp */; };
 		02C427C41DDCAC620088039F /* SUITextField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C427C21DDCAC620088039F /* SUITextField.cpp */; };
+		02D20CFA1DF60B32008DAFD1 /* SCursor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D20CF81DF60B32008DAFD1 /* SCursor.cpp */; };
 		02D295D11D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D295CF1D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp */; };
 		02D35A731D86217A00F62A7B /* SSceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D35A711D86217A00F62A7B /* SSceneGraph.cpp */; };
 		02DAB8C61D8A28F900A39E27 /* SRenderingPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02DAB8C41D8A28F900A39E27 /* SRenderingPipeline.cpp */; };
@@ -183,6 +184,8 @@
 		02C427C21DDCAC620088039F /* SUITextField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUITextField.cpp; sourceTree = "<group>"; };
 		02C427C31DDCAC620088039F /* SUITextField.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUITextField.hpp; sourceTree = "<group>"; };
 		02C427C61DDCACE60088039F /* SUIWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUIWidget.hpp; sourceTree = "<group>"; };
+		02D20CF81DF60B32008DAFD1 /* SCursor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SCursor.cpp; sourceTree = "<group>"; };
+		02D20CF91DF60B32008DAFD1 /* SCursor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SCursor.hpp; sourceTree = "<group>"; };
 		02D295CF1D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDeferredRenderingPipeline.cpp; sourceTree = "<group>"; };
 		02D295D01D935E4F00CBF342 /* SDeferredRenderingPipeline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SDeferredRenderingPipeline.hpp; sourceTree = "<group>"; };
 		02D35A711D86217A00F62A7B /* SSceneGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSceneGraph.cpp; sourceTree = "<group>"; };
@@ -240,6 +243,8 @@
 		0201C7861DEF4B4C00AA0B24 /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
+				02D20CF81DF60B32008DAFD1 /* SCursor.cpp */,
+				02D20CF91DF60B32008DAFD1 /* SCursor.hpp */,
 				025CB5AE1D83EB500059AF6C /* STexture.cpp */,
 				025CB5AF1D83EB500059AF6C /* STexture.hpp */,
 				025536521D8993B5003D04EE /* SCubeMap.cpp */,
@@ -673,6 +678,7 @@
 				02328BEF1DD185E70083B0BB /* SStaticMeshInstance.cpp in Sources */,
 				02F669331DEC7ADA0042F8D6 /* SUIButton.cpp in Sources */,
 				025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */,
+				02D20CFA1DF60B32008DAFD1 /* SCursor.cpp in Sources */,
 				026915C81DDB386C00A06D4C /* SFont.cpp in Sources */,
 				02716E3F1DC2A5DE00EFC656 /* SRectPacker.cpp in Sources */,
 				02D35A731D86217A00F62A7B /* SSceneGraph.cpp in Sources */,
