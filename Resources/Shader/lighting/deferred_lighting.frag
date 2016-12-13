@@ -61,7 +61,7 @@ float getShadowTerm(int matrix, vec3 L) {
     float z = texture(tex_shadow, tex_coord_shadow).r;
 
     // Figure out if we are outside of the shadow map
-    float outside = 1.0 - length(normalize(clamp(position_shadow.xy, 0.0, 1.0) - position_shadow.xy));
+    float outside = 1.0 - length(clamp(position_shadow.xy, 0.0, 1.0) - position_shadow.xy);
     
     return step(position_shadow.z * outside, z);
 

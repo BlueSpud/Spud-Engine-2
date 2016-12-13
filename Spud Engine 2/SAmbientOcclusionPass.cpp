@@ -135,7 +135,7 @@ void SAmbientOcclusionPass::renderAmbientOcclusion(int depth, int normal, int to
     ambient_occlusion_shader->bindUniform(&projection_matrix, "mat_projection_scene", UNIFORM_MAT4, 1);
     ambient_occlusion_shader->bindUniform(&inv_projection_matrix, "inv_proj", UNIFORM_MAT4, 1);
     
-    SGL::drawRect(glm::vec2(0), viewport.screen_size);
+    SGL::renderRect(glm::vec2(0), viewport.screen_size);
     
     // Blur the framebuffer
     blur_framebuffer->bind();
@@ -159,7 +159,7 @@ void SAmbientOcclusionPass::renderAmbientOcclusion(int depth, int normal, int to
     projection_matrix_2D = SGL::getProjectionMatrix2D(viewport);
     SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION_MATRIX);
     
-    SGL::drawRect(glm::vec2(0), viewport.screen_size);
+    SGL::renderRect(glm::vec2(0), viewport.screen_size);
     
     // Reset the viewport
     viewport.screen_size = viewport.screen_size * 2.0f;

@@ -24,7 +24,7 @@ SResource* SStaticMesh::resource() { return new SStaticMeshInstance(this); }
 
 void SStaticMesh::render(bool render_material, const std::vector<SMaterial*>& instance_material) {
     
-    // Bind the array and then draw
+    // Bind the array and then render
     glBindVertexArray(array_id);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_ids[buffer_indicies]);
     
@@ -39,13 +39,13 @@ void SStaticMesh::render(bool render_material, const std::vector<SMaterial*>& in
         SGL::flushMatrix(MAT_MODEL_MATRIX);
         SGL::flushMatrix(MAT_VIEW_MATRIX);
         
-        // Draw the array with an offset based on what we have already drawn
+        // render the array with an offset based on what we have already rendern
         glDrawElements(GL_TRIANGLES, draw_calls[i], GL_UNSIGNED_INT, (GLubyte*)(sizeof(unsigned int) * sum));
         sum += draw_calls[i];
         
     }
     
-    // Dont need to unbind becasue the next thing that draws should bind
+    // Dont need to unbind becasue the next thing that renders should bind
     //glBindVertexArray(0);
     
 }

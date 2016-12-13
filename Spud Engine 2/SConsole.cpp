@@ -92,7 +92,7 @@ void SConsole::render() {
     if (console_active) {
     
         // First render an entirely black quad
-        SUI::drawRect(consoleFrame, glm::vec4(0.0, 0.0, 0.0, 1.0));
+        SUI::renderRect(consoleFrame, glm::vec4(0.0, 0.0, 0.0, 1.0));
         
         // Get the number of lines in the log and the size of a line
         int line_count = SLog::getLineCount();
@@ -111,7 +111,7 @@ void SConsole::render() {
         for (int i = start; i < line_count; i++)
             displayed_lines = displayed_lines + SLog::getLine(i) + "\n";
         
-        // Draw some text over it
+        // render some text over it
         STextRenderer::renderText(displayed_lines, console_font, CONSOLE_FONT_SIZE, glm::vec2(CONSOLE_INDENT));
         
         // Render the text field

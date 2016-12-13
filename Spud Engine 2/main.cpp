@@ -11,6 +11,7 @@
 #include "STime.hpp"
 #include "SInputSystem.hpp"
 #include "SDeferredRenderingPipeline.hpp"
+#include "SRenderSystem.hpp"
 #include "SCamera.hpp"
 #include "SHotLoadSystem.hpp"
 #include "SFramebuffer.hpp"
@@ -140,6 +141,8 @@ int main(int argc, char* argv[]) {
     
     SSoundSystem::startup();
     SGL::startup();
+    SRenderSystem::startup();
+    
     STime::startup();
     
     SGLUploadSystem::startup();
@@ -174,28 +177,29 @@ int main(int argc, char* argv[]) {
     sound_emitter->setLoops(true);
     sound_emitter->transform.translation = camera.transform.translation;
     
-    SSimpleSceneGraph scene_graph;
+    SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
     
     // Access the mesh
     SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
     mesh->transform.scale = glm::vec3(2.0);
-    scene_graph.addObject(mesh);
+    scene_graph->addObject(mesh);
     
     mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
     mesh->transform.scale = glm::vec3(2.0);
     mesh->transform.translation.z = 5.7;
     
-    scene_graph.addObject(mesh);
+    scene_graph->addObject(mesh);
     
     mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
-    scene_graph.addObject(mesh);
+    scene_graph->addObject(mesh);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
     SViewport viewport_2D = SViewport(window_framebuffer_size, glm::vec2());
     SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2(0), 45.0f, glm::vec2(0.1, 500.0));
     
-    deferred_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
+    SRenderSystem::rendering_pipeline = deferred_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
+    SRenderSystem::current_scene_graph = scene_graph;
     
     SInputListener listener;
     listener.bind(&keyPress, GLFW_KEY_S, INPUT_ACTION_DOWN);
@@ -358,7 +362,7 @@ int main(int argc, char* argv[]) {
         SSoundSystem::updateListenerPosition(interpolation);
         
         // Render using a deferred rendering pipline
-        deferred_pipeline->render(scene_graph, camera, interpolation);
+        SRenderSystem::render(interpolation);
         
         SUI::renderUI(interpolation);
         
@@ -371,10 +375,6 @@ int main(int argc, char* argv[]) {
         frames_counted++;
         
     }
-    
-    // Clean up
-    deferred_pipeline->unload();
-    delete deferred_pipeline;
     
     // Subsystem shutdown
     SConsole::shutdown();
@@ -410,6 +410,8 @@ int main(int argc, char* argv[]) {
     SGLUploadSystem::shutdown();
     
     STime::shutdown();
+    
+    SRenderSystem::shutdown();
     SGL::shutdown();
     SSoundSystem::shutdown();
     

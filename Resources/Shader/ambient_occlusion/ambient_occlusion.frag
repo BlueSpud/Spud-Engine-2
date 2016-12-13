@@ -13,6 +13,7 @@ uniform vec2 tex_coord_scale;
 
 uniform vec3 kernel[64];
 uniform int kernel_size;
+uniform float occlusion_intensity = 0.7;
 
 uniform vec2 planes;
 
@@ -31,7 +32,7 @@ void main() {
     vec4 normal_sample = texture(tex_normal, tex_coord0);
     if (normal_sample.w == 0.0)
         discard;
-    vec3 normal = (mat_view_scene * vec4(normal_sample.xyz, 0.0)).xyz;
+    vec3 normal = normalize((mat_view_scene * vec4(normal_sample.xyz, 0.0)).xyz);
 
     // Get position from depth
     float depth = texture(tex_depth, tex_coord0).x * 2.0 - 1.0;
@@ -40,6 +41,8 @@ void main() {
     vec3 position = (position_p / position_p.w).xyz;
     
     vec3 random_sample = texture(tex_noise, tex_coord0 * tex_coord_scale).xyz * 2.0 - 1.0;
+    random_sample.z = 0.0;
+    
     vec3 tangent = normalize(random_sample - normal * dot(random_sample, normal));
     vec3 bitangent = cross(normal, tangent);
     mat3 tbn_matrix = mat3(tangent, bitangent, normal);
@@ -64,7 +67,7 @@ void main() {
         
     }
     
-    occlusion = 1.0 - occlusion / kernel_size;
+    occlusion = 1.0 - occlusion / (kernel_size * occlusion_intensity);
     
     occlusion_out = occlusion;
 

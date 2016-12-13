@@ -20,7 +20,7 @@
 #include "SCamera.hpp"
 
 /******************************************************************************
- *  Definition for scene graph draw order sorting                             *
+ *  Definition for scene graph render order sorting                             *
  ******************************************************************************/
 
 struct SSortedObject {

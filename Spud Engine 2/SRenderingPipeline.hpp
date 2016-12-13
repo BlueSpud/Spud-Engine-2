@@ -31,8 +31,7 @@ class SRenderingPipeline {
     public:
     
         SRenderingPipeline(SViewport* _viewport_2D, SViewport3D* _viewport_3D);
-    
-        virtual void unload() = 0;
+        virtual ~SRenderingPipeline() { /* intentionally blank */ }
     
         virtual void render(SSceneGraph& scene_graph, SCamera& camera, double interpolation) = 0;
     

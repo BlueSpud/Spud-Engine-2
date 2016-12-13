@@ -32,7 +32,7 @@ SFramebuffer::SFramebuffer(std::vector<SFramebufferAttatchment*> attatchments, u
     upload->width = width = _width;
     upload->height = height = _height;
     
-    upload->buffers_to_draw = &buffers_to_draw;
+    upload->buffers_to_render = &buffers_to_render;
     
     SGLUploadSystem::addUpload(upload);
     
@@ -44,7 +44,7 @@ void SFramebuffer::unload() {
     SFramebufferUnload* unload = new SFramebufferUnload();
     unload->framebuffer_id = framebuffer_id;
     unload-> textures = &textures;
-    unload->buffers_to_draw = buffers_to_draw;
+    unload->buffers_to_render = buffers_to_render;
     
     SGLUploadSystem::addUpload(unload);
 
@@ -52,9 +52,9 @@ void SFramebuffer::unload() {
 
 void SFramebuffer::bind() {
     
-    // Bind the framebuffer and tell it to draw all the buffers
+    // Bind the framebuffer and tell it to render all the buffers
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_id);
-    glDrawBuffers((int)textures.size(), buffers_to_draw);
+    glDrawBuffers((int)textures.size(), buffers_to_render);
     
 }
 
@@ -119,24 +119,24 @@ void SFramebufferUpload::upload() {
         SLog::verboseLog(SVerbosityLevel::Critical, "Framebuffer failed to be created! Check attatchment arguments!");
     
     // Make the buffer array
-    GLenum* _buffers_to_draw;
+    GLenum* _buffers_to_render;
     
     if (attatchment) {
         
-        // If there was some color attatchments we draw them
-        _buffers_to_draw = new GLenum[attatchment - 1];
+        // If there was some color attatchments we render them
+        _buffers_to_render = new GLenum[attatchment - 1];
         for (int i = 0; i < attatchment; i++)
-            _buffers_to_draw[i] = GL_COLOR_ATTACHMENT0 + i;
+            _buffers_to_render[i] = GL_COLOR_ATTACHMENT0 + i;
         
     } else {
         
-        // No color attatchments, only draw the depth buffer
-        _buffers_to_draw = new GLenum[1];
-        _buffers_to_draw[0] = GL_NONE;
+        // No color attatchments, only render the depth buffer
+        _buffers_to_render = new GLenum[1];
+        _buffers_to_render[0] = GL_NONE;
         
     }
     
-    *buffers_to_draw = _buffers_to_draw;
+    *buffers_to_render = _buffers_to_render;
     
     // Clear the framebuffer once
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -163,7 +163,7 @@ void SFramebufferUnload::upload() {
     glDeleteFramebuffers(1, &framebuffer_id);
     
     // Delete the buffer array
-    delete[] buffers_to_draw;
+    delete[] buffers_to_render;
     
 }
 

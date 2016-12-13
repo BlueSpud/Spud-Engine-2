@@ -65,7 +65,7 @@ struct SFramebufferUpload : public SGLUpload {
     GLuint* framebuffer_id;
     std::vector<SFramebufferAttatchment*> attatchments; 
     
-    GLenum** buffers_to_draw;
+    GLenum** buffers_to_render;
 
 };
 
@@ -81,7 +81,7 @@ struct SFramebufferUnload : public SGLUpload {
     GLuint framebuffer_id;
     std::map<int, GLuint>* textures;
     
-    GLenum* buffers_to_draw;
+    GLenum* buffers_to_render;
     
 };
 
@@ -112,7 +112,7 @@ class SFramebuffer {
     
         SFramebufferUpload* upload;
     
-        GLenum* buffers_to_draw;
+        GLenum* buffers_to_render;
     
 };
 

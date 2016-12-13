@@ -117,7 +117,7 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* clo
     
     light_projection_view_matrix = projection_matrix * view_matrix;
     
-    // Clear the framebuffer and draw the scene
+    // Clear the framebuffer and render the scene
     glClear(GL_DEPTH_BUFFER_BIT);
     
     // Render the scene from the camera

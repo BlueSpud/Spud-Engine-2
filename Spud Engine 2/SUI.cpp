@@ -96,25 +96,25 @@ void SUI::renderUI(double interpolation) {
     
 }
 
-void SUI::drawRect(SUIRect& rect, glm::vec4 color) {
+void SUI::renderRect(SUIRect& rect, glm::vec4 color) {
     
     // Bind the simple color shader and the color
     simple_shader_color->bind();
     SUI::simple_shader_color->bindUniform(&color, "color", UNIFORM_VEC4, 1);
     
-    // Draw the rect with opengl
-    SGL::drawRect(rect.origin * SGL::getScreenScale(), rect.size * SGL::getScreenScale());
+    // render the rect with opengl
+    SGL::renderRect(rect.origin * SGL::getScreenScale(), rect.size * SGL::getScreenScale());
     
 }
 
-void SUI::drawRect(SUIRect& rect, STexture* texture) {
+void SUI::renderRect(SUIRect& rect, STexture* texture) {
     
      // Bind the simple color shader and the texture
     simple_shader_texture->bind();
     texture->bind(0);
     
-    // Draw the rect with opengl
-    SGL::drawRect(rect.origin * SGL::getScreenScale(), rect.size * SGL::getScreenScale());
+    // render the rect with opengl
+    SGL::renderRect(rect.origin * SGL::getScreenScale(), rect.size * SGL::getScreenScale());
     
 }
 
@@ -156,7 +156,6 @@ void SUI::moveMouse() {
     // First we need to get the mouse position on the screen
     glm::vec2 mouse_position;
     SGL::getMousePos(&mouse_position.x, &mouse_position.y);
-    
     
     // Go through the widgets in reverse order and see if we're hovering on any
     SUIWidget* new_hover_widget = nullptr;

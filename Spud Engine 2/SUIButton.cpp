@@ -23,17 +23,17 @@ SUIButton::SUIButton() {
 void SUIButton::render(double interpolation) {
 
     // Figure out which image we should be using
-    STexture* draw_image = background_image;
+    STexture* render_image = background_image;
     
     if (hovering && hover_image)
-        draw_image = hover_image;
+        render_image = hover_image;
     
     if (pressed && press_image)
-        draw_image = press_image;
+        render_image = press_image;
     
-    SUI::drawRect(frame, draw_image);
+    SUI::renderRect(frame, render_image);
     
-    // Draw the label on top of it
+    // render the label on top of it
     if (font) {
         
         // Get the padding

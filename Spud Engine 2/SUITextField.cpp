@@ -34,7 +34,7 @@ SUITextField::SUITextField() : cursor_blink_timer(boost::bind(&SUITextField::bli
 void SUITextField::render(double interpolation) {
     
     // Render a background
-    SUI::drawRect(frame, background_color);
+    SUI::renderRect(frame, background_color);
     
     // Calculate the padding in the y direction
     float y_padding = (frame.size.y - font->getLineHeight(font_size)) / 2.0;

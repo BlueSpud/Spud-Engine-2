@@ -19,7 +19,7 @@
  ******************************************************************************/
 
 #define AO_KERNAL_SIZE 16
-#define AO_NOISE_SIZE 16
+#define AO_NOISE_SIZE 4
 
 class SAmbientOcclusionPass {
     

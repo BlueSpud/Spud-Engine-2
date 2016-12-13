@@ -39,13 +39,6 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     // Create the light graph
     light_graph = new SSimpleLightGraph();
     
-    // Create a temporary light
-//    light = new SPointLight();
-//    light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
-//    light->light_color = glm::vec3(0.4, 0.4, 0.4);
-    
-    //light_graph->addLight(light);
-    
     light = new SDirectionalLight();
     light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
     
@@ -53,33 +46,9 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     
     light_graph->addLight(light);
     
-//
-//    light = new SDirectionalLight();
-//    light->transform.translation.y = 20;
-//    light->transform.translation.z = 0.0;
-//    light->transform.translation.x = -6.0;
-//    light->transform.rotation.x = -M_PI / 3;
-//    light->transform.rotation.y = M_PI / 2;
-//    
-//    light->light_color = glm::vec3(1.0, 0.0, 0.0);
-//    
-//    light->casts_shadow = true;
-//    
-//    light_graph->addLight(light);
-    
-//    light = new SDirectionalLight();
-//    light->transform.translation.y = 10;
-//    light->transform.translation.z = 3.0;
-//    light->transform.translation.x = 0.0;
-//    light->transform.rotation.x = -M_PI / 3;
-//    
-//    light->light_color = glm::vec3(1.0, 1.0, 1.0);
-//    
-//    light_graph->addLight(light);
-    
 }
 
-void SDeferredRenderingPipleline::unload() {
+SDeferredRenderingPipleline::~SDeferredRenderingPipleline() {
     
     // Unload the gbuffer
     gbuffer->unload();
@@ -211,6 +180,6 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
     
     lit_shader->bindUniform(view_pos_u);
     
-    SGL::drawRect(glm::vec2(0, 0), viewport_2D->screen_size);
+    SGL::renderRect(glm::vec2(0, 0), viewport_2D->screen_size);
     
 }

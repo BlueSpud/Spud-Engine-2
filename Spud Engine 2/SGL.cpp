@@ -43,7 +43,7 @@ void SGL::shutdown() {
     
     SLog::verboseLog(SVerbosityLevel::Debug, "SGL shutdown");
     
-    // Unload the rect we use for drawing
+    // Unload the rect we use for rendering
     unloadRect();
     
     // Shut down OpenGL
@@ -162,7 +162,7 @@ void SGL::setUpViewport(const SViewport& viewport) { glViewport(viewport.screen_
                                                                 viewport.screen_size.x,
                                                                 viewport.screen_size.y); }
 
-void SGL::drawRect(glm::vec2 position, glm::vec2 size) {
+void SGL::renderRect(glm::vec2 position, glm::vec2 size) {
     
     // Make the matrix for the rect
     glm::mat4 matrix = glm::mat4(1.0);
@@ -177,7 +177,7 @@ void SGL::drawRect(glm::vec2 position, glm::vec2 size) {
     flushMatrix(MAT_VIEW_MATRIX);
     flushMatrix(MAT_MODEL_MATRIX);
     
-    // Draw the array
+    // render the array
     glBindVertexArray(rect_id);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
@@ -243,7 +243,7 @@ void SGL::flushMatrix(const char* mat_name) {
 }
 
 /******************************************************************************
- *  Arrays for simple quad drawing                                            *
+ *  Arrays for simple quad rendering                                          *
  ******************************************************************************/
 
 float rect_position[] = { 0.0, 1.0, 0.0,
@@ -264,7 +264,7 @@ float rect_tex_coord[] = { 0.0, 0.0,
 
 void SGL::loadRect() {
     
-    // Create a simple 1x1 square that we can use to draw rects to the screen
+    // Create a simple 1x1 square that we can use to render rects to the screen
     glGenVertexArrays(1, &rect_id);
     
     // Create the position buffer
