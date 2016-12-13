@@ -10,6 +10,7 @@
 #define SRenderingPipeline_hpp
 
 #include "SSceneGraph.hpp"
+#include "SLightGraph.hpp"
 #include "SShader.hpp"
 
 /******************************************************************************
@@ -33,7 +34,7 @@ class SRenderingPipeline {
         SRenderingPipeline(SViewport* _viewport_2D, SViewport3D* _viewport_3D);
         virtual ~SRenderingPipeline() { /* intentionally blank */ }
     
-        virtual void render(SSceneGraph& scene_graph, SCamera& camera, double interpolation) = 0;
+        virtual void render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation) = 0;
     
         void addPostProcessPass(SPostProcessPass pass);
     

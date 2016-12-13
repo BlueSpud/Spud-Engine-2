@@ -12,7 +12,6 @@
 #include "SSubsystem.hpp"
 
 #include "SRenderingPipeline.hpp"
-#include "SSceneGraph.hpp"
 
 /******************************************************************************
  *  Definition for the render system                                          *
@@ -29,6 +28,7 @@ class SRenderSystem : public SSubsystem {
     
         static SRenderingPipeline* rendering_pipeline;
         static SSceneGraph* current_scene_graph;
+        static SLightGraph* current_light_graph;
     
     
 };

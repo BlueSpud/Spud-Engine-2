@@ -75,19 +75,18 @@ class SInputSystem : public SSubsystem {
     
         static void setInputMode(SInputMode _input_mode);
     
+        static void moveMouse();
+    
     private:
     
         static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
         static void charCallback(GLFWwindow* window, unsigned int unicode_value);
         static void mouseCallback(GLFWwindow* window, int button, int action, int mods);
     
-        static void moveMouse(const SEvent& event);
-    
         static glm::vec2 mouse_pos;
         static glm::vec2 last_mouse_pos;
     
         static SInputListener* current_input_listener;
-        static SEventListener event_listener;
     
         static SInputMode input_mode;
     

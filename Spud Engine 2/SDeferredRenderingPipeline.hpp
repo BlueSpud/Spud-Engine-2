@@ -37,10 +37,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport3D* _viewport_3D);
         virtual ~SDeferredRenderingPipleline();
     
-        virtual void render(SSceneGraph& scene_graph, SCamera& camera, double interpolation);
-    
-        SLight* light;
-    
+        virtual void render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation);
     private:
     
         // Stuff for rendering
@@ -53,11 +50,6 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
         SCubeMap* environment_map;
         SUniform* view_pos_u;
-    
-        // Temp stuff
-        SSimpleLightGraph* light_graph;
-        STexture* test;
-    
     
 };
 

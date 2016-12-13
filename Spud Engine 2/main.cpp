@@ -8,10 +8,9 @@
 
 #include <btBulletDynamicsCommon.h>
 
-#include "STime.hpp"
+#include "SMainLoop.hpp"
 #include "SInputSystem.hpp"
 #include "SDeferredRenderingPipeline.hpp"
-#include "SRenderSystem.hpp"
 #include "SCamera.hpp"
 #include "SHotLoadSystem.hpp"
 #include "SFramebuffer.hpp"
@@ -32,14 +31,12 @@ double speed_x = 0.0;
 double speed_r = 0.0;
 
 SCamera camera;
-SDeferredRenderingPipleline* deferred_pipeline;
+SLight* light;
 SSoundEmitter* sound_emitter;
 
 void moveLight(int key) {
     
-    // Temp function
-    deferred_pipeline->light->transform = camera.transform;
-    deferred_pipeline->light->needs_shadow_update = true;
+    light->transform = camera.transform;
     
 }
 
@@ -131,6 +128,19 @@ void FPS() {
     
 }
 
+void update(const SEvent& event) {
+    
+    // Update camera position and calculate new velocity
+    camera.transform.update();
+    
+    glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0, -cos(camera.transform.rotation.y) * speed);
+    glm::vec3 strafe = glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0, -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
+    glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
+    
+    camera.transform.translation_velocity = strafe + forward + fly;
+    
+}
+
 int main(int argc, char* argv[]) {
     
     // Set verbosity level
@@ -198,8 +208,19 @@ int main(int argc, char* argv[]) {
     SViewport viewport_2D = SViewport(window_framebuffer_size, glm::vec2());
     SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2(0), 45.0f, glm::vec2(0.1, 500.0));
     
-    SRenderSystem::rendering_pipeline = deferred_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
+    // Create the light graph
+    SSimpleLightGraph* light_graph = new SSimpleLightGraph();
+    
+    light = new SDirectionalLight();
+    light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
+    
+    light->casts_shadow = true;
+    
+    light_graph->addLight(light);
+    
+    SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
     SRenderSystem::current_scene_graph = scene_graph;
+    SRenderSystem::current_light_graph = light_graph;
     
     SInputListener listener;
     listener.bind(&keyPress, GLFW_KEY_S, INPUT_ACTION_DOWN);
@@ -283,6 +304,8 @@ int main(int argc, char* argv[]) {
     SCursor* cursor = (SCursor*)SResourceManager::getResource(SPath("/Texture/ui/cursor/pointer.cur"));
     cursor->bind();
     
+    SEventListener event_listener;
+    event_listener.listenToEvent(EVENT_TICK, &update);
     
     // END TEMP CODE
     
@@ -290,91 +313,10 @@ int main(int argc, char* argv[]) {
     SGLUploadSystem::processUploads();
     SGLUploadSystem::setUploadLimitPerFrame(10);
     
-    double loopElapsedTime = 0.0;
-    double time_tick = 1.0 / TICKS_PER_SECOND;
-    int maxUpdateCount = 5;
-
-    SStopwatch profiler;
+    SLog::verboseLog(SVerbosityLevel::Debug, "Startup complete");
     
-    SLog::verboseLog(SVerbosityLevel::Debug, "Startup complete\n");
-    
-    glClearColor(0.2, 0.2, 0.2, 0.0);
-    
-    SStopwatch stopwatch;
-    stopwatch.start();
-    
-    // Create a timer to display the FPS
-    STimer fps_timer = STimer(&FPS, 1.0, TIMER_LOOP_INFINITE);
-    
-    // Disable the cursor by default
-    SGL::setMouseInputMode(GLFW_CURSOR_DISABLED);
-    
-    // Main loop start
-    while (SGL::windowIsGood()) {
-        
-        // Manage elapsed time for the loop
-        double elapsed = stopwatch.stop();
-        stopwatch.start();
-        loopElapsedTime += elapsed;
-        
-        //SLog::verboseLog(SVerbosityLevel::Debug, "%i FPS", (int)(1.0 / elapsed));
-        
-        int loops = 0;
-        profiler.start();
-        while (loopElapsedTime >= time_tick && loops < maxUpdateCount) {
-            
-            // Take in input events from user
-            glfwPollEvents();
-            
-            // Update camera position and calculate new velocity
-            camera.transform.update();
-            
-            glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0, -cos(camera.transform.rotation.y) * speed);
-            glm::vec3 strafe = glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0, -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
-            glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
-            
-            camera.transform.translation_velocity = strafe + forward + fly;
-            
-            // Post a tick event for everyone
-            SEventTick e;
-            SEventSystem::postEvent(EVENT_TICK, e);
-            
-            // Record that a game update was done
-            loopElapsedTime -= time_tick;
-            loops++;
-            
-        }
-        
-        //SLog::verboseLog(SVerbosityLevel::Debug, "Update took %fs", (float)profiler.stop());
-        
-        // If we were forced to stop updating the game and render a frame, we cant keep up
-        if (loops == maxUpdateCount)
-            SLog::verboseLog(SVerbosityLevel::Critical, "Unable to perform %i updates per second", TICKS_PER_SECOND);
-        
-        profiler.start();
-        
-        // Upload stuff to the GPU
-        SGLUploadSystem::processUploads();
-        
-        double interpolation = loopElapsedTime / time_tick;
-        
-        // Before we render we set where the listener is
-        SSoundSystem::updateListenerPosition(interpolation);
-        
-        // Render using a deferred rendering pipline
-        SRenderSystem::render(interpolation);
-        
-        SUI::renderUI(interpolation);
-        
-        //SLog::verboseLog(SVerbosityLevel::Debug, "Render took %fs", (float)profiler.stop());
-        
-        // Swap back and front buffer to display
-        SGL::swapBuffers();
-        
-        // Save that we drew a frame
-        frames_counted++;
-        
-    }
+    // Do the main loop
+    SMainLoop::loop();
     
     // Subsystem shutdown
     SConsole::shutdown();

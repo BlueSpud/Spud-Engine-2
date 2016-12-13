@@ -22,6 +22,7 @@
 		022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */; };
 		02328BEF1DD185E70083B0BB /* SStaticMeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */; };
 		0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0236A34C1D7D316D00DB2DBA /* SLog.cpp */; };
+		023EFA7C1DFFA207003E20F5 /* SRenderSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */; };
 		0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3A1D7DC57300B3E63E /* STime.cpp */; };
 		0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3E1D7DC64300B3E63E /* SGL.cpp */; };
 		025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025536521D8993B5003D04EE /* SCubeMap.cpp */; };
@@ -49,6 +50,7 @@
 		029865981D84AD52005EED43 /* Model in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865971D84AD4D005EED43 /* Model */; };
 		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
 		02A24C2A1D9317A00039F422 /* SFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A24C281D9317A00039F422 /* SFramebuffer.cpp */; };
+		02A2CC071DFF8F3500EA2F4B /* SMainLoop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A2CC051DFF8F3500EA2F4B /* SMainLoop.cpp */; };
 		02B6B7DD1DDB39A80068FCBA /* Shader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 020604711DB7982800B6268F /* Shader */; };
 		02B6B7DE1DDB39AD0068FCBA /* Font in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02B6B7DC1DDB399B0068FCBA /* Font */; };
 		02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B6B7DF1DDB40270068FCBA /* STextRenderer.cpp */; };
@@ -127,6 +129,8 @@
 		02328BEE1DD185E70083B0BB /* SStaticMeshInstance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMeshInstance.hpp; sourceTree = "<group>"; };
 		0236A34C1D7D316D00DB2DBA /* SLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLog.cpp; sourceTree = "<group>"; };
 		0236A34D1D7D316D00DB2DBA /* SLog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLog.hpp; sourceTree = "<group>"; };
+		023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRenderSystem.cpp; sourceTree = "<group>"; };
+		023EFA7B1DFFA207003E20F5 /* SRenderSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRenderSystem.hpp; sourceTree = "<group>"; };
 		0251FC3A1D7DC57300B3E63E /* STime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STime.cpp; sourceTree = "<group>"; };
 		0251FC3B1D7DC57300B3E63E /* STime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = STime.hpp; sourceTree = "<group>"; };
 		0251FC3E1D7DC64300B3E63E /* SGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGL.cpp; sourceTree = "<group>"; };
@@ -171,6 +175,8 @@
 		0298659A1D84C38D005EED43 /* Texture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Texture; path = Resources/Texture; sourceTree = "<group>"; };
 		02A24C281D9317A00039F422 /* SFramebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFramebuffer.cpp; sourceTree = "<group>"; };
 		02A24C291D9317A00039F422 /* SFramebuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFramebuffer.hpp; sourceTree = "<group>"; };
+		02A2CC051DFF8F3500EA2F4B /* SMainLoop.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMainLoop.cpp; sourceTree = "<group>"; };
+		02A2CC061DFF8F3500EA2F4B /* SMainLoop.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SMainLoop.hpp; sourceTree = "<group>"; };
 		02B6B7DC1DDB399B0068FCBA /* Font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Font; path = Resources/Font; sourceTree = "<group>"; };
 		02B6B7DF1DDB40270068FCBA /* STextRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STextRenderer.cpp; sourceTree = "<group>"; };
 		02B6B7E01DDB40270068FCBA /* STextRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = STextRenderer.hpp; sourceTree = "<group>"; };
@@ -358,6 +364,8 @@
 				02DAB8C31D8A28EB00A39E27 /* Pipeline */,
 				0298658D1D84A264005EED43 /* Objects */,
 				0278C0F31DA2F69B002F8B7D /* Utils */,
+				023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */,
+				023EFA7B1DFFA207003E20F5 /* SRenderSystem.hpp */,
 				0251FC3E1D7DC64300B3E63E /* SGL.cpp */,
 				0251FC3F1D7DC64300B3E63E /* SGL.hpp */,
 			);
@@ -394,6 +402,8 @@
 				0201C7821DEF4B0000AA0B24 /* Sound */,
 				0228B87D1D7A6BA200596526 /* Resource */,
 				0259032C1D77940400EA6372 /* driver.hpp */,
+				02A2CC051DFF8F3500EA2F4B /* SMainLoop.cpp */,
+				02A2CC061DFF8F3500EA2F4B /* SMainLoop.hpp */,
 				0259032D1D77940400EA6372 /* main.cpp */,
 				025903171D77933E00EA6372 /* Info.plist */,
 			);
@@ -694,6 +704,7 @@
 				0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */,
 				022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */,
 				02E7A7751DD2325E00F3164F /* SActor.cpp in Sources */,
+				02A2CC071DFF8F3500EA2F4B /* SMainLoop.cpp in Sources */,
 				02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */,
 				0228B8841D7A779200596526 /* SStaticMesh.cpp in Sources */,
 				02C35AE01DDE2E26007C361C /* SUI.cpp in Sources */,
@@ -702,6 +713,7 @@
 				02E178D31DE6718200D80D5B /* SInputSystem.cpp in Sources */,
 				02D295D11D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp in Sources */,
 				0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */,
+				023EFA7C1DFFA207003E20F5 /* SRenderSystem.cpp in Sources */,
 				0201C7851DEF4B0F00AA0B24 /* SSoundSystem.cpp in Sources */,
 				025903301D77940400EA6372 /* main.cpp in Sources */,
 				0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */,

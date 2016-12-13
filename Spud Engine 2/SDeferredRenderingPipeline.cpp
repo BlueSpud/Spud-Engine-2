@@ -36,16 +36,6 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     // Get the view pos
     view_pos_u = SUniformManger::instance()->getUniformWithName("view_position");
     
-    // Create the light graph
-    light_graph = new SSimpleLightGraph();
-    
-    light = new SDirectionalLight();
-    light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
-    
-    light->casts_shadow = true;
-    
-    light_graph->addLight(light);
-    
 }
 
 SDeferredRenderingPipleline::~SDeferredRenderingPipleline() {
@@ -53,12 +43,9 @@ SDeferredRenderingPipleline::~SDeferredRenderingPipleline() {
     // Unload the gbuffer
     gbuffer->unload();
     delete gbuffer;
-    
-    delete light_graph;
-    
 }
 
-void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& camera, double interpolation) {
+void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation) {
     
     /******************************************************************************
      * 3D viewport setup                                                          *
@@ -79,8 +66,8 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
      * Shadow mapping updates                                                     *
      ******************************************************************************/
 
-    light_graph->cullLights(projection_view_matrix);
-    light_graph->updateShadows(scene_graph, projection_matrix_3D, view_matrix, interpolation);
+    light_graph.cullLights(projection_view_matrix);
+    light_graph.updateShadows(scene_graph, projection_matrix_3D, view_matrix, interpolation);
     
     /******************************************************************************
      * Gbuffer render                                                             *
@@ -121,7 +108,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
     gbuffer->bindTexture(GBUFFER_ORM);
     environment_map->bind(ENVIRONMENT_MAP);
     glActiveTexture(GL_TEXTURE5);
-    light_graph->shadow_map_buffer->bindTexture(0);
+    light_graph.shadow_map_buffer->bindTexture(0);
     
     // Render out the ambient occlusion and then bind it
     ambient_occlusion_pass->renderAmbientOcclusion(GBUFFER_DEPTH, GBUFFER_NORMAL, AMBIENT_OCCLUSION,
@@ -166,17 +153,17 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
     
     // Lighting uniforms
-    int light_count = light_graph->getLightCount();
+    int light_count = light_graph.getLightCount();
     lit_shader->bindUniform(&light_count, "light_count", UNIFORM_INT, 1);
     
-    lit_shader->bindUniform(light_graph->getLightPositions(interpolation).data(), "light_positions", UNIFORM_VEC3, light_count);
-    lit_shader->bindUniform(light_graph->getColors().data(), "light_colors", UNIFORM_VEC3, light_count);
-    lit_shader->bindUniform(light_graph->getShadowLights().data(), "lights_shadow", UNIFORM_INT, light_count);
+    lit_shader->bindUniform(light_graph.getLightPositions(interpolation).data(), "light_positions", UNIFORM_VEC3, light_count);
+    lit_shader->bindUniform(light_graph.getColors().data(), "light_colors", UNIFORM_VEC3, light_count);
+    lit_shader->bindUniform(light_graph.getShadowLights().data(), "lights_shadow", UNIFORM_INT, light_count);
     
-    std::vector<glm::mat4> light_matrices = light_graph->getShadowMatrices();
+    std::vector<glm::mat4> light_matrices = light_graph.getShadowMatrices();
     lit_shader->bindUniform(light_matrices.data(), "light_matrices", UNIFORM_MAT4, (int)light_matrices.size());
     
-    lit_shader->bindUniform(light_graph->getShadowMapCoordinates().data(), "shadow_map_coordinates", UNIFORM_VEC2, (int)light_matrices.size());
+    lit_shader->bindUniform(light_graph.getShadowMapCoordinates().data(), "shadow_map_coordinates", UNIFORM_VEC2, (int)light_matrices.size());
     
     lit_shader->bindUniform(view_pos_u);
     

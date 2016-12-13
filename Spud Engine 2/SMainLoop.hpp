@@ -9,6 +9,27 @@
 #ifndef SMainLoop_hpp
 #define SMainLoop_hpp
 
-#include <stdio.h>
+#include "SRenderSystem.hpp"
+#include "SUI.hpp"
+#include "SSoundSystem.hpp"
+
+#include "SInputSystem.hpp"
+
+#include "STime.hpp"
+
+#define MAX_UPDATES_BEFORE_RENDER 5
+
+/******************************************************************************
+ *  Definition for main loop                                                  *
+ ******************************************************************************/
+
+class SMainLoop {
+    
+    public:
+    
+        static int loop();
+    
+    
+};
 
 #endif /* SMainLoop_hpp */

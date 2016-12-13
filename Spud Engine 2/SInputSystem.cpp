@@ -14,7 +14,6 @@ glm::vec2 SInputSystem::last_mouse_pos;
 glm::vec2 SInputSystem::mouse_pos;
 
 SInputListener* SInputSystem::current_input_listener;
-SEventListener SInputSystem::event_listener;
 
 /******************************************************************************
  *  Functions for input listener                                              *
@@ -85,10 +84,8 @@ void SInputSystem::startup() {
     // Set the mouse button callback
     SGL::setMouseCallback(mouseCallback);
     
-    // Set the mouse mode and get the initial position and listen to the tick event for mouse movement
+    // Set the mouse mode and get the initial position
     SGL::setMouseInputMode(GLFW_CURSOR_DISABLED);
-    event_listener.listenToEvent(EVENT_TICK, &moveMouse);
-    
     SGL::getMousePos(&last_mouse_pos.x, &last_mouse_pos.y);
 
 }
@@ -96,9 +93,6 @@ void SInputSystem::startup() {
 void SInputSystem::shutdown() {
     
     SLog::verboseLog(SVerbosityLevel::Debug, "SInputSystem shutdown");
-    
-    // Stop listening for mouse movement
-    event_listener.stopListeningToEvent(EVENT_TICK);
 
 }
 
@@ -179,7 +173,7 @@ void SInputSystem::mouseCallback(GLFWwindow* window, int button, int action, int
     
 }
 
-void SInputSystem::moveMouse(const SEvent& event) {
+void SInputSystem::moveMouse() {
     
     // Save the old position as the last position
     last_mouse_pos = mouse_pos;
