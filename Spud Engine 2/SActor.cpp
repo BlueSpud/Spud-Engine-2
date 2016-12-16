@@ -31,3 +31,6 @@ void SActor::render(bool render_material, double interpolation) {
 }
 
 void SActor::update() { /* nothing is done by default here */ }
+
+void SActor::onMoveToSceneGraph() { root_component->onMoveToSceneGraph(); }
+void SActor::onRemoveFromSceneGraph() { root_component->onRemoveFromSceneGraph(); }

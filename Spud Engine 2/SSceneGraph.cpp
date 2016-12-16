@@ -80,6 +80,7 @@ void SSimpleSceneGraph::addObject(SObject* object) {
 
     // Add it to the list
     objects.push_back(object);
+    object->onMoveToSceneGraph();
 
 }
 
@@ -87,6 +88,7 @@ void SSimpleSceneGraph::removeObject(SObject* object) {
 
     // Remove it from the list
     objects.remove(object);
+    object->onRemoveFromSceneGraph();
 
 }
 

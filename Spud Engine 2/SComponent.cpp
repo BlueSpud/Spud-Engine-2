@@ -34,7 +34,23 @@ void SComponent::render(bool render_material, double interpolation) {
     
 }
 
-void SComponent::update() { /* components updat enothing by default */ }
+void SComponent::update() { /* components updat nothing by default */ }
+
+void SComponent::onMoveToSceneGraph() {
+
+    // Call on all children components
+    for (int i = 0; i < child_components.size(); i++)
+        child_components[i]->onMoveToSceneGraph();
+
+}
+
+void SComponent::onRemoveFromSceneGraph() {
+
+    // Call on all children components
+    for (int i = 0; i < child_components.size(); i++)
+        child_components[i]->onRemoveFromSceneGraph();
+
+}
 
 void SComponent::attatchComponent(SComponent* new_child_componenet) {
     

@@ -15,7 +15,7 @@
 int SMainLoop::loop() {
     
     double loop_elapsed_time = 0.0;
-    double time_tick = 1.0 / TICKS_PER_SECOND;
+    double real_time_per_tick = 1.0 / TICKS_PER_SECOND;
     
     SStopwatch stopwatch;
     stopwatch.start();
@@ -30,21 +30,24 @@ int SMainLoop::loop() {
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "%i FPS", (int)(1.0 / elapsed));
         
+        // Update physics
+        SPhysicsSystem::updatePhysics(elapsed, MAX_UPDATES_BEFORE_RENDER, real_time_per_tick);
+        
         int loops = 0;
-        while (loop_elapsed_time >= time_tick && loops < MAX_UPDATES_BEFORE_RENDER) {
+        while (loop_elapsed_time >= real_time_per_tick && loops < MAX_UPDATES_BEFORE_RENDER) {
             
             // Take in input events from user
             glfwPollEvents();
             
             // Post a tick event for everyone
-            SEventTick e;
-            SEventSystem::postEvent(EVENT_TICK, e);
+            SEventTick tick_event;
+            SEventSystem::postEvent(EVENT_TICK, tick_event);
             
             // Poll for the mouse movement
             SInputSystem::moveMouse();
             
             // Record that a game update was done
-            loop_elapsed_time -= time_tick;
+            loop_elapsed_time -= real_time_per_tick;
             loops++;
             
         }
@@ -56,7 +59,7 @@ int SMainLoop::loop() {
         // Upload stuff to the GPU
         SGLUploadSystem::processUploads();
         
-        double interpolation = loop_elapsed_time / time_tick;
+        double interpolation = loop_elapsed_time / real_time_per_tick;
         
         // Before we render we set where the listener is
         SSoundSystem::updateListenerPosition(interpolation);

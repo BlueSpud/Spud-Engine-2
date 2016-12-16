@@ -6,8 +6,6 @@
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#include <btBulletDynamicsCommon.h>
-
 #include "SMainLoop.hpp"
 #include "SInputSystem.hpp"
 #include "SDeferredRenderingPipeline.hpp"
@@ -27,8 +25,6 @@
 
 double speed = 0.0;
 double speed_x = 0.0;
-
-double speed_r = 0.0;
 
 SCamera camera;
 SLight* light;
@@ -213,7 +209,6 @@ int main(int argc, char* argv[]) {
     
     light = new SDirectionalLight();
     light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
-    
     light->casts_shadow = true;
     
     light_graph->addLight(light);
@@ -221,6 +216,10 @@ int main(int argc, char* argv[]) {
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
     SRenderSystem::current_scene_graph = scene_graph;
     SRenderSystem::current_light_graph = light_graph;
+    
+    // Physics
+    SPhysicsGraph* physics_graph = new SPhysicsGraph();
+    SPhysicsSystem::current_physics_graph = physics_graph;
     
     SInputListener listener;
     listener.bind(&keyPress, GLFW_KEY_S, INPUT_ACTION_DOWN);
@@ -257,7 +256,7 @@ int main(int argc, char* argv[]) {
     button->press_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_press.wav"));
     
     button->frame.origin = glm::vec2(5.0, 5.0);
-    button->frame.size = glm::vec2(279, 37.5);
+    button->frame.size = glm::vec2(280, 50);
     
     button->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
     button->label = "Button 1";
@@ -276,8 +275,8 @@ int main(int argc, char* argv[]) {
     button->hover_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_hover.wav"));
     button->press_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_press.wav"));
     
-    button->frame.origin = glm::vec2(5.0, 47.5);
-    button->frame.size = glm::vec2(279, 37.5);
+    button->frame.origin = glm::vec2(5.0, 60.0);
+    button->frame.size = glm::vec2(280, 50);
     
     button->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
     button->label = "Button 2";
@@ -294,8 +293,8 @@ int main(int argc, char* argv[]) {
     
     text_field->background_color = glm::vec4(0.1, 0.1, 0.1, 1.0);
     
-    text_field->frame.origin = glm::vec2(5.0, 95);
-    text_field->frame.size = glm::vec2(279, 37.5);
+    text_field->frame.origin = glm::vec2(5.0, 115);
+    text_field->frame.size = glm::vec2(280, 37.5);
     
     ui_graph->addWidget(text_field);
     

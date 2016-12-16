@@ -12,6 +12,8 @@
 #include "SStaticMesh.hpp"
 #include "SObject.hpp"
 
+#include "SPhysicsSystem.hpp"
+
 /******************************************************************************
  *  Definition for static mesh instance                                       *
  ******************************************************************************/
@@ -25,7 +27,11 @@ class SStaticMeshInstance : public SResource, public SObject {
         virtual void render(bool render_material, double interpolation);
         virtual void update();
     
+        virtual void physicsUpdate(const SEvent& event);
+    
         void setMaterial(SMaterial* new_material, int material_domain);
+    
+        void setPhysicsEnabled(bool physics_enabled);
     
     protected:
     

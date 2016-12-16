@@ -11,6 +11,7 @@
 
 #include "SRenderSystem.hpp"
 #include "SUI.hpp"
+#include "SPhysicsSystem.hpp"
 #include "SSoundSystem.hpp"
 
 #include "SInputSystem.hpp"

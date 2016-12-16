@@ -23,6 +23,9 @@ class SStaticMeshComponent : public SComponent {
         virtual void render(bool render_material, double interpolation);
         void setStaticMesh(SStaticMeshInstance* new_mesh_instance);
     
+        virtual void onMoveToSceneGraph();
+        virtual void onRemoveFromSceneGraph();
+    
     private:
     
         SStaticMeshInstance* mesh_instance;

@@ -25,6 +25,9 @@ class SActor : public SObject {
         virtual void render(bool render_material, double interpolation);
         virtual void update();
     
+        virtual void onMoveToSceneGraph();
+        virtual void onRemoveFromSceneGraph();
+    
     //protected:
     
         SComponent* root_component;

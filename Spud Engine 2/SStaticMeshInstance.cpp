@@ -33,6 +33,13 @@ void SStaticMeshInstance::render(bool render_material, double interpolation) {
 
 }
 
+void SStaticMeshInstance::physicsUpdate(const SEvent& event) {
+    
+    // We are reciving this because we have physics enabled, so we set our position to the position of the rigidbody
+    
+    
+}
+
 void SStaticMeshInstance::setMaterial(SMaterial* new_material, int material_domain) {
     
     // Check if we have a material domain for the material we tried to replace
@@ -42,6 +49,15 @@ void SStaticMeshInstance::setMaterial(SMaterial* new_material, int material_doma
         materials[material_domain] = new_material;
         
     }
+    
+}
+
+void SStaticMeshInstance::setPhysicsEnabled(bool physics_enabled) {
+    
+    // Either register the physics update or unbind it
+    if (physics_enabled)
+        event_listener.listenToEvent(EVENT_PHYSICS_UPDATE, EVENT_MEMBER(SStaticMeshInstance::physicsUpdate));
+    else event_listener.stopListeningToEvent(EVENT_PHYSICS_UPDATE);
     
 }
 
