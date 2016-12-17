@@ -30,9 +30,6 @@ int SMainLoop::loop() {
         
         //SLog::verboseLog(SVerbosityLevel::Debug, "%i FPS", (int)(1.0 / elapsed));
         
-        // Update physics
-        SPhysicsSystem::updatePhysics(elapsed, MAX_UPDATES_BEFORE_RENDER, real_time_per_tick);
-        
         int loops = 0;
         while (loop_elapsed_time >= real_time_per_tick && loops < MAX_UPDATES_BEFORE_RENDER) {
             
@@ -60,6 +57,9 @@ int SMainLoop::loop() {
         SGLUploadSystem::processUploads();
         
         double interpolation = loop_elapsed_time / real_time_per_tick;
+        
+        // Update physics
+        SPhysicsSystem::updatePhysics(elapsed, interpolation, MAX_UPDATES_BEFORE_RENDER, real_time_per_tick);
         
         // Before we render we set where the listener is
         SSoundSystem::updateListenerPosition(interpolation);

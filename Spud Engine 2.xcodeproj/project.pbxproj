@@ -15,6 +15,7 @@
 		0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */; };
 		0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0202413D1D7C99130050E9D3 /* libboost_signals.a */; };
 		02064B0D1D9D663000D49D4A /* SLightGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02064B0B1D9D663000D49D4A /* SLightGraph.cpp */; };
+		0219249E1E05972E003D0CB3 /* SRigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0219249C1E05972E003D0CB3 /* SRigidBody.cpp */; };
 		021B32B91D9C4B820032001D /* SLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 021B32B71D9C4B820032001D /* SLight.cpp */; };
 		0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B87E1D7A6BB100596526 /* SResourceManager.cpp */; };
 		0228B8841D7A779200596526 /* SStaticMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B8821D7A779200596526 /* SStaticMesh.cpp */; };
@@ -41,6 +42,7 @@
 		025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025CB5AE1D83EB500059AF6C /* STexture.cpp */; };
 		026915C81DDB386C00A06D4C /* SFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 026915C61DDB386C00A06D4C /* SFont.cpp */; };
 		02716E3F1DC2A5DE00EFC656 /* SRectPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02716E3D1DC2A5DE00EFC656 /* SRectPacker.cpp */; };
+		02731C181E01A8B000A63389 /* SPhysicsSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02731C161E01A8B000A63389 /* SPhysicsSystem.cpp */; };
 		0278C0F61DA2F6AB002F8B7D /* SBoundingBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0278C0F41DA2F6AB002F8B7D /* SBoundingBox.cpp */; };
 		029039671DB11CB30087B500 /* SAmbientOcclusionPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 029039651DB11CB30087B500 /* SAmbientOcclusionPass.cpp */; };
 		02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02956BCE1D8B0FFB0035733E /* SGLUpload.cpp */; };
@@ -114,6 +116,8 @@
 		020604711DB7982800B6268F /* Shader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shader; path = Resources/Shader; sourceTree = "<group>"; };
 		02064B0B1D9D663000D49D4A /* SLightGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLightGraph.cpp; sourceTree = "<group>"; };
 		02064B0C1D9D663000D49D4A /* SLightGraph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLightGraph.hpp; sourceTree = "<group>"; };
+		0219249C1E05972E003D0CB3 /* SRigidBody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRigidBody.cpp; sourceTree = "<group>"; };
+		0219249D1E05972E003D0CB3 /* SRigidBody.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRigidBody.hpp; sourceTree = "<group>"; };
 		021B32B71D9C4B820032001D /* SLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLight.cpp; sourceTree = "<group>"; };
 		021B32B81D9C4B820032001D /* SLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLight.hpp; sourceTree = "<group>"; };
 		0228B87E1D7A6BB100596526 /* SResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SResourceManager.cpp; sourceTree = "<group>"; };
@@ -160,6 +164,8 @@
 		026915C71DDB386C00A06D4C /* SFont.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFont.hpp; sourceTree = "<group>"; };
 		02716E3D1DC2A5DE00EFC656 /* SRectPacker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRectPacker.cpp; sourceTree = "<group>"; };
 		02716E3E1DC2A5DE00EFC656 /* SRectPacker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRectPacker.hpp; sourceTree = "<group>"; };
+		02731C161E01A8B000A63389 /* SPhysicsSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SPhysicsSystem.cpp; sourceTree = "<group>"; };
+		02731C171E01A8B000A63389 /* SPhysicsSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SPhysicsSystem.hpp; sourceTree = "<group>"; };
 		0278C0F41DA2F6AB002F8B7D /* SBoundingBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SBoundingBox.cpp; sourceTree = "<group>"; };
 		0278C0F51DA2F6AB002F8B7D /* SBoundingBox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SBoundingBox.hpp; sourceTree = "<group>"; };
 		029039651DB11CB30087B500 /* SAmbientOcclusionPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SAmbientOcclusionPass.cpp; sourceTree = "<group>"; };
@@ -399,6 +405,7 @@
 				020241581D7CEC930050E9D3 /* Event */,
 				022ED1551D78FA2400DC1ECD /* File */,
 				0251FC3D1D7DC62400B3E63E /* Rendering */,
+				02731C151E01A8A400A63389 /* Physics */,
 				0201C7821DEF4B0000AA0B24 /* Sound */,
 				0228B87D1D7A6BA200596526 /* Resource */,
 				0259032C1D77940400EA6372 /* driver.hpp */,
@@ -488,6 +495,17 @@
 				02716E3E1DC2A5DE00EFC656 /* SRectPacker.hpp */,
 			);
 			name = Utilities;
+			sourceTree = "<group>";
+		};
+		02731C151E01A8A400A63389 /* Physics */ = {
+			isa = PBXGroup;
+			children = (
+				02731C161E01A8B000A63389 /* SPhysicsSystem.cpp */,
+				02731C171E01A8B000A63389 /* SPhysicsSystem.hpp */,
+				0219249C1E05972E003D0CB3 /* SRigidBody.cpp */,
+				0219249D1E05972E003D0CB3 /* SRigidBody.hpp */,
+			);
+			name = Physics;
 			sourceTree = "<group>";
 		};
 		0278C0F31DA2F69B002F8B7D /* Utils */ = {
@@ -690,6 +708,7 @@
 				025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */,
 				02D20CFA1DF60B32008DAFD1 /* SCursor.cpp in Sources */,
 				026915C81DDB386C00A06D4C /* SFont.cpp in Sources */,
+				0219249E1E05972E003D0CB3 /* SRigidBody.cpp in Sources */,
 				02716E3F1DC2A5DE00EFC656 /* SRectPacker.cpp in Sources */,
 				02D35A731D86217A00F62A7B /* SSceneGraph.cpp in Sources */,
 				02B947F81D89FF7200822957 /* SUniform.cpp in Sources */,
@@ -701,6 +720,7 @@
 				0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */,
 				02064B0D1D9D663000D49D4A /* SLightGraph.cpp in Sources */,
 				0201C78A1DEF4C1100AA0B24 /* SSound.cpp in Sources */,
+				02731C181E01A8B000A63389 /* SPhysicsSystem.cpp in Sources */,
 				0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */,
 				022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */,
 				02E7A7751DD2325E00F3164F /* SActor.cpp in Sources */,

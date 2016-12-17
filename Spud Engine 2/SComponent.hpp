@@ -22,8 +22,8 @@ class SComponent : public SObject {
         virtual void render(bool render_material, double interpolation);
         virtual void update();
     
-        virtual void onMoveToSceneGraph();
-        virtual void onRemoveFromSceneGraph();
+        virtual void onMoveToSceneGraph(SPhysicsGraph* physics_graph);
+        virtual void onRemoveFromSceneGraph(SPhysicsGraph* physics_graph);
     
         void attatchComponent(SComponent* new_child_componenet);
     

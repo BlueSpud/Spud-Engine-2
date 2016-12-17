@@ -7,12 +7,28 @@
 //
 
 #include "SSceneGraph.hpp"
+#include "SRenderSystem.hpp"
 
-SSceneGraph::~SSceneGraph() { /* stub, destroy objects, scene graph manages memory for them */ }
+SSceneGraph::~SSceneGraph() { /* blank, destroy objects, scene graph manages memory for them */ }
 
 /******************************************************************************
  *  Functions for basic scene graph                                           *
  ******************************************************************************/
+
+SSimpleSceneGraph::SSimpleSceneGraph() {
+    
+    // Create a physics graph
+    physics_graph = new SPhysicsGraph();
+
+}
+
+void SSimpleSceneGraph::makeCurrent() {
+    
+    // This is bad, TEMP
+    SRenderSystem::current_scene_graph = this;
+    SPhysicsSystem::current_physics_graph = physics_graph;
+    
+}
 
 void SSimpleSceneGraph::render(SCamera& camera, bool render_material, double interpolation) {
 
@@ -80,7 +96,7 @@ void SSimpleSceneGraph::addObject(SObject* object) {
 
     // Add it to the list
     objects.push_back(object);
-    object->onMoveToSceneGraph();
+    object->onMoveToSceneGraph(physics_graph);
 
 }
 
@@ -88,7 +104,7 @@ void SSimpleSceneGraph::removeObject(SObject* object) {
 
     // Remove it from the list
     objects.remove(object);
-    object->onRemoveFromSceneGraph();
+    object->onRemoveFromSceneGraph(physics_graph);
 
 }
 

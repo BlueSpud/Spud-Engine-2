@@ -21,9 +21,14 @@ class SPhysicsGraph;
  *  Definition for physics update event                                        *
  ******************************************************************************/
 
-#define EVENT_PHYSICS_UPDATE 35
+#define EVENT_PHYSICS_PREUPDATE 35
+#define EVENT_PHYSICS_POSTUPDATE 36
 
-struct SEventPhysicsUpdate : public SEvent {};
+struct SEventPhysicsUpdate : public SEvent {
+
+    double interpolation;
+
+};
 
 /******************************************************************************
  *  Definition for physics system                                             *
@@ -38,7 +43,7 @@ class SPhysicsSystem : public SSubsystem {
         static void startup();
         static void shutdown();
     
-        static void updatePhysics(double time_elapsed, int max_updates, double time_per_tick);
+        static void updatePhysics(double time_elapsed, double interpolation, int max_updates, double time_per_tick);
     
         static void rigidBodyTransformToSTransform(btRigidBody* rigid_body, STransform& transform);
     
@@ -58,6 +63,9 @@ class SPhysicsGraph {
     
         SPhysicsGraph();
         ~SPhysicsGraph();
+    
+        void addRigidBody(btRigidBody* rigid_body);
+        void removeRigidBody(btRigidBody* rigid_body);
     
     private:
     

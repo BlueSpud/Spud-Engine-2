@@ -143,6 +143,33 @@ bool SStaticMesh::load(const SPath& path) {
                 
             }
             
+            if (token == COLLISION_TOKEN) {
+                
+                // Create the mesh
+                //btTriangleMesh* collision_mesh = new btTriangleMesh();
+                collision_shape = new btConvexHullShape();
+                
+                // Get the size of the collision mesh
+                unsigned int collision_mesh_size;
+                file->read((char*)&collision_mesh_size, sizeof(unsigned int));
+                
+                for (int i = 0; i < collision_mesh_size; i++) {
+                    
+                    // Read a triangle
+                    glm::vec3 vert0, vert1, vert2;
+                    file->read(&vert0, sizeof(glm::vec3));
+                    file->read(&vert1, sizeof(glm::vec3));
+                    file->read(&vert2, sizeof(glm::vec3));
+                    
+                    // Add the triangle to the collision mesh
+                    collision_shape->addPoint(btVector3(vert0.x, vert0.y, vert0.z));
+                    collision_shape->addPoint(btVector3(vert1.x, vert1.y, vert1.z));
+                    collision_shape->addPoint(btVector3(vert2.x, vert2.y, vert2.z));
+                    
+                }
+                
+            }
+            
         }
         
         // Create an upload
@@ -180,6 +207,8 @@ void SStaticMesh::unload() {
         glDeleteVertexArrays(1, &array_id);
         
     }
+    
+    delete collision_shape;
 
 }
 
@@ -207,7 +236,6 @@ void SStaticMesh::hotload(const SPath& path) {
         upload->unload();
         
     }
-    
     
     // Close the old file and then load the new one
     SFileSystem::closeFile(file);

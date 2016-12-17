@@ -12,6 +12,8 @@
 #include "SEventSystem.hpp"
 #include "SShader.hpp"
 
+#include "SPhysicsSystem.hpp"
+
 /******************************************************************************
  *  Definition for generic renderable object                                  *
  ******************************************************************************/
@@ -27,8 +29,8 @@ class SObject {
     
         virtual bool shouldBeRendered(const glm::mat4& projection_view_matrix) { return true; }
     
-        virtual void onMoveToSceneGraph() { /* intentionally empty */ }
-        virtual void onRemoveFromSceneGraph() { /* intentionally empty */ }
+        virtual void onMoveToSceneGraph(SPhysicsGraph* physics_graph) { /* intentionally empty */ }
+        virtual void onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) { /* intentionally empty */ }
     
         STransform transform;
     

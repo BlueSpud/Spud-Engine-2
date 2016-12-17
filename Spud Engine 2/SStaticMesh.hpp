@@ -10,6 +10,8 @@
 #define SStaticMesh_hpp
 
 #include <glm/glm.hpp>
+#include <btBulletDynamicsCommon.h>
+#include <btBulletCollisionCommon.h>
 
 #include "SResourceManager.hpp"
 #include "SGLUpload.hpp"
@@ -81,6 +83,7 @@ struct SStaticMeshUnload : public SGLUpload {
  ******************************************************************************/
 
 #define END_OF_FILE_TOKEN 0x00
+#define COLLISION_TOKEN 0x01
 #define NEW_MATERIAL_TOKEN 0xFF
 
 /******************************************************************************
@@ -132,6 +135,9 @@ class SStaticMesh : public SResource {
         // Min and maxes of the model
         glm::vec3 mins;
         glm::vec3 maxes;
+    
+        // Collision stuff
+        btConvexHullShape* collision_shape;
     
 };
 

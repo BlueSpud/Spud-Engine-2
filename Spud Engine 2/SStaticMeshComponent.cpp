@@ -32,18 +32,18 @@ void SStaticMeshComponent::render(bool render_material, double interpolation) {
 
 void SStaticMeshComponent::setStaticMesh(SStaticMeshInstance* new_mesh_instance) { mesh_instance = new_mesh_instance; }
 
-void SStaticMeshComponent::onMoveToSceneGraph() {
+void SStaticMeshComponent::onMoveToSceneGraph(SPhysicsGraph* physics_graph) {
 
     // Add physics object to the world
     
-    SComponent::onRemoveFromSceneGraph();
+    SComponent::onMoveToSceneGraph(physics_graph);
 
 }
 
-void SStaticMeshComponent::onRemoveFromSceneGraph() {
+void SStaticMeshComponent::onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) {
 
     // Remove physics object to the world
     
-    SComponent::onRemoveFromSceneGraph();
+    SComponent::onRemoveFromSceneGraph(physics_graph);
 
 }

@@ -199,6 +199,36 @@ int main(int argc, char* argv[]) {
     mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
     scene_graph->addObject(mesh);
     
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
+    scene_graph->addObject(mesh);
+    
+    //mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
+    //mesh->setPhysicsEnabled(true);
+    //scene_graph->addObject(mesh);
+    
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
+    mesh->transform.translation.y = 10.0;
+    
+    SRigidBody* rigid_body = new SRigidBody(10.0, new btSphereShape(0.5), &mesh->transform);
+    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    
+    scene_graph->addObject(mesh);
+    
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
+    mesh->transform.translation.y = 15.0;
+    mesh->transform.translation.x = 0.5;
+    
+    rigid_body = new SRigidBody(10.0, new btSphereShape(0.5), &mesh->transform);
+    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    
+    scene_graph->addObject(mesh);
+
+    
+    STransform temp_transform;
+    rigid_body = new SRigidBody(0.0, new btStaticPlaneShape(btVector3(0.0, 1.0, 0.0), false), &temp_transform);
+    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    
+    
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
     SViewport viewport_2D = SViewport(window_framebuffer_size, glm::vec2());
@@ -214,12 +244,8 @@ int main(int argc, char* argv[]) {
     light_graph->addLight(light);
     
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
-    SRenderSystem::current_scene_graph = scene_graph;
+    scene_graph->makeCurrent();
     SRenderSystem::current_light_graph = light_graph;
-    
-    // Physics
-    SPhysicsGraph* physics_graph = new SPhysicsGraph();
-    SPhysicsSystem::current_physics_graph = physics_graph;
     
     SInputListener listener;
     listener.bind(&keyPress, GLFW_KEY_S, INPUT_ACTION_DOWN);

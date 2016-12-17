@@ -20,6 +20,10 @@ SStaticMeshInstance::SStaticMeshInstance(SStaticMesh* _parent_mesh) {
     // Copy over the material
     materials = parent_mesh->materials;
     
+    // If we have a collision shape from the parent mesh, make a rigid body
+    if (parent_mesh->collision_shape)
+        rigid_body = new SRigidBody(0.0, parent_mesh->collision_shape, &transform);
+    
 }
 
 void SStaticMeshInstance::render(bool render_material, double interpolation) {
@@ -31,13 +35,6 @@ void SStaticMeshInstance::render(bool render_material, double interpolation) {
     // Call render on the parent model
     parent_mesh->render(render_material, materials);
 
-}
-
-void SStaticMeshInstance::physicsUpdate(const SEvent& event) {
-    
-    // We are reciving this because we have physics enabled, so we set our position to the position of the rigidbody
-    
-    
 }
 
 void SStaticMeshInstance::setMaterial(SMaterial* new_material, int material_domain) {
@@ -52,12 +49,19 @@ void SStaticMeshInstance::setMaterial(SMaterial* new_material, int material_doma
     
 }
 
-void SStaticMeshInstance::setPhysicsEnabled(bool physics_enabled) {
+void SStaticMeshInstance::onMoveToSceneGraph(SPhysicsGraph* physics_graph) {
     
-    // Either register the physics update or unbind it
-    if (physics_enabled)
-        event_listener.listenToEvent(EVENT_PHYSICS_UPDATE, EVENT_MEMBER(SStaticMeshInstance::physicsUpdate));
-    else event_listener.stopListeningToEvent(EVENT_PHYSICS_UPDATE);
+    // Add the rigid body to the physics graph
+    if (rigid_body != nullptr)
+        rigid_body->addToPhysicsGraph(physics_graph);
+    
+}
+
+void SStaticMeshInstance::onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) {
+    
+    // Remove the rigid body to the physics graph
+    if (rigid_body != nullptr)
+        rigid_body->removeFromPhysicsGraph(physics_graph);
     
 }
 

@@ -34,12 +34,16 @@ class SSceneGraph {
     
     public:
     
+        virtual ~SSceneGraph();
+    
+        virtual void makeCurrent() = 0;
+    
         virtual void render(SCamera& camera, bool render_material,  double interpolation) = 0;
     
         virtual void addObject(SObject* object) = 0;
         virtual void removeObject(SObject* object) = 0;
-    
-        virtual ~SSceneGraph();
+
+        SPhysicsGraph* physics_graph;
     
 };
 
@@ -50,6 +54,10 @@ class SSceneGraph {
 class SSimpleSceneGraph : public SSceneGraph {
     
     public:
+    
+        SSimpleSceneGraph();
+    
+        virtual void makeCurrent();
     
         virtual void render(SCamera& camera, bool render_material, double interpolation);
     

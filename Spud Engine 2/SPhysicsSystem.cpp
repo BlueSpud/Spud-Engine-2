@@ -30,16 +30,21 @@ void SPhysicsSystem::shutdown() {
 
 }
 
-void SPhysicsSystem::updatePhysics(double time_elapsed, int max_updates, double time_per_tick) {
+void SPhysicsSystem::updatePhysics(double time_elapsed, double interpolation, int max_updates, double time_per_tick) {
     
     // If there is a current physics graph, we update it
     if (current_physics_graph) {
         
+        // Pre-physics update
+        SEventPhysicsUpdate event;
+        event.interpolation = interpolation;
+        SEventSystem::postEvent(EVENT_PHYSICS_PREUPDATE, event);
+        
         current_physics_graph->bullet_world->stepSimulation(time_elapsed, max_updates, time_per_tick);
         
-        // Send out a physics update
-        SEventPhysicsUpdate event;
-        SEventSystem::postEvent(EVENT_PHYSICS_UPDATE, event);
+        // post-physics update
+        event = SEventPhysicsUpdate();
+        SEventSystem::postEvent(EVENT_PHYSICS_POSTUPDATE, event);
         
     }
     
@@ -56,14 +61,17 @@ void SPhysicsSystem::rigidBodyTransformToSTransform(btRigidBody* rigid_body, STr
     btVector3 rigid_body_origin = bullet_transform.getOrigin();
     btQuaternion rigid_body_rotation = bullet_transform.getRotation();
     
-    transform.rotation = glm::eulerAngles(glm::quat(rigid_body_rotation.y(),
+    // eulerAngles() returns pitch, yaw, roll, we have to swap it to be in yaw pitch roll
+    glm::vec3 rotation = glm::eulerAngles(glm::quat(rigid_body_rotation.y(),
                                                     rigid_body_rotation.x(),
                                                     rigid_body_rotation.z(),
                                                     rigid_body_rotation.w()));
     
+    transform.rotation = glm::vec3(rotation.x, rotation.y, rotation.z + M_PI);
+    
     transform.translation = glm::vec3(rigid_body_origin.x(),
-                            rigid_body_origin.y(),
-                            rigid_body_origin.z());
+                                      rigid_body_origin.y(),
+                                      rigid_body_origin.z());
     
 }
 
@@ -103,3 +111,6 @@ SPhysicsGraph::~SPhysicsGraph() {
     delete bullet_broadphase;
     
 }
+
+void SPhysicsGraph::addRigidBody(btRigidBody* rigid_body) { bullet_world->addRigidBody(rigid_body); }
+void SPhysicsGraph::removeRigidBody(btRigidBody* rigid_body) { bullet_world->removeRigidBody(rigid_body); }

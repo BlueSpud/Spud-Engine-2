@@ -36,19 +36,19 @@ void SComponent::render(bool render_material, double interpolation) {
 
 void SComponent::update() { /* components updat nothing by default */ }
 
-void SComponent::onMoveToSceneGraph() {
+void SComponent::onMoveToSceneGraph(SPhysicsGraph* physics_graph) {
 
     // Call on all children components
     for (int i = 0; i < child_components.size(); i++)
-        child_components[i]->onMoveToSceneGraph();
+        child_components[i]->onMoveToSceneGraph(physics_graph);
 
 }
 
-void SComponent::onRemoveFromSceneGraph() {
+void SComponent::onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) {
 
     // Call on all children components
     for (int i = 0; i < child_components.size(); i++)
-        child_components[i]->onRemoveFromSceneGraph();
+        child_components[i]->onRemoveFromSceneGraph(physics_graph);
 
 }
 
