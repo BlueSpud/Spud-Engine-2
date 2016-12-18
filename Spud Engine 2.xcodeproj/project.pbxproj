@@ -22,6 +22,7 @@
 		022B19C41D8DD533004D9B18 /* SHotLoadSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022B19C21D8DD533004D9B18 /* SHotLoadSystem.cpp */; };
 		022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */; };
 		02328BEF1DD185E70083B0BB /* SStaticMeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */; };
+		0234DD531E06F1D700E1ADE8 /* SObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0234DD521E06F1D700E1ADE8 /* SObject.cpp */; };
 		0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0236A34C1D7D316D00DB2DBA /* SLog.cpp */; };
 		023EFA7C1DFFA207003E20F5 /* SRenderSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */; };
 		0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3A1D7DC57300B3E63E /* STime.cpp */; };
@@ -131,6 +132,7 @@
 		022ED15B1D79165A00DC1ECD /* SSubsystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSubsystem.hpp; sourceTree = "<group>"; };
 		02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SStaticMeshInstance.cpp; sourceTree = "<group>"; };
 		02328BEE1DD185E70083B0BB /* SStaticMeshInstance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMeshInstance.hpp; sourceTree = "<group>"; };
+		0234DD521E06F1D700E1ADE8 /* SObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SObject.cpp; sourceTree = "<group>"; };
 		0236A34C1D7D316D00DB2DBA /* SLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLog.cpp; sourceTree = "<group>"; };
 		0236A34D1D7D316D00DB2DBA /* SLog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLog.hpp; sourceTree = "<group>"; };
 		023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRenderSystem.cpp; sourceTree = "<group>"; };
@@ -532,6 +534,7 @@
 			isa = PBXGroup;
 			children = (
 				0298658F1D84A26E005EED43 /* SObject.hpp */,
+				0234DD521E06F1D700E1ADE8 /* SObject.cpp */,
 				02E7A7761DD2329B00F3164F /* Component Based */,
 			);
 			name = Objects;
@@ -735,6 +738,7 @@
 				0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */,
 				023EFA7C1DFFA207003E20F5 /* SRenderSystem.cpp in Sources */,
 				0201C7851DEF4B0F00AA0B24 /* SSoundSystem.cpp in Sources */,
+				0234DD531E06F1D700E1ADE8 /* SObject.cpp in Sources */,
 				025903301D77940400EA6372 /* main.cpp in Sources */,
 				0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */,
 				0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */,

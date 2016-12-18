@@ -25,7 +25,7 @@ class SStaticMeshInstance : public SResource, public SObject {
     public:
     
         virtual void render(bool render_material, double interpolation);
-        virtual void update();
+        virtual void update(const SEvent& event);
     
         void setMaterial(SMaterial* new_material, int material_domain);
     

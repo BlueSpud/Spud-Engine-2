@@ -23,7 +23,7 @@ class SActor : public SObject {
         SActor();
     
         virtual void render(bool render_material, double interpolation);
-        virtual void update();
+        virtual void update(const SEvent& event);
     
         virtual void onMoveToSceneGraph(SPhysicsGraph* physics_graph);
         virtual void onRemoveFromSceneGraph(SPhysicsGraph* physics_graph);

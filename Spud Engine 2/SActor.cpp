@@ -30,7 +30,7 @@ void SActor::render(bool render_material, double interpolation) {
 
 }
 
-void SActor::update() { /* nothing is done by default here */ }
+void SActor::update(const SEvent& event) { /* nothing is done by default here */ }
 
 void SActor::onMoveToSceneGraph(SPhysicsGraph* physics_graph) { root_component->onMoveToSceneGraph(physics_graph); }
 void SActor::onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) { root_component->onRemoveFromSceneGraph(physics_graph); }

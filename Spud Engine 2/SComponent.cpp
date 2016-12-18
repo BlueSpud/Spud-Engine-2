@@ -34,7 +34,7 @@ void SComponent::render(bool render_material, double interpolation) {
     
 }
 
-void SComponent::update() { /* components updat nothing by default */ }
+void SComponent::update(const SEvent& event) { /* components update nothing by default */ }
 
 void SComponent::onMoveToSceneGraph(SPhysicsGraph* physics_graph) {
 

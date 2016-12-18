@@ -42,7 +42,7 @@ class SSoundEmitter : public SObject {
         void setSound(SSound* _sound);
     
         virtual void render(bool render_material, double interpolation) { /* intentionally blank */ };
-        virtual void update() { /* intentionally blank */ };
+        virtual void update(const SEvent& event) { /* intentionally blank */ };
     
         void play();
         void stop();

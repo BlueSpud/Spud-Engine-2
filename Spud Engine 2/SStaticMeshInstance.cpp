@@ -65,6 +65,12 @@ void SStaticMeshInstance::onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) {
     
 }
 
-void SStaticMeshInstance::update() { /* intentionally empty */ }
+void SStaticMeshInstance::update(const SEvent& event) {
+    
+    // Update the transform
+    transform.update();
+    
+}
+
 bool SStaticMeshInstance::load(const SPath& path) { return true; }
 void SStaticMeshInstance::unload() { /* intentionally empty */ }

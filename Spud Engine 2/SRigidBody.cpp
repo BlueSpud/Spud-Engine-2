@@ -19,11 +19,9 @@ SRigidBody::SRigidBody(float _mass, btCollisionShape* _collision_shape, STransfo
     collision_shape = _collision_shape;
     parent_transform = _parent_transform;
     
-    // Cannot use scale for transform, TEMP needs solution
+    // Make an empty transform
     btTransform bullet_transform;
     bullet_transform.setIdentity();
-    bullet_transform.setOrigin(btVector3(parent_transform->translation.x, parent_transform->translation.y, parent_transform->translation.z));
-    bullet_transform.setRotation(btQuaternion(parent_transform->rotation.x, parent_transform->rotation.y, parent_transform->rotation.z));
     
     // Calculate the inertia
     btVector3 inertia;
@@ -32,7 +30,11 @@ SRigidBody::SRigidBody(float _mass, btCollisionShape* _collision_shape, STransfo
     btMotionState* motion_state = new btDefaultMotionState(bullet_transform);
     btRigidBody::btRigidBodyConstructionInfo info = btRigidBody::btRigidBodyConstructionInfo(mass, motion_state, collision_shape, inertia);
     
+    // Create the bullet rigid body
     bullet_rigid_body = new btRigidBody(info);
+    
+    // Move the rigidbody to the parent
+    moveRigidBodyToParent(0.0);
     
     // Have the event listener listen to the physics ticks
     event_listener.listenToEvent(EVENT_PHYSICS_PREUPDATE, EVENT_MEMBER(SRigidBody::prePhysicsUpdate));
@@ -46,23 +48,8 @@ void SRigidBody::prePhysicsUpdate(const SEvent& event) {
     const SEventPhysicsUpdate& event_p = (const SEventPhysicsUpdate&)event;
     
     // If we dont have a mass, that means that the body is static and therfore needs to take on the parent transform
-    if (!mass) {
-        
-        btTransform bullet_transform;
-        bullet_transform.setIdentity();
-        
-        // Set the transform, making sure to take in account velocity
-        bullet_transform.setOrigin(btVector3(parent_transform->translation.x + parent_transform->translation_velocity.x * event_p.interpolation,
-                                             parent_transform->translation.y + parent_transform->translation_velocity.y * event_p.interpolation,
-                                             parent_transform->translation.z + parent_transform->translation_velocity.z * event_p.interpolation));
-        
-        bullet_transform.setRotation(btQuaternion(parent_transform->rotation.x + parent_transform->rotation_velocity.x * event_p.interpolation,
-                                                  parent_transform->rotation.y + parent_transform->rotation_velocity.y * event_p.interpolation,
-                                                  parent_transform->rotation.z + parent_transform->rotation_velocity.z * event_p.interpolation));
-    
-        bullet_rigid_body->getMotionState()->setWorldTransform(bullet_transform);
-        
-    }
+    if (!mass)
+        moveRigidBodyToParent(event_p.interpolation);
     
 }
 
@@ -71,15 +58,11 @@ void SRigidBody::postPhysicsUpdate(const SEvent& event) {
     // If we have a mass, that means that the body is moving and therfore needs to change the parent transform
     if (mass) {
         
-        STransform temp_transform;
-        SPhysicsSystem::rigidBodyTransformToSTransform(bullet_rigid_body, temp_transform);
+        SPhysicsSystem::rigidBodyTransformToSTransform(bullet_rigid_body, *parent_transform);
         
-        // Set the parent transforms rotation and translation, making sure to zero velocities
-        parent_transform->translation = temp_transform.translation;
-        parent_transform->translation_velocity = glm::vec3();
-        
-        parent_transform->rotation = temp_transform.rotation;
-        parent_transform->rotation_velocity = glm::vec3();
+        // Zero the velocities because bullet handles interpolation for us
+        parent_transform->translation_velocity = glm::vec3(0.0);
+        parent_transform->rotation_velocity = glm::vec3(0.0);
         
     }
     
@@ -96,6 +79,19 @@ void SRigidBody::removeFromPhysicsGraph(SPhysicsGraph* physics_graph) {
 
     // Add the bullet body to the physics graph
     physics_graph->addRigidBody(bullet_rigid_body);
+    
+}
+
+void SRigidBody::moveRigidBodyToParent(double interpolation) {
+    
+    // Make a bullet transform that mirrors the parent transform
+    btTransform bullet_transform;
+    glm::mat4 transform_matrix = SGL::transformToMatrix(*parent_transform, interpolation);
+    bullet_transform.setFromOpenGLMatrix(&transform_matrix[0][0]);
+    
+    // Create a new motion state with the new transform
+    btMotionState* new_motion_state = new btDefaultMotionState(bullet_transform);
+    bullet_rigid_body->setMotionState(new_motion_state);
     
 }
 

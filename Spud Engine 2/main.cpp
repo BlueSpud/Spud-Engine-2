@@ -186,8 +186,9 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
     
     // Access the mesh
-    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
-    mesh->transform.scale = glm::vec3(2.0);
+    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
+    mesh->transform.rotation.y = M_PI / 2.0;
+    mesh->transform.rotation_velocity.y = M_PI / 200.0;
     scene_graph->addObject(mesh);
     
     mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
@@ -209,7 +210,7 @@ int main(int argc, char* argv[]) {
     mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
     mesh->transform.translation.y = 10.0;
     
-    SRigidBody* rigid_body = new SRigidBody(10.0, new btSphereShape(0.5), &mesh->transform);
+    SRigidBody* rigid_body = new SRigidBody(10.0, new btSphereShape(1.0), &mesh->transform);
     rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
     scene_graph->addObject(mesh);
@@ -218,7 +219,7 @@ int main(int argc, char* argv[]) {
     mesh->transform.translation.y = 15.0;
     mesh->transform.translation.x = 0.5;
     
-    rigid_body = new SRigidBody(10.0, new btSphereShape(0.5), &mesh->transform);
+    rigid_body = new SRigidBody(10.0, new btSphereShape(1.0), &mesh->transform);
     rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
     scene_graph->addObject(mesh);

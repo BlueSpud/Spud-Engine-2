@@ -27,6 +27,8 @@ class SRigidBody {
         void addToPhysicsGraph(SPhysicsGraph* physics_graph);
         void removeFromPhysicsGraph(SPhysicsGraph* physics_graph);
     
+        void moveRigidBodyToParent(double interpolation);
+    
         void setMass(float _mass);
     
     private:

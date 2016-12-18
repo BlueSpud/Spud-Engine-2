@@ -11,7 +11,6 @@
 
 #include "SRenderingPipeline.hpp"
 #include "SCubeMap.hpp"
-#include "SLightGraph.hpp"
 #include "SAmbientOcclusionPass.hpp"
 
 /******************************************************************************
