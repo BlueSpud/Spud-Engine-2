@@ -59,15 +59,16 @@ void SPhysicsSystem::rigidBodyTransformToSTransform(btRigidBody* rigid_body, STr
     
     // Get position and rotation
     btVector3 rigid_body_origin = bullet_transform.getOrigin();
-    btQuaternion rigid_body_rotation = bullet_transform.getRotation();
     
-    // eulerAngles() returns pitch, yaw, roll, we have to swap it to be in yaw pitch roll
-    glm::vec3 rotation = glm::eulerAngles(glm::quat(rigid_body_rotation.y(),
-                                                    rigid_body_rotation.x(),
-                                                    rigid_body_rotation.z(),
-                                                    rigid_body_rotation.w()));
+    // Get rotation as a matrix and then convert it to euler angles
+    glm::mat4* transform_matrix = new glm::mat4(1.0);
+    bullet_transform.getOpenGLMatrix(&transform_matrix[0][0][0]);
+    glm::quat rotation_quat = glm::quat(*transform_matrix);
     
-    transform.rotation = glm::vec3(rotation.x, rotation.y, rotation.z + M_PI);
+    transform.rotation = glm::eulerAngles(rotation_quat);
+    
+    // Delete the matrix
+    delete transform_matrix;
     
     transform.translation = glm::vec3(rigid_body_origin.x(),
                                       rigid_body_origin.y(),
