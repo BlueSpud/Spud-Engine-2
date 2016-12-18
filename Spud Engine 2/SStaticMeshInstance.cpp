@@ -65,6 +65,15 @@ void SStaticMeshInstance::onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) {
     
 }
 
+void SStaticMeshInstance::setPhysicsEnabled(bool physics_enabled) {
+    
+    // If physics enabled is true, we need to give the rigid body a mass, else it is static
+    if (physics_enabled)
+        rigid_body->setMass(100.0);
+    else rigid_body->setMass(0.0);
+
+}
+
 void SStaticMeshInstance::update(const SEvent& event) {
     
     // Update the transform

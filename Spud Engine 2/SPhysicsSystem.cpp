@@ -50,12 +50,7 @@ void SPhysicsSystem::updatePhysics(double time_elapsed, double interpolation, in
     
 }
 
-void SPhysicsSystem::rigidBodyTransformToSTransform(btRigidBody* rigid_body, STransform& transform) {
-    
-    // Get the entire transform of the object
-    btMotionState* motionStatePlane = rigid_body->getMotionState();
-    btTransform bullet_transform;
-    motionStatePlane->getWorldTransform(bullet_transform);
+void SPhysicsSystem::bulletTransformToSTransform(const btTransform& bullet_transform, STransform& transform) {
     
     // Get position and rotation
     btVector3 rigid_body_origin = bullet_transform.getOrigin();
@@ -73,6 +68,17 @@ void SPhysicsSystem::rigidBodyTransformToSTransform(btRigidBody* rigid_body, STr
     transform.translation = glm::vec3(rigid_body_origin.x(),
                                       rigid_body_origin.y(),
                                       rigid_body_origin.z());
+    
+}
+
+btTransform SPhysicsSystem::STransformToBulletTransform(const STransform& transform, double interpolation) {
+    
+    // Make a bullet transform that mirrors the given transform
+    btTransform bullet_transform;
+    glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
+    bullet_transform.setFromOpenGLMatrix(&transform_matrix[0][0]);
+
+    return bullet_transform;
     
 }
 
@@ -115,3 +121,19 @@ SPhysicsGraph::~SPhysicsGraph() {
 
 void SPhysicsGraph::addRigidBody(btRigidBody* rigid_body) { bullet_world->addRigidBody(rigid_body); }
 void SPhysicsGraph::removeRigidBody(btRigidBody* rigid_body) { bullet_world->removeRigidBody(rigid_body); }
+
+void SPhysicsGraph::addPhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller) {
+
+    // Add the controller's components to the world
+    bullet_world->addCollisionObject(ghost_body, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::AllFilter);
+    bullet_world->addAction(controller);
+    
+}
+
+void SPhysicsGraph::removePhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller) {
+
+    // Remove the controller's components to the world
+    bullet_world->removeAction(controller);
+    bullet_world->removeCollisionObject(ghost_body);
+    
+}

@@ -66,8 +66,11 @@ bool SMaterial::load(const SPath& path) {
 
 void SMaterial::bind() {
     
+    // Make sure the shader is bound
+    bool did_bind = shader->bind();
+    
     // Check if this is already the currently bound material
-    if (currently_bound_material != this) {
+    if (currently_bound_material != this || did_bind) {
         
         currently_bound_material = this;
         
@@ -80,9 +83,6 @@ void SMaterial::bind() {
             
         }
         
-        // Make sure the shader is bound
-        bool did_bind = shader->bind();
-        
         // If the shader was bound, reupload texture IDs
         if (did_bind)
             uploadTextureIDs(shader);
@@ -91,7 +91,7 @@ void SMaterial::bind() {
         for (int i = 0; i < uniforms.size(); i++)
             shader->bindUniform(uniforms[i]);
         
-     }
+    }
     
 }
 

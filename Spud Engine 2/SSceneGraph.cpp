@@ -88,6 +88,7 @@ void SSimpleSceneGraph::render(SCamera& camera, bool render_material, double int
         
         // Render the object
         (*j).object->render(render_material, interpolation);
+        
     }
     
 }

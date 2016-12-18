@@ -25,6 +25,10 @@
 		0234DD531E06F1D700E1ADE8 /* SObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0234DD521E06F1D700E1ADE8 /* SObject.cpp */; };
 		0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0236A34C1D7D316D00DB2DBA /* SLog.cpp */; };
 		023EFA7C1DFFA207003E20F5 /* SRenderSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */; };
+		02436D871E070A6F0094D536 /* SPhysicsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02436D851E070A6F0094D536 /* SPhysicsController.cpp */; };
+		02436D9D1E0723500094D536 /* libBulletCollision_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02436D9A1E0723500094D536 /* libBulletCollision_gmake_x64_release.a */; };
+		02436D9E1E0723500094D536 /* libBulletDynamics_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02436D9B1E0723500094D536 /* libBulletDynamics_gmake_x64_release.a */; };
+		02436D9F1E0723500094D536 /* libLinearMath_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02436D9C1E0723500094D536 /* libLinearMath_gmake_x64_release.a */; };
 		0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3A1D7DC57300B3E63E /* STime.cpp */; };
 		0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3E1D7DC64300B3E63E /* SGL.cpp */; };
 		025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025536521D8993B5003D04EE /* SCubeMap.cpp */; };
@@ -36,9 +40,6 @@
 		0259032A1D7793EA00EA6372 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903231D7793EA00EA6372 /* Cocoa.framework */; };
 		0259032B1D7793EA00EA6372 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903241D7793EA00EA6372 /* OpenGL.framework */; };
 		025903301D77940400EA6372 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0259032D1D77940400EA6372 /* main.cpp */; };
-		025903351D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */; };
-		025903361D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */; };
-		025903371D7794B500EA6372 /* libLinearMath_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */; };
 		025CB5961D83CD880059AF6C /* SShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025CB5941D83CD880059AF6C /* SShader.cpp */; };
 		025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025CB5AE1D83EB500059AF6C /* STexture.cpp */; };
 		026915C81DDB386C00A06D4C /* SFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 026915C61DDB386C00A06D4C /* SFont.cpp */; };
@@ -137,6 +138,11 @@
 		0236A34D1D7D316D00DB2DBA /* SLog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLog.hpp; sourceTree = "<group>"; };
 		023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRenderSystem.cpp; sourceTree = "<group>"; };
 		023EFA7B1DFFA207003E20F5 /* SRenderSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRenderSystem.hpp; sourceTree = "<group>"; };
+		02436D851E070A6F0094D536 /* SPhysicsController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SPhysicsController.cpp; sourceTree = "<group>"; };
+		02436D861E070A6F0094D536 /* SPhysicsController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SPhysicsController.hpp; sourceTree = "<group>"; };
+		02436D9A1E0723500094D536 /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
+		02436D9B1E0723500094D536 /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
+		02436D9C1E0723500094D536 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
 		0251FC3A1D7DC57300B3E63E /* STime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STime.cpp; sourceTree = "<group>"; };
 		0251FC3B1D7DC57300B3E63E /* STime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = STime.hpp; sourceTree = "<group>"; };
 		0251FC3E1D7DC64300B3E63E /* SGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGL.cpp; sourceTree = "<group>"; };
@@ -154,9 +160,6 @@
 		025903241D7793EA00EA6372 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		0259032C1D77940400EA6372 /* driver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = driver.hpp; sourceTree = "<group>"; };
 		0259032D1D77940400EA6372 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
-		025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
-		025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
 		025A4A491D8B0EAB00AFFB79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Base; path = Base.lproj/SGLUpload.hpp; sourceTree = "<group>"; };
 		025CB5941D83CD880059AF6C /* SShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SShader.cpp; sourceTree = "<group>"; };
 		025CB5951D83CD880059AF6C /* SShader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SShader.hpp; sourceTree = "<group>"; };
@@ -224,19 +227,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02436D9E1E0723500094D536 /* libBulletDynamics_gmake_x64_release.a in Frameworks */,
 				025903251D7793EA00EA6372 /* libboost_system.a in Frameworks */,
+				02436D9D1E0723500094D536 /* libBulletCollision_gmake_x64_release.a in Frameworks */,
 				025903261D7793EA00EA6372 /* libboost_thread.a in Frameworks */,
 				0259032A1D7793EA00EA6372 /* Cocoa.framework in Frameworks */,
-				025903361D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a in Frameworks */,
+				02436D9F1E0723500094D536 /* libLinearMath_gmake_x64_release.a in Frameworks */,
 				0259032B1D7793EA00EA6372 /* OpenGL.framework in Frameworks */,
 				025903271D7793EA00EA6372 /* libglfw3.a in Frameworks */,
-				025903351D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a in Frameworks */,
 				025903291D7793EA00EA6372 /* IOKit.framework in Frameworks */,
 				0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */,
 				0201C77F1DEF4A9A00AA0B24 /* libopenal.1.dylib in Frameworks */,
 				02E7FC831DB545D600955052 /* libfreeimage.a in Frameworks */,
 				025903281D7793EA00EA6372 /* CoreVideo.framework in Frameworks */,
-				025903371D7794B500EA6372 /* libLinearMath_gmake_x64_release.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,9 +437,9 @@
 		025903381D7794E500EA6372 /* Bullet */ = {
 			isa = PBXGroup;
 			children = (
-				025903321D7794B500EA6372 /* libBulletCollision_gmake_x64_release.a */,
-				025903331D7794B500EA6372 /* libBulletDynamics_gmake_x64_release.a */,
-				025903341D7794B500EA6372 /* libLinearMath_gmake_x64_release.a */,
+				02436D9A1E0723500094D536 /* libBulletCollision_gmake_x64_release.a */,
+				02436D9B1E0723500094D536 /* libBulletDynamics_gmake_x64_release.a */,
+				02436D9C1E0723500094D536 /* libLinearMath_gmake_x64_release.a */,
 			);
 			name = Bullet;
 			sourceTree = "<group>";
@@ -506,6 +509,8 @@
 				02731C171E01A8B000A63389 /* SPhysicsSystem.hpp */,
 				0219249C1E05972E003D0CB3 /* SRigidBody.cpp */,
 				0219249D1E05972E003D0CB3 /* SRigidBody.hpp */,
+				02436D851E070A6F0094D536 /* SPhysicsController.cpp */,
+				02436D861E070A6F0094D536 /* SPhysicsController.hpp */,
 			);
 			name = Physics;
 			sourceTree = "<group>";
@@ -719,6 +724,7 @@
 				025CB5961D83CD880059AF6C /* SShader.cpp in Sources */,
 				0201C78E1DEF547400AA0B24 /* SSoundEmitter.cpp in Sources */,
 				02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */,
+				02436D871E070A6F0094D536 /* SPhysicsController.cpp in Sources */,
 				025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */,
 				0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */,
 				02064B0D1D9D663000D49D4A /* SLightGraph.cpp in Sources */,

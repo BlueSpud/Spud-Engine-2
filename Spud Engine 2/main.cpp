@@ -23,12 +23,16 @@
 #include "SSoundSystem.hpp"
 #include "SSoundEmitter.hpp"
 
+#include "SPhysicsController.hpp"
+
 double speed = 0.0;
 double speed_x = 0.0;
 
 SCamera camera;
 SLight* light;
 SSoundEmitter* sound_emitter;
+
+SPhysicsController* controller;
 
 void moveLight(int key) {
     
@@ -186,21 +190,18 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
     
     // Access the mesh
-    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
-    mesh->transform.rotation.y = M_PI / 2.0;
-    mesh->transform.rotation_velocity.y = M_PI / 200.0;
-    scene_graph->addObject(mesh);
+//    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
+//    mesh->transform.rotation.y = M_PI / 2.0;
+//    mesh->transform.rotation_velocity.y = M_PI / 200.0;
+//    scene_graph->addObject(mesh);
     
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
-    mesh->transform.scale = glm::vec3(2.0);
-    mesh->transform.translation.z = 5.7;
+//    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
+//    mesh->transform.scale = glm::vec3(2.0);
+//    mesh->transform.translation.z = 5.7;
     
-    scene_graph->addObject(mesh);
+    //scene_graph->addObject(mesh);
     
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
-    scene_graph->addObject(mesh);
-    
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
+    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
     scene_graph->addObject(mesh);
     
     //mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
@@ -228,6 +229,9 @@ int main(int argc, char* argv[]) {
     STransform temp_transform;
     rigid_body = new SRigidBody(0.0, new btStaticPlaneShape(btVector3(0.0, 1.0, 0.0), false), &temp_transform);
     rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    
+    //controller = new SPhysicsController(new btCapsuleShape(0.5, 1.0), &temp_transform);
+    //controller->addToPhysicsGraph(scene_graph->physics_graph);
     
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();

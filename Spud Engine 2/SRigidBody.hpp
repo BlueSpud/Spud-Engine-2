@@ -20,6 +20,7 @@ class SRigidBody {
     public:
     
         SRigidBody(float _mass, btCollisionShape* _collision_shape, STransform* _parent_transform);
+        ~SRigidBody();
     
         void prePhysicsUpdate(const SEvent& event);
         void postPhysicsUpdate(const SEvent& event);
@@ -34,11 +35,10 @@ class SRigidBody {
     private:
     
         float mass;
+        STransform* parent_transform;
     
         btRigidBody* bullet_rigid_body;
         btCollisionShape* collision_shape;
-    
-        STransform* parent_transform;
     
         SEventListener event_listener;
     

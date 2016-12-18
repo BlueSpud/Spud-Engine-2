@@ -21,7 +21,6 @@ SRigidBody::SRigidBody(float _mass, btCollisionShape* _collision_shape, STransfo
     
     // Make an empty transform
     btTransform bullet_transform;
-    bullet_transform.setIdentity();
     
     // Calculate the inertia
     btVector3 inertia;
@@ -42,6 +41,14 @@ SRigidBody::SRigidBody(float _mass, btCollisionShape* _collision_shape, STransfo
     
 }
 
+SRigidBody::~SRigidBody() {
+    
+    // Clean up
+    delete bullet_rigid_body;
+    delete collision_shape;
+    
+}
+
 void SRigidBody::prePhysicsUpdate(const SEvent& event) {
     
     // Get the event so we can get interpolation
@@ -58,7 +65,9 @@ void SRigidBody::postPhysicsUpdate(const SEvent& event) {
     // If we have a mass, that means that the body is moving and therfore needs to change the parent transform
     if (mass) {
         
-        SPhysicsSystem::rigidBodyTransformToSTransform(bullet_rigid_body, *parent_transform);
+        btTransform bullet_transform;
+        bullet_rigid_body->getMotionState()->getWorldTransform(bullet_transform);
+        SPhysicsSystem::bulletTransformToSTransform(bullet_transform, *parent_transform);
         
         // Zero the velocities because bullet handles interpolation for us
         parent_transform->translation_velocity = glm::vec3(0.0);
@@ -84,13 +93,8 @@ void SRigidBody::removeFromPhysicsGraph(SPhysicsGraph* physics_graph) {
 
 void SRigidBody::moveRigidBodyToParent(double interpolation) {
     
-    // Make a bullet transform that mirrors the parent transform
-    btTransform bullet_transform;
-    glm::mat4 transform_matrix = SGL::transformToMatrix(*parent_transform, interpolation);
-    bullet_transform.setFromOpenGLMatrix(&transform_matrix[0][0]);
-    
     // Create a new motion state with the new transform
-    btMotionState* new_motion_state = new btDefaultMotionState(bullet_transform);
+    btMotionState* new_motion_state = new btDefaultMotionState(SPhysicsSystem::STransformToBulletTransform(*parent_transform, interpolation));
     bullet_rigid_body->setMotionState(new_motion_state);
     
 }

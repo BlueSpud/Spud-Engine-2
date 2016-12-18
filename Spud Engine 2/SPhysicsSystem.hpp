@@ -10,6 +10,8 @@
 #define SPhysicsSystem_hpp
 
 #include <btBulletDynamicsCommon.h>
+#include <BulletDynamics/Character/btKinematicCharacterController.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include "SEventSystem.hpp"
 #include "SGL.hpp"
@@ -45,7 +47,8 @@ class SPhysicsSystem : public SSubsystem {
     
         static void updatePhysics(double time_elapsed, double interpolation, int max_updates, double time_per_tick);
     
-        static void rigidBodyTransformToSTransform(btRigidBody* rigid_body, STransform& transform);
+        static void bulletTransformToSTransform(const btTransform& bullet_transform, STransform& transform);
+        static btTransform STransformToBulletTransform(const STransform& transform, double interpolation);
     
         static SPhysicsGraph* current_physics_graph;
     
@@ -66,6 +69,9 @@ class SPhysicsGraph {
     
         void addRigidBody(btRigidBody* rigid_body);
         void removeRigidBody(btRigidBody* rigid_body);
+    
+        void addPhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller);
+        void removePhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller);
     
     private:
     
