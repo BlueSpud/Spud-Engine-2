@@ -41,6 +41,8 @@ class SPhysicsController {
     
         SEventListener event_listener;
     
+        glm::vec3 last_walk;
+    
 };
 
 #endif /* SPhysicsController_hpp */

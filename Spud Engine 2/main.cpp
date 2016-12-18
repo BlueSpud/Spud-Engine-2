@@ -54,19 +54,19 @@ void keyPress(int key) {
     switch (key) {
             
         case GLFW_KEY_W:
-            speed += 0.4;
+            speed += 0.2;
             break;
         
         case GLFW_KEY_S:
-            speed += -0.4;
+            speed += -0.2;
             break;
             
         case GLFW_KEY_D:
-            speed_x += 0.4;
+            speed_x += 0.2;
             break;
             
         case GLFW_KEY_A:
-            speed_x += -0.4;
+            speed_x += -0.2;
             break;
             
         case GLFW_KEY_G:
@@ -85,19 +85,19 @@ void keyRelease(int key) {
     switch (key) {
             
         case GLFW_KEY_W:
-            speed -= 0.4;
+            speed -= 0.2;
             break;
             
         case GLFW_KEY_S:
-            speed -= -0.4;
+            speed -= -0.2;
             break;
             
         case GLFW_KEY_D:
-            speed_x -= 0.4;
+            speed_x -= 0.2;
             break;
             
         case GLFW_KEY_A:
-            speed_x -= -0.4;
+            speed_x -= -0.2;
             break;
         
     }
@@ -137,7 +137,9 @@ void update(const SEvent& event) {
     glm::vec3 strafe = glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0, -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
     glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
     
-    camera.transform.translation_velocity = strafe + forward + fly;
+    //camera.transform.translation_velocity = strafe + forward + fly;
+    glm::vec3 direction = strafe + forward;
+    controller->setWalkingDirection(direction);
     
 }
 
@@ -190,10 +192,10 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
     
     // Access the mesh
-//    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
-//    mesh->transform.rotation.y = M_PI / 2.0;
-//    mesh->transform.rotation_velocity.y = M_PI / 200.0;
-//    scene_graph->addObject(mesh);
+    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
+    mesh->transform.rotation.y = M_PI / 2.0;
+    mesh->transform.rotation_velocity.y = M_PI / 200.0;
+    scene_graph->addObject(mesh);
     
 //    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
 //    mesh->transform.scale = glm::vec3(2.0);
@@ -201,12 +203,8 @@ int main(int argc, char* argv[]) {
     
     //scene_graph->addObject(mesh);
     
-    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
     scene_graph->addObject(mesh);
-    
-    //mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
-    //mesh->setPhysicsEnabled(true);
-    //scene_graph->addObject(mesh);
     
     mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
     mesh->transform.translation.y = 10.0;
@@ -230,8 +228,11 @@ int main(int argc, char* argv[]) {
     rigid_body = new SRigidBody(0.0, new btStaticPlaneShape(btVector3(0.0, 1.0, 0.0), false), &temp_transform);
     rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
-    //controller = new SPhysicsController(new btCapsuleShape(0.5, 1.0), &temp_transform);
-    //controller->addToPhysicsGraph(scene_graph->physics_graph);
+    STransform controller_transform;
+    controller_transform.translation.y = 10.0;
+    
+    controller = new SPhysicsController(new btCylinderShape(btVector3(1.0, 0.2, 0.2)), &camera.transform);
+    controller->addToPhysicsGraph(scene_graph->physics_graph);
     
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
@@ -331,7 +332,7 @@ int main(int argc, char* argv[]) {
     
     SUI::current_ui_graph = ui_graph;
     
-    SCursor* cursor = (SCursor*)SResourceManager::getResource(SPath("/Texture/ui/cursor/pointer.cur"));
+    SCursor* cursor = (SCursor*)SResourceManager::getResource(SPath("Texture/ui/cursor/pointer.cur"));
     cursor->bind();
     
     SEventListener event_listener;

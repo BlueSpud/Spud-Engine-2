@@ -40,7 +40,7 @@ void SPhysicsSystem::updatePhysics(double time_elapsed, double interpolation, in
         event.interpolation = interpolation;
         SEventSystem::postEvent(EVENT_PHYSICS_PREUPDATE, event);
         
-        current_physics_graph->bullet_world->stepSimulation(time_elapsed, max_updates, time_per_tick);
+        current_physics_graph->bullet_world->stepSimulation(time_elapsed);
         
         // post-physics update
         event = SEventPhysicsUpdate();
@@ -90,6 +90,7 @@ SPhysicsGraph::SPhysicsGraph() {
     
     // Create the necessary components for a bullet physics world
     bullet_broadphase = new btDbvtBroadphase();
+    bullet_broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
     
     bullet_collision_configuration = new btDefaultCollisionConfiguration();
     bullet_collision_dispatcher = new btCollisionDispatcher(bullet_collision_configuration);
@@ -125,7 +126,7 @@ void SPhysicsGraph::removeRigidBody(btRigidBody* rigid_body) { bullet_world->rem
 void SPhysicsGraph::addPhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller) {
 
     // Add the controller's components to the world
-    bullet_world->addCollisionObject(ghost_body, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::AllFilter);
+    bullet_world->addCollisionObject(ghost_body, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::DefaultFilter);
     bullet_world->addAction(controller);
     
 }
