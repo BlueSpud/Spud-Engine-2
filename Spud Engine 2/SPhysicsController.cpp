@@ -26,7 +26,7 @@ SPhysicsController::SPhysicsController(btConvexShape* _collision_shape, STransfo
     // Create the character controller
     controller = new btKinematicCharacterController(ghost_body, collision_shape, 0.3);
     controller->setUseGhostSweepTest(false);
-    controller->setGravity(btVector3(0.0, -9.8, 0.0));
+    controller->setGravity(btVector3(0.0, -19.6, 0.0));
     
     // Only listen to post-physics tick
     event_listener.listenToEvent(EVENT_PHYSICS_POSTUPDATE, EVENT_MEMBER(SPhysicsController::postPhysicsUpdate));
@@ -77,4 +77,10 @@ void SPhysicsController::setWalkingDirection(glm::vec3 direction) { controller->
                                                                                                            direction.y,
                                                                                                            direction.z)); }
 
-void SPhysicsController::jump() { controller->jump(); }
+void SPhysicsController::jump() {
+    
+    // If the controller is on ground, jump
+    if (controller->onGround())
+        controller->jump(btVector3(0.0, 7.5, 0.0));
+    
+}
