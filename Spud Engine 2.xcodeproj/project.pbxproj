@@ -21,6 +21,9 @@
 		0228B8841D7A779200596526 /* SStaticMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B8821D7A779200596526 /* SStaticMesh.cpp */; };
 		022B19C41D8DD533004D9B18 /* SHotLoadSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022B19C21D8DD533004D9B18 /* SHotLoadSystem.cpp */; };
 		022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */; };
+		0231F7C41E07860B000854A8 /* libBulletCollision_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0231F7C11E07860B000854A8 /* libBulletCollision_gmake_x64_release.a */; };
+		0231F7C51E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0231F7C21E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a */; };
+		0231F7C61E07860B000854A8 /* libLinearMath_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0231F7C31E07860B000854A8 /* libLinearMath_gmake_x64_release.a */; };
 		02328BEF1DD185E70083B0BB /* SStaticMeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */; };
 		0234DD531E06F1D700E1ADE8 /* SObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0234DD521E06F1D700E1ADE8 /* SObject.cpp */; };
 		0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0236A34C1D7D316D00DB2DBA /* SLog.cpp */; };
@@ -52,21 +55,6 @@
 		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
 		02A24C2A1D9317A00039F422 /* SFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A24C281D9317A00039F422 /* SFramebuffer.cpp */; };
 		02A2CC071DFF8F3500EA2F4B /* SMainLoop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02A2CC051DFF8F3500EA2F4B /* SMainLoop.cpp */; };
-		02A63A631E077951002064AC /* libBullet3Collision_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A541E077951002064AC /* libBullet3Collision_gmake_x64_release.a */; };
-		02A63A641E077951002064AC /* libBullet3Common_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A551E077951002064AC /* libBullet3Common_gmake_x64_release.a */; };
-		02A63A651E077951002064AC /* libBullet3Dynamics_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A561E077951002064AC /* libBullet3Dynamics_gmake_x64_release.a */; };
-		02A63A661E077951002064AC /* libBullet3Geometry_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A571E077951002064AC /* libBullet3Geometry_gmake_x64_release.a */; };
-		02A63A671E077951002064AC /* libBullet3OpenCL_clew_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A581E077951002064AC /* libBullet3OpenCL_clew_gmake_x64_release.a */; };
-		02A63A681E077951002064AC /* libBulletCollision_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A591E077951002064AC /* libBulletCollision_gmake_x64_release.a */; };
-		02A63A691E077951002064AC /* libBulletDynamics_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A5A1E077951002064AC /* libBulletDynamics_gmake_x64_release.a */; };
-		02A63A6A1E077951002064AC /* libBulletExampleBrowserLib_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A5B1E077951002064AC /* libBulletExampleBrowserLib_gmake_x64_release.a */; };
-		02A63A6B1E077951002064AC /* libBulletInverseDynamics_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A5C1E077951002064AC /* libBulletInverseDynamics_gmake_x64_release.a */; };
-		02A63A6C1E077951002064AC /* libBulletInverseDynamicsUtils_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A5D1E077951002064AC /* libBulletInverseDynamicsUtils_gmake_x64_release.a */; };
-		02A63A6D1E077951002064AC /* libBulletSoftBody_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A5E1E077951002064AC /* libBulletSoftBody_gmake_x64_release.a */; };
-		02A63A6E1E077951002064AC /* libBussIK_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A5F1E077951002064AC /* libBussIK_gmake_x64_release.a */; };
-		02A63A6F1E077951002064AC /* libgwen_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A601E077951002064AC /* libgwen_gmake_x64_release.a */; };
-		02A63A701E077951002064AC /* libLinearMath_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A611E077951002064AC /* libLinearMath_gmake_x64_release.a */; };
-		02A63A711E077951002064AC /* libOpenGL_Window_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A63A621E077951002064AC /* libOpenGL_Window_gmake_x64_release.a */; };
 		02B6B7DD1DDB39A80068FCBA /* Shader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 020604711DB7982800B6268F /* Shader */; };
 		02B6B7DE1DDB39AD0068FCBA /* Font in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02B6B7DC1DDB399B0068FCBA /* Font */; };
 		02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B6B7DF1DDB40270068FCBA /* STextRenderer.cpp */; };
@@ -143,6 +131,9 @@
 		022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFileSystem.cpp; sourceTree = "<group>"; };
 		022ED1571D78FA3100DC1ECD /* SFileSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFileSystem.hpp; sourceTree = "<group>"; };
 		022ED15B1D79165A00DC1ECD /* SSubsystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSubsystem.hpp; sourceTree = "<group>"; };
+		0231F7C11E07860B000854A8 /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
+		0231F7C21E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
+		0231F7C31E07860B000854A8 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
 		02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SStaticMeshInstance.cpp; sourceTree = "<group>"; };
 		02328BEE1DD185E70083B0BB /* SStaticMeshInstance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMeshInstance.hpp; sourceTree = "<group>"; };
 		0234DD521E06F1D700E1ADE8 /* SObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SObject.cpp; sourceTree = "<group>"; };
@@ -197,21 +188,6 @@
 		02A24C291D9317A00039F422 /* SFramebuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFramebuffer.hpp; sourceTree = "<group>"; };
 		02A2CC051DFF8F3500EA2F4B /* SMainLoop.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SMainLoop.cpp; sourceTree = "<group>"; };
 		02A2CC061DFF8F3500EA2F4B /* SMainLoop.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SMainLoop.hpp; sourceTree = "<group>"; };
-		02A63A541E077951002064AC /* libBullet3Collision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBullet3Collision_gmake_x64_release.a; path = Bullet/lib/libBullet3Collision_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A551E077951002064AC /* libBullet3Common_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBullet3Common_gmake_x64_release.a; path = Bullet/lib/libBullet3Common_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A561E077951002064AC /* libBullet3Dynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBullet3Dynamics_gmake_x64_release.a; path = Bullet/lib/libBullet3Dynamics_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A571E077951002064AC /* libBullet3Geometry_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBullet3Geometry_gmake_x64_release.a; path = Bullet/lib/libBullet3Geometry_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A581E077951002064AC /* libBullet3OpenCL_clew_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBullet3OpenCL_clew_gmake_x64_release.a; path = Bullet/lib/libBullet3OpenCL_clew_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A591E077951002064AC /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A5A1E077951002064AC /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A5B1E077951002064AC /* libBulletExampleBrowserLib_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletExampleBrowserLib_gmake_x64_release.a; path = Bullet/lib/libBulletExampleBrowserLib_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A5C1E077951002064AC /* libBulletInverseDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletInverseDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletInverseDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A5D1E077951002064AC /* libBulletInverseDynamicsUtils_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletInverseDynamicsUtils_gmake_x64_release.a; path = Bullet/lib/libBulletInverseDynamicsUtils_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A5E1E077951002064AC /* libBulletSoftBody_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletSoftBody_gmake_x64_release.a; path = Bullet/lib/libBulletSoftBody_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A5F1E077951002064AC /* libBussIK_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBussIK_gmake_x64_release.a; path = Bullet/lib/libBussIK_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A601E077951002064AC /* libgwen_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgwen_gmake_x64_release.a; path = Bullet/lib/libgwen_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A611E077951002064AC /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
-		02A63A621E077951002064AC /* libOpenGL_Window_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOpenGL_Window_gmake_x64_release.a; path = Bullet/lib/libOpenGL_Window_gmake_x64_release.a; sourceTree = "<group>"; };
 		02B6B7DC1DDB399B0068FCBA /* Font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Font; path = Resources/Font; sourceTree = "<group>"; };
 		02B6B7DF1DDB40270068FCBA /* STextRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STextRenderer.cpp; sourceTree = "<group>"; };
 		02B6B7E01DDB40270068FCBA /* STextRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = STextRenderer.hpp; sourceTree = "<group>"; };
@@ -251,28 +227,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02A63A671E077951002064AC /* libBullet3OpenCL_clew_gmake_x64_release.a in Frameworks */,
-				02A63A6C1E077951002064AC /* libBulletInverseDynamicsUtils_gmake_x64_release.a in Frameworks */,
-				02A63A661E077951002064AC /* libBullet3Geometry_gmake_x64_release.a in Frameworks */,
-				02A63A6A1E077951002064AC /* libBulletExampleBrowserLib_gmake_x64_release.a in Frameworks */,
+				0231F7C51E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a in Frameworks */,
 				025903251D7793EA00EA6372 /* libboost_system.a in Frameworks */,
-				02A63A6E1E077951002064AC /* libBussIK_gmake_x64_release.a in Frameworks */,
+				0231F7C41E07860B000854A8 /* libBulletCollision_gmake_x64_release.a in Frameworks */,
 				025903261D7793EA00EA6372 /* libboost_thread.a in Frameworks */,
 				0259032A1D7793EA00EA6372 /* Cocoa.framework in Frameworks */,
-				02A63A681E077951002064AC /* libBulletCollision_gmake_x64_release.a in Frameworks */,
-				02A63A6D1E077951002064AC /* libBulletSoftBody_gmake_x64_release.a in Frameworks */,
-				02A63A641E077951002064AC /* libBullet3Common_gmake_x64_release.a in Frameworks */,
-				02A63A701E077951002064AC /* libLinearMath_gmake_x64_release.a in Frameworks */,
-				02A63A6B1E077951002064AC /* libBulletInverseDynamics_gmake_x64_release.a in Frameworks */,
-				02A63A6F1E077951002064AC /* libgwen_gmake_x64_release.a in Frameworks */,
-				02A63A691E077951002064AC /* libBulletDynamics_gmake_x64_release.a in Frameworks */,
+				0231F7C61E07860B000854A8 /* libLinearMath_gmake_x64_release.a in Frameworks */,
 				0259032B1D7793EA00EA6372 /* OpenGL.framework in Frameworks */,
-				02A63A711E077951002064AC /* libOpenGL_Window_gmake_x64_release.a in Frameworks */,
-				02A63A631E077951002064AC /* libBullet3Collision_gmake_x64_release.a in Frameworks */,
 				025903271D7793EA00EA6372 /* libglfw3.a in Frameworks */,
 				025903291D7793EA00EA6372 /* IOKit.framework in Frameworks */,
 				0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */,
-				02A63A651E077951002064AC /* libBullet3Dynamics_gmake_x64_release.a in Frameworks */,
 				0201C77F1DEF4A9A00AA0B24 /* libopenal.1.dylib in Frameworks */,
 				02E7FC831DB545D600955052 /* libfreeimage.a in Frameworks */,
 				025903281D7793EA00EA6372 /* CoreVideo.framework in Frameworks */,
@@ -473,21 +437,9 @@
 		025903381D7794E500EA6372 /* Bullet */ = {
 			isa = PBXGroup;
 			children = (
-				02A63A541E077951002064AC /* libBullet3Collision_gmake_x64_release.a */,
-				02A63A551E077951002064AC /* libBullet3Common_gmake_x64_release.a */,
-				02A63A561E077951002064AC /* libBullet3Dynamics_gmake_x64_release.a */,
-				02A63A571E077951002064AC /* libBullet3Geometry_gmake_x64_release.a */,
-				02A63A581E077951002064AC /* libBullet3OpenCL_clew_gmake_x64_release.a */,
-				02A63A591E077951002064AC /* libBulletCollision_gmake_x64_release.a */,
-				02A63A5A1E077951002064AC /* libBulletDynamics_gmake_x64_release.a */,
-				02A63A5B1E077951002064AC /* libBulletExampleBrowserLib_gmake_x64_release.a */,
-				02A63A5C1E077951002064AC /* libBulletInverseDynamics_gmake_x64_release.a */,
-				02A63A5D1E077951002064AC /* libBulletInverseDynamicsUtils_gmake_x64_release.a */,
-				02A63A5E1E077951002064AC /* libBulletSoftBody_gmake_x64_release.a */,
-				02A63A5F1E077951002064AC /* libBussIK_gmake_x64_release.a */,
-				02A63A601E077951002064AC /* libgwen_gmake_x64_release.a */,
-				02A63A611E077951002064AC /* libLinearMath_gmake_x64_release.a */,
-				02A63A621E077951002064AC /* libOpenGL_Window_gmake_x64_release.a */,
+				0231F7C11E07860B000854A8 /* libBulletCollision_gmake_x64_release.a */,
+				0231F7C21E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a */,
+				0231F7C31E07860B000854A8 /* libLinearMath_gmake_x64_release.a */,
 			);
 			name = Bullet;
 			sourceTree = "<group>";
