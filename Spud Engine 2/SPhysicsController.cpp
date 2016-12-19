@@ -24,7 +24,7 @@ SPhysicsController::SPhysicsController(btConvexShape* _collision_shape, STransfo
     ghost_body->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
     
     // Create the character controller
-    controller = new btKinematicCharacterController(ghost_body, collision_shape, btScalar(0.1));
+    controller = new btKinematicCharacterController(ghost_body, collision_shape, 0.3);
     controller->setUseGhostSweepTest(false);
     controller->setUp(btVector3(0.0, 1.0, 0.0));
     
@@ -49,6 +49,7 @@ void SPhysicsController::postPhysicsUpdate(const SEvent& event) {
     btTransform ghost_transform = ghost_body->getWorldTransform();
     btVector3 ghost_position = ghost_transform.getOrigin();
     
+    //
     parent_transform->translation = glm::vec3(ghost_position.x(), ghost_position.y(), ghost_position.z());
     parent_transform->translation_velocity = glm::vec3(0.0);
 
@@ -56,12 +57,15 @@ void SPhysicsController::postPhysicsUpdate(const SEvent& event) {
 
 void SPhysicsController::moveControllerToParent(double interpolation) {
     
-    // Move the ghost body to the parent transform
-    // TEMP, might need to add in yaw in future
+    // Create a transform for the ghost body, given a 90º pitch transform to correct a bug with the ghost body
+    // Parent transform rotation is not taken into account, TEMP may need yaw later
     btTransform transform;
-    transform.setOrigin(btVector3(parent_transform->translation.x + parent_transform->translation_velocity.x * interpolation,
-                                  parent_transform->translation.y + parent_transform->translation_velocity.y * interpolation,
-                                  parent_transform->translation.z + parent_transform->translation_velocity.z * interpolation));
+    
+    glm::mat4 parent_matrix = glm::mat4(1.0);
+    parent_matrix = glm::translate(parent_matrix, parent_transform->translation);
+    parent_matrix = glm::rotate(parent_matrix, (float)M_PI / 2.0f, x_axis);
+    
+    transform.setFromOpenGLMatrix(&parent_matrix[0][0]);
     
     ghost_body->setWorldTransform(transform);
     

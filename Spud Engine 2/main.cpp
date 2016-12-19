@@ -231,7 +231,7 @@ int main(int argc, char* argv[]) {
     STransform controller_transform;
     controller_transform.translation.y = 10.0;
     
-    controller = new SPhysicsController(new btCylinderShape(btVector3(1.0, 0.2, 0.2)), &camera.transform);
+    controller = new SPhysicsController(new btCylinderShape(btVector3(0.4, 2.0, 0.4)), &camera.transform);
     controller->addToPhysicsGraph(scene_graph->physics_graph);
     
     
