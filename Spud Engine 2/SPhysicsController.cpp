@@ -26,7 +26,7 @@ SPhysicsController::SPhysicsController(btConvexShape* _collision_shape, STransfo
     // Create the character controller
     controller = new btKinematicCharacterController(ghost_body, collision_shape, 0.3);
     controller->setUseGhostSweepTest(false);
-    controller->setUp(btVector3(0.0, 1.0, 0.0));
+    controller->setGravity(btVector3(0.0, -9.8, 0.0));
     
     // Only listen to post-physics tick
     event_listener.listenToEvent(EVENT_PHYSICS_POSTUPDATE, EVENT_MEMBER(SPhysicsController::postPhysicsUpdate));
@@ -49,7 +49,6 @@ void SPhysicsController::postPhysicsUpdate(const SEvent& event) {
     btTransform ghost_transform = ghost_body->getWorldTransform();
     btVector3 ghost_position = ghost_transform.getOrigin();
     
-    //
     parent_transform->translation = glm::vec3(ghost_position.x(), ghost_position.y(), ghost_position.z());
     parent_transform->translation_velocity = glm::vec3(0.0);
 
@@ -74,8 +73,8 @@ void SPhysicsController::moveControllerToParent(double interpolation) {
 void SPhysicsController::addToPhysicsGraph(SPhysicsGraph* physics_graph) { physics_graph->addPhysicsController(ghost_body, controller); }
 void SPhysicsController::removeFromPhysicsGraph(SPhysicsGraph* physics_graph) { physics_graph->removePhysicsController(ghost_body, controller); }
 
-void SPhysicsController::setWalkingDirection(glm::vec3 direction) { controller->setWalkDirection(btVector3(direction.x, direction.y, direction.z));
+void SPhysicsController::setWalkingDirection(glm::vec3 direction) { controller->setWalkDirection(btVector3(direction.x,
+                                                                                                           direction.y,
+                                                                                                           direction.z)); }
 
-    last_walk = direction;
-
-}
+void SPhysicsController::jump() { controller->jump(); }

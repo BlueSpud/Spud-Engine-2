@@ -30,6 +30,7 @@ class SPhysicsController {
         void removeFromPhysicsGraph(SPhysicsGraph* physics_graph);
     
         void setWalkingDirection(glm::vec3 direction);
+        void jump();
     
     private:
     
@@ -40,8 +41,6 @@ class SPhysicsController {
         btPairCachingGhostObject* ghost_body;
     
         SEventListener event_listener;
-    
-        glm::vec3 last_walk;
     
 };
 

@@ -21,6 +21,7 @@ SRigidBody::SRigidBody(float _mass, btCollisionShape* _collision_shape, STransfo
     
     // Make an empty transform
     btTransform bullet_transform;
+    bullet_transform.setIdentity();
     
     // Calculate the inertia
     btVector3 inertia;
@@ -67,6 +68,7 @@ void SRigidBody::postPhysicsUpdate(const SEvent& event) {
         
         btTransform bullet_transform;
         bullet_rigid_body->getMotionState()->getWorldTransform(bullet_transform);
+        
         SPhysicsSystem::bulletTransformToSTransform(bullet_transform, *parent_transform);
         
         // Zero the velocities because bullet handles interpolation for us

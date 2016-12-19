@@ -75,6 +75,12 @@ void keyPress(int key) {
             SGL::setMouseInputMode(GLFW_CURSOR_NORMAL);
             
             break;
+        
+        case GLFW_KEY_SPACE:
+        
+            controller->jump();
+        
+        break;
 
     }
     
@@ -134,8 +140,9 @@ void update(const SEvent& event) {
     camera.transform.update();
     
     glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0, -cos(camera.transform.rotation.y) * speed);
-    glm::vec3 strafe = glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0, -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
-    glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
+    glm::vec3 strafe =  glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0,
+                                 -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
+    //glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
     
     //camera.transform.translation_velocity = strafe + forward + fly;
     glm::vec3 direction = strafe + forward;
@@ -228,9 +235,6 @@ int main(int argc, char* argv[]) {
     rigid_body = new SRigidBody(0.0, new btStaticPlaneShape(btVector3(0.0, 1.0, 0.0), false), &temp_transform);
     rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
-    STransform controller_transform;
-    controller_transform.translation.y = 10.0;
-    
     controller = new SPhysicsController(new btCylinderShape(btVector3(0.4, 2.0, 0.4)), &camera.transform);
     controller->addToPhysicsGraph(scene_graph->physics_graph);
     
@@ -258,8 +262,7 @@ int main(int argc, char* argv[]) {
     listener.bind(&keyPress, GLFW_KEY_W, INPUT_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_D, INPUT_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_A, INPUT_ACTION_DOWN);
-    listener.bind(&keyPress, GLFW_KEY_LEFT, INPUT_ACTION_DOWN);
-    listener.bind(&keyPress, GLFW_KEY_RIGHT, INPUT_ACTION_DOWN);
+    listener.bind(&keyPress, GLFW_KEY_SPACE, INPUT_ACTION_DOWN);
     
     listener.bind(&moveLight, GLFW_KEY_P, INPUT_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_G, INPUT_ACTION_DOWN);
