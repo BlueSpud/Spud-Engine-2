@@ -18,6 +18,7 @@ SPhysicsController::SPhysicsController(float _mass, btCollisionShape* _collision
     // Make it always stand up and never sleep
     bullet_rigid_body->setSleepingThresholds(0.0, 0.0);
     bullet_rigid_body->setAngularFactor(0.0);
+    bullet_rigid_body->setFriction(0.0);
     
 }
 
