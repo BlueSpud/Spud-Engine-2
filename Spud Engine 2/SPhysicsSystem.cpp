@@ -40,7 +40,7 @@ void SPhysicsSystem::updatePhysics(double time_elapsed, double interpolation, in
         event.interpolation = interpolation;
         SEventSystem::postEvent(EVENT_PHYSICS_PREUPDATE, event);
         
-        current_physics_graph->bullet_world->stepSimulation(time_elapsed);
+        current_physics_graph->bullet_world->stepSimulation(time_elapsed, max_updates, time_per_tick);
         
         // post-physics update
         event = SEventPhysicsUpdate();

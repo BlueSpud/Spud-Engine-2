@@ -12,65 +12,75 @@
  *  Functions for physics controller                                          *
  ******************************************************************************/
 
-SPhysicsController::SPhysicsController(float _mass, btCollisionShape* _collision_shape, STransform* _parent_transform) : SRigidBody(_mass, _collision_shape, _parent_transform) {
+SPhysicsController::SPhysicsController(btConvexShape* _collision_shape, STransform* _parent_transform) {
     
-    // Set the properties of the rigid body that make it behave how we want it
-    // Make it always stand up and never sleep
-    bullet_rigid_body->setSleepingThresholds(0.0, 0.0);
-    bullet_rigid_body->setAngularFactor(0.0);
-    bullet_rigid_body->setFriction(0.0);
+    parent_transform = _parent_transform;
+    collision_shape = _collision_shape;
+    
+    // Create a ghost object
+    ghost_body = new btPairCachingGhostObject();
+    moveControllerToParent(0.0);
+    ghost_body->setCollisionShape(collision_shape);
+    ghost_body->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+    
+    // Create the character controller
+    controller = new btKinematicCharacterController(ghost_body, collision_shape, 0.2);
+    controller->setUseGhostSweepTest(false);
+    controller->setGravity(btVector3(0.0, -14.7, 0.0));
+    
+    // Only listen to post-physics tick
+    event_listener.listenToEvent(EVENT_PHYSICS_POSTUPDATE, EVENT_MEMBER(SPhysicsController::postPhysicsUpdate));
     
 }
 
-void SPhysicsController::prePhysicsUpdate(const SEvent& event) {
+SPhysicsController::~SPhysicsController() {
     
-    // Set the velocity of the rigid body to the walking direction, we ignore the y direction because you cant walk in that directions
-    btVector3 new_velocity = bullet_rigid_body->getLinearVelocity();
-    new_velocity.setX(walking_direction.x());
-    new_velocity.setZ(walking_direction.z());
-    
-    bullet_rigid_body->setLinearVelocity(new_velocity);
+    // Clean up
+    delete controller;
+    delete ghost_body;
+    delete collision_shape;
     
 }
-
 
 void SPhysicsController::postPhysicsUpdate(const SEvent& event) {
     
-    // Perform a similar uppdate as the rigid body, but we ignore rotation unless specified
-    btTransform bullet_transform;
-    bullet_rigid_body->getMotionState()->getWorldTransform(bullet_transform);
+    // Set the position of the parent transform to the position of the ghost body
+    // TEMP, might need to add in yaw in future
+    btTransform ghost_transform = ghost_body->getWorldTransform();
+    btVector3 ghost_position = ghost_transform.getOrigin();
     
-    STransform new_transform;
-    SPhysicsSystem::bulletTransformToSTransform(bullet_transform, new_transform);
-    
-    parent_transform->translation = new_transform.translation;
-    
-    // Usually we ignore rotation, but if for some reason we dont that is done here
-    if (!ignore_rotation) {
-        
-        parent_transform->rotation = new_transform.rotation;
-        parent_transform->rotation_velocity = glm::vec3(0.0);
-        
-    }
-    
-    // Zero the velocities because bullet handles interpolation for us
+    parent_transform->translation = glm::vec3(ghost_position.x(), ghost_position.y(), ghost_position.z());
     parent_transform->translation_velocity = glm::vec3(0.0);
     
 }
 
+void SPhysicsController::moveControllerToParent(double interpolation) {
+    
+    // Create a transform for the ghost body, given a 90º pitch transform to correct a bug with the ghost body
+    // Parent transform rotation is not taken into account, TEMP may need yaw later
+    btTransform transform;
+    
+    glm::mat4 parent_matrix = glm::mat4(1.0);
+    parent_matrix = glm::translate(parent_matrix, parent_transform->translation);
+    parent_matrix = glm::rotate(parent_matrix, (float)M_PI / 2.0f, x_axis);
+    
+    transform.setFromOpenGLMatrix(&parent_matrix[0][0]);
+    
+    ghost_body->setWorldTransform(transform);
+    
+}
 
-void SPhysicsController::setWalkingDirection(glm::vec3 direction) { walking_direction = btVector3(direction.x,
-                                                                                                  direction.y,
-                                                                                                  direction.z); }
+void SPhysicsController::addToPhysicsGraph(SPhysicsGraph* physics_graph) { physics_graph->addPhysicsController(ghost_body, controller); }
+void SPhysicsController::removeFromPhysicsGraph(SPhysicsGraph* physics_graph) { physics_graph->removePhysicsController(ghost_body, controller); }
+
+void SPhysicsController::setWalkingDirection(glm::vec3 direction) { controller->setWalkDirection(btVector3(direction.x,
+                                                                                                           direction.y,
+                                                                                                           direction.z)); }
 
 void SPhysicsController::jump() {
     
-    // Calculate the needed initial velocity to reach the height we want
-    float initial_velocity = sqrt(jump_height) * SQRT_2G;
-    
-    btVector3 new_velocity = bullet_rigid_body->getLinearVelocity();
-    new_velocity.setY(initial_velocity);
-    bullet_rigid_body->setLinearVelocity(new_velocity);
-    
+    // If the controller is on ground, jump
+    if (controller->onGround())
+        controller->jump(btVector3(0.0, 7.5, 0.0));
     
 }

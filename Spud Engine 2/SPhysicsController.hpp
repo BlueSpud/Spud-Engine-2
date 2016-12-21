@@ -9,33 +9,38 @@
 #ifndef SPhysicsController_hpp
 #define SPhysicsController_hpp
 
-#include "SRigidBody.hpp"
-
-#define SQRT_2G 5.4221766847f
+#include "SPhysicsSystem.hpp"
 
 /******************************************************************************
  *  Definition for physics controller                                         *
  ******************************************************************************/
 
-class SPhysicsController : public SRigidBody {
+class SPhysicsController {
     
-    public:
+public:
     
-        SPhysicsController(float _mass, btCollisionShape* _collision_shape, STransform* _parent_transform);
+    SPhysicsController(btConvexShape* _collision_shape, STransform* _parent_transform);
+    ~SPhysicsController();
     
-        virtual void prePhysicsUpdate(const SEvent& event);
-        virtual void postPhysicsUpdate(const SEvent& event);
+    void postPhysicsUpdate(const SEvent& event);
     
-        void setWalkingDirection(glm::vec3 direction);
-        void jump();
+    void moveControllerToParent(double interpolation);
     
-        bool ignore_rotation = true;
+    void addToPhysicsGraph(SPhysicsGraph* physics_graph);
+    void removeFromPhysicsGraph(SPhysicsGraph* physics_graph);
     
-        float jump_height = 2.2;
+    void setWalkingDirection(glm::vec3 direction);
+    void jump();
     
-    protected:
+private:
     
-        btVector3 walking_direction;
+    STransform* parent_transform;
+    
+    btConvexShape* collision_shape;
+    btKinematicCharacterController* controller;
+    btPairCachingGhostObject* ghost_body;
+    
+    SEventListener event_listener;
     
 };
 

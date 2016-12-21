@@ -146,7 +146,7 @@ void update(const SEvent& event) {
     //glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
     
     //camera.transform.translation_velocity = strafe + forward + fly;
-    controller->setWalkingDirection((strafe + forward) * 50.0f);
+    controller->setWalkingDirection((strafe + forward));
     
 }
 
@@ -199,17 +199,16 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
     
     // Access the mesh
-    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/cube.smdl"));
+    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
     //mesh->transform.translation.y = -0.2;
     //mesh->transform.rotation.y = M_PI / 2.0;
     //mesh->transform.rotation_velocity.y = M_PI / 200.0;
     scene_graph->addObject(mesh);
     
-//    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
-//    mesh->transform.scale = glm::vec3(2.0);
-//    mesh->transform.translation.z = 5.7;
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/cube.smdl"));
+    mesh->transform.translation.z = 7.0;
     
-    //scene_graph->addObject(mesh);
+    scene_graph->addObject(mesh);
     
     mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
     scene_graph->addObject(mesh);
@@ -236,7 +235,7 @@ int main(int argc, char* argv[]) {
     rigid_body = new SRigidBody(0.0, new btStaticPlaneShape(btVector3(0.0, 1.0, 0.0), false), &temp_transform);
     rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
-    controller = new SPhysicsController(10.0, new btCylinderShape(btVector3(0.4, 2.0, 0.4)), &camera.transform);
+    controller = new SPhysicsController(new btCylinderShape(btVector3(0.4, 2.0, 0.4)), &camera.transform);
     controller->addToPhysicsGraph(scene_graph->physics_graph);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
