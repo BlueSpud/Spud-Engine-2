@@ -22,8 +22,8 @@ class SRigidBody {
         SRigidBody(float _mass, btCollisionShape* _collision_shape, STransform* _parent_transform);
         ~SRigidBody();
     
-        void prePhysicsUpdate(const SEvent& event);
-        void postPhysicsUpdate(const SEvent& event);
+        virtual void prePhysicsUpdate(const SEvent& event);
+        virtual void postPhysicsUpdate(const SEvent& event);
     
         void addToPhysicsGraph(SPhysicsGraph* physics_graph);
         void removeFromPhysicsGraph(SPhysicsGraph* physics_graph);
@@ -32,7 +32,9 @@ class SRigidBody {
     
         void setMass(float _mass);
     
-    private:
+        bool ignore_rotation = false;
+    
+    protected:
     
         float mass;
         STransform* parent_transform;

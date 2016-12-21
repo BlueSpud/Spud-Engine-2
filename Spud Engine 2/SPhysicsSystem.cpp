@@ -104,7 +104,7 @@ SPhysicsGraph::SPhysicsGraph() {
                                                bullet_collision_configuration);
     
     // Set gravity, by default it is -9.8 m/s in the y direction
-    bullet_world->setGravity(btVector3(0.0, -9.8, 0.0));
+    bullet_world->setGravity(btVector3(0.0, -14.7, 0.0));
     
     
 }
