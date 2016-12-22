@@ -23,8 +23,6 @@
 #include "SSoundSystem.hpp"
 #include "SSoundEmitter.hpp"
 
-#include "SPhysicsController.hpp"
-
 double speed = 0.0;
 double speed_x = 0.0;
 
@@ -32,7 +30,8 @@ SCamera camera;
 SLight* light;
 SSoundEmitter* sound_emitter;
 
-SPhysicsController* controller;
+physx::PxRigidDynamic* rigid_body;
+SStaticMeshInstance* instance;
 
 void moveLight(int key) {
     
@@ -77,9 +76,7 @@ void keyPress(int key) {
             break;
         
         case GLFW_KEY_SPACE:
-        
-            controller->jump();
-            //bullet_rigid_body->applyCentralImpulse(btVector3(0.0, 60.0, 0.0));
+    
         
         break;
 
@@ -143,10 +140,17 @@ void update(const SEvent& event) {
     glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0, -cos(camera.transform.rotation.y) * speed);
     glm::vec3 strafe =  glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0,
                                  -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
-    //glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
+    glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
     
-    //camera.transform.translation_velocity = strafe + forward + fly;
-    controller->setWalkingDirection((strafe + forward));
+    camera.transform.translation_velocity = strafe + forward + fly;
+    
+}
+
+void physics(const SEvent& event) {
+    
+    physx::PxTransform transform = rigid_body->getGlobalPose();
+    physx::PxVec3 position = transform.p;
+    instance->transform.translation = glm::vec3(position.x, position.y, position.z);
     
 }
 
@@ -163,6 +167,8 @@ int main(int argc, char* argv[]) {
     SRenderSystem::startup();
     
     STime::startup();
+    
+    SPhysicsSystem::startup();
     
     SGLUploadSystem::startup();
     
@@ -198,45 +204,33 @@ int main(int argc, char* argv[]) {
     
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
     
+    physx::PxMaterial* material = PxGetPhysics().createMaterial(0.5f, 0.5f, 0.6f);
+    physx::PxRigidStatic* ground = PxCreatePlane(PxGetPhysics(), physx::PxPlane(0,1,0,0), *material);
+    
+    physx::PxTransform transform = physx::PxTransform(physx::PxVec3(0.0, 10.0, 0.0));
+    physx::PxShape* shape = PxGetPhysics().createShape(physx::PxSphereGeometry(1.0), *material);
+    
+    rigid_body = PxGetPhysics().createRigidDynamic(transform);
+    rigid_body->attachShape(*shape);
+    physx::PxRigidBodyExt::updateMassAndInertia(*rigid_body, 10.0f);
+    
+    instance = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
+    scene_graph->addObject(instance);
+    
+    scene_graph->addObject(instance);
+    
+    scene_graph->physics_graph->addActor(ground);
+    scene_graph->physics_graph->addActor(rigid_body);
+    
+    shape->release();
+    material->release();
+    
     // Access the mesh
-    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
-    //mesh->transform.translation.y = -0.2;
-    //mesh->transform.rotation.y = M_PI / 2.0;
-    //mesh->transform.rotation_velocity.y = M_PI / 200.0;
+    //SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
+    //scene_graph->addObject(mesh);
+    
+    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
     scene_graph->addObject(mesh);
-    
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/cube.smdl"));
-    mesh->transform.translation.z = 7.0;
-    
-    scene_graph->addObject(mesh);
-    
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
-    scene_graph->addObject(mesh);
-    
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
-    mesh->transform.translation.y = 10.0;
-    
-    SRigidBody* rigid_body = new SRigidBody(10.0, new btSphereShape(1.0), &mesh->transform);
-    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
-    
-    scene_graph->addObject(mesh);
-    
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
-    mesh->transform.translation.y = 15.0;
-    mesh->transform.translation.x = 0.5;
-    
-    rigid_body = new SRigidBody(10.0, new btSphereShape(1.0), &mesh->transform);
-    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
-    
-    scene_graph->addObject(mesh);
-
-    
-    STransform temp_transform;
-    rigid_body = new SRigidBody(0.0, new btStaticPlaneShape(btVector3(0.0, 1.0, 0.0), false), &temp_transform);
-    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
-    
-    controller = new SPhysicsController(new btCylinderShape(btVector3(0.4, 2.0, 0.4)), &camera.transform);
-    controller->addToPhysicsGraph(scene_graph->physics_graph);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
@@ -339,6 +333,7 @@ int main(int argc, char* argv[]) {
     
     SEventListener event_listener;
     event_listener.listenToEvent(EVENT_TICK, &update);
+    event_listener.listenToEvent(EVENT_PHYSICS_POSTUPDATE, &physics);
     
     // END TEMP CODE
     
@@ -383,6 +378,8 @@ int main(int argc, char* argv[]) {
     SInputSystem::shutdown();
     
     SGLUploadSystem::shutdown();
+    
+    SPhysicsSystem::shutdown();
     
     STime::shutdown();
     

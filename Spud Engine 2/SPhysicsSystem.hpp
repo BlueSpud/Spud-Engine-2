@@ -9,9 +9,9 @@
 #ifndef SPhysicsSystem_hpp
 #define SPhysicsSystem_hpp
 
-#include <btBulletDynamicsCommon.h>
-#include <BulletDynamics/Character/btKinematicCharacterController.h>
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
+#define NDEBUG
+
+#include <PxPhysicsAPI.h>
 
 #include "SEventSystem.hpp"
 #include "SGL.hpp"
@@ -47,10 +47,14 @@ class SPhysicsSystem : public SSubsystem {
     
         static void updatePhysics(double time_elapsed, double interpolation, int max_updates, double time_per_tick);
     
-        static void bulletTransformToSTransform(const btTransform& bullet_transform, STransform& transform);
-        static btTransform STransformToBulletTransform(const STransform& transform, double interpolation);
-    
         static SPhysicsGraph* current_physics_graph;
+    
+    private:
+    
+        static physx::PxFoundation* physx_foundation;
+        static physx::PxPhysics* physx_SDK;
+        static physx::PxDefaultErrorCallback physx_error_callback;
+        static physx::PxDefaultAllocator physx_allocator;
     
 };
 
@@ -67,19 +71,13 @@ class SPhysicsGraph {
         SPhysicsGraph();
         ~SPhysicsGraph();
     
-        void addRigidBody(btRigidBody* rigid_body);
-        void removeRigidBody(btRigidBody* rigid_body);
-    
-        void addPhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller);
-        void removePhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller);
+        void addActor(physx::PxActor* actor);
+        void removeActor(physx::PxActor* actor);
     
     private:
     
-        btBroadphaseInterface* bullet_broadphase;
-        btDefaultCollisionConfiguration* bullet_collision_configuration;
-        btCollisionDispatcher* bullet_collision_dispatcher;
-        btSequentialImpulseConstraintSolver* bullet_constraint_solver;
-        btDiscreteDynamicsWorld* bullet_world;
+        physx::PxScene* physx_scene;
+        physx::PxDefaultCpuDispatcher* cpu_dispatcher;
     
 };
 

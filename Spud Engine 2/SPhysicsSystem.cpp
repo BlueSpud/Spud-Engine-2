@@ -10,6 +10,11 @@
 
 SPhysicsGraph* SPhysicsSystem::current_physics_graph;
 
+physx::PxFoundation* SPhysicsSystem::physx_foundation;
+physx::PxPhysics* SPhysicsSystem::physx_SDK;
+physx::PxDefaultErrorCallback SPhysicsSystem::physx_error_callback;
+physx::PxDefaultAllocator SPhysicsSystem::physx_allocator;
+
 /******************************************************************************
  *  Functions for physics system                                              *
  ******************************************************************************/
@@ -17,6 +22,10 @@ SPhysicsGraph* SPhysicsSystem::current_physics_graph;
 void SPhysicsSystem::startup() {
     
     SLog::verboseLog(SVerbosityLevel::Debug, "SPhysicsSystem startup");
+    
+    // Open up PhysX
+    physx_foundation = PxCreateFoundation(PX_PHYSICS_VERSION, physx_allocator, physx_error_callback);
+    physx_SDK = PxCreatePhysics(PX_PHYSICS_VERSION, *physx_foundation, physx::PxTolerancesScale());
 
 }
 
@@ -27,6 +36,10 @@ void SPhysicsSystem::shutdown() {
     // If we have a physics graph, delete it
     if (current_physics_graph)
         delete current_physics_graph;
+    
+    // Close down PhysX
+    physx_SDK->release();
+    physx_foundation->release();
 
 }
 
@@ -40,7 +53,9 @@ void SPhysicsSystem::updatePhysics(double time_elapsed, double interpolation, in
         event.interpolation = interpolation;
         SEventSystem::postEvent(EVENT_PHYSICS_PREUPDATE, event);
         
-        current_physics_graph->bullet_world->stepSimulation(time_elapsed, max_updates, time_per_tick);
+        // PhysX update
+        current_physics_graph->physx_scene->simulate(time_elapsed);
+        current_physics_graph->physx_scene->fetchResults(true);
         
         // post-physics update
         event = SEventPhysicsUpdate();
@@ -50,91 +65,32 @@ void SPhysicsSystem::updatePhysics(double time_elapsed, double interpolation, in
     
 }
 
-void SPhysicsSystem::bulletTransformToSTransform(const btTransform& bullet_transform, STransform& transform) {
-    
-    // Get position and rotation
-    btVector3 rigid_body_origin = bullet_transform.getOrigin();
-    
-    // Get rotation as a matrix and then convert it to euler angles
-    glm::mat4* transform_matrix = new glm::mat4(1.0);
-    bullet_transform.getOpenGLMatrix(&transform_matrix[0][0][0]);
-    glm::quat rotation_quat = glm::quat(*transform_matrix);
-    
-    transform.rotation = glm::eulerAngles(rotation_quat);
-    
-    // Delete the matrix
-    delete transform_matrix;
-    
-    transform.translation = glm::vec3(rigid_body_origin.x(),
-                                      rigid_body_origin.y(),
-                                      rigid_body_origin.z());
-    
-}
-
-btTransform SPhysicsSystem::STransformToBulletTransform(const STransform& transform, double interpolation) {
-    
-    // Make a bullet transform that mirrors the given transform
-    btTransform bullet_transform;
-    glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
-    bullet_transform.setFromOpenGLMatrix(&transform_matrix[0][0]);
-
-    return bullet_transform;
-    
-}
-
 /******************************************************************************
  *  Functions for physics graph                                               *
  ******************************************************************************/
 
 SPhysicsGraph::SPhysicsGraph() {
     
-    // Create the necessary components for a bullet physics world
-    bullet_broadphase = new btDbvtBroadphase();
-    bullet_broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+    // Create thr PhysX scene descriptor, gravity and the like
+    physx::PxSceneDesc scene_desc = physx::PxSceneDesc(SPhysicsSystem::physx_SDK->getTolerancesScale());
+    scene_desc.gravity = physx::PxVec3(0.0, -9.81, 0.0);
+    cpu_dispatcher = physx::PxDefaultCpuDispatcherCreate(2);
+    scene_desc.cpuDispatcher = cpu_dispatcher;
+    scene_desc.filterShader = physx::PxDefaultSimulationFilterShader;
     
-    bullet_collision_configuration = new btDefaultCollisionConfiguration();
-    bullet_collision_dispatcher = new btCollisionDispatcher(bullet_collision_configuration);
-    
-    bullet_constraint_solver = new btSequentialImpulseConstraintSolver();
-    
-    // Create the bullet world
-    bullet_world = new btDiscreteDynamicsWorld(bullet_collision_dispatcher,
-                                               bullet_broadphase,
-                                               bullet_constraint_solver,
-                                               bullet_collision_configuration);
-    
-    // Set gravity, by default it is -9.8 m/s in the y direction
-    bullet_world->setGravity(btVector3(0.0, -14.7, 0.0));
+    // Create the actual scene
+    physx_scene = SPhysicsSystem::physx_SDK->createScene(scene_desc);
     
     
 }
 
 SPhysicsGraph::~SPhysicsGraph() {
     
-    // Delete everything in reverse order
-    delete bullet_world;
-    delete bullet_constraint_solver;
-    delete bullet_collision_dispatcher;
-    delete bullet_collision_configuration;
-    delete bullet_broadphase;
+    // Destroy the PhysX scene
+    physx_scene->release();
+    cpu_dispatcher->release();
     
 }
 
-void SPhysicsGraph::addRigidBody(btRigidBody* rigid_body) { bullet_world->addRigidBody(rigid_body); }
-void SPhysicsGraph::removeRigidBody(btRigidBody* rigid_body) { bullet_world->removeRigidBody(rigid_body); }
-
-void SPhysicsGraph::addPhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller) {
-
-    // Add the controller's components to the world
-    bullet_world->addCollisionObject(ghost_body, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::DefaultFilter);
-    bullet_world->addAction(controller);
-    
-}
-
-void SPhysicsGraph::removePhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller) {
-
-    // Remove the controller's components to the world
-    bullet_world->removeAction(controller);
-    bullet_world->removeCollisionObject(ghost_body);
-    
-}
+void SPhysicsGraph::addActor(physx::PxActor* actor) { physx_scene->addActor(*actor); }
+void SPhysicsGraph::removeActor(physx::PxActor* actor) { physx_scene->removeActor(*actor); }

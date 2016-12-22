@@ -12,6 +12,7 @@
 #include <glm/glm.hpp>
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
+#include <BulletCollision/CollisionShapes/btShapeHull.h>
 
 #include "SResourceManager.hpp"
 #include "SGLUpload.hpp"
@@ -138,6 +139,7 @@ class SStaticMesh : public SResource {
     
         // Collision stuff
         btConvexHullShape* collision_shape;
+        btBvhTriangleMeshShape* static_collision_shape;
     
 };
 

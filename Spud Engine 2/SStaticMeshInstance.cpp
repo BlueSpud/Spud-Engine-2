@@ -20,10 +20,6 @@ SStaticMeshInstance::SStaticMeshInstance(SStaticMesh* _parent_mesh) {
     // Copy over the material
     materials = parent_mesh->materials;
     
-    // If we have a collision shape from the parent mesh, make a rigid body
-    if (parent_mesh->collision_shape)
-        rigid_body = new SRigidBody(0.0, parent_mesh->collision_shape, &transform);
-    
 }
 
 void SStaticMeshInstance::render(bool render_material, double interpolation) {
@@ -51,27 +47,12 @@ void SStaticMeshInstance::setMaterial(SMaterial* new_material, int material_doma
 
 void SStaticMeshInstance::onMoveToSceneGraph(SPhysicsGraph* physics_graph) {
     
-    // Add the rigid body to the physics graph
-    if (rigid_body != nullptr)
-        rigid_body->addToPhysicsGraph(physics_graph);
     
 }
 
 void SStaticMeshInstance::onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) {
     
-    // Remove the rigid body to the physics graph
-    if (rigid_body != nullptr)
-        rigid_body->removeFromPhysicsGraph(physics_graph);
     
-}
-
-void SStaticMeshInstance::setPhysicsEnabled(bool physics_enabled) {
-    
-    // If physics enabled is true, we need to give the rigid body a mass, else it is static
-    if (physics_enabled)
-        rigid_body->setMass(100.0);
-    else rigid_body->setMass(0.0);
-
 }
 
 void SStaticMeshInstance::update(const SEvent& event) {

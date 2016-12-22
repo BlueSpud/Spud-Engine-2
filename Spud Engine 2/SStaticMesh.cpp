@@ -146,7 +146,7 @@ bool SStaticMesh::load(const SPath& path) {
             if (token == COLLISION_TOKEN) {
                 
                 // Create the mesh
-                //btTriangleMesh* collision_mesh = new btTriangleMesh();
+                btTriangleMesh* collision_mesh = new btTriangleMesh();
                 collision_shape = new btConvexHullShape();
                 
                 // Get the size of the collision mesh
@@ -166,7 +166,23 @@ bool SStaticMesh::load(const SPath& path) {
                     collision_shape->addPoint(btVector3(vert1.x, vert1.y, vert1.z));
                     collision_shape->addPoint(btVector3(vert2.x, vert2.y, vert2.z));
                     
+                    collision_mesh->addTriangle(btVector3(vert0.x, vert0.y, vert0.z),
+                                                btVector3(vert1.x, vert1.y, vert1.z),
+                                                btVector3(vert2.x, vert2.y, vert2.z));
+                    
                 }
+                
+                // Simplify the hull
+                btShapeHull* simplified_hull = new btShapeHull(collision_shape);
+                btScalar margin = collision_shape->getMargin();
+                simplified_hull->buildHull(margin);
+                
+                delete collision_shape;
+                collision_shape = new btConvexHullShape((btScalar*)simplified_hull->getVertexPointer(), simplified_hull->numVertices());
+                
+                // Create a complex mesh
+                static_collision_shape = new btBvhTriangleMeshShape(collision_mesh, false);
+                //delete collision_mesh;
                 
             }
             
