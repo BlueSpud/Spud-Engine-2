@@ -24,6 +24,7 @@
 #include "SSoundEmitter.hpp"
 
 #include "SRigidBody.hpp"
+#include "SCharacterController.hpp"
 
 double speed = 0.0;
 double speed_x = 0.0;
@@ -31,6 +32,7 @@ double speed_x = 0.0;
 SCamera camera;
 SLight* light;
 SSoundEmitter* sound_emitter;
+SCharacterController* controller;
 
 void moveLight(int key) {
     
@@ -76,7 +78,8 @@ void keyPress(int key) {
         
         case GLFW_KEY_SPACE:
     
-        
+            controller->jump();
+            
         break;
 
     }
@@ -139,9 +142,10 @@ void update(const SEvent& event) {
     glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0, -cos(camera.transform.rotation.y) * speed);
     glm::vec3 strafe =  glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0,
                                  -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
-    glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
+    //glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
     
-    camera.transform.translation_velocity = strafe + forward + fly;
+    //camera.transform.translation_velocity = strafe + forward + fly;
+    controller->setMoveDirection((strafe + forward) * 50.0f);
     
 }
 
@@ -183,7 +187,7 @@ int main(int argc, char* argv[]) {
     
     // TEMP CODE
     
-    camera.transform.translation.y = 7.0;
+    camera.transform.translation.y = 16.0;
     SCamera::current_camera = &camera;
     
     SSound* sound = (SSound*)SResourceManager::getResource(SPath("Sound/Birds.wav"));
@@ -195,8 +199,8 @@ int main(int argc, char* argv[]) {
     
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
     
-    physx::PxMaterial* material = PxGetPhysics().createMaterial(0.5f, 0.5f, 0.6f);
-    physx::PxRigidStatic* ground = PxCreatePlane(PxGetPhysics(), physx::PxPlane(0,1,0,0), *material);
+    physx::PxMaterial* material = PxGetPhysics().createMaterial(0.5, 0.5, 0.1);
+    physx::PxRigidStatic* ground = PxCreatePlane(PxGetPhysics(), physx::PxPlane(0.0, 1.0, 0.0, 0.0), *material);
     
     scene_graph->physics_graph->addActor(ground);
     
@@ -204,8 +208,6 @@ int main(int argc, char* argv[]) {
     scene_graph->addObject(mesh);
     
     mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
-    mesh->transform.translation.y = 10.0;
-    mesh->transform.rotation_velocity.y = M_PI / 10.0;
     scene_graph->addObject(mesh);
     
     SRigidBody* rigid_body = new SRigidBody(0.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
@@ -217,7 +219,7 @@ int main(int argc, char* argv[]) {
     mesh->transform.translation.z = 0.5;
     scene_graph->addObject(mesh);
     
-    rigid_body = new SRigidBody(10.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
+    rigid_body = new SRigidBody(100.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
     rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
     
@@ -227,8 +229,10 @@ int main(int argc, char* argv[]) {
     mesh->transform.translation.z = 0.5;
     scene_graph->addObject(mesh);
     
-    rigid_body = new SRigidBody(10.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
+    rigid_body = new SRigidBody(100.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
     rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    
+    controller = new SCharacterController(scene_graph->physics_graph, material, &camera.transform);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     

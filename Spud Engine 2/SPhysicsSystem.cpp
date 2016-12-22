@@ -51,6 +51,7 @@ void SPhysicsSystem::updatePhysics(double time_elapsed, double interpolation, in
         // Pre-physics update
         SEventPhysicsUpdate event;
         event.interpolation = interpolation;
+        event.time_elapsed = time_elapsed;
         SEventSystem::postEvent(EVENT_PHYSICS_PREUPDATE, event);
         
         // PhysX update
@@ -103,7 +104,7 @@ SPhysicsGraph::SPhysicsGraph() {
     
     // Create thr PhysX scene descriptor, gravity and the like
     physx::PxSceneDesc scene_desc = physx::PxSceneDesc(SPhysicsSystem::physx_SDK->getTolerancesScale());
-    scene_desc.gravity = physx::PxVec3(0.0, -9.81, 0.0);
+    scene_desc.gravity = physx::PxVec3(0.0, -PHYSICS_G, 0.0);
     cpu_dispatcher = physx::PxDefaultCpuDispatcherCreate(2);
     scene_desc.cpuDispatcher = cpu_dispatcher;
     scene_desc.filterShader = physx::PxDefaultSimulationFilterShader;
@@ -111,12 +112,15 @@ SPhysicsGraph::SPhysicsGraph() {
     // Create the actual scene
     physx_scene = SPhysicsSystem::physx_SDK->createScene(scene_desc);
     
+    // Create the characer manager
+    character_manager = PxCreateControllerManager(*physx_scene);
     
 }
 
 SPhysicsGraph::~SPhysicsGraph() {
     
     // Destroy the PhysX scene
+    character_manager->release();
     physx_scene->release();
     cpu_dispatcher->release();
     
@@ -124,3 +128,11 @@ SPhysicsGraph::~SPhysicsGraph() {
 
 void SPhysicsGraph::addActor(physx::PxActor* actor) { physx_scene->addActor(*actor); }
 void SPhysicsGraph::removeActor(physx::PxActor* actor) { physx_scene->removeActor(*actor); }
+
+physx::PxController* SPhysicsGraph::createCharacterController(const physx::PxControllerDesc& description) {
+    
+    // Create a character controller with the given description
+    return character_manager->createController(description);
+    
+}
+

@@ -85,6 +85,7 @@
 		02F6D90D1E0C16F100D78D80 /* libSceneQuery.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8FF1E0C16F100D78D80 /* libSceneQuery.a */; };
 		02F6D90E1E0C16F100D78D80 /* libSimulationController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D9001E0C16F100D78D80 /* libSimulationController.a */; };
 		02F6D9111E0C2DA000D78D80 /* SRigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02F6D90F1E0C2DA000D78D80 /* SRigidBody.cpp */; };
+		02F6D9141E0C6E9500D78D80 /* SCharacterController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02F6D9121E0C6E9500D78D80 /* SCharacterController.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -245,6 +246,8 @@
 		02F6D9001E0C16F100D78D80 /* libSimulationController.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSimulationController.a; path = PhysX/lib/libSimulationController.a; sourceTree = "<group>"; };
 		02F6D90F1E0C2DA000D78D80 /* SRigidBody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRigidBody.cpp; sourceTree = "<group>"; };
 		02F6D9101E0C2DA000D78D80 /* SRigidBody.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRigidBody.hpp; sourceTree = "<group>"; };
+		02F6D9121E0C6E9500D78D80 /* SCharacterController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SCharacterController.cpp; sourceTree = "<group>"; };
+		02F6D9131E0C6E9500D78D80 /* SCharacterController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SCharacterController.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -549,6 +552,8 @@
 				02731C171E01A8B000A63389 /* SPhysicsSystem.hpp */,
 				02F6D90F1E0C2DA000D78D80 /* SRigidBody.cpp */,
 				02F6D9101E0C2DA000D78D80 /* SRigidBody.hpp */,
+				02F6D9121E0C6E9500D78D80 /* SCharacterController.cpp */,
+				02F6D9131E0C6E9500D78D80 /* SCharacterController.hpp */,
 			);
 			name = Physics;
 			sourceTree = "<group>";
@@ -803,6 +808,7 @@
 				023EFA7C1DFFA207003E20F5 /* SRenderSystem.cpp in Sources */,
 				0201C7851DEF4B0F00AA0B24 /* SSoundSystem.cpp in Sources */,
 				0234DD531E06F1D700E1ADE8 /* SObject.cpp in Sources */,
+				02F6D9141E0C6E9500D78D80 /* SCharacterController.cpp in Sources */,
 				025903301D77940400EA6372 /* main.cpp in Sources */,
 				0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */,
 				0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */,

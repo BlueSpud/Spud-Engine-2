@@ -28,6 +28,7 @@ class SPhysicsGraph;
 
 struct SEventPhysicsUpdate : public SEvent {
 
+    double time_elapsed;
     double interpolation;
 
 };
@@ -35,6 +36,8 @@ struct SEventPhysicsUpdate : public SEvent {
 /******************************************************************************
  *  Definition for physics system                                             *
  ******************************************************************************/
+
+#define PHYSICS_G 9.81f
 
 class SPhysicsSystem : public SSubsystem {
     
@@ -77,10 +80,14 @@ class SPhysicsGraph {
         void addActor(physx::PxActor* actor);
         void removeActor(physx::PxActor* actor);
     
+        physx::PxController* createCharacterController(const physx::PxControllerDesc& description);
+    
     private:
     
         physx::PxScene* physx_scene;
         physx::PxDefaultCpuDispatcher* cpu_dispatcher;
+    
+        physx::PxControllerManager* character_manager;
     
 };
 
