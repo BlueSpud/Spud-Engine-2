@@ -47,6 +47,9 @@ class SPhysicsSystem : public SSubsystem {
     
         static void updatePhysics(double time_elapsed, double interpolation, int max_updates, double time_per_tick);
     
+        static physx::PxTransform STransformToPxTransform(const STransform& transform, double interpolation);
+        static void PxTransformToSTransform(const physx::PxTransform& physx_transform, STransform& transform);
+    
         static SPhysicsGraph* current_physics_graph;
     
     private:

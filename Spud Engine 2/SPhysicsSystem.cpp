@@ -65,6 +65,36 @@ void SPhysicsSystem::updatePhysics(double time_elapsed, double interpolation, in
     
 }
 
+physx::PxTransform SPhysicsSystem::STransformToPxTransform(const STransform& transform, double interpolation) {
+    
+    // Create a quaternian to represent rotation
+    glm::quat rotation;
+    rotation = glm::rotate(rotation, transform.rotation.z + transform.rotation_velocity.z * (float)interpolation, z_axis);
+    rotation = glm::rotate(rotation, transform.rotation.y + transform.rotation_velocity.y * (float)interpolation, y_axis);
+    rotation = glm::rotate(rotation, transform.rotation.x + transform.rotation_velocity.x * (float)interpolation, x_axis);
+    
+    // Create a PhysX transform
+    return physx::PxTransform(physx::PxVec3(transform.translation.x + transform.translation_velocity.x * (float)interpolation,
+                                            transform.translation.y + transform.translation_velocity.y * (float)interpolation,
+                                            transform.translation.z + transform.translation_velocity.z * (float)interpolation),
+                              physx::PxQuat(-rotation.z, rotation.y, -rotation.x, rotation.w));
+    
+}
+
+void SPhysicsSystem::PxTransformToSTransform(const physx::PxTransform& physx_transform, STransform& transform) {
+    
+    // Get rotation, set velocity to 0
+    physx::PxQuat rotation = physx_transform.q;
+    transform.rotation = glm::eulerAngles(glm::quat(-rotation.z, rotation.y, -rotation.x, rotation.w));
+    transform.rotation_velocity = glm::vec3(0.0);
+    
+    // Get translation, set velocity to 0
+    physx::PxVec3 translation = physx_transform.p;
+    transform.translation = glm::vec3(translation.x, translation.y, translation.z);
+    transform.translation_velocity = glm::vec3(0.0);
+    
+}
+
 /******************************************************************************
  *  Functions for physics graph                                               *
  ******************************************************************************/

@@ -23,15 +23,14 @@
 #include "SSoundSystem.hpp"
 #include "SSoundEmitter.hpp"
 
+#include "SRigidBody.hpp"
+
 double speed = 0.0;
 double speed_x = 0.0;
 
 SCamera camera;
 SLight* light;
 SSoundEmitter* sound_emitter;
-
-physx::PxRigidDynamic* rigid_body;
-SStaticMeshInstance* instance;
 
 void moveLight(int key) {
     
@@ -146,14 +145,6 @@ void update(const SEvent& event) {
     
 }
 
-void physics(const SEvent& event) {
-    
-    physx::PxTransform transform = rigid_body->getGlobalPose();
-    physx::PxVec3 position = transform.p;
-    instance->transform.translation = glm::vec3(position.x, position.y, position.z);
-    
-}
-
 int main(int argc, char* argv[]) {
     
     // Set verbosity level
@@ -207,30 +198,37 @@ int main(int argc, char* argv[]) {
     physx::PxMaterial* material = PxGetPhysics().createMaterial(0.5f, 0.5f, 0.6f);
     physx::PxRigidStatic* ground = PxCreatePlane(PxGetPhysics(), physx::PxPlane(0,1,0,0), *material);
     
-    physx::PxTransform transform = physx::PxTransform(physx::PxVec3(0.0, 10.0, 0.0));
-    physx::PxShape* shape = PxGetPhysics().createShape(physx::PxSphereGeometry(1.0), *material);
-    
-    rigid_body = PxGetPhysics().createRigidDynamic(transform);
-    rigid_body->attachShape(*shape);
-    physx::PxRigidBodyExt::updateMassAndInertia(*rigid_body, 10.0f);
-    
-    instance = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
-    scene_graph->addObject(instance);
-    
-    scene_graph->addObject(instance);
-    
     scene_graph->physics_graph->addActor(ground);
-    scene_graph->physics_graph->addActor(rigid_body);
-    
-    shape->release();
-    material->release();
-    
-    // Access the mesh
-    //SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/house.smdl"));
-    //scene_graph->addObject(mesh);
     
     SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
     scene_graph->addObject(mesh);
+    
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
+    mesh->transform.translation.y = 10.0;
+    mesh->transform.rotation_velocity.y = M_PI / 10.0;
+    scene_graph->addObject(mesh);
+    
+    SRigidBody* rigid_body = new SRigidBody(0.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
+    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
+    mesh->transform.translation.y = 13.0;
+    mesh->transform.translation.x = 0.5;
+    mesh->transform.translation.z = 0.5;
+    scene_graph->addObject(mesh);
+    
+    rigid_body = new SRigidBody(10.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
+    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    
+    
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
+    mesh->transform.translation.y = 15.5;
+    mesh->transform.translation.x = -0.5;
+    mesh->transform.translation.z = 0.5;
+    scene_graph->addObject(mesh);
+    
+    rigid_body = new SRigidBody(10.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
+    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
@@ -333,7 +331,6 @@ int main(int argc, char* argv[]) {
     
     SEventListener event_listener;
     event_listener.listenToEvent(EVENT_TICK, &update);
-    event_listener.listenToEvent(EVENT_PHYSICS_POSTUPDATE, &physics);
     
     // END TEMP CODE
     

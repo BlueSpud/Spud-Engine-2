@@ -84,6 +84,7 @@
 		02F6D90C1E0C16F100D78D80 /* libPxTask.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8FE1E0C16F100D78D80 /* libPxTask.a */; };
 		02F6D90D1E0C16F100D78D80 /* libSceneQuery.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8FF1E0C16F100D78D80 /* libSceneQuery.a */; };
 		02F6D90E1E0C16F100D78D80 /* libSimulationController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D9001E0C16F100D78D80 /* libSimulationController.a */; };
+		02F6D9111E0C2DA000D78D80 /* SRigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02F6D90F1E0C2DA000D78D80 /* SRigidBody.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -242,6 +243,8 @@
 		02F6D8FE1E0C16F100D78D80 /* libPxTask.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPxTask.a; path = PhysX/lib/libPxTask.a; sourceTree = "<group>"; };
 		02F6D8FF1E0C16F100D78D80 /* libSceneQuery.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSceneQuery.a; path = PhysX/lib/libSceneQuery.a; sourceTree = "<group>"; };
 		02F6D9001E0C16F100D78D80 /* libSimulationController.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSimulationController.a; path = PhysX/lib/libSimulationController.a; sourceTree = "<group>"; };
+		02F6D90F1E0C2DA000D78D80 /* SRigidBody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRigidBody.cpp; sourceTree = "<group>"; };
+		02F6D9101E0C2DA000D78D80 /* SRigidBody.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRigidBody.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -544,6 +547,8 @@
 			children = (
 				02731C161E01A8B000A63389 /* SPhysicsSystem.cpp */,
 				02731C171E01A8B000A63389 /* SPhysicsSystem.hpp */,
+				02F6D90F1E0C2DA000D78D80 /* SRigidBody.cpp */,
+				02F6D9101E0C2DA000D78D80 /* SRigidBody.hpp */,
 			);
 			name = Physics;
 			sourceTree = "<group>";
@@ -786,6 +791,7 @@
 				022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */,
 				02E7A7751DD2325E00F3164F /* SActor.cpp in Sources */,
 				02A2CC071DFF8F3500EA2F4B /* SMainLoop.cpp in Sources */,
+				02F6D9111E0C2DA000D78D80 /* SRigidBody.cpp in Sources */,
 				02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */,
 				0228B8841D7A779200596526 /* SStaticMesh.cpp in Sources */,
 				02C35AE01DDE2E26007C361C /* SUI.cpp in Sources */,
