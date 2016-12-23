@@ -20,6 +20,10 @@ SStaticMeshInstance::SStaticMeshInstance(SStaticMesh* _parent_mesh) {
     // Copy over the material
     materials = parent_mesh->materials;
     
+    // Check if there is a colliison mesh for the parent
+    if (parent_mesh->collision_geometry)
+        rigid_body = new SRigidBody(0.0, parent_mesh->collision_geometry, PxGetPhysics().createMaterial(0.5, 0.5, 0.1), &transform);
+    
 }
 
 void SStaticMeshInstance::render(bool render_material, double interpolation) {
@@ -47,11 +51,17 @@ void SStaticMeshInstance::setMaterial(SMaterial* new_material, int material_doma
 
 void SStaticMeshInstance::onMoveToSceneGraph(SPhysicsGraph* physics_graph) {
     
+    // Add the rigidbody to the world
+    if (rigid_body)
+        rigid_body->addToPhysicsGraph(physics_graph);
     
 }
 
 void SStaticMeshInstance::onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) {
     
+    // Remove the rigidbody to the world
+    if (rigid_body)
+        rigid_body->removeFromPhysicsGraph(physics_graph);
     
 }
 

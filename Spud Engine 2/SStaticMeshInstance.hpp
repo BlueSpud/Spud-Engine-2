@@ -12,6 +12,8 @@
 #include "SStaticMesh.hpp"
 #include "SObject.hpp"
 
+#include "SRigidBody.hpp"
+
 /******************************************************************************
  *  Definition for static mesh instance                                       *
  ******************************************************************************/
@@ -42,6 +44,8 @@ class SStaticMeshInstance : public SResource, public SObject {
         SStaticMesh* parent_mesh;
     
         std::vector<SMaterial*> materials;
+    
+        SRigidBody* rigid_body = nullptr;
     
 };
 

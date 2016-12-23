@@ -14,6 +14,7 @@ physx::PxFoundation* SPhysicsSystem::physx_foundation;
 physx::PxPhysics* SPhysicsSystem::physx_SDK;
 physx::PxDefaultErrorCallback SPhysicsSystem::physx_error_callback;
 physx::PxDefaultAllocator SPhysicsSystem::physx_allocator;
+physx::PxCooking* SPhysicsSystem::physx_cooking;
 
 /******************************************************************************
  *  Functions for physics system                                              *
@@ -26,6 +27,7 @@ void SPhysicsSystem::startup() {
     // Open up PhysX
     physx_foundation = PxCreateFoundation(PX_PHYSICS_VERSION, physx_allocator, physx_error_callback);
     physx_SDK = PxCreatePhysics(PX_PHYSICS_VERSION, *physx_foundation, physx::PxTolerancesScale());
+    physx_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *physx_foundation, physx::PxCookingParams(physx::PxTolerancesScale()));
 
 }
 
@@ -38,6 +40,7 @@ void SPhysicsSystem::shutdown() {
         delete current_physics_graph;
     
     // Close down PhysX
+    physx_cooking->release();
     physx_SDK->release();
     physx_foundation->release();
 
@@ -95,6 +98,8 @@ void SPhysicsSystem::PxTransformToSTransform(const physx::PxTransform& physx_tra
     transform.translation_velocity = glm::vec3(0.0);
     
 }
+
+physx::PxCooking* SPhysicsSystem::getCooking() { return physx_cooking; }
 
 /******************************************************************************
  *  Functions for physics graph                                               *

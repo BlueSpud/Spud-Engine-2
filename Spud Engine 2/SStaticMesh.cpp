@@ -145,44 +145,50 @@ bool SStaticMesh::load(const SPath& path) {
             
             if (token == COLLISION_TOKEN) {
                 
-                // Create the mesh
-                btTriangleMesh* collision_mesh = new btTriangleMesh();
-                collision_shape = new btConvexHullShape();
+                // Read the number of verticies
+                unsigned int collision_vertex_count;
+                file->read((char*)&collision_vertex_count, sizeof(unsigned int));
                 
-                // Get the size of the collision mesh
-                unsigned int collision_mesh_size;
-                file->read((char*)&collision_mesh_size, sizeof(unsigned int));
+                physx::PxVec3* collision_verticies = new physx::PxVec3[collision_vertex_count];
                 
-                for (int i = 0; i < collision_mesh_size; i++) {
+                for (int i = 0; i < collision_vertex_count; i++)
+                    file->read(&collision_verticies[i], sizeof(physx::PxVec3));
+                
+                // Read the indicies
+                unsigned int collision_index_count;
+                file->read((char*)&collision_index_count, sizeof(unsigned int));
+                
+                physx::PxU32* collision_indicies = new physx::PxU32[collision_index_count * 3];
+                
+                for (int i = 0; i < collision_index_count * 3; i++)
+                    file->read(&collision_indicies[i], sizeof(physx::PxU32));
+                
+                // Create the mesh for PhysX
+                physx::PxTriangleMeshDesc mesh_desc;
+                mesh_desc.points.count = collision_vertex_count;
+                mesh_desc.points.data = collision_verticies;
+                mesh_desc.points.stride = sizeof(physx::PxVec3);
+                
+                mesh_desc.triangles.count = collision_index_count;
+                mesh_desc.triangles.data = collision_indicies;
+                mesh_desc.triangles.stride = sizeof(physx::PxU32) * 3;
+                
+                // Cook the mesh
+                physx::PxDefaultMemoryOutputStream cooked_buffer;
+                if (SPhysicsSystem::getCooking()->cookTriangleMesh(mesh_desc, cooked_buffer)) {
                     
-                    // Read a triangle
-                    glm::vec3 vert0, vert1, vert2;
-                    file->read(&vert0, sizeof(glm::vec3));
-                    file->read(&vert1, sizeof(glm::vec3));
-                    file->read(&vert2, sizeof(glm::vec3));
+                    // Cooking success, create the final meshs
+                    physx::PxDefaultMemoryInputData read_buffer = physx::PxDefaultMemoryInputData(cooked_buffer.getData(),
+                                                                                                  cooked_buffer.getSize());
                     
-                    // Add the triangle to the collision mesh
-                    collision_shape->addPoint(btVector3(vert0.x, vert0.y, vert0.z));
-                    collision_shape->addPoint(btVector3(vert1.x, vert1.y, vert1.z));
-                    collision_shape->addPoint(btVector3(vert2.x, vert2.y, vert2.z));
-                    
-                    collision_mesh->addTriangle(btVector3(vert0.x, vert0.y, vert0.z),
-                                                btVector3(vert1.x, vert1.y, vert1.z),
-                                                btVector3(vert2.x, vert2.y, vert2.z));
+                    collision_mesh = PxGetPhysics().createTriangleMesh(read_buffer);
+                    collision_geometry = new physx::PxTriangleMeshGeometry(collision_mesh);
                     
                 }
                 
-                // Simplify the hull
-                btShapeHull* simplified_hull = new btShapeHull(collision_shape);
-                btScalar margin = collision_shape->getMargin();
-                simplified_hull->buildHull(margin);
-                
-                delete collision_shape;
-                collision_shape = new btConvexHullShape((btScalar*)simplified_hull->getVertexPointer(), simplified_hull->numVertices());
-                
-                // Create a complex mesh
-                static_collision_shape = new btBvhTriangleMeshShape(collision_mesh, false);
-                //delete collision_mesh;
+                // Clean up
+                delete [] collision_verticies;
+                delete [] collision_indicies;
                 
             }
             
@@ -224,7 +230,7 @@ void SStaticMesh::unload() {
         
     }
     
-    delete collision_shape;
+    delete collision_geometry;
 
 }
 

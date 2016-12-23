@@ -55,12 +55,15 @@ class SPhysicsSystem : public SSubsystem {
     
         static SPhysicsGraph* current_physics_graph;
     
+        static physx::PxCooking* getCooking();
+    
     private:
     
         static physx::PxFoundation* physx_foundation;
         static physx::PxPhysics* physx_SDK;
         static physx::PxDefaultErrorCallback physx_error_callback;
         static physx::PxDefaultAllocator physx_allocator;
+        static physx::PxCooking* physx_cooking;
     
 };
 

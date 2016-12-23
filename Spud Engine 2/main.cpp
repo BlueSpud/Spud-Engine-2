@@ -210,27 +210,31 @@ int main(int argc, char* argv[]) {
     mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
     scene_graph->addObject(mesh);
     
-    SRigidBody* rigid_body = new SRigidBody(0.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
-    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
+    scene_graph->addObject(mesh);
+
+    
+    //SRigidBody* rigid_body = new SRigidBody(0.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
+    //rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
     mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
     mesh->transform.translation.y = 13.0;
-    mesh->transform.translation.x = 0.5;
-    mesh->transform.translation.z = 0.5;
+//    mesh->transform.translation.x = 0.5;
+//    mesh->transform.translation.z = 0.5;
     scene_graph->addObject(mesh);
     
-    rigid_body = new SRigidBody(100.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
+    SRigidBody* rigid_body = new SRigidBody(100.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
     rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
     
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
-    mesh->transform.translation.y = 15.5;
-    mesh->transform.translation.x = -0.5;
-    mesh->transform.translation.z = 0.5;
-    scene_graph->addObject(mesh);
-    
-    rigid_body = new SRigidBody(100.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
-    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+//    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
+//    mesh->transform.translation.y = 15.5;
+//    mesh->transform.translation.x = -0.5;
+//    mesh->transform.translation.z = 0.5;
+//    scene_graph->addObject(mesh);
+//    
+//    rigid_body = new SRigidBody(100.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
+//    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
     controller = new SCharacterController(scene_graph->physics_graph, material, &camera.transform);
     

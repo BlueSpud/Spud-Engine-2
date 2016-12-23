@@ -11,7 +11,7 @@
 
 #include "SPhysicsSystem.hpp"
 
-#define SQRT_2G sqrt(2 * PHYSICS_G)
+#define SQRT_2G sqrt(2.0f * PHYSICS_G)
 
 /******************************************************************************
  *  Definition for character controller                                       *
