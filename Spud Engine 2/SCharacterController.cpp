@@ -27,11 +27,15 @@ SCharacterController::SCharacterController(SPhysicsGraph* physics_graph, physx::
     
     // Stepping information
     controller_desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
+    controller_desc.nonWalkableMode = physx::PxControllerNonWalkableMode::ePREVENT_CLIMBING_AND_FORCE_SLIDING;
     controller_desc.slopeLimit = cosf(M_PI / 4.0);
     controller_desc.stepOffset = 0.2;
     
     controller_desc.upDirection = physx::PxVec3(0.0, 1.0, 0.0);
     controller_desc.material = material;
+    
+    // Set the callback to recieve collision
+    controller_desc.reportCallback = this;
     
     // Create the controller
     physx_controller = physics_graph->createCharacterController(controller_desc);
@@ -46,21 +50,38 @@ void SCharacterController::prePhysicsUpdate(const SEvent& event) {
     
     const SEventPhysicsUpdate& event_p = (const SEventPhysicsUpdate&)event;
     
+    physx::PxVec3 movement_direction = walking_direction;
+    
+    // If we're on the ground we change the movement vector along the normal
+    // Check the normal threshold to make sure we can actually climb it
+    float dot = physx_controller->getUpDirection().dot(floor_normal);
+    if (isOnGround() && acos(dot) < M_PI / 3.0) {
+        
+        // Do some math to get a rotation matrix
+        physx::PxQuat quat;
+        physx::PxVec3 cross_product = physx_controller->getUpDirection().cross(floor_normal);
+        quat.x = cross_product.x;
+        quat.y = cross_product.y;
+        quat.z = cross_product.z;
+        
+        // We can use 1.0 because we normalize the vectors
+        quat.w = 1.0 + dot;
+        quat.normalize();
+        
+        // Rotate it alone the normal
+        physx::PxMat33 rotation_matrix = physx::PxMat33(quat);
+        movement_direction = rotation_matrix * movement_direction;
+        
+    }
+    
     // Set the walking direction to the y-velocity
-    walking_direction.y = y_velocity;
+    movement_direction.y = movement_direction.y + y_velocity;
     
     // Update the controller walking
-    physx_controller->move(walking_direction * event_p.time_elapsed, 0.01f, event_p.time_elapsed, physx::PxControllerFilters());
-    
-    // Get the stats of the character
-    physx::PxControllerState controller_state;
-    physx_controller->getState(controller_state);
-    
-    // Return if it is on the ground
-    is_on_ground = (controller_state.collisionFlags & physx::PxControllerCollisionFlag::eCOLLISION_DOWN) != 0;
+    physx_controller->move(movement_direction * event_p.time_elapsed, 0.01f, event_p.time_elapsed, physx::PxControllerFilters());
     
     // Calculate new y-velocity
-    if (!is_on_ground)
+    if (!isOnGround())
         y_velocity = y_velocity - PHYSICS_G * event_p.time_elapsed;
     else y_velocity = 0.0;
     
@@ -75,9 +96,36 @@ void SCharacterController::postPhysicsUpdate(const SEvent& event) {
 
 }
 
-void SCharacterController::setMoveDirection(glm::vec3 direction) { walking_direction = physx::PxVec3(direction.x, -PHYSICS_G, direction.z); }
+void SCharacterController::onShapeHit(const physx::PxControllerShapeHit& hit) {
+    
+    // If the motion direction was the up direction, take the floor normal
+    if (hit.dir == -physx_controller->getUpDirection())
+        floor_normal = hit.worldNormal.getNormalized();
+    
+}
 
-bool SCharacterController::isOnGround() { return is_on_ground; }
+void SCharacterController::onControllerHit(const physx::PxControllersHit& hit) { /* intentionally blank */ }
+void SCharacterController::onObstacleHit(const physx::PxControllerObstacleHit& hit) { /* intentionally blank */ }
+
+void SCharacterController::setMoveDirection(glm::vec3 direction) { walking_direction = physx::PxVec3(direction.x, 0.0, direction.z); }
+
+bool SCharacterController::isOnGround() {
+    
+    // Move the capsule down and see it it ended up in the same position
+    physx::PxExtendedVec3 last_position = physx_controller->getPosition();
+    physx_controller->move(physx::PxVec3(0.0, -PHYSICS_G * 100.0, 0.0), 0.01f, 1.0, physx::PxControllerFilters());
+    float delta_y = physx_controller->getPosition().y - last_position.y;
+    
+    if (delta_y < -CHARACTER_VELOCITY_EPSILON) {
+        
+        // Reset position
+        physx_controller->setPosition(last_position);
+        return false;
+        
+    }
+    
+    return true;
+}
 
 void SCharacterController::jump() {
     
