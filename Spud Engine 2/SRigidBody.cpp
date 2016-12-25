@@ -2,7 +2,7 @@
 //  SRigidBody.cpp
 //  Spud Engine 2
 //
-//  Created by Logan Pazol on 12/17/16.
+//  Created by Logan Pazol on 12/22/16.
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
@@ -12,28 +12,30 @@
  *  Functions for rigid body                                                  *
  ******************************************************************************/
 
-SRigidBody::SRigidBody(float _mass, btCollisionShape* _collision_shape, STransform* _parent_transform) {
+SRigidBody::SRigidBody(float _mass, physx::PxGeometry* _collision_geometry, physx::PxMaterial* _material, STransform* _parent_transform) {
     
-    // Create a new motion state, using the parents transform
     mass = _mass;
-    collision_shape = _collision_shape;
     parent_transform = _parent_transform;
+    physx_material = _material;
     
-    // Make an empty transform
-    btTransform bullet_transform;
-    bullet_transform.setIdentity();
+    // Create the PhysX rigid body
+    physx_shape = PxGetPhysics().createShape(*_collision_geometry, *physx_material);
     
-    // Calculate the inertia
-    btVector3 inertia;
-    collision_shape->calculateLocalInertia(mass, inertia);
+    // Create a rigid body, static or dynamic, with an identity transform
+    physx::PxTransform transform;
     
-    btMotionState* motion_state = new btDefaultMotionState(bullet_transform);
-    btRigidBody::btRigidBodyConstructionInfo info = btRigidBody::btRigidBodyConstructionInfo(mass, motion_state, collision_shape, inertia);
+    if (mass) {
+        
+        // Dynamic needs to be cast
+        rigid_body = PxGetPhysics().createRigidDynamic(transform);
+        physx::PxRigidBodyExt::updateMassAndInertia(*(physx::PxRigidDynamic*)rigid_body, mass);
+        
+    } else rigid_body = PxGetPhysics().createRigidStatic(transform);
     
-    // Create the bullet rigid body
-    bullet_rigid_body = new btRigidBody(info);
+    // Attatch the shape and calculate inertia
+    rigid_body->attachShape(*physx_shape);
     
-    // Move the rigidbody to the parent
+    // Move the rigid body to the parent
     moveRigidBodyToParent(0.0);
     
     // Have the event listener listen to the physics ticks
@@ -44,71 +46,41 @@ SRigidBody::SRigidBody(float _mass, btCollisionShape* _collision_shape, STransfo
 
 SRigidBody::~SRigidBody() {
     
-    // Clean up
-    delete bullet_rigid_body;
-    delete collision_shape;
+    // Unload the assets
+    rigid_body->release();
+    physx_material->release();
+    physx_shape->release();
     
 }
 
 void SRigidBody::prePhysicsUpdate(const SEvent& event) {
     
-    // Get the event so we can get interpolation
-    const SEventPhysicsUpdate& event_p = (const SEventPhysicsUpdate&)event;
-    
-    // If we dont have a mass, that means that the body is static and therfore needs to take on the parent transform
-    if (!mass)
+    // Update the static rigid body
+    if (!mass) {
+        
+        // Move it to the parent transform
+        const SEventPhysicsUpdate& event_p = (const SEventPhysicsUpdate&)event;
         moveRigidBodyToParent(event_p.interpolation);
-    
-}
-
-void SRigidBody::postPhysicsUpdate(const SEvent& event) {
-    
-    // If we have a mass, that means that the body is moving and therfore needs to change the parent transform
-    if (mass) {
-        
-        btTransform bullet_transform;
-        bullet_rigid_body->getMotionState()->getWorldTransform(bullet_transform);
-        
-        SPhysicsSystem::bulletTransformToSTransform(bullet_transform, *parent_transform);
-        
-        // Zero the velocities because bullet handles interpolation for us
-        parent_transform->translation_velocity = glm::vec3(0.0);
-        parent_transform->rotation_velocity = glm::vec3(0.0);
         
     }
     
 }
 
-void SRigidBody::addToPhysicsGraph(SPhysicsGraph* physics_graph) {
+void SRigidBody::postPhysicsUpdate(const SEvent& event) {
     
-    // Add the bullet body to the physics graph
-    physics_graph->addRigidBody(bullet_rigid_body);
-
-}
-
-void SRigidBody::removeFromPhysicsGraph(SPhysicsGraph* physics_graph) {
-
-    // Add the bullet body to the physics graph
-    physics_graph->addRigidBody(bullet_rigid_body);
+    // Update the parent transform for the dynamic rigid body
+    if (mass)
+        SPhysicsSystem::PxTransformToSTransform(rigid_body->getGlobalPose(), *parent_transform);
     
 }
 
 void SRigidBody::moveRigidBodyToParent(double interpolation) {
     
-    // Create a new motion state with the new transform
-    btMotionState* new_motion_state = new btDefaultMotionState(SPhysicsSystem::STransformToBulletTransform(*parent_transform, interpolation));
-    bullet_rigid_body->setMotionState(new_motion_state);
+    // Create a new transform for the body
+    physx::PxTransform new_transform = SPhysicsSystem::STransformToPxTransform(*parent_transform, interpolation);
+    rigid_body->setGlobalPose(new_transform);
     
 }
 
-void SRigidBody::setMass(float _mass) {
-    
-    mass = _mass;
-    
-    // Calculate the new inertia
-    btVector3 inertia;
-    collision_shape->calculateLocalInertia(mass, inertia);
-    
-    bullet_rigid_body->setMassProps(mass, inertia);
-    
-}
+void SRigidBody::addToPhysicsGraph(SPhysicsGraph* physics_graph) { physics_graph->addActor(rigid_body); }
+void SRigidBody::removeFromPhysicsGraph(SPhysicsGraph* physics_graph) { physics_graph->removeActor(rigid_body); }

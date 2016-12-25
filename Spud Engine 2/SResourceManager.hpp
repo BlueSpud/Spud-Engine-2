@@ -81,6 +81,14 @@ class SResourceManager : public SSubsystem {
         static bool registerAllocatorForExtension(std::string extension, SResource*(*allocator)());
         static SResource* getResource(const SPath& resource_path);
     
+        template <class T>
+        static T* getResourceCast(const SPath& resource_path) {
+        
+            SResource* resource = getResource(resource_path);
+            return (T*)resource;
+        
+        }
+    
     private:
     
         static long getModifiedTimeForFileAtPath(const char* path);

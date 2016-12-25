@@ -32,8 +32,6 @@ class SStaticMeshInstance : public SResource, public SObject {
         virtual void onMoveToSceneGraph(SPhysicsGraph* physics_graph);
         virtual void onRemoveFromSceneGraph(SPhysicsGraph* physics_graph);
     
-        void setPhysicsEnabled(bool physics_enabled);
-    
     protected:
     
         // FUNCTIONS SHOULD NEVER BE CALLED

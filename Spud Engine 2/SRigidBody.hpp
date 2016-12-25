@@ -2,7 +2,7 @@
 //  SRigidBody.hpp
 //  Spud Engine 2
 //
-//  Created by Logan Pazol on 12/17/16.
+//  Created by Logan Pazol on 12/22/16.
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
@@ -19,7 +19,7 @@ class SRigidBody {
     
     public:
     
-        SRigidBody(float _mass, btCollisionShape* _collision_shape, STransform* _parent_transform);
+        SRigidBody(float _mass, physx::PxGeometry* _collision_geometry, physx::PxMaterial* _material, STransform* _parent_transform);
         ~SRigidBody();
     
         virtual void prePhysicsUpdate(const SEvent& event);
@@ -28,22 +28,18 @@ class SRigidBody {
         void addToPhysicsGraph(SPhysicsGraph* physics_graph);
         void removeFromPhysicsGraph(SPhysicsGraph* physics_graph);
     
+    private:
+    
         void moveRigidBodyToParent(double interpolation);
-    
-        void setMass(float _mass);
-    
-        bool ignore_rotation = false;
-    
-    protected:
     
         float mass;
         STransform* parent_transform;
     
-        btRigidBody* bullet_rigid_body;
-        btCollisionShape* collision_shape;
+        physx::PxRigidActor* rigid_body;
+        physx::PxShape* physx_shape;
+        physx::PxMaterial* physx_material;
     
         SEventListener event_listener;
-    
     
 };
 

@@ -15,20 +15,15 @@
 		0202413C1D7C98D80050E9D3 /* SEventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0202413A1D7C98D80050E9D3 /* SEventSystem.cpp */; };
 		0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0202413D1D7C99130050E9D3 /* libboost_signals.a */; };
 		02064B0D1D9D663000D49D4A /* SLightGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02064B0B1D9D663000D49D4A /* SLightGraph.cpp */; };
-		0219249E1E05972E003D0CB3 /* SRigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0219249C1E05972E003D0CB3 /* SRigidBody.cpp */; };
 		021B32B91D9C4B820032001D /* SLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 021B32B71D9C4B820032001D /* SLight.cpp */; };
 		0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B87E1D7A6BB100596526 /* SResourceManager.cpp */; };
 		0228B8841D7A779200596526 /* SStaticMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B8821D7A779200596526 /* SStaticMesh.cpp */; };
 		022B19C41D8DD533004D9B18 /* SHotLoadSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022B19C21D8DD533004D9B18 /* SHotLoadSystem.cpp */; };
 		022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */; };
-		0231F7C41E07860B000854A8 /* libBulletCollision_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0231F7C11E07860B000854A8 /* libBulletCollision_gmake_x64_release.a */; };
-		0231F7C51E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0231F7C21E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a */; };
-		0231F7C61E07860B000854A8 /* libLinearMath_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0231F7C31E07860B000854A8 /* libLinearMath_gmake_x64_release.a */; };
 		02328BEF1DD185E70083B0BB /* SStaticMeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */; };
 		0234DD531E06F1D700E1ADE8 /* SObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0234DD521E06F1D700E1ADE8 /* SObject.cpp */; };
 		0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0236A34C1D7D316D00DB2DBA /* SLog.cpp */; };
 		023EFA7C1DFFA207003E20F5 /* SRenderSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */; };
-		02436D871E070A6F0094D536 /* SPhysicsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02436D851E070A6F0094D536 /* SPhysicsController.cpp */; };
 		0251FC3C1D7DC57300B3E63E /* STime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3A1D7DC57300B3E63E /* STime.cpp */; };
 		0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0251FC3E1D7DC64300B3E63E /* SGL.cpp */; };
 		025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 025536521D8993B5003D04EE /* SCubeMap.cpp */; };
@@ -72,6 +67,22 @@
 		02E7FC831DB545D600955052 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E7FC821DB545D600955052 /* libfreeimage.a */; };
 		02F547B31DD271EB005DAB0D /* SStaticMeshComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02F547B11DD271EB005DAB0D /* SStaticMeshComponent.cpp */; };
 		02F669331DEC7ADA0042F8D6 /* SUIButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02F669311DEC7ADA0042F8D6 /* SUIButton.cpp */; };
+		02F6D9011E0C16F100D78D80 /* libLowLevel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8F31E0C16F100D78D80 /* libLowLevel.a */; };
+		02F6D9021E0C16F100D78D80 /* libLowLevelCloth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8F41E0C16F100D78D80 /* libLowLevelCloth.a */; };
+		02F6D9031E0C16F100D78D80 /* libPhysX3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8F51E0C16F100D78D80 /* libPhysX3.a */; };
+		02F6D9041E0C16F100D78D80 /* libPhysX3CharacterKinematic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8F61E0C16F100D78D80 /* libPhysX3CharacterKinematic.a */; };
+		02F6D9051E0C16F100D78D80 /* libPhysX3Common.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8F71E0C16F100D78D80 /* libPhysX3Common.a */; };
+		02F6D9061E0C16F100D78D80 /* libPhysX3Cooking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8F81E0C16F100D78D80 /* libPhysX3Cooking.a */; };
+		02F6D9071E0C16F100D78D80 /* libPhysX3Extensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8F91E0C16F100D78D80 /* libPhysX3Extensions.a */; };
+		02F6D9081E0C16F100D78D80 /* libPhysX3Vehicle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8FA1E0C16F100D78D80 /* libPhysX3Vehicle.a */; };
+		02F6D9091E0C16F100D78D80 /* libPhysXProfileSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8FB1E0C16F100D78D80 /* libPhysXProfileSDK.a */; };
+		02F6D90A1E0C16F100D78D80 /* libPhysXVisualDebuggerSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8FC1E0C16F100D78D80 /* libPhysXVisualDebuggerSDK.a */; };
+		02F6D90B1E0C16F100D78D80 /* libPvdRuntime.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8FD1E0C16F100D78D80 /* libPvdRuntime.a */; };
+		02F6D90C1E0C16F100D78D80 /* libPxTask.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8FE1E0C16F100D78D80 /* libPxTask.a */; };
+		02F6D90D1E0C16F100D78D80 /* libSceneQuery.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8FF1E0C16F100D78D80 /* libSceneQuery.a */; };
+		02F6D90E1E0C16F100D78D80 /* libSimulationController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D9001E0C16F100D78D80 /* libSimulationController.a */; };
+		02F6D9111E0C2DA000D78D80 /* SRigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02F6D90F1E0C2DA000D78D80 /* SRigidBody.cpp */; };
+		02F6D9141E0C6E9500D78D80 /* SCharacterController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02F6D9121E0C6E9500D78D80 /* SCharacterController.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -118,8 +129,6 @@
 		020604711DB7982800B6268F /* Shader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shader; path = Resources/Shader; sourceTree = "<group>"; };
 		02064B0B1D9D663000D49D4A /* SLightGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLightGraph.cpp; sourceTree = "<group>"; };
 		02064B0C1D9D663000D49D4A /* SLightGraph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLightGraph.hpp; sourceTree = "<group>"; };
-		0219249C1E05972E003D0CB3 /* SRigidBody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRigidBody.cpp; sourceTree = "<group>"; };
-		0219249D1E05972E003D0CB3 /* SRigidBody.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRigidBody.hpp; sourceTree = "<group>"; };
 		021B32B71D9C4B820032001D /* SLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLight.cpp; sourceTree = "<group>"; };
 		021B32B81D9C4B820032001D /* SLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLight.hpp; sourceTree = "<group>"; };
 		0228B87E1D7A6BB100596526 /* SResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SResourceManager.cpp; sourceTree = "<group>"; };
@@ -131,9 +140,6 @@
 		022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFileSystem.cpp; sourceTree = "<group>"; };
 		022ED1571D78FA3100DC1ECD /* SFileSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFileSystem.hpp; sourceTree = "<group>"; };
 		022ED15B1D79165A00DC1ECD /* SSubsystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSubsystem.hpp; sourceTree = "<group>"; };
-		0231F7C11E07860B000854A8 /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
-		0231F7C21E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
-		0231F7C31E07860B000854A8 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
 		02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SStaticMeshInstance.cpp; sourceTree = "<group>"; };
 		02328BEE1DD185E70083B0BB /* SStaticMeshInstance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMeshInstance.hpp; sourceTree = "<group>"; };
 		0234DD521E06F1D700E1ADE8 /* SObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SObject.cpp; sourceTree = "<group>"; };
@@ -141,8 +147,6 @@
 		0236A34D1D7D316D00DB2DBA /* SLog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLog.hpp; sourceTree = "<group>"; };
 		023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRenderSystem.cpp; sourceTree = "<group>"; };
 		023EFA7B1DFFA207003E20F5 /* SRenderSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRenderSystem.hpp; sourceTree = "<group>"; };
-		02436D851E070A6F0094D536 /* SPhysicsController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SPhysicsController.cpp; sourceTree = "<group>"; };
-		02436D861E070A6F0094D536 /* SPhysicsController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SPhysicsController.hpp; sourceTree = "<group>"; };
 		0251FC3A1D7DC57300B3E63E /* STime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STime.cpp; sourceTree = "<group>"; };
 		0251FC3B1D7DC57300B3E63E /* STime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = STime.hpp; sourceTree = "<group>"; };
 		0251FC3E1D7DC64300B3E63E /* SGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGL.cpp; sourceTree = "<group>"; };
@@ -220,6 +224,24 @@
 		02F547B21DD271EB005DAB0D /* SStaticMeshComponent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMeshComponent.hpp; sourceTree = "<group>"; };
 		02F669311DEC7ADA0042F8D6 /* SUIButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUIButton.cpp; sourceTree = "<group>"; };
 		02F669321DEC7ADA0042F8D6 /* SUIButton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUIButton.hpp; sourceTree = "<group>"; };
+		02F6D8F31E0C16F100D78D80 /* libLowLevel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLowLevel.a; path = PhysX/lib/libLowLevel.a; sourceTree = "<group>"; };
+		02F6D8F41E0C16F100D78D80 /* libLowLevelCloth.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLowLevelCloth.a; path = PhysX/lib/libLowLevelCloth.a; sourceTree = "<group>"; };
+		02F6D8F51E0C16F100D78D80 /* libPhysX3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysX3.a; path = PhysX/lib/libPhysX3.a; sourceTree = "<group>"; };
+		02F6D8F61E0C16F100D78D80 /* libPhysX3CharacterKinematic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysX3CharacterKinematic.a; path = PhysX/lib/libPhysX3CharacterKinematic.a; sourceTree = "<group>"; };
+		02F6D8F71E0C16F100D78D80 /* libPhysX3Common.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysX3Common.a; path = PhysX/lib/libPhysX3Common.a; sourceTree = "<group>"; };
+		02F6D8F81E0C16F100D78D80 /* libPhysX3Cooking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysX3Cooking.a; path = PhysX/lib/libPhysX3Cooking.a; sourceTree = "<group>"; };
+		02F6D8F91E0C16F100D78D80 /* libPhysX3Extensions.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysX3Extensions.a; path = PhysX/lib/libPhysX3Extensions.a; sourceTree = "<group>"; };
+		02F6D8FA1E0C16F100D78D80 /* libPhysX3Vehicle.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysX3Vehicle.a; path = PhysX/lib/libPhysX3Vehicle.a; sourceTree = "<group>"; };
+		02F6D8FB1E0C16F100D78D80 /* libPhysXProfileSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXProfileSDK.a; path = PhysX/lib/libPhysXProfileSDK.a; sourceTree = "<group>"; };
+		02F6D8FC1E0C16F100D78D80 /* libPhysXVisualDebuggerSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXVisualDebuggerSDK.a; path = PhysX/lib/libPhysXVisualDebuggerSDK.a; sourceTree = "<group>"; };
+		02F6D8FD1E0C16F100D78D80 /* libPvdRuntime.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPvdRuntime.a; path = PhysX/lib/libPvdRuntime.a; sourceTree = "<group>"; };
+		02F6D8FE1E0C16F100D78D80 /* libPxTask.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPxTask.a; path = PhysX/lib/libPxTask.a; sourceTree = "<group>"; };
+		02F6D8FF1E0C16F100D78D80 /* libSceneQuery.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSceneQuery.a; path = PhysX/lib/libSceneQuery.a; sourceTree = "<group>"; };
+		02F6D9001E0C16F100D78D80 /* libSimulationController.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSimulationController.a; path = PhysX/lib/libSimulationController.a; sourceTree = "<group>"; };
+		02F6D90F1E0C2DA000D78D80 /* SRigidBody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRigidBody.cpp; sourceTree = "<group>"; };
+		02F6D9101E0C2DA000D78D80 /* SRigidBody.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRigidBody.hpp; sourceTree = "<group>"; };
+		02F6D9121E0C6E9500D78D80 /* SCharacterController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SCharacterController.cpp; sourceTree = "<group>"; };
+		02F6D9131E0C6E9500D78D80 /* SCharacterController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SCharacterController.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,12 +249,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0231F7C51E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a in Frameworks */,
+				02F6D9031E0C16F100D78D80 /* libPhysX3.a in Frameworks */,
+				02F6D9051E0C16F100D78D80 /* libPhysX3Common.a in Frameworks */,
+				02F6D9081E0C16F100D78D80 /* libPhysX3Vehicle.a in Frameworks */,
+				02F6D90B1E0C16F100D78D80 /* libPvdRuntime.a in Frameworks */,
+				02F6D9071E0C16F100D78D80 /* libPhysX3Extensions.a in Frameworks */,
+				02F6D9021E0C16F100D78D80 /* libLowLevelCloth.a in Frameworks */,
+				02F6D9091E0C16F100D78D80 /* libPhysXProfileSDK.a in Frameworks */,
 				025903251D7793EA00EA6372 /* libboost_system.a in Frameworks */,
-				0231F7C41E07860B000854A8 /* libBulletCollision_gmake_x64_release.a in Frameworks */,
+				02F6D9041E0C16F100D78D80 /* libPhysX3CharacterKinematic.a in Frameworks */,
+				02F6D9061E0C16F100D78D80 /* libPhysX3Cooking.a in Frameworks */,
+				02F6D90A1E0C16F100D78D80 /* libPhysXVisualDebuggerSDK.a in Frameworks */,
+				02F6D90D1E0C16F100D78D80 /* libSceneQuery.a in Frameworks */,
+				02F6D90C1E0C16F100D78D80 /* libPxTask.a in Frameworks */,
 				025903261D7793EA00EA6372 /* libboost_thread.a in Frameworks */,
 				0259032A1D7793EA00EA6372 /* Cocoa.framework in Frameworks */,
-				0231F7C61E07860B000854A8 /* libLinearMath_gmake_x64_release.a in Frameworks */,
 				0259032B1D7793EA00EA6372 /* OpenGL.framework in Frameworks */,
 				025903271D7793EA00EA6372 /* libglfw3.a in Frameworks */,
 				025903291D7793EA00EA6372 /* IOKit.framework in Frameworks */,
@@ -240,6 +271,8 @@
 				0201C77F1DEF4A9A00AA0B24 /* libopenal.1.dylib in Frameworks */,
 				02E7FC831DB545D600955052 /* libfreeimage.a in Frameworks */,
 				025903281D7793EA00EA6372 /* CoreVideo.framework in Frameworks */,
+				02F6D90E1E0C16F100D78D80 /* libSimulationController.a in Frameworks */,
+				02F6D9011E0C16F100D78D80 /* libLowLevel.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -427,21 +460,11 @@
 			children = (
 				0201C77E1DEF4A9A00AA0B24 /* libopenal.1.dylib */,
 				02E7FC821DB545D600955052 /* libfreeimage.a */,
+				02F6D8EA1E0C135200D78D80 /* PhysX */,
 				025903391D7794EC00EA6372 /* Boost */,
-				025903381D7794E500EA6372 /* Bullet */,
 				0259033A1D7794F400EA6372 /* GLFW */,
 			);
 			name = Libraries;
-			sourceTree = "<group>";
-		};
-		025903381D7794E500EA6372 /* Bullet */ = {
-			isa = PBXGroup;
-			children = (
-				0231F7C11E07860B000854A8 /* libBulletCollision_gmake_x64_release.a */,
-				0231F7C21E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a */,
-				0231F7C31E07860B000854A8 /* libLinearMath_gmake_x64_release.a */,
-			);
-			name = Bullet;
 			sourceTree = "<group>";
 		};
 		025903391D7794EC00EA6372 /* Boost */ = {
@@ -507,10 +530,10 @@
 			children = (
 				02731C161E01A8B000A63389 /* SPhysicsSystem.cpp */,
 				02731C171E01A8B000A63389 /* SPhysicsSystem.hpp */,
-				0219249C1E05972E003D0CB3 /* SRigidBody.cpp */,
-				0219249D1E05972E003D0CB3 /* SRigidBody.hpp */,
-				02436D851E070A6F0094D536 /* SPhysicsController.cpp */,
-				02436D861E070A6F0094D536 /* SPhysicsController.hpp */,
+				02F6D90F1E0C2DA000D78D80 /* SRigidBody.cpp */,
+				02F6D9101E0C2DA000D78D80 /* SRigidBody.hpp */,
+				02F6D9121E0C6E9500D78D80 /* SCharacterController.cpp */,
+				02F6D9131E0C6E9500D78D80 /* SCharacterController.hpp */,
 			);
 			name = Physics;
 			sourceTree = "<group>";
@@ -649,6 +672,27 @@
 			name = Components;
 			sourceTree = "<group>";
 		};
+		02F6D8EA1E0C135200D78D80 /* PhysX */ = {
+			isa = PBXGroup;
+			children = (
+				02F6D8F31E0C16F100D78D80 /* libLowLevel.a */,
+				02F6D8F41E0C16F100D78D80 /* libLowLevelCloth.a */,
+				02F6D8F51E0C16F100D78D80 /* libPhysX3.a */,
+				02F6D8F61E0C16F100D78D80 /* libPhysX3CharacterKinematic.a */,
+				02F6D8F71E0C16F100D78D80 /* libPhysX3Common.a */,
+				02F6D8F81E0C16F100D78D80 /* libPhysX3Cooking.a */,
+				02F6D8F91E0C16F100D78D80 /* libPhysX3Extensions.a */,
+				02F6D8FA1E0C16F100D78D80 /* libPhysX3Vehicle.a */,
+				02F6D8FB1E0C16F100D78D80 /* libPhysXProfileSDK.a */,
+				02F6D8FC1E0C16F100D78D80 /* libPhysXVisualDebuggerSDK.a */,
+				02F6D8FD1E0C16F100D78D80 /* libPvdRuntime.a */,
+				02F6D8FE1E0C16F100D78D80 /* libPxTask.a */,
+				02F6D8FF1E0C16F100D78D80 /* libSceneQuery.a */,
+				02F6D9001E0C16F100D78D80 /* libSimulationController.a */,
+			);
+			name = PhysX;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -716,7 +760,6 @@
 				025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */,
 				02D20CFA1DF60B32008DAFD1 /* SCursor.cpp in Sources */,
 				026915C81DDB386C00A06D4C /* SFont.cpp in Sources */,
-				0219249E1E05972E003D0CB3 /* SRigidBody.cpp in Sources */,
 				02716E3F1DC2A5DE00EFC656 /* SRectPacker.cpp in Sources */,
 				02D35A731D86217A00F62A7B /* SSceneGraph.cpp in Sources */,
 				02B947F81D89FF7200822957 /* SUniform.cpp in Sources */,
@@ -724,7 +767,6 @@
 				025CB5961D83CD880059AF6C /* SShader.cpp in Sources */,
 				0201C78E1DEF547400AA0B24 /* SSoundEmitter.cpp in Sources */,
 				02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */,
-				02436D871E070A6F0094D536 /* SPhysicsController.cpp in Sources */,
 				025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */,
 				0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */,
 				02064B0D1D9D663000D49D4A /* SLightGraph.cpp in Sources */,
@@ -734,6 +776,7 @@
 				022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */,
 				02E7A7751DD2325E00F3164F /* SActor.cpp in Sources */,
 				02A2CC071DFF8F3500EA2F4B /* SMainLoop.cpp in Sources */,
+				02F6D9111E0C2DA000D78D80 /* SRigidBody.cpp in Sources */,
 				02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */,
 				0228B8841D7A779200596526 /* SStaticMesh.cpp in Sources */,
 				02C35AE01DDE2E26007C361C /* SUI.cpp in Sources */,
@@ -745,6 +788,7 @@
 				023EFA7C1DFFA207003E20F5 /* SRenderSystem.cpp in Sources */,
 				0201C7851DEF4B0F00AA0B24 /* SSoundSystem.cpp in Sources */,
 				0234DD531E06F1D700E1ADE8 /* SObject.cpp in Sources */,
+				02F6D9141E0C6E9500D78D80 /* SCharacterController.cpp in Sources */,
 				025903301D77940400EA6372 /* main.cpp in Sources */,
 				0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */,
 				0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */,
@@ -870,19 +914,18 @@
 				DEVELOPMENT_TEAM = 259SD8597R;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
-					"$(PROJECT_DIR)/Bullet/include",
 					"$(PROJECT_DIR)/glm",
 					"$(PROJECT_DIR)/FreeImage/include",
 					"$(PROJECT_DIR)/OpenAL/include",
+					"$(PROJECT_DIR)/PhysX/include",
 				);
 				INFOPLIST_FILE = "Spud Engine 2/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
-					"$(PROJECT_DIR)/Bullet/lib",
 					"$(PROJECT_DIR)/FreeImage/lib",
 					"$(PROJECT_DIR)/OpenAL/lib",
-					"$(PROJECT_DIR)/Bullet/include/Bullet3Common",
+					"$(PROJECT_DIR)/Physx/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.thinkworkx.Spud-Engine-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -898,19 +941,18 @@
 				DEVELOPMENT_TEAM = 259SD8597R;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
-					"$(PROJECT_DIR)/Bullet/include",
 					"$(PROJECT_DIR)/glm",
 					"$(PROJECT_DIR)/FreeImage/include",
 					"$(PROJECT_DIR)/OpenAL/include",
+					"$(PROJECT_DIR)/PhysX/include",
 				);
 				INFOPLIST_FILE = "Spud Engine 2/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
-					"$(PROJECT_DIR)/Bullet/lib",
 					"$(PROJECT_DIR)/FreeImage/lib",
 					"$(PROJECT_DIR)/OpenAL/lib",
-					"$(PROJECT_DIR)/Bullet/include/Bullet3Common",
+					"$(PROJECT_DIR)/Physx/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.thinkworkx.Spud-Engine-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";

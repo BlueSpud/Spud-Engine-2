@@ -9,9 +9,9 @@
 #ifndef SPhysicsSystem_hpp
 #define SPhysicsSystem_hpp
 
-#include <btBulletDynamicsCommon.h>
-#include <BulletDynamics/Character/btKinematicCharacterController.h>
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
+#define NDEBUG
+
+#include <PxPhysicsAPI.h>
 
 #include "SEventSystem.hpp"
 #include "SGL.hpp"
@@ -28,6 +28,7 @@ class SPhysicsGraph;
 
 struct SEventPhysicsUpdate : public SEvent {
 
+    double time_elapsed;
     double interpolation;
 
 };
@@ -35,6 +36,8 @@ struct SEventPhysicsUpdate : public SEvent {
 /******************************************************************************
  *  Definition for physics system                                             *
  ******************************************************************************/
+
+#define PHYSICS_G 19.62
 
 class SPhysicsSystem : public SSubsystem {
     
@@ -45,12 +48,22 @@ class SPhysicsSystem : public SSubsystem {
         static void startup();
         static void shutdown();
     
-        static void updatePhysics(double time_elapsed, double interpolation, int max_updates, double time_per_tick);
+        static void updatePhysics(double time_elapsed, double interpolation);
     
-        static void bulletTransformToSTransform(const btTransform& bullet_transform, STransform& transform);
-        static btTransform STransformToBulletTransform(const STransform& transform, double interpolation);
+        static physx::PxTransform STransformToPxTransform(const STransform& transform, double interpolation);
+        static void PxTransformToSTransform(const physx::PxTransform& physx_transform, STransform& transform);
     
         static SPhysicsGraph* current_physics_graph;
+    
+        static physx::PxCooking* getCooking();
+    
+    private:
+    
+        static physx::PxFoundation* physx_foundation;
+        static physx::PxPhysics* physx_SDK;
+        static physx::PxDefaultErrorCallback physx_error_callback;
+        static physx::PxDefaultAllocator physx_allocator;
+        static physx::PxCooking* physx_cooking;
     
 };
 
@@ -67,19 +80,17 @@ class SPhysicsGraph {
         SPhysicsGraph();
         ~SPhysicsGraph();
     
-        void addRigidBody(btRigidBody* rigid_body);
-        void removeRigidBody(btRigidBody* rigid_body);
+        void addActor(physx::PxActor* actor);
+        void removeActor(physx::PxActor* actor);
     
-        void addPhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller);
-        void removePhysicsController(btPairCachingGhostObject* ghost_body, btKinematicCharacterController* controller);
+        physx::PxController* createCharacterController(const physx::PxControllerDesc& description);
     
     private:
     
-        btBroadphaseInterface* bullet_broadphase;
-        btDefaultCollisionConfiguration* bullet_collision_configuration;
-        btCollisionDispatcher* bullet_collision_dispatcher;
-        btSequentialImpulseConstraintSolver* bullet_constraint_solver;
-        btDiscreteDynamicsWorld* bullet_world;
+        physx::PxScene* physx_scene;
+        physx::PxDefaultCpuDispatcher* cpu_dispatcher;
+    
+        physx::PxControllerManager* character_manager;
     
 };
 

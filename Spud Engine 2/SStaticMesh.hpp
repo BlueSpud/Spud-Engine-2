@@ -9,13 +9,11 @@
 #ifndef SStaticMesh_hpp
 #define SStaticMesh_hpp
 
-#include <glm/glm.hpp>
-#include <btBulletDynamicsCommon.h>
-#include <btBulletCollisionCommon.h>
-
 #include "SResourceManager.hpp"
 #include "SGLUpload.hpp"
 #include "SMaterial.hpp"
+
+#include "SPhysicsSystem.hpp"
 
 #define MODEL_BOUNDING_BOX_PADDING 0.1f
 
@@ -137,7 +135,11 @@ class SStaticMesh : public SResource {
         glm::vec3 maxes;
     
         // Collision stuff
-        btConvexHullShape* collision_shape;
+        physx::PxTriangleMeshGeometry* collision_geometry = nullptr;
+        physx::PxTriangleMesh* collision_mesh;
+    
+        physx::PxConvexMeshGeometry* dynamic_collision_geometry;
+        physx::PxConvexMesh* dynamic_collision_mesh;
     
 };
 
