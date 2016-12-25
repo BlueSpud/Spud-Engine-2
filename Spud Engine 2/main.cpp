@@ -78,7 +78,8 @@ void keyPress(int key) {
         
         case GLFW_KEY_SPACE:
     
-            controller->jump();
+            if (controller->isOnGround())
+                controller->jump();
             
         break;
 
@@ -190,7 +191,7 @@ int main(int argc, char* argv[]) {
     camera.transform.translation.y = 4.0;
     SCamera::current_camera = &camera;
     
-    SSound* sound = (SSound*)SResourceManager::getResource(SPath("Sound/Birds.wav"));
+    SSound* sound = SResourceManager::getResourceCast<SSound>(SPath("Sound/Birds.wav"));
     sound_emitter = new SSoundEmitter();
     sound_emitter->setSound(sound);
     sound_emitter->play();
@@ -214,29 +215,26 @@ int main(int argc, char* argv[]) {
     scene_graph->addObject(mesh);
 
     
-    //SRigidBody* rigid_body = new SRigidBody(0.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
-    //rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
+    mesh->transform.translation.y = 13.0;
+    mesh->transform.translation.x = 0.5;
+    mesh->transform.translation.z = 0.5;
+    scene_graph->addObject(mesh);
     
-    //mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
-    //mesh->transform.translation.y = 13.0;
-    //    mesh->transform.translation.x = 0.5;
-    //    mesh->transform.translation.z = 0.5;
-    //scene_graph->addObject(mesh);
-    
-    //SRigidBody* rigid_body = new SRigidBody(100.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
-    //rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    SRigidBody* rigid_body = new SRigidBody(1000.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
+    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
     
-//    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
-//    mesh->transform.translation.y = 15.5;
-//    mesh->transform.translation.x = -0.5;
-//    mesh->transform.translation.z = 0.5;
-//    scene_graph->addObject(mesh);
-//    
-//    rigid_body = new SRigidBody(100.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
-//    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
+    mesh->transform.translation.y = 15.5;
+    mesh->transform.translation.x = -0.5;
+    mesh->transform.translation.z = 0.5;
+    scene_graph->addObject(mesh);
     
-    controller = new SCharacterController(scene_graph->physics_graph, material, &camera.transform);
+    rigid_body = new SRigidBody(100.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
+    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
+    
+    controller = new SCharacterController(scene_graph->physics_graph, material, glm::vec2(0.2, 1.0), 0.2, M_PI / 4.0,  &camera.transform);
     
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     

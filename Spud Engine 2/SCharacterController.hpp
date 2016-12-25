@@ -12,7 +12,7 @@
 #include "SPhysicsSystem.hpp"
 
 #define SQRT_2G sqrt(2.0f * PHYSICS_G)
-#define CHARACTER_VELOCITY_EPSILON 0.0001
+#define CHARACTER_VELOCITY_EPSILON 0.005
 
 /******************************************************************************
  *  Definition for character controller                                       *
@@ -22,7 +22,12 @@ class SCharacterController : physx::PxUserControllerHitReport {
     
     public:
     
-        SCharacterController(SPhysicsGraph* physics_graph, physx::PxMaterial* material, STransform* _parent_transform);
+        SCharacterController(SPhysicsGraph* physics_graph,
+                             physx::PxMaterial* material,
+                             glm::vec2 size,
+                             float _step_size,
+                             float _slope_limit,
+                             STransform* _parent_transform);
     
         virtual void prePhysicsUpdate(const SEvent& event);
         virtual void postPhysicsUpdate(const SEvent& event);
@@ -37,6 +42,8 @@ class SCharacterController : physx::PxUserControllerHitReport {
         void jump();
         void setJumpHeight(float _jump_height);
     
+        float movement_speed = 5.0;
+    
     protected:
     
         STransform* parent_transform;
@@ -45,7 +52,7 @@ class SCharacterController : physx::PxUserControllerHitReport {
         physx::PxVec3 walking_direction;
         physx::PxVec3 floor_normal;
         float y_velocity;
-        float sqrt_jump_height = sqrtf(2.0);
+        float jump_vel = sqrtf(2.0) * SQRT_2G;
     
         bool is_on_ground = false;
     

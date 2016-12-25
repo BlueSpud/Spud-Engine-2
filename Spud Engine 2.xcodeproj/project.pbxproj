@@ -20,9 +20,6 @@
 		0228B8841D7A779200596526 /* SStaticMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B8821D7A779200596526 /* SStaticMesh.cpp */; };
 		022B19C41D8DD533004D9B18 /* SHotLoadSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022B19C21D8DD533004D9B18 /* SHotLoadSystem.cpp */; };
 		022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */; };
-		0231F7C41E07860B000854A8 /* libBulletCollision_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0231F7C11E07860B000854A8 /* libBulletCollision_gmake_x64_release.a */; };
-		0231F7C51E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0231F7C21E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a */; };
-		0231F7C61E07860B000854A8 /* libLinearMath_gmake_x64_release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0231F7C31E07860B000854A8 /* libLinearMath_gmake_x64_release.a */; };
 		02328BEF1DD185E70083B0BB /* SStaticMeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */; };
 		0234DD531E06F1D700E1ADE8 /* SObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0234DD521E06F1D700E1ADE8 /* SObject.cpp */; };
 		0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0236A34C1D7D316D00DB2DBA /* SLog.cpp */; };
@@ -143,9 +140,6 @@
 		022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFileSystem.cpp; sourceTree = "<group>"; };
 		022ED1571D78FA3100DC1ECD /* SFileSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFileSystem.hpp; sourceTree = "<group>"; };
 		022ED15B1D79165A00DC1ECD /* SSubsystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSubsystem.hpp; sourceTree = "<group>"; };
-		0231F7C11E07860B000854A8 /* libBulletCollision_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision_gmake_x64_release.a; path = Bullet/lib/libBulletCollision_gmake_x64_release.a; sourceTree = "<group>"; };
-		0231F7C21E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics_gmake_x64_release.a; path = Bullet/lib/libBulletDynamics_gmake_x64_release.a; sourceTree = "<group>"; };
-		0231F7C31E07860B000854A8 /* libLinearMath_gmake_x64_release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath_gmake_x64_release.a; path = Bullet/lib/libLinearMath_gmake_x64_release.a; sourceTree = "<group>"; };
 		02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SStaticMeshInstance.cpp; sourceTree = "<group>"; };
 		02328BEE1DD185E70083B0BB /* SStaticMeshInstance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMeshInstance.hpp; sourceTree = "<group>"; };
 		0234DD521E06F1D700E1ADE8 /* SObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SObject.cpp; sourceTree = "<group>"; };
@@ -262,17 +256,14 @@
 				02F6D9071E0C16F100D78D80 /* libPhysX3Extensions.a in Frameworks */,
 				02F6D9021E0C16F100D78D80 /* libLowLevelCloth.a in Frameworks */,
 				02F6D9091E0C16F100D78D80 /* libPhysXProfileSDK.a in Frameworks */,
-				0231F7C51E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a in Frameworks */,
 				025903251D7793EA00EA6372 /* libboost_system.a in Frameworks */,
 				02F6D9041E0C16F100D78D80 /* libPhysX3CharacterKinematic.a in Frameworks */,
-				0231F7C41E07860B000854A8 /* libBulletCollision_gmake_x64_release.a in Frameworks */,
 				02F6D9061E0C16F100D78D80 /* libPhysX3Cooking.a in Frameworks */,
 				02F6D90A1E0C16F100D78D80 /* libPhysXVisualDebuggerSDK.a in Frameworks */,
 				02F6D90D1E0C16F100D78D80 /* libSceneQuery.a in Frameworks */,
 				02F6D90C1E0C16F100D78D80 /* libPxTask.a in Frameworks */,
 				025903261D7793EA00EA6372 /* libboost_thread.a in Frameworks */,
 				0259032A1D7793EA00EA6372 /* Cocoa.framework in Frameworks */,
-				0231F7C61E07860B000854A8 /* libLinearMath_gmake_x64_release.a in Frameworks */,
 				0259032B1D7793EA00EA6372 /* OpenGL.framework in Frameworks */,
 				025903271D7793EA00EA6372 /* libglfw3.a in Frameworks */,
 				025903291D7793EA00EA6372 /* IOKit.framework in Frameworks */,
@@ -471,20 +462,9 @@
 				02E7FC821DB545D600955052 /* libfreeimage.a */,
 				02F6D8EA1E0C135200D78D80 /* PhysX */,
 				025903391D7794EC00EA6372 /* Boost */,
-				025903381D7794E500EA6372 /* Bullet */,
 				0259033A1D7794F400EA6372 /* GLFW */,
 			);
 			name = Libraries;
-			sourceTree = "<group>";
-		};
-		025903381D7794E500EA6372 /* Bullet */ = {
-			isa = PBXGroup;
-			children = (
-				0231F7C11E07860B000854A8 /* libBulletCollision_gmake_x64_release.a */,
-				0231F7C21E07860B000854A8 /* libBulletDynamics_gmake_x64_release.a */,
-				0231F7C31E07860B000854A8 /* libLinearMath_gmake_x64_release.a */,
-			);
-			name = Bullet;
 			sourceTree = "<group>";
 		};
 		025903391D7794EC00EA6372 /* Boost */ = {
@@ -934,7 +914,6 @@
 				DEVELOPMENT_TEAM = 259SD8597R;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
-					"$(PROJECT_DIR)/Bullet/include",
 					"$(PROJECT_DIR)/glm",
 					"$(PROJECT_DIR)/FreeImage/include",
 					"$(PROJECT_DIR)/OpenAL/include",
@@ -944,12 +923,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
-					"$(PROJECT_DIR)/Bullet/lib",
 					"$(PROJECT_DIR)/FreeImage/lib",
 					"$(PROJECT_DIR)/OpenAL/lib",
-					"$(PROJECT_DIR)/Bullet/include/Bullet3Common",
 					"$(PROJECT_DIR)/Physx/lib",
-					"$(PROJECT_DIR)/PhysX/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.thinkworkx.Spud-Engine-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -965,7 +941,6 @@
 				DEVELOPMENT_TEAM = 259SD8597R;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
-					"$(PROJECT_DIR)/Bullet/include",
 					"$(PROJECT_DIR)/glm",
 					"$(PROJECT_DIR)/FreeImage/include",
 					"$(PROJECT_DIR)/OpenAL/include",
@@ -975,12 +950,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
-					"$(PROJECT_DIR)/Bullet/lib",
 					"$(PROJECT_DIR)/FreeImage/lib",
 					"$(PROJECT_DIR)/OpenAL/lib",
-					"$(PROJECT_DIR)/Bullet/include/Bullet3Common",
 					"$(PROJECT_DIR)/Physx/lib",
-					"$(PROJECT_DIR)/PhysX/lib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.thinkworkx.Spud-Engine-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";

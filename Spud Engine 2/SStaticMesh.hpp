@@ -138,6 +138,9 @@ class SStaticMesh : public SResource {
         physx::PxTriangleMeshGeometry* collision_geometry = nullptr;
         physx::PxTriangleMesh* collision_mesh;
     
+        physx::PxConvexMeshGeometry* dynamic_collision_geometry;
+        physx::PxConvexMesh* dynamic_collision_mesh;
+    
 };
 
 #endif /* SStaticMesh_hpp */

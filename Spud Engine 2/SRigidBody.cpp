@@ -53,16 +53,8 @@ SRigidBody::~SRigidBody() {
     
 }
 
-void SRigidBody::moveRigidBodyToParent(double interpolation) {
-    
-    // Create a new transform for the body
-    physx::PxTransform new_transform = SPhysicsSystem::STransformToPxTransform(*parent_transform, interpolation);
-    rigid_body->setGlobalPose(new_transform);
-    
-}
-
 void SRigidBody::prePhysicsUpdate(const SEvent& event) {
-
+    
     // Update the static rigid body
     if (!mass) {
         
@@ -75,11 +67,19 @@ void SRigidBody::prePhysicsUpdate(const SEvent& event) {
 }
 
 void SRigidBody::postPhysicsUpdate(const SEvent& event) {
-
+    
     // Update the parent transform for the dynamic rigid body
     if (mass)
         SPhysicsSystem::PxTransformToSTransform(rigid_body->getGlobalPose(), *parent_transform);
+    
+}
 
+void SRigidBody::moveRigidBodyToParent(double interpolation) {
+    
+    // Create a new transform for the body
+    physx::PxTransform new_transform = SPhysicsSystem::STransformToPxTransform(*parent_transform, interpolation);
+    rigid_body->setGlobalPose(new_transform);
+    
 }
 
 void SRigidBody::addToPhysicsGraph(SPhysicsGraph* physics_graph) { physics_graph->addActor(rigid_body); }

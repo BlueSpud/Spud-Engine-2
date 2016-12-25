@@ -59,7 +59,7 @@ int SMainLoop::loop() {
         double interpolation = loop_elapsed_time / real_time_per_tick;
         
         // Update physics
-        SPhysicsSystem::updatePhysics(elapsed, interpolation, MAX_UPDATES_BEFORE_RENDER, real_time_per_tick);
+        SPhysicsSystem::updatePhysics(elapsed, interpolation);
         
         // Before we render we set where the listener is
         SSoundSystem::updateListenerPosition(interpolation);

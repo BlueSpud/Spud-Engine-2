@@ -186,6 +186,27 @@ bool SStaticMesh::load(const SPath& path) {
                     
                 }
                 
+                // Create a convex mesh for dynamic collision
+                physx::PxConvexMeshDesc convex_desc;
+                convex_desc.points.count = collision_vertex_count;
+                convex_desc.points.data = collision_verticies;
+                convex_desc.points.stride = sizeof(physx::PxVec3);
+                convex_desc.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX;
+                convex_desc.vertexLimit = collision_vertex_count;
+                
+                // Cook the dynamic mesh
+                physx::PxDefaultMemoryOutputStream convex_cooked_buffer;
+                if (SPhysicsSystem::getCooking()->cookConvexMesh(convex_desc, convex_cooked_buffer)) {
+                    
+                    // Cooking sucess
+                    physx::PxDefaultMemoryInputData read_buffer = physx::PxDefaultMemoryInputData(convex_cooked_buffer.getData(),
+                                                                                                  convex_cooked_buffer.getSize());
+                    
+                    dynamic_collision_mesh = PxGetPhysics().createConvexMesh(read_buffer);
+                    dynamic_collision_geometry = new physx::PxConvexMeshGeometry(dynamic_collision_mesh);
+                    
+                }
+                
                 // Clean up
                 delete [] collision_verticies;
                 delete [] collision_indicies;
@@ -231,6 +252,7 @@ void SStaticMesh::unload() {
     }
     
     delete collision_geometry;
+    delete dynamic_collision_geometry;
 
 }
 

@@ -37,7 +37,7 @@ struct SEventPhysicsUpdate : public SEvent {
  *  Definition for physics system                                             *
  ******************************************************************************/
 
-#define PHYSICS_G 9.81f
+#define PHYSICS_G 19.62
 
 class SPhysicsSystem : public SSubsystem {
     
@@ -48,7 +48,7 @@ class SPhysicsSystem : public SSubsystem {
         static void startup();
         static void shutdown();
     
-        static void updatePhysics(double time_elapsed, double interpolation, int max_updates, double time_per_tick);
+        static void updatePhysics(double time_elapsed, double interpolation);
     
         static physx::PxTransform STransformToPxTransform(const STransform& transform, double interpolation);
         static void PxTransformToSTransform(const physx::PxTransform& physx_transform, STransform& transform);

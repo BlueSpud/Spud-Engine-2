@@ -12,15 +12,20 @@
  *  Functions for character controller                                        *
  ******************************************************************************/
 
-SCharacterController::SCharacterController(SPhysicsGraph* physics_graph, physx::PxMaterial* material, STransform* _parent_transform) {
+SCharacterController::SCharacterController(SPhysicsGraph* physics_graph,
+                                           physx::PxMaterial* material,
+                                           glm::vec2 size,
+                                           float _step_size,
+                                           float _slope_limit,
+                                           STransform* _parent_transform) {
     
     parent_transform = _parent_transform;
     
     // Create a descriptor
     physx::PxCapsuleControllerDesc controller_desc;
     
-    controller_desc.height = 2.0;
-    controller_desc.radius = 0.2;
+    controller_desc.height = size.y;
+    controller_desc.radius = size.x;
     controller_desc.position = physx::PxExtendedVec3(parent_transform->translation.x,
                                                      parent_transform->translation.y,
                                                      parent_transform->translation.z);
@@ -28,14 +33,16 @@ SCharacterController::SCharacterController(SPhysicsGraph* physics_graph, physx::
     // Stepping information
     controller_desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
     controller_desc.nonWalkableMode = physx::PxControllerNonWalkableMode::ePREVENT_CLIMBING_AND_FORCE_SLIDING;
-    controller_desc.slopeLimit = cosf(M_PI / 4.0);
-    controller_desc.stepOffset = 0.2;
+    controller_desc.slopeLimit = _slope_limit;
+    controller_desc.stepOffset = _step_size;
     
     controller_desc.upDirection = physx::PxVec3(0.0, 1.0, 0.0);
     controller_desc.material = material;
+    controller_desc.density = 0.0001;
     
     // Set the callback to recieve collision
     controller_desc.reportCallback = this;
+    
     
     // Create the controller
     physx_controller = physics_graph->createCharacterController(controller_desc);
@@ -50,12 +57,13 @@ void SCharacterController::prePhysicsUpdate(const SEvent& event) {
     
     const SEventPhysicsUpdate& event_p = (const SEventPhysicsUpdate&)event;
     
-    physx::PxVec3 movement_direction = walking_direction;
+    physx::PxVec3 movement_direction = walking_direction * movement_speed;
     
     // If we're on the ground we change the movement vector along the normal
     // Check the normal threshold to make sure we can actually climb it
     float dot = physx_controller->getUpDirection().dot(floor_normal);
-    if (isOnGround() && acos(dot) < M_PI / 3.0) {
+    float normal_angle = acos(dot);
+    if (isOnGround() && normal_angle < physx_controller->getSlopeLimit()) {
         
         // Do some math to get a rotation matrix
         physx::PxQuat quat;
@@ -64,7 +72,7 @@ void SCharacterController::prePhysicsUpdate(const SEvent& event) {
         quat.y = cross_product.y;
         quat.z = cross_product.z;
         
-        // We can use 1.0 because we normalize the vectors
+        // We can use 1.0 because we the vectors are normalized so mag1^2 * mag2^2 = 1.0
         quat.w = 1.0 + dot;
         quat.normalize();
         
@@ -107,7 +115,17 @@ void SCharacterController::onShapeHit(const physx::PxControllerShapeHit& hit) {
 void SCharacterController::onControllerHit(const physx::PxControllersHit& hit) { /* intentionally blank */ }
 void SCharacterController::onObstacleHit(const physx::PxControllerObstacleHit& hit) { /* intentionally blank */ }
 
-void SCharacterController::setMoveDirection(glm::vec3 direction) { walking_direction = physx::PxVec3(direction.x, 0.0, direction.z); }
+void SCharacterController::setMoveDirection(glm::vec3 direction) {
+
+    physx::PxVec3 new_walking_direction = physx::PxVec3(direction.x, 0.0, direction.z);
+    
+    // Check if the direction has a magnitude, if so normalize
+    if (glm::length(direction))
+        new_walking_direction.normalize();
+    
+    walking_direction = new_walking_direction;
+
+}
 
 bool SCharacterController::isOnGround() {
     
@@ -127,12 +145,5 @@ bool SCharacterController::isOnGround() {
     return true;
 }
 
-void SCharacterController::jump() {
-    
-    // Add jump velocity in case we want to implement jumping while falling / double jump
-    float delta_v_y = sqrt_jump_height * SQRT_2G;
-    y_velocity += delta_v_y;
-    
-}
-
-void SCharacterController::setJumpHeight(float _jump_height) { sqrt_jump_height = sqrtf(_jump_height); }
+void SCharacterController::jump() { y_velocity += jump_vel; }
+void SCharacterController::setJumpHeight(float _jump_height) { jump_vel = sqrtf(_jump_height) * SQRT_2G; }

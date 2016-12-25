@@ -46,7 +46,7 @@ void SPhysicsSystem::shutdown() {
 
 }
 
-void SPhysicsSystem::updatePhysics(double time_elapsed, double interpolation, int max_updates, double time_per_tick) {
+void SPhysicsSystem::updatePhysics(double time_elapsed, double interpolation) {
     
     // If there is a current physics graph, we update it
     if (current_physics_graph) {
