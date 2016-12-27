@@ -54,12 +54,12 @@ struct STransform {
 };
 
 /******************************************************************************
- *  Definition for unform locations                                           *
+ *  Definition for matrix locations                                           *
  ******************************************************************************/
 
-#define MAT_MODEL_MATRIX "mat_model"
-#define MAT_VIEW_MATRIX "mat_view"
-#define MAT_PROJECTION_MATRIX "mat_projection"
+#define MAT_MODEL "mat_model"
+#define MAT_VIEW "mat_view"
+#define MAT_PROJECTION "mat_projection"
 
 /******************************************************************************
  *  Definition for 2D viewport                                                *

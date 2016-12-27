@@ -18,16 +18,16 @@ void SComponent::render(bool render_material, double interpolation) {
     
     // Get the transform of this
     glm::mat4 model_matrix = SGL::transformToMatrix(transform);
-    SGL::mulMatrix(model_matrix, MAT_MODEL_MATRIX);
+    SGL::mulMatrix(model_matrix, MAT_MODEL);
     
     // Get the modified model matrix
-    model_matrix = SGL::getMatrix(MAT_MODEL_MATRIX);
+    model_matrix = SGL::getMatrix(MAT_MODEL);
     
     // Next we render all of the children, this should be called from subclasses
     for (int i = 0; i < child_components.size(); i++) {
         
         // Because the children can change the model matrix, we need to upload the original again
-        SGL::loadMatrix(model_matrix, MAT_MODEL_MATRIX);
+        SGL::loadMatrix(model_matrix, MAT_MODEL);
         child_components[i]->render(render_material, interpolation);
         
     }

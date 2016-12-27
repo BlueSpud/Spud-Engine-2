@@ -10,20 +10,9 @@
 #define SDeferredPipeline_hpp
 
 #include "SRenderingPipeline.hpp"
+#include "GBuffer.h"
 #include "SCubeMap.hpp"
 #include "SAmbientOcclusionPass.hpp"
-
-/******************************************************************************
- *  Definition for gbuffer components                                         *
- ******************************************************************************/
-
-#define GBUFFER_DEPTH 0
-#define GBUFFER_ALBEDO 1
-#define GBUFFER_NORMAL 2
-#define GBUFFER_ORM 3
-#define ENVIRONMENT_MAP 4
-#define SHADOW_ATLAS 5
-#define AMBIENT_OCCLUSION 6
 
 /******************************************************************************
  *  Definition for deferred rendering pipeline                                *
@@ -37,11 +26,11 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         virtual ~SDeferredRenderingPipleline();
     
         virtual void render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation);
+    
     private:
     
         // Stuff for rendering
         SFramebuffer* gbuffer;
-        SAmbientOcclusionPass* ambient_occlusion_pass;
     
         SShader* gbuffer_shader;
         SShader* lit_shader;

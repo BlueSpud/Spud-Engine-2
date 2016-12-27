@@ -37,7 +37,6 @@ SCharacterController* controller;
 void moveLight(int key) {
     
     light->transform = camera.transform;
-    std::cout << camera.transform.rotation.x << " " << camera.transform.rotation.y << std::endl;
     
 }
 
@@ -141,8 +140,9 @@ void update(const SEvent& event) {
     // Update camera position and calculate new velocity
     camera.transform.update();
     
-    glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0, -cos(camera.transform.rotation.y) * speed);
-    glm::vec3 strafe =  glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0,
+    glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0.0,
+                                 -cos(camera.transform.rotation.y) * speed);
+    glm::vec3 strafe =  glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0.0,
                                  -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
     //glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
     
@@ -181,11 +181,6 @@ int main(int argc, char* argv[]) {
     SUI::startup();
     
     SConsole::startup();
-    
-    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-    glCullFace(GL_BACK);
-    
-    glEnable(GL_DEPTH_TEST);
     
     // TEMP CODE
     
@@ -338,7 +333,6 @@ int main(int argc, char* argv[]) {
     SHotLoadSystem::shutdown();
     SResourceManager::shutdown();
     
-    
     // Write out the log to a file
     #ifdef __APPLE__
     
@@ -351,7 +345,6 @@ int main(int argc, char* argv[]) {
     log_root_path.removeLastPathComponent();
     
     #endif
-    
     
     SFileSystem::setRootDirectory(log_root_path);
     SLog::writeLogToFile();

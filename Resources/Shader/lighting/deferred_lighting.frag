@@ -4,7 +4,6 @@ uniform sampler2D tex_depth;
 uniform sampler2D tex_albedo;
 uniform sampler2D tex_normal;
 uniform sampler2D tex_orm;
-uniform sampler2D tex_ambient_occlusion;
 uniform samplerCube tex_cube;
 
 uniform vec3 view_position;
@@ -123,7 +122,7 @@ void main() {
     roughness = orm.y;
     inverse_roughness = 1.0 - roughness;
     metalic = orm.z;
-    float occlusion = orm.x * texture(tex_ambient_occlusion, tex_coord0).r;
+    float occlusion = orm.x;
 
     // Get position from depth
     depth = texture(tex_depth, tex_coord0).x;

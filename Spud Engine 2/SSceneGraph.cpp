@@ -33,9 +33,9 @@ void SSimpleSceneGraph::makeCurrent() {
 void SSimpleSceneGraph::render(SCamera& camera, bool render_material, double interpolation) {
 
     // Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling
-    SGL::clearMatrix(MAT_VIEW_MATRIX);
+    SGL::clearMatrix(MAT_VIEW);
     glm::mat4 view_matrix = camera.translateToCameraSpace(interpolation);
-    glm::mat4 projection_view_matrix = SGL::getMatrix(MAT_PROJECTION_MATRIX) * view_matrix;
+    glm::mat4 projection_view_matrix = SGL::getMatrix(MAT_PROJECTION) * view_matrix;
     
     // Make sure that anything we want to render is added to the reder que
     // The array is sorted by z value of an object relative to the camera
@@ -84,7 +84,7 @@ void SSimpleSceneGraph::render(SCamera& camera, bool render_material, double int
     for (j = rendered_objects.begin(); j != rendered_objects.end(); j++) {
         
         // Set up the matricies for this
-        SGL::clearMatrix(MAT_MODEL_MATRIX);
+        SGL::clearMatrix(MAT_MODEL);
         
         // Render the object
         (*j).object->render(render_material, interpolation);

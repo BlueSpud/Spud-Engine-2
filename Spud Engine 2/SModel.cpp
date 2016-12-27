@@ -31,9 +31,9 @@ void SModel::render(bool render_material, const std::vector<SMaterial*>& instanc
             instance_material[i]->bind();
         
         // Force an upload of the matricies, needs to be done for every material just in case there is a shader change
-        SGL::flushMatrix(MAT_PROJECTION_MATRIX);
-        SGL::flushMatrix(MAT_MODEL_MATRIX);
-        SGL::flushMatrix(MAT_VIEW_MATRIX);
+        SGL::flushMatrix(MAT_PROJECTION);
+        SGL::flushMatrix(MAT_MODEL);
+        SGL::flushMatrix(MAT_VIEW);
         
         // render the array with an offset based on what we have already rendern
         glDrawElements(GL_TRIANGLES, draw_calls[i], GL_UNSIGNED_INT, (GLubyte*)(sizeof(unsigned int) * sum));

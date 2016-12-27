@@ -23,7 +23,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     gbuffer = new SFramebuffer(attatchments, viewport_3D->screen_size.x, viewport_3D->screen_size.y);
     
     // Create an ambient occlusion pass
-    ambient_occlusion_pass = new SAmbientOcclusionPass(_viewport_3D->screen_size);
+    addPostProcessPass(new SAmbientOcclusionPass(_viewport_3D->screen_size));
     
     // Get the cube map
     environment_map =  SResourceManager::getResource<SCubeMap>(SPath("Texture/room.cube"));
@@ -74,7 +74,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
      ******************************************************************************/
     
     SGL::setUpViewport(*viewport_3D);
-    SGL::loadMatrix(projection_matrix_3D, MAT_PROJECTION_MATRIX);
+    SGL::loadMatrix(projection_matrix_3D, MAT_PROJECTION);
     
     // Render the 3D scene into the GBuffer
     gbuffer->bind();
@@ -91,7 +91,6 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     glDisable(GL_DEPTH_TEST);
     
     // Get view matrix
-    glm::mat4 inverse_proj = glm::inverse(projection_matrix_3D);
     glm::mat4 inverse_proj_view = glm::inverse(projection_view_matrix);
     
     /******************************************************************************
@@ -110,20 +109,16 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     glActiveTexture(GL_TEXTURE5);
     light_graph.shadow_map_buffer->bindTexture(0);
     
-    // Render out the ambient occlusion and then bind it
-    ambient_occlusion_pass->renderAmbientOcclusion(GBUFFER_DEPTH, GBUFFER_NORMAL, AMBIENT_OCCLUSION,
-                                                   *viewport_3D, projection_matrix_3D, inverse_proj, view_matrix);
-    ambient_occlusion_pass->bindAmbientOcclusionTexture(AMBIENT_OCCLUSION);
-    
     // Render the lit buffer to the screen
-    SFramebuffer::unbind();
+    final_framebuffer->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Set up the new viewport
     SGL::setUpViewport(*viewport_2D);
     glm::mat4 projection_matrix_2D = SGL::getProjectionMatrix2D(*viewport_2D);
-    SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION_MATRIX);
-    SGL::clearMatrix(MAT_VIEW_MATRIX);
+    SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION);
+    SGL::clearMatrix(MAT_MODEL);
+    SGL::clearMatrix(MAT_VIEW);
     
     lit_shader->bind();
     
@@ -146,9 +141,6 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     texture = SHADOW_ATLAS;
     lit_shader->bindUniform(&texture, "tex_shadow", UNIFORM_INT, 1);
     
-    texture = AMBIENT_OCCLUSION;
-    lit_shader->bindUniform(&texture, "tex_ambient_occlusion", UNIFORM_INT, 1);
-    
     // Bind other uniforms needed for lighting
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
     
@@ -168,5 +160,8 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     lit_shader->bindUniform(view_pos_u);
     
     SGL::renderRect(glm::vec2(0, 0), viewport_2D->screen_size);
+    
+    // Perform post-processing
+    runPostProcess(view_matrix, projection_matrix_3D, POST_RPOCESS_START);
     
 }

@@ -113,7 +113,7 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* clo
 
     // Make a new projection matrix and a new combined light matrix
     projection_matrix = crop_matrix * projection_matrix;
-    SGL::loadMatrix(projection_matrix, MAT_PROJECTION_MATRIX);
+    SGL::loadMatrix(projection_matrix, MAT_PROJECTION);
     
     light_projection_view_matrix = projection_matrix * view_matrix;
     

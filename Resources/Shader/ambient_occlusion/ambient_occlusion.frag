@@ -54,7 +54,7 @@ void main() {
         
         // Get the position of the sample
         vec3 sample_position = tbn_matrix * kernel[i];
-        sample_position = position + sample_position * 0.2;
+        sample_position = position + sample_position * 0.1;
         
         // Get an offset
         vec4 offset = mat_projection_scene * vec4(sample_position, 1.0);

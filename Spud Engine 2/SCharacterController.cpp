@@ -26,9 +26,6 @@ SCharacterController::SCharacterController(SPhysicsGraph* physics_graph,
     
     controller_desc.height = size.y;
     controller_desc.radius = size.x;
-    controller_desc.position = physx::PxExtendedVec3(parent_transform->translation.x,
-                                                     parent_transform->translation.y,
-                                                     parent_transform->translation.z);
     
     // Stepping information
     controller_desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
@@ -46,6 +43,9 @@ SCharacterController::SCharacterController(SPhysicsGraph* physics_graph,
     
     // Create the controller
     physx_controller = physics_graph->createCharacterController(controller_desc);
+    physx_controller->setPosition(physx::PxExtendedVec3(parent_transform->translation.x,
+                                                        parent_transform->translation.y,
+                                                        parent_transform->translation.z));
     
     // Have the event listener listen to the physics ticks
     event_listener.listenToEvent(EVENT_PHYSICS_PREUPDATE, EVENT_MEMBER(SCharacterController::prePhysicsUpdate));
@@ -98,6 +98,7 @@ void SCharacterController::prePhysicsUpdate(const SEvent& event) {
 void SCharacterController::postPhysicsUpdate(const SEvent& event) {
     
     // Set the parent transform translation, velocity is 0
+    // Make sure we're sane
     physx::PxExtendedVec3 position = physx_controller->getPosition();
     parent_transform->translation = glm::vec3(position.x, position.y, position.z);
     parent_transform->translation_velocity = glm::vec3(0.0);

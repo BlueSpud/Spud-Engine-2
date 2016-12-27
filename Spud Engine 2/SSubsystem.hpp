@@ -13,14 +13,21 @@
 
 #include "SLog.hpp"
 
+/******************************************************************************
+ *  Definition for generic subsystem                                          *
+ ******************************************************************************/
+
 class SSubsystem {
     
     public:
     
         static void startup() { /* intentionally empty */}
-    
         static void shutdown() { /* intentionally empty */}
     
 };
+
+/******************************************************************************
+ *  Definition for subsystem manager                                          *
+ ******************************************************************************/
 
 #endif /* SSubsystem_hpp */

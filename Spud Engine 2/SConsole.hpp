@@ -53,7 +53,7 @@ class SConsoleCommandRegistry {
     
     public:
     
-    bool registerCommand(const std::string& command_name,  void (*function)(const std::vector<std::string>&));
+        bool registerCommand(const std::string& command_name, void (*function)(const std::vector<std::string>&));
         static SConsoleCommandRegistry* instance();
     
     private:
@@ -65,6 +65,6 @@ class SConsoleCommandRegistry {
 };
 
 // Define a macro that can be used to register a command
-#define REGISTER_COMMAND(C, F) bool isRegistered_##F_##C =  SConsoleCommandRegistry::instance()->registerCommand(#C, F)
+#define REGISTER_COMMAND(C, F) bool isRegistered_##C =  SConsoleCommandRegistry::instance()->registerCommand(#C, F)
 
 #endif /* SConsole_hpp */

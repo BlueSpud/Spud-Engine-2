@@ -11,8 +11,8 @@
 
 #include <random>
 
-#include "SFramebuffer.hpp" 
-#include "SShader.hpp"
+#include "SRenderingPipeline.hpp"
+#include "GBuffer.h"
 
 /******************************************************************************
  *  Definition for the ambient occlusion pass                                 *
@@ -21,20 +21,14 @@
 #define AO_KERNAL_SIZE 16
 #define AO_NOISE_SIZE 4
 
-class SAmbientOcclusionPass {
+class SAmbientOcclusionPass : public SPostProcessPass {
     
     public:
     
         SAmbientOcclusionPass(glm::vec2 main_framebuffer_size);
         void unload();
     
-        void renderAmbientOcclusion(int depth, int normal, int to_place_noise,
-                                    SViewport3D& viewport_3D,
-                                    glm::mat4& projection_matrix,
-                                    glm::mat4& inv_projection_matrix,
-                                    glm::mat4& view_matrix);
-    
-        void bindAmbientOcclusionTexture(int texture);
+        virtual void render(SPostProcessPassData& data);
     
     private:
     
@@ -47,6 +41,7 @@ class SAmbientOcclusionPass {
     
         static SShader* ambient_occlusion_shader;
         static SShader* blur_shader;
+        static SShader* blend_shader;
 
     
     

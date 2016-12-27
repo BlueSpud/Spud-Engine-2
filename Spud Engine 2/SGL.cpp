@@ -37,6 +37,12 @@ void SGL::startup() {
     // Load the rect we use
     loadRect();
     
+    // Set some basic parameters for OpenGL
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+    glCullFace(GL_BACK);
+    
+    glEnable(GL_DEPTH_TEST);
+    
 }
 
 void SGL::shutdown() {
@@ -170,12 +176,12 @@ void SGL::renderRect(glm::vec2 position, glm::vec2 size) {
     matrix = glm::scale(matrix, glm::vec3(size.x, size.y, 1.0));
     
     // Load the modelview and flush the matricies
-    loadMatrix(matrix, MAT_MODEL_MATRIX);
-    clearMatrix(MAT_VIEW_MATRIX);
+    loadMatrix(matrix, MAT_MODEL);
+    clearMatrix(MAT_VIEW);
     
-    flushMatrix(MAT_PROJECTION_MATRIX);
-    flushMatrix(MAT_VIEW_MATRIX);
-    flushMatrix(MAT_MODEL_MATRIX);
+    flushMatrix(MAT_PROJECTION);
+    flushMatrix(MAT_VIEW);
+    flushMatrix(MAT_MODEL);
     
     // render the array
     glBindVertexArray(rect_id);

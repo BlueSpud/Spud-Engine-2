@@ -49,7 +49,7 @@ glm::mat4 SCamera::translateToCameraSpace() {
     
     // Get the matrix and upload it
     glm::mat4 mat = getCameraMatrix();
-    SGL::mulMatrix(mat, MAT_VIEW_MATRIX);
+    SGL::mulMatrix(mat, MAT_VIEW);
     
     // Store the view position where everyone can see it
     view_position = transform.translation;
@@ -62,7 +62,7 @@ glm::mat4 SCamera::translateToCameraSpace(double interpolation) {
     
     // Get the matrix and upload it
     glm::mat4 mat = getCameraMatrix(interpolation);
-    SGL::mulMatrix(mat, MAT_VIEW_MATRIX);
+    SGL::mulMatrix(mat, MAT_VIEW);
     
     // Store the view position where everyone can see it
     view_position = transform.translation + transform.translation_velocity * (float)interpolation;

@@ -145,6 +145,7 @@
 		0234DD521E06F1D700E1ADE8 /* SObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SObject.cpp; sourceTree = "<group>"; };
 		0236A34C1D7D316D00DB2DBA /* SLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLog.cpp; sourceTree = "<group>"; };
 		0236A34D1D7D316D00DB2DBA /* SLog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLog.hpp; sourceTree = "<group>"; };
+		02399AB41E12C8BB00EC6342 /* GBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GBuffer.h; sourceTree = "<group>"; };
 		023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRenderSystem.cpp; sourceTree = "<group>"; };
 		023EFA7B1DFFA207003E20F5 /* SRenderSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRenderSystem.hpp; sourceTree = "<group>"; };
 		0251FC3A1D7DC57300B3E63E /* STime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STime.cpp; sourceTree = "<group>"; };
@@ -625,6 +626,7 @@
 			children = (
 				02D295CF1D935E4F00CBF342 /* SDeferredRenderingPipeline.cpp */,
 				02D295D01D935E4F00CBF342 /* SDeferredRenderingPipeline.hpp */,
+				02399AB41E12C8BB00EC6342 /* GBuffer.h */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";

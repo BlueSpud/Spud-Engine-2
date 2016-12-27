@@ -12,8 +12,7 @@ GLuint SAmbientOcclusionPass::noise_texture_id;
 
 SShader* SAmbientOcclusionPass::ambient_occlusion_shader;
 SShader* SAmbientOcclusionPass::blur_shader;
-
-
+SShader* SAmbientOcclusionPass::blend_shader;
 
 /******************************************************************************
  *  Implementation for the ambient occlusion pass                             *
@@ -26,6 +25,7 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
         
         ambient_occlusion_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/ambient_occlusion.glsl"));
         blur_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/blur.glsl"));
+        blend_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/blend.glsl"));
     
         // Create a random engine for the kernal and noise
         std::default_random_engine random_engine;
@@ -89,16 +89,12 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
     
 }
 
-void SAmbientOcclusionPass::renderAmbientOcclusion(int depth, int normal, int to_place_noise,
-                                                   SViewport3D& viewport_3D,
-                                                   glm::mat4& projection_matrix,
-                                                   glm::mat4& inv_projection_matrix,
-                                                   glm::mat4& view_matrix) {
+void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
     
     // Set the viewport up
     SGL::setUpViewport(viewport);
     glm::mat4 projection_matrix_2D = SGL::getProjectionMatrix2D(viewport);
-    SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION_MATRIX);
+    SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION);
     
     // Bind the ambient occlusion framebuffer and get it ready
     occlusion_framebuffer->bind();
@@ -107,12 +103,15 @@ void SAmbientOcclusionPass::renderAmbientOcclusion(int depth, int normal, int to
     // Use the shader
     ambient_occlusion_shader->bind();
     
-    ambient_occlusion_shader->bindUniform(&depth, "tex_depth", UNIFORM_INT, 1);
-    ambient_occlusion_shader->bindUniform(&normal, "tex_normal", UNIFORM_INT, 1);
-    ambient_occlusion_shader->bindUniform(&to_place_noise, "tex_noise", UNIFORM_INT, 1);
+    int attatchment = GBUFFER_DEPTH;
+    ambient_occlusion_shader->bindUniform(&attatchment, "tex_depth", UNIFORM_INT, 1);
+    
+    attatchment = GBUFFER_NORMAL;
+    ambient_occlusion_shader->bindUniform(&attatchment, "tex_normal", UNIFORM_INT, 1);
+    ambient_occlusion_shader->bindUniform(&data.texture_bind_start, "tex_noise", UNIFORM_INT, 1);
     
     // Bind the noise texture
-    glActiveTexture(GL_TEXTURE0 + to_place_noise);
+    glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);
     glBindTexture(GL_TEXTURE_2D, noise_texture_id);
     
     // Bind the kernel
@@ -128,12 +127,14 @@ void SAmbientOcclusionPass::renderAmbientOcclusion(int depth, int normal, int to
     ambient_occlusion_shader->bindUniform(&kernel_size, "kernel_size", UNIFORM_INT, 1);
     
     // Bind the near and far planes
-    ambient_occlusion_shader->bindUniform(&viewport_3D.planes, "planes", UNIFORM_VEC2, 1);
-
+    ambient_occlusion_shader->bindUniform(&data.viewport_3D->planes, "planes", UNIFORM_VEC2, 1);
+    
     // Bind the matrices
-    ambient_occlusion_shader->bindUniform(&view_matrix, "mat_view_scene", UNIFORM_MAT4, 1);
-    ambient_occlusion_shader->bindUniform(&projection_matrix, "mat_projection_scene", UNIFORM_MAT4, 1);
-    ambient_occlusion_shader->bindUniform(&inv_projection_matrix, "inv_proj", UNIFORM_MAT4, 1);
+    ambient_occlusion_shader->bindUniform(data.view_matrix, "mat_view_scene", UNIFORM_MAT4, 1);
+    ambient_occlusion_shader->bindUniform(data.projection_matrix, "mat_projection_scene", UNIFORM_MAT4, 1);
+    
+    glm::mat4 inverse_projection = glm::inverse(*data.projection_matrix);
+    ambient_occlusion_shader->bindUniform(&inverse_projection, "inv_proj", UNIFORM_MAT4, 1);
     
     SGL::renderRect(glm::vec2(0), viewport.screen_size);
     
@@ -145,7 +146,7 @@ void SAmbientOcclusionPass::renderAmbientOcclusion(int depth, int normal, int to
     blur_shader->bind();
     
     // Bind the texture and its location
-    blur_shader->bindUniform(&to_place_noise, "tex_occlusion", UNIFORM_INT, 1);
+    blur_shader->bindUniform(&data.texture_bind_start, "tex_occlusion", UNIFORM_INT, 1);
     occlusion_framebuffer->bindTexture(0);
     
     // Bind the data we need to blur
@@ -157,19 +158,36 @@ void SAmbientOcclusionPass::renderAmbientOcclusion(int depth, int normal, int to
     viewport.screen_size = viewport.screen_size / 2.0f;
     SGL::setUpViewport(viewport);
     projection_matrix_2D = SGL::getProjectionMatrix2D(viewport);
-    SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION_MATRIX);
+    SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION);
     
-    SGL::renderRect(glm::vec2(0), viewport.screen_size);
+    SGL::renderRect(glm::vec2(0.0), viewport.screen_size);
     
     // Reset the viewport
     viewport.screen_size = viewport.screen_size * 2.0f;
     
-}
-
-void SAmbientOcclusionPass::bindAmbientOcclusionTexture(int texture) {
+    // Blend the main framebuffer with the new occlusion
+    data.framebuffer->bind();
     
-    glActiveTexture(GL_TEXTURE0 + texture);
+    blend_shader->bind();
+    
+    // Bind the texture
+    attatchment = data.texture_bind_start;
+    blend_shader->bindUniform(&attatchment, "blurred", UNIFORM_INT, 1);
+    
+    attatchment = data.texture_bind_start + 1;
+    blend_shader->bindUniform(&attatchment, "final_render", UNIFORM_INT, 1);
+    
+    glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);
     blur_framebuffer->bindTexture(0);
+    
+    glActiveTexture(GL_TEXTURE0 + data.texture_bind_start + 1);
+    data.framebuffer->bindTexture(0);
+    
+    SGL::setUpViewport(*data.viewport_2D);
+    projection_matrix_2D = SGL::getProjectionMatrix2D(*data.viewport_2D);
+    SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION);
+    
+    SGL::renderRect(data.viewport_2D->screen_pos, data.viewport_2D->screen_size);
     
 }
 

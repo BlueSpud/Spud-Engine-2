@@ -17,9 +17,24 @@
  *  Definition for post-process pass                                          *
  ******************************************************************************/
 
+struct SPostProcessPassData {
+    
+    SViewport* viewport_2D;
+    SViewport3D* viewport_3D;
+    
+    SFramebuffer* framebuffer;
+    int texture_bind_start;
+    
+    glm::mat4* view_matrix;
+    glm::mat4* projection_matrix;
+    
+};
+
 class SPostProcessPass {
     
-    SShader* shader;
+    public:
+    
+        virtual void render(SPostProcessPassData& data) = 0;
     
 };
 
@@ -35,13 +50,18 @@ class SRenderingPipeline {
         virtual ~SRenderingPipeline() { /* intentionally blank */ }
     
         virtual void render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation) = 0;
+        void finalizeRender(SFramebuffer* output_framebuffer);
     
-        void addPostProcessPass(SPostProcessPass pass);
+        void runPostProcess(glm::mat4& view_matrix, glm::mat4& projection_matrix, int texture_bind_start);
+        void addPostProcessPass(SPostProcessPass* pass);
     
     protected:
     
-        std::vector<SPostProcessPass> post_process_passes;
+        SFramebuffer* final_framebuffer;
     
+        std::vector<SPostProcessPass*> post_process_passes;
+    
+        SShader* simple_shader;
         SViewport* viewport_2D;
         SViewport3D* viewport_3D;
 

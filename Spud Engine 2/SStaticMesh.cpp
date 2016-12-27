@@ -30,7 +30,7 @@ void SStaticMesh::render(bool render_material, double interpolation) {
 
     // Set the model matrix to the proper matrix for this model
     glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
-    SGL::mulMatrix(transform_matrix, MAT_MODEL_MATRIX);
+    SGL::mulMatrix(transform_matrix, MAT_MODEL);
     
     // Call render on the parent model
     parent_mesh->render(render_material, materials);

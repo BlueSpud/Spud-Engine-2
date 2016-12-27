@@ -41,7 +41,12 @@ void SRenderSystem::shutdown() {
 void SRenderSystem::render(double interpolation) {
     
     // If we have a scene graph and a rendering pipline we can render the scene
-    if(rendering_pipeline && current_scene_graph && current_light_graph)
+    if(rendering_pipeline && current_scene_graph && current_light_graph) {
+        
+        // Render and then finalize
         rendering_pipeline->render(*current_scene_graph, *current_light_graph, *SCamera::current_camera, interpolation);
+        rendering_pipeline->finalizeRender(nullptr);
+        
+    }
     
 }
