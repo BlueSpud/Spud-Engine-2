@@ -11,7 +11,7 @@
 double STime::time_since_startup;
 
 /******************************************************************************
- *  Functions for time system                                                 *
+ *  Implementation for time system                                            *
  ******************************************************************************/
 
 void STime::startup() {
@@ -39,7 +39,7 @@ void STime::update(const SEvent& event) {
 }
 
 /******************************************************************************
- *  Functions for timer                                                       *
+ *  Implementation for timer                                                  *
  ******************************************************************************/
 
 STimer::STimer(boost::function<void()> _func, double duration, bool _loops) {
@@ -91,7 +91,7 @@ void STimer::fire() {
 }
 
 /******************************************************************************
- *  Functions for stopwatch                                                   *
+ *  Implementation for stopwatch                                              *
  ******************************************************************************/
 
 void SStopwatch::start() {

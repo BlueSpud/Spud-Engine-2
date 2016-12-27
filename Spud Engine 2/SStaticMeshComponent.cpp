@@ -9,7 +9,7 @@
 #include "SStaticMeshComponent.hpp"
 
 /******************************************************************************
- *  Functions for static mesh component                                       *
+ *  Implementation for static mesh component                                  *
  ******************************************************************************/
 
 void SStaticMeshComponent::render(bool render_material, double interpolation) {
@@ -30,7 +30,7 @@ void SStaticMeshComponent::render(bool render_material, double interpolation) {
 
 }
 
-void SStaticMeshComponent::setStaticMesh(SStaticMeshInstance* new_mesh_instance) { mesh_instance = new_mesh_instance; }
+void SStaticMeshComponent::setStaticMesh(SStaticMesh* new_mesh_instance) { mesh_instance = new_mesh_instance; }
 
 void SStaticMeshComponent::onMoveToSceneGraph(SPhysicsGraph* physics_graph) {
 

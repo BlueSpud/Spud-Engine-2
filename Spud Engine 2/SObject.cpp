@@ -9,7 +9,7 @@
 #include "SObject.hpp"
 
 /******************************************************************************
- *  Functions for generic renderable object                                   *
+ *  Implementation for generic renderable object                              *
  ******************************************************************************/
 
 SObject::SObject() {

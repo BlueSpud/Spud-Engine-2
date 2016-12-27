@@ -9,7 +9,7 @@
 #include "SMainLoop.hpp"
 
 /******************************************************************************
- *  Functions for main loop                                                   *
+ *  Implementation for main loop                                              *
  ******************************************************************************/
 
 int SMainLoop::loop() {

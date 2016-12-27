@@ -16,7 +16,7 @@ glm::vec3 SSoundSystem::listener_position;
 glm::vec3 SSoundSystem::listener_velocity;
 
 /******************************************************************************
- *  Functions for sound system                                                *
+ *  Implementation for sound system                                           *
  ******************************************************************************/
 
 void SSoundSystem::startup() {

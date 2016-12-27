@@ -9,7 +9,7 @@
 #include "SLightGraph.hpp"
 
 /******************************************************************************
- *  Functions for default light graph                                         *
+ *  Implementation for default light graph                                         *
  ******************************************************************************/
 
 SLightGraph::SLightGraph() {
@@ -39,7 +39,7 @@ SLightGraph::~SLightGraph() {
 }
 
 /******************************************************************************
- *  Functions for simple light graph                                          *
+ *  Implementation for simple light graph                                     *
  ******************************************************************************/
 
 SSimpleLightGraph::SSimpleLightGraph() : SLightGraph() {

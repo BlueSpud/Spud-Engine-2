@@ -50,8 +50,6 @@ class SShader : public SResource {
     
     public:
     
-        static SResource* allocate();
-    
         bool bind();
         void static unbind();
         static SShader* getBoundShader();

@@ -9,7 +9,7 @@
 #include "SFramebuffer.hpp"
 
 /******************************************************************************
- *  Functions for framebuffer                                                 *
+ *  Implementation for framebuffer                                            *
  ******************************************************************************/
 
 SFramebuffer::SFramebuffer(std::vector<SFramebufferAttatchment*> attatchments, unsigned int _width, unsigned int _height) {
@@ -72,7 +72,7 @@ void SFramebuffer::bindTexture(int id) {
 void SFramebuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); } 
 
 /******************************************************************************
- *  Functions for framebuffer upload                                          *
+ *  Implementation for framebuffer upload                                     *
  ******************************************************************************/
 
 void SFramebufferUpload::upload() {
@@ -150,7 +150,7 @@ void SFramebufferUpload::upload() {
 void SFramebufferUpload::unload() { /* nothing */ }
 
 /******************************************************************************
- *  Functions for framebuffer unload                                          *
+ *  Implementation for framebuffer unload                                     *
  ******************************************************************************/
 
 void SFramebufferUnload::upload() {

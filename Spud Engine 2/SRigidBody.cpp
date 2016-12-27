@@ -9,7 +9,7 @@
 #include "SRigidBody.hpp"
 
 /******************************************************************************
- *  Functions for rigid body                                                  *
+ *  Implementation for rigid body                                             *
  ******************************************************************************/
 
 SRigidBody::SRigidBody(float _mass, physx::PxGeometry* _collision_geometry, physx::PxMaterial* _material, STransform* _parent_transform) {

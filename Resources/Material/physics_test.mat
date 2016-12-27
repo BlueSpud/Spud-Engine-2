@@ -1,0 +1,4 @@
+s:Shader/gbuffer.glsl
+t:tex_albedo:Texture/physics_test/physics_test_albedo.png
+t:tex_orm:Texture/physics_test/physics_test_orm.png
+t:tex_normal:Texture/physics_test/physics_test_normal.png

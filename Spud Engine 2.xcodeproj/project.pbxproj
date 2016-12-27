@@ -17,10 +17,10 @@
 		02064B0D1D9D663000D49D4A /* SLightGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02064B0B1D9D663000D49D4A /* SLightGraph.cpp */; };
 		021B32B91D9C4B820032001D /* SLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 021B32B71D9C4B820032001D /* SLight.cpp */; };
 		0228B8801D7A6BB100596526 /* SResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B87E1D7A6BB100596526 /* SResourceManager.cpp */; };
-		0228B8841D7A779200596526 /* SStaticMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B8821D7A779200596526 /* SStaticMesh.cpp */; };
+		0228B8841D7A779200596526 /* SModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0228B8821D7A779200596526 /* SModel.cpp */; };
 		022B19C41D8DD533004D9B18 /* SHotLoadSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022B19C21D8DD533004D9B18 /* SHotLoadSystem.cpp */; };
 		022ED1581D78FA3100DC1ECD /* SFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */; };
-		02328BEF1DD185E70083B0BB /* SStaticMeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */; };
+		02328BEF1DD185E70083B0BB /* SStaticMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02328BED1DD185E70083B0BB /* SStaticMesh.cpp */; };
 		0234DD531E06F1D700E1ADE8 /* SObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0234DD521E06F1D700E1ADE8 /* SObject.cpp */; };
 		0236A34E1D7D316D00DB2DBA /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0236A34C1D7D316D00DB2DBA /* SLog.cpp */; };
 		023EFA7C1DFFA207003E20F5 /* SRenderSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 023EFA7A1DFFA207003E20F5 /* SRenderSystem.cpp */; };
@@ -133,15 +133,15 @@
 		021B32B81D9C4B820032001D /* SLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLight.hpp; sourceTree = "<group>"; };
 		0228B87E1D7A6BB100596526 /* SResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SResourceManager.cpp; sourceTree = "<group>"; };
 		0228B87F1D7A6BB100596526 /* SResourceManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SResourceManager.hpp; sourceTree = "<group>"; };
-		0228B8821D7A779200596526 /* SStaticMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SStaticMesh.cpp; sourceTree = "<group>"; };
-		0228B8831D7A779200596526 /* SStaticMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMesh.hpp; sourceTree = "<group>"; };
+		0228B8821D7A779200596526 /* SModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SModel.cpp; sourceTree = "<group>"; };
+		0228B8831D7A779200596526 /* SModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SModel.hpp; sourceTree = "<group>"; };
 		022B19C21D8DD533004D9B18 /* SHotLoadSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SHotLoadSystem.cpp; sourceTree = "<group>"; };
 		022B19C31D8DD533004D9B18 /* SHotLoadSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SHotLoadSystem.hpp; sourceTree = "<group>"; };
 		022ED1561D78FA3100DC1ECD /* SFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SFileSystem.cpp; sourceTree = "<group>"; };
 		022ED1571D78FA3100DC1ECD /* SFileSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SFileSystem.hpp; sourceTree = "<group>"; };
 		022ED15B1D79165A00DC1ECD /* SSubsystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSubsystem.hpp; sourceTree = "<group>"; };
-		02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SStaticMeshInstance.cpp; sourceTree = "<group>"; };
-		02328BEE1DD185E70083B0BB /* SStaticMeshInstance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMeshInstance.hpp; sourceTree = "<group>"; };
+		02328BED1DD185E70083B0BB /* SStaticMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SStaticMesh.cpp; sourceTree = "<group>"; };
+		02328BEE1DD185E70083B0BB /* SStaticMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SStaticMesh.hpp; sourceTree = "<group>"; };
 		0234DD521E06F1D700E1ADE8 /* SObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SObject.cpp; sourceTree = "<group>"; };
 		0236A34C1D7D316D00DB2DBA /* SLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLog.cpp; sourceTree = "<group>"; };
 		0236A34D1D7D316D00DB2DBA /* SLog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLog.hpp; sourceTree = "<group>"; };
@@ -383,10 +383,10 @@
 		02328BEC1DD185B70083B0BB /* Static Mesh */ = {
 			isa = PBXGroup;
 			children = (
-				0228B8821D7A779200596526 /* SStaticMesh.cpp */,
-				0228B8831D7A779200596526 /* SStaticMesh.hpp */,
-				02328BED1DD185E70083B0BB /* SStaticMeshInstance.cpp */,
-				02328BEE1DD185E70083B0BB /* SStaticMeshInstance.hpp */,
+				0228B8821D7A779200596526 /* SModel.cpp */,
+				0228B8831D7A779200596526 /* SModel.hpp */,
+				02328BED1DD185E70083B0BB /* SStaticMesh.cpp */,
+				02328BEE1DD185E70083B0BB /* SStaticMesh.hpp */,
 			);
 			name = "Static Mesh";
 			sourceTree = "<group>";
@@ -755,7 +755,7 @@
 			files = (
 				029865801D8460DC005EED43 /* SCamera.cpp in Sources */,
 				02F547B31DD271EB005DAB0D /* SStaticMeshComponent.cpp in Sources */,
-				02328BEF1DD185E70083B0BB /* SStaticMeshInstance.cpp in Sources */,
+				02328BEF1DD185E70083B0BB /* SStaticMesh.cpp in Sources */,
 				02F669331DEC7ADA0042F8D6 /* SUIButton.cpp in Sources */,
 				025CB5B01D83EB500059AF6C /* STexture.cpp in Sources */,
 				02D20CFA1DF60B32008DAFD1 /* SCursor.cpp in Sources */,
@@ -778,7 +778,7 @@
 				02A2CC071DFF8F3500EA2F4B /* SMainLoop.cpp in Sources */,
 				02F6D9111E0C2DA000D78D80 /* SRigidBody.cpp in Sources */,
 				02956BCF1D8B0FFB0035733E /* SGLUpload.cpp in Sources */,
-				0228B8841D7A779200596526 /* SStaticMesh.cpp in Sources */,
+				0228B8841D7A779200596526 /* SModel.cpp in Sources */,
 				02C35AE01DDE2E26007C361C /* SUI.cpp in Sources */,
 				02B6B7E61DDBAE990068FCBA /* SConsole.cpp in Sources */,
 				029039671DB11CB30087B500 /* SAmbientOcclusionPass.cpp in Sources */,

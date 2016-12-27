@@ -13,7 +13,7 @@ SFont* STextRenderer::default_font;
 SShader* STextRenderer::text_shader;
 
 /******************************************************************************
- *  Functions for the text rendering                                          *
+ *  Implementation for the text rendering                                     *
  ******************************************************************************/
 
 void STextRenderer::startup() {
@@ -21,7 +21,7 @@ void STextRenderer::startup() {
     SLog::verboseLog(SVerbosityLevel::Debug, "STextRenderer startup");
     
     // Load up the shader that we use for text rendering
-    text_shader = (SShader*)SResourceManager::getResource(SPath("Shader/ui/text_simple.glsl"));
+    text_shader = SResourceManager::getResource<SShader>(SPath("Shader/ui/text_simple.glsl"));
     
 }
 

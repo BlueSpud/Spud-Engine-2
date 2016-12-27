@@ -16,7 +16,7 @@ SVerbosityLevel SLog::verbosity_level = SVerbosityLevel::Critical;
 std::vector<std::string> SLog::log_lines;
 
 /******************************************************************************
- *  Functions for logging system                                              *
+ *  Implementation for logging system                                         *
  ******************************************************************************/
 
 void SLog::setVerbosityLevel(SVerbosityLevel level) { verbosity_level = level; }

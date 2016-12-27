@@ -14,13 +14,11 @@ SMaterial* SMaterial::currently_bound_material;
  *  Registration for supported material extensions                            *
  ******************************************************************************/
 
-REGISTER_RESOURCE_CLASS(mat, SMaterial);
+REGISTER_RESOURCE_CLASS(mat, SMaterial)
 
 /******************************************************************************
- *  Functions for material                                                    *
+ *  Implementation for material                                               *
  ******************************************************************************/
-
-SResource* SMaterial::allocate() { return new SMaterial(); }
 
 bool SMaterial::load(const SPath& path) {
 
@@ -41,7 +39,7 @@ bool SMaterial::load(const SPath& path) {
                 std::string texture_name = texture_name_and_path.substr(0, split_index);
                 SPath texture_path = SPath(texture_name_and_path.substr(split_index + 1, texture_name_and_path.length() - split_index));
                 
-                textures[texture_name] = (STexture*)SResourceManager::getResource(texture_path);
+                textures[texture_name] = SResourceManager::getResource<STexture>(texture_path);
                 
             }
             
@@ -49,7 +47,7 @@ bool SMaterial::load(const SPath& path) {
                 
                 // Get the path of the shader and load it up
                 SPath shader_path = SPath(line.substr(2, line.length() - 2));
-                shader = (SShader*)SResourceManager::getResource(shader_path);
+                shader = SResourceManager::getResource<SShader>(shader_path);
                 
             }
 

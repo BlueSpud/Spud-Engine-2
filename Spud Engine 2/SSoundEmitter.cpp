@@ -9,7 +9,7 @@
 #include "SSoundEmitter.hpp"
 
 /******************************************************************************
- *  Functions for sound emitter                                               *
+ *  Implementation for sound emitter                                          *
  ******************************************************************************/
 
 SSoundEmitter::SSoundEmitter() {

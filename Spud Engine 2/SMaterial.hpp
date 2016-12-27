@@ -20,7 +20,6 @@ class SMaterial : public SResource {
     
     public:
     
-        static SResource* allocate();
         void bind();
     
     protected:

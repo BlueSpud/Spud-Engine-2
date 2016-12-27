@@ -14,13 +14,11 @@ std::string side_names[] = {"right.jpg", "left.jpg", "bottom.jpg", "top.jpg", "f
  *  Registration for supported texture extensions                             *
  ******************************************************************************/
 
-REGISTER_RESOURCE_CLASS(cube, SCubeMap);
+REGISTER_RESOURCE_CLASS(cube, SCubeMap)
 
 /******************************************************************************
- *  Functions for texture                                                     *
+ *  Implementation for texture                                                *
  ******************************************************************************/
-
-SResource* SCubeMap::allocate() { return new SCubeMap(); }
 
 void SCubeMap::bind() {
 
@@ -112,7 +110,7 @@ void SCubeMap::unload() {
 }
 
 /******************************************************************************
- *  Functions for cube map upload                                             *
+ *  Implementation for cube map upload                                        *
  ******************************************************************************/
 
 void SCubeMapUpload::upload() {

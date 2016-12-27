@@ -9,7 +9,7 @@
 #include "SCharacterController.hpp"
 
 /******************************************************************************
- *  Functions for character controller                                        *
+ *  Implementation for character controller                                   *
  ******************************************************************************/
 
 SCharacterController::SCharacterController(SPhysicsGraph* physics_graph,

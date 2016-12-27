@@ -61,8 +61,8 @@ void SUI::startup() {
     SLog::verboseLog(SVerbosityLevel::Debug, "SUI startup");
     
     // Aquire the shaders that the UI might need to use
-    simple_shader_color = (SShader*)SResourceManager::getResource(SPath("Shader/simple/simple_color.glsl"));
-    simple_shader_texture = (SShader*)SResourceManager::getResource(SPath("Shader/simple/simple_texture.glsl"));
+    simple_shader_color = SResourceManager::getResource<SShader>(SPath("Shader/simple/simple_color.glsl"));
+    simple_shader_texture = SResourceManager::getResource<SShader>(SPath("Shader/simple/simple_texture.glsl"));
     
 }
 

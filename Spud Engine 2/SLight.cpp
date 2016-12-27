@@ -16,19 +16,19 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
 SShader* SLight::shadow_shader;
 
 /******************************************************************************
- *  Functions for generic light                                               *
+ *  Implementation for generic light                                          *
  ******************************************************************************/
 
 SLight::SLight() {
     
     // Get the shader for shadow mapping if we dont already have it
     if (!SLight::shadow_shader)
-        SLight::shadow_shader = (SShader*)SResourceManager::getResource(SPath("Shader/lighting/shadow.glsl"));
+        SLight::shadow_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow.glsl"));
     
 }
 
 /******************************************************************************
- *  Functions for point light                                                 *
+ *  Implementation for point light                                            *
  ******************************************************************************/
 
 SPointLight::SPointLight() : bounding_box(glm::vec3(-4.0), glm::vec3(4.0), &transform) { /* No initialization */ }
@@ -54,7 +54,7 @@ bool SPointLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
 }
 
 /******************************************************************************
- *  Functions for directional light                                           *
+ *  Implementation for directional light                                      *
  ******************************************************************************/
 
 void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {

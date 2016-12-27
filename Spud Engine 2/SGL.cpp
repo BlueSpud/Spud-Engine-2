@@ -17,7 +17,7 @@ GLuint SGL::rect_id;
 GLuint SGL::rect_buffers[2];
 
 /******************************************************************************
- *  Functions for OpenGL system                                               *
+ *  Implementation for OpenGL system                                          *
  ******************************************************************************/
 
 void SGL::startup() {
@@ -114,7 +114,7 @@ glm::ivec2 SGL::getWindowFramebufferSize() {
 float SGL::getScreenScale() { return getWindowFramebufferSize().x / WINDOW_WIDTH; }
 
 /******************************************************************************
- *  Functions for operations pertaining to graphics math                      *
+ *  Implementation for operations pertaining to graphics math                 *
  ******************************************************************************/
 
 glm::mat4 SGL::transformToMatrix(const STransform& transform) {
@@ -185,7 +185,7 @@ void SGL::renderRect(glm::vec2 position, glm::vec2 size) {
 }
 
 /******************************************************************************
- *  Functions for the matrix stack                                            *
+ *  Implementation for the matricies                                          *
  ******************************************************************************/
 
 void SGL::loadMatrix(const glm::mat4& mat, const char* mat_name) {

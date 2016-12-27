@@ -9,7 +9,7 @@
 #include "SGLUpload.hpp"
 
 /******************************************************************************
- *  Functions for upload que                                                  *
+ *  Implementation for upload que                                             *
  ******************************************************************************/
 
 std::queue<SGLUpload*> SGLUploadSystem::upload_queue;

@@ -17,7 +17,7 @@ physx::PxDefaultAllocator SPhysicsSystem::physx_allocator;
 physx::PxCooking* SPhysicsSystem::physx_cooking;
 
 /******************************************************************************
- *  Functions for physics system                                              *
+ *  Implementation for physics system                                         *
  ******************************************************************************/
 
 void SPhysicsSystem::startup() {
@@ -102,7 +102,7 @@ void SPhysicsSystem::PxTransformToSTransform(const physx::PxTransform& physx_tra
 physx::PxCooking* SPhysicsSystem::getCooking() { return physx_cooking; }
 
 /******************************************************************************
- *  Functions for physics graph                                               *
+ *  Implementation for physics graph                                          *
  ******************************************************************************/
 
 SPhysicsGraph::SPhysicsGraph() {
@@ -119,6 +119,7 @@ SPhysicsGraph::SPhysicsGraph() {
     
     // Create the characer manager
     character_manager = PxCreateControllerManager(*physx_scene);
+    character_manager->setOverlapRecoveryModule(true);
     
 }
 

@@ -37,6 +37,7 @@ SCharacterController* controller;
 void moveLight(int key) {
     
     light->transform = camera.transform;
+    std::cout << camera.transform.rotation.x << " " << camera.transform.rotation.y << std::endl;
     
 }
 
@@ -191,7 +192,7 @@ int main(int argc, char* argv[]) {
     camera.transform.translation.y = 4.0;
     SCamera::current_camera = &camera;
     
-    SSound* sound = SResourceManager::getResourceCast<SSound>(SPath("Sound/Birds.wav"));
+    SSound* sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
     sound_emitter = new SSoundEmitter();
     sound_emitter->setSound(sound);
     sound_emitter->play();
@@ -201,37 +202,15 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
     
     physx::PxMaterial* material = PxGetPhysics().createMaterial(0.5, 0.5, 0.1);
-    physx::PxRigidStatic* ground = PxCreatePlane(PxGetPhysics(), physx::PxPlane(0.0, 1.0, 0.0, 0.0), *material);
     
-    scene_graph->physics_graph->addActor(ground);
-    
-    SStaticMeshInstance* mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/plane.smdl"));
-    scene_graph->addObject(mesh);
-    
-    //mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
-    //scene_graph->addObject(mesh);
-    
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/physics_test.smdl"));
+    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/physics_test.smdl")));
     scene_graph->addObject(mesh);
 
-    
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
-    mesh->transform.translation.y = 13.0;
-    mesh->transform.translation.x = 0.5;
-    mesh->transform.translation.z = 0.5;
+    mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sphere.smdl")));
+    mesh->transform.translation.y = 50.0;
     scene_graph->addObject(mesh);
     
     SRigidBody* rigid_body = new SRigidBody(1000.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
-    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
-    
-    
-    mesh = (SStaticMeshInstance*)SResourceManager::getResource(SPath("Model/sphere.smdl"));
-    mesh->transform.translation.y = 15.5;
-    mesh->transform.translation.x = -0.5;
-    mesh->transform.translation.z = 0.5;
-    scene_graph->addObject(mesh);
-    
-    rigid_body = new SRigidBody(100.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
     rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
     
     controller = new SCharacterController(scene_graph->physics_graph, material, glm::vec2(0.2, 1.0), 0.2, M_PI / 4.0,  &camera.transform);
@@ -246,6 +225,7 @@ int main(int argc, char* argv[]) {
     
     light = new SDirectionalLight();
     light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
+    light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
     light->casts_shadow = true;
     
     light_graph->addLight(light);
@@ -280,17 +260,17 @@ int main(int argc, char* argv[]) {
     
     SUIButton* button = new SUIButton();
     
-    button->background_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_normal.png"));
-    button->hover_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_hover.png"));
-    button->press_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_press.png"));
+    button->background_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_normal.png"));
+    button->hover_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_hover.png"));
+    button->press_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_press.png"));
     
-    button->hover_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_hover.wav"));
-    button->press_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_press.wav"));
+    button->hover_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_hover.wav"));
+    button->press_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_press.wav"));
     
     button->frame.origin = glm::vec2(5.0, 5.0);
     button->frame.size = glm::vec2(280, 50);
     
-    button->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
+    button->font = SResourceManager::getResource<SFont>(SPath("Font/Arial.font"));
     button->label = "Button 1";
     button->font_size = 13.0;
     
@@ -300,17 +280,17 @@ int main(int argc, char* argv[]) {
     
     button = new SUIButton();
     
-    button->background_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_normal.png"));
-    button->hover_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_hover.png"));
-    button->press_image = (STexture*)SResourceManager::getResource(SPath("Texture/ui/button/button_press.png"));
+    button->background_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_normal.png"));
+    button->hover_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_hover.png"));
+    button->press_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_press.png"));
     
-    button->hover_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_hover.wav"));
-    button->press_sound = (SSound*)SResourceManager::getResource(SPath("Sound/ui/button/button_press.wav"));
+    button->hover_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_hover.wav"));
+    button->press_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_press.wav"));
     
     button->frame.origin = glm::vec2(5.0, 60.0);
     button->frame.size = glm::vec2(280, 50);
     
-    button->font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
+    button->font = SResourceManager::getResource<SFont>(SPath("Font/Arial.font"));
     button->label = "Button 2";
     button->font_size = 13.0;
     
@@ -332,7 +312,7 @@ int main(int argc, char* argv[]) {
     
     SUI::current_ui_graph = ui_graph;
     
-    SCursor* cursor = (SCursor*)SResourceManager::getResource(SPath("Texture/ui/cursor/pointer.cur"));
+    SCursor* cursor = SResourceManager::getResource<SCursor>(SPath("Texture/ui/cursor/pointer.png"));
     cursor->bind();
     
     SEventListener event_listener;

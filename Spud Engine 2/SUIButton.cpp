@@ -9,7 +9,7 @@
 #include "SUIButton.hpp"
 
 /******************************************************************************
- *  Functions for simple button widget                                        *
+ *  Implementation for simple button widget                                   *
  ******************************************************************************/
 
 SUIButton::SUIButton() {

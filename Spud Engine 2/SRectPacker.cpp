@@ -9,7 +9,7 @@
 #include "SRectPacker.hpp"
 
 /******************************************************************************
- *  Functions for rect node                                                   *
+ *  Implementation for rect node                                              *
  ******************************************************************************/
 
 SRectPackerNode::~SRectPackerNode() {
@@ -60,7 +60,7 @@ SRectPackerNode* SRectPackerNode::insertNode(glm::vec2 rect_size) {
 }
 
 /******************************************************************************
- *  Functions for rect packer                                                 *
+ *  Implementation for rect packer                                            *
  ******************************************************************************/
 
 SRectPacker::SRectPacker(glm::vec2 max_size) {

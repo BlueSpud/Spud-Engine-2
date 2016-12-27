@@ -42,8 +42,6 @@ class SFont : public SResource {
     
     public:
     
-        static SResource* allocate();
-    
         float getLineHeight(float _font_size);
     
     protected:

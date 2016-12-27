@@ -14,14 +14,11 @@ SShader* SShader::bound_shader;
  *  Registration for supported shader extensions (GLSL used to load frag and vert) *
  ***********************************************************************************/
 
-REGISTER_RESOURCE_CLASS(glsl, SShader);
+REGISTER_RESOURCE_CLASS(glsl, SShader)
 
 /******************************************************************************
- *  Functions for shader                                                      *
+ *  Implementation for shader                                                 *
  ******************************************************************************/
-
-SResource* SShader::allocate() { return new SShader(); }
-
 bool SShader::bind() {
     
     if ((bound_shader != this && uploaded) || (force_rebind && program_id != 0)) {
@@ -210,7 +207,7 @@ void SShader::hotload(const SPath& path) {
 }
 
 /******************************************************************************
- *  Functions for shader upload                                               *
+ *  Implementation for shader upload                                          *
  ******************************************************************************/
 
 void SShaderUpload::upload() {
@@ -308,7 +305,7 @@ void SShaderUpload::unload() {
 }
 
 /******************************************************************************
- *  Functions for shader unload                                               *
+ *  Implementation for shader unload                                          *
  ******************************************************************************/
 
 void SShaderUnload::upload() { glDeleteProgram(program_id); }

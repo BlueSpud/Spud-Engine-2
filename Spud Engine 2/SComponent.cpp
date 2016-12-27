@@ -9,7 +9,7 @@
 #include "SComponent.hpp"
 
 /******************************************************************************
- *  Functions for generic component                                           *
+ *  Implementation for generic component                                      *
  ******************************************************************************/
 
 void SComponent::render(bool render_material, double interpolation) {

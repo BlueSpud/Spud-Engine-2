@@ -12,13 +12,11 @@
  *  Registration for supported sound extensions                               *
  ******************************************************************************/
 
-REGISTER_RESOURCE_CLASS(wav, SSound);
+REGISTER_RESOURCE_CLASS(wav, SSound)
 
 /******************************************************************************
  *  Function for sound resource                                               *
  ******************************************************************************/
-
-SResource* SSound::allocate() { return new SSound(); }
 
 bool SSound::load(const SPath& path) {
     

@@ -116,7 +116,7 @@ template <class T>
 void ValueDriver<T>::reset() { ticks_elapsed = 0; }
 
 /******************************************************************************
- *  Functions for the Sine driver class                                       *
+ *  Implementation for the Sine driver class                                  *
  ******************************************************************************/
 
 template <class T>

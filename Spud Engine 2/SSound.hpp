@@ -39,10 +39,6 @@ class SSound : public SResource {
     
     friend class SSoundEmitter;
     
-    public:
-    
-        static SResource* allocate();
-    
     protected:
     
         virtual bool load(const SPath& path);

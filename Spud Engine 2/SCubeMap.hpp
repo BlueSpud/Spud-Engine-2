@@ -38,8 +38,6 @@ class SCubeMap : public STexture {
     
     public:
     
-        static SResource* allocate();
-    
         virtual void bind();
         virtual void bind(int texture_number);
     

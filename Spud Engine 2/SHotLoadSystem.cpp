@@ -12,7 +12,7 @@ bool SHotLoadSystem::should_check_for_updates = true;
 boost::thread SHotLoadSystem::update_thread;
 
 /******************************************************************************
- *  Functions for resource hot load manager                                   *
+ *  Implementation for resource hot load manager                              *
  ******************************************************************************/
 
 void SHotLoadSystem::startup() {

@@ -12,13 +12,11 @@
  *  Registration for supported font extensions                                *
  ******************************************************************************/
 
-REGISTER_RESOURCE_CLASS(font, SFont);
+REGISTER_RESOURCE_CLASS(font, SFont)
 
 /******************************************************************************
  *  Fucntions for font                                                        *
  ******************************************************************************/
-
-SResource* SFont::allocate() { return new SFont(); }
 
 float SFont::getLineHeight(float _font_size) { return ((float)line_height / font_size * _font_size) / SGL::getScreenScale(); }
 
@@ -30,7 +28,7 @@ bool SFont::load(const SPath& path) {
     if (font_file) {
         
         // We got the font file now we load up the texture
-        font_atlas = (STexture*)SResourceManager::getResource(SPath(path.getPathAsString() + "/atlas.png"));
+        font_atlas = SResourceManager::getResource<STexture>(SPath(path.getPathAsString() + "/atlas.png"));
         if (font_atlas) {
             
             std::string line;

@@ -9,7 +9,7 @@
 #include "SBoundingBox.hpp"
 
 /******************************************************************************
- *  Functions for bounding box                                                *
+ *  Implementation for bounding box                                           *
  ******************************************************************************/
 
 SBoundingBox::SBoundingBox(glm::vec3 _mins, glm::vec3 _maxes, STransform* _transform) {

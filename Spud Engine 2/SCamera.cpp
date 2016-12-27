@@ -14,7 +14,7 @@ REGISTER_UNIFORM(&SCamera::view_position, "view_position", UNIFORM_VEC3, 1);
 SCamera* SCamera::current_camera;;
 
 /******************************************************************************
- *  Functions for camera                                                      *
+ *  Implementation for camera                                                 *
  ******************************************************************************/
 
 glm::mat4 SCamera::getCameraMatrix() {

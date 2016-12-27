@@ -9,7 +9,7 @@
 #include "SUniform.hpp"
 
 /******************************************************************************
- *  Functions for resource allocation manager                                *
+ *  Implementation for resource allocation manager                            *
  ******************************************************************************/
 
 SUniformManger* SUniformManger::instance() {

@@ -13,7 +13,7 @@ SSceneGraph* SRenderSystem::current_scene_graph;
 SLightGraph* SRenderSystem::current_light_graph;
 
 /******************************************************************************
- *  Functions for the render system                                           *
+ *  Implementation for the render system                                      *
  ******************************************************************************/
 
 void SRenderSystem::startup() {

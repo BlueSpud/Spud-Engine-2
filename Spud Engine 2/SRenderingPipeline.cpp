@@ -9,7 +9,7 @@
 #include "SRenderingPipeline.hpp"
 
 /******************************************************************************
- *  Functions for default rendering pipeline                                   *
+ *  Implementation for default rendering pipeline                             *
  ******************************************************************************/
 
 SRenderingPipeline::SRenderingPipeline(SViewport* _viewport_2D, SViewport3D* _viewport_3D) {

@@ -14,17 +14,15 @@ bool STexture::freeimage_initialized = false;
  *  Registration for supported texture extensions                             *
  ******************************************************************************/
 
-REGISTER_RESOURCE_CLASS(png, STexture);
-REGISTER_RESOURCE_CLASS(psd, STexture);
-REGISTER_RESOURCE_CLASS(jpg, STexture);
-REGISTER_RESOURCE_CLASS(jpeg, STexture);
-REGISTER_RESOURCE_CLASS(tiff, STexture);
+REGISTER_RESOURCE_CLASS(png, STexture)
+REGISTER_RESOURCE_CLASS(psd, STexture)
+REGISTER_RESOURCE_CLASS(jpg, STexture)
+REGISTER_RESOURCE_CLASS(jpeg, STexture)
+REGISTER_RESOURCE_CLASS(tiff, STexture)
 
 /******************************************************************************
- *  Functions for texture                                                     *
+ *  Implementation for texture                                                *
  ******************************************************************************/
-
-SResource* STexture::allocate() { return new STexture(); }
 
 void STexture::bind() {
     
@@ -127,7 +125,7 @@ void STexture::hotload(const SPath& path) {
 }
 
 /******************************************************************************
- *  Functions for texture upload                                              *
+ *  Implementation for texture upload                                              *
  ******************************************************************************/
 
 void STextureUpload::upload() {

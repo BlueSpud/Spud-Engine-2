@@ -16,7 +16,7 @@ SShader* SAmbientOcclusionPass::blur_shader;
 
 
 /******************************************************************************
- *  Functions for the ambient occlusion pass                                  *
+ *  Implementation for the ambient occlusion pass                             *
  ******************************************************************************/
 
 SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : viewport(main_framebuffer_size, glm::vec2(0)) {
@@ -24,8 +24,8 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
     // Get the shader for an ambient occlusion pass if we dont have it
     if (!ambient_occlusion_shader) {
         
-        ambient_occlusion_shader = (SShader*)SResourceManager::getResource(SPath("Shader/ambient_occlusion/ambient_occlusion.glsl"));
-        blur_shader = (SShader*)SResourceManager::getResource(SPath("Shader/ambient_occlusion/blur.glsl"));
+        ambient_occlusion_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/ambient_occlusion.glsl"));
+        blur_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/blur.glsl"));
     
         // Create a random engine for the kernal and noise
         std::default_random_engine random_engine;

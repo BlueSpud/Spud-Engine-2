@@ -9,7 +9,7 @@
 #include "SDeferredRenderingPipeline.hpp"
 
 /******************************************************************************
- * Functions for deferred rendering pipeline                                  *
+ * Implementation for deferred rendering pipeline                             *
  ******************************************************************************/
 
 SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport3D* _viewport_3D) : SRenderingPipeline(_viewport_2D, _viewport_3D) {
@@ -26,12 +26,12 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     ambient_occlusion_pass = new SAmbientOcclusionPass(_viewport_3D->screen_size);
     
     // Get the cube map
-    environment_map =  (SCubeMap*)SResourceManager::getResource(SPath("Texture/room.cube"));
+    environment_map =  SResourceManager::getResource<SCubeMap>(SPath("Texture/room.cube"));
     
     // Get the lighting shader
-    gbuffer_shader = (SShader*)SResourceManager::getResource(SPath("Shader/gbuffer.glsl"));
-    lit_shader = (SShader*)SResourceManager::getResource(SPath("Shader/lighting/deferred_lighting.glsl"));
-    simple_shader = (SShader*)SResourceManager::getResource(SPath("Shader/simple/simple_texture.glsl"));
+    gbuffer_shader = SResourceManager::getResource<SShader>(SPath("Shader/gbuffer.glsl"));
+    lit_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/deferred_lighting.glsl"));
+    simple_shader = SResourceManager::getResource<SShader>(SPath("Shader/simple/simple_texture.glsl"));
     
     // Get the view pos
     view_pos_u = SUniformManger::instance()->getUniformWithName("view_position");

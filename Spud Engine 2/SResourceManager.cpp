@@ -12,16 +12,15 @@ std::map<size_t, SResource*>SResourceManager::loaded_resources;
 std::hash<std::string>SResourceManager::hasher;
 
 /******************************************************************************
- *  Functions for generic resource                                            *
+ *  Implementation for generic resource                                       *
  ******************************************************************************/
 
-SResource* SResource::allocate() { return nullptr; }
 SResource::~SResource() { /* intentionally empty */ }
 void SResource::hotload(const SPath& path) { /* intentionally empty */ }
 SResource* SResource::resource() { return this; }
 
 /******************************************************************************
- *  Functions for resource allocation manager                                 *
+ *  Implementation for resource allocation manager                            *
  ******************************************************************************/
 
 SResourceAllocatorManger* SResourceAllocatorManger::instance() {
@@ -35,16 +34,20 @@ SResourceAllocatorManger* SResourceAllocatorManger::instance() {
     
 }
 
-bool SResourceAllocatorManger::registerAllocatorForExtension(const std::string& extension,  SResource* (*allocator)()) {
+bool SResourceAllocatorManger::registerClassForExtension(const std::string& class_name, const std::string& extension) {
     
-    // Keep track of the allocator for this extension
-    allocators[extension] = allocator;
+    // Check if we need to create a new vector for the extensions
+    if (!supported_extensions.count(class_name))
+        supported_extensions[class_name] = std::vector<std::string>();
+    
+    supported_extensions[class_name].push_back(extension);
+    
     return true;
     
 }
 
 /******************************************************************************
- *  Functions for resource manager                                            *
+ *  Implementation for resource manager                                       *
  ******************************************************************************/
 
 void SResourceManager::startup() {
@@ -75,47 +78,6 @@ void SResourceManager::shutdown() {
     
     SLog::verboseLog(SVerbosityLevel::Debug, "SResourceManager shutdown");
 
-}
-
-SResource* SResourceManager::getResource(const SPath& resource_path) {
-    
-    // Hash the name of the resource
-    size_t hash = hasher(resource_path.getPathAsString());
-    
-    // Check for loaded resource
-    if (!loaded_resources.count(hash)) {
-        
-        // Check that we have the allocator that handles this type of resource
-        if (SResourceAllocatorManger::instance()->allocators.count(resource_path.getExtension())) {
-        
-            // Load the resource, upload it and keep it
-            SResource* resource = SResourceAllocatorManger::instance()->allocators[resource_path.getExtension()]();
-            
-            // Save the path that the resource was loaded from
-            resource->paths.push_back(resource_path);
-            
-            SLog::verboseLog(SVerbosityLevel::Debug, "Loading resource %s", resource_path.getPathAsString().c_str());
-            
-            // Make sure we have an allocator
-            if (!resource->load(resource_path)) {
-                
-                // Failed to load it
-                SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s! Resource was returned but may behave unexpectadly", resource_path.getPathAsString().c_str());
-                
-            }
-            
-            // Get the times it was modified
-            for (int i = 0; i < resource->paths.size(); i++)
-                resource->modified_times.push_back(getModifiedTimeForFileAtPath(resource->paths[i].getPathAsAbsolutePath().c_str()));
-            
-            loaded_resources[hash] = resource;
-            
-        } else SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s! Resource had an extension that was not valid", resource_path.getPathAsString().c_str());
-            
-    }
-    
-    return loaded_resources[hash]->resource();
-    
 }
 
 long SResourceManager::getModifiedTimeForFileAtPath(const char* path) {

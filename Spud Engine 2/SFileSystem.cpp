@@ -18,7 +18,7 @@ std::hash<std::string> SFileSystem::hasher;
 std::string root_directory;
 
 /******************************************************************************
- *  Functions for the path class                                              *
+ *  Implementation for the path class                                         *
  ******************************************************************************/
 
 SPath::SPath(std::string relative_path) {
@@ -97,7 +97,7 @@ std::string SPath::getPathAsAbsolutePath() const { return root_directory + path_
 bool SPath::getIsDirectory() const { return is_directory; }
 
 /******************************************************************************
- *  Functions for the file class                                              *
+ *  Implementation for the file class                                         *
  ******************************************************************************/
 
 SFile::SFile() { /* default constructor, nothing*/ }
@@ -178,7 +178,7 @@ void SFile::read(void* to_place, std::streamsize size) {
 }
 
 /******************************************************************************
- *  Functions for the file system class                                       *
+ *  Implementation for the file system class                                  *
  ******************************************************************************/
 
 void SFileSystem::startup() {

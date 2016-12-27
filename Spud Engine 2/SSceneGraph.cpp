@@ -12,7 +12,7 @@
 SSceneGraph::~SSceneGraph() { /* blank, destroy objects, scene graph manages memory for them */ }
 
 /******************************************************************************
- *  Functions for basic scene graph                                           *
+ *  Implementation for basic scene graph                                      *
  ******************************************************************************/
 
 SSimpleSceneGraph::SSimpleSceneGraph() {

@@ -16,7 +16,7 @@ glm::vec2 SInputSystem::mouse_pos;
 SInputListener* SInputSystem::current_input_listener;
 
 /******************************************************************************
- *  Functions for input listener                                              *
+ *  Implementation for input listener                                         *
  ******************************************************************************/
 
 void SInputListener::bind(boost::function<void(int)> function, int key, int action) {
@@ -70,7 +70,7 @@ void SInputListener::keyCallback(GLFWwindow* window, int key, int scancode, int 
 }
 
 /******************************************************************************
- *  Functions for input system                                                *
+ *  Implementation for input system                                           *
  ******************************************************************************/
 
 void SInputSystem::startup() {

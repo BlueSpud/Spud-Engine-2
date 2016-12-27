@@ -36,7 +36,7 @@ SEventListener::~SEventListener() {
 }
 
 /******************************************************************************
- *  Functions for event system                                                *
+ *  Implementation for event system                                           *
  ******************************************************************************/
 
 std::map<int, boost::signals2::signal<void(const SEvent&)>>SEventSystem::signals;

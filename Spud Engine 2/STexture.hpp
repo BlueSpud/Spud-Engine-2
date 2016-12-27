@@ -56,8 +56,6 @@ class STexture : public SResource {
     
         glm::ivec2 size;
     
-        static SResource* allocate();
-    
         virtual void bind();
         virtual void bind(int texture_number);
     

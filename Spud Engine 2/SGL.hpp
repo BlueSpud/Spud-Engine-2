@@ -34,13 +34,13 @@ class SCursor;
 
 struct STransform {
     
-    glm::vec3 translation;
-    glm::vec3 rotation;
+    glm::vec3 translation = glm::vec3(0.0);
+    glm::vec3 rotation = glm::vec3(0.0);
     glm::vec3 scale = glm::vec3(1.0);
     
-    glm::vec3 translation_velocity;
-    glm::vec3 rotation_velocity;
-    glm::vec3 scale_velocity;
+    glm::vec3 translation_velocity = glm::vec3(0.0);
+    glm::vec3 rotation_velocity = glm::vec3(0.0);
+    glm::vec3 scale_velocity = glm::vec3(0.0);
     
     void update() {
         
@@ -146,7 +146,7 @@ class SGL : public SSubsystem {
         static void renderRect(glm::vec2 position, glm::vec2 size);
     
 /******************************************************************************
-*  Definition for the matrix stack operations                                 *
+*  Definition for the matrix operations                                       *
 ******************************************************************************/
     
         static void loadMatrix(const glm::mat4& mat, const char* mat_name);

@@ -10,7 +10,7 @@
 #define SStaticMeshComponent_hpp
 
 #include "SComponent.hpp"
-#include "SStaticMeshInstance.hpp"
+#include "SStaticMesh.hpp"
 
 /******************************************************************************
  *  Definition for static mesh component                                      *
@@ -21,14 +21,14 @@ class SStaticMeshComponent : public SComponent {
     public:
     
         virtual void render(bool render_material, double interpolation);
-        void setStaticMesh(SStaticMeshInstance* new_mesh_instance);
+        void setStaticMesh(SStaticMesh* new_mesh_instance);
     
         virtual void onMoveToSceneGraph(SPhysicsGraph* physics_graph);
         virtual void onRemoveFromSceneGraph(SPhysicsGraph* physics_graph);
     
     private:
     
-        SStaticMeshInstance* mesh_instance;
+        SStaticMesh* mesh_instance;
     
     
 };

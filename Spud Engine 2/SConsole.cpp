@@ -28,7 +28,7 @@ std::hash<std::string> SConsoleCommandRegistry::hasher;
 std::map<size_t, void(*)(const std::vector<std::string>&)> SConsoleCommandRegistry::commands;
 
 /******************************************************************************
- *  Functions for console                                                     *
+ *  Implementation for console                                                *
  ******************************************************************************/
 
 void SConsole::startup() {
@@ -36,7 +36,7 @@ void SConsole::startup() {
     // Load up the shader that we use for text rendering
     SLog::verboseLog(SVerbosityLevel::Debug, "SConsole startup");
     
-    console_font = (SFont*)SResourceManager::getResource(SPath("Font/Arial.font"));
+    console_font = SResourceManager::getResource<SFont>(SPath("Font/Arial.font"));
     
     text_field = new SUITextField();
     text_field->font = console_font;
@@ -160,7 +160,7 @@ void SConsole::commitCommand() {
 }
 
 /******************************************************************************
- *  Functions for console command registry                                    *
+ *  Implementation for console command registry                               *
  ******************************************************************************/
 
 bool SConsoleCommandRegistry::registerCommand(const std::string& command_name, void (*function)(const std::vector<std::string>&)) {
