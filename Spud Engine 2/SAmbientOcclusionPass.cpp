@@ -61,7 +61,7 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
         glBindTexture(GL_TEXTURE_2D, noise_texture_id);
         
         int noise_size = sqrt(AO_NOISE_SIZE);
-        
+
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RG, noise_size, noise_size, 0, GL_RG, GL_FLOAT, &noise_data);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

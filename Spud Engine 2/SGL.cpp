@@ -73,7 +73,7 @@ void SGL::createWindow() {
   
     }
 
-    SLog::verboseLog(SVerbosityLevel::Debug, "Created a window with an OpenGL context version of: %i.%i",
+    SLog::verboseLog(SVerbosityLevel::Debug, "Created an OpenGL context version: %i.%i",
                      glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR),
                      glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR));
     
