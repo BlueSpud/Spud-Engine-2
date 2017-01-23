@@ -62,26 +62,6 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
     
     int attatchment = GBUFFER_DEPTH;
     ambient_occlusion_shader->bindUniform(&attatchment, "tex_depth", UNIFORM_INT, 1);
-    
-//    attatchment = GBUFFER_NORMAL;
-//    ambient_occlusion_shader->bindUniform(&attatchment, "tex_normal", UNIFORM_INT, 1);
-//    ambient_occlusion_shader->bindUniform(&data.texture_bind_start, "tex_noise", UNIFORM_INT, 1);
-//    
-//    // Bind the noise texture
-//    glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);
-//    glBindTexture(GL_TEXTURE_2D, noise_texture_id);
-//    
-//    // Bind the kernel
-//    ambient_occlusion_shader->bindUniform(&kernel, "kernel", UNIFORM_VEC3, AO_KERNAL_SIZE);
-//    
-//    // Let the shader know how far to step for the noise based on the resolution and noise size
-//    int noise_size = sqrt(AO_NOISE_SIZE);
-//    glm::vec2 tex_coord_scale = viewport.screen_size / (float)noise_size;
-//    ambient_occlusion_shader->bindUniform(&tex_coord_scale, "tex_coord_scale", UNIFORM_VEC2, 1);
-//    
-//    // Bind the kernel size
-//    int kernel_size = AO_KERNAL_SIZE;
-//    ambient_occlusion_shader->bindUniform(&kernel_size, "kernel_size", UNIFORM_INT, 1);
 	
     // Bind the near and far planes
     ambient_occlusion_shader->bindUniform(&data.viewport_3D->planes, "planes", UNIFORM_VEC2, 1);
@@ -94,54 +74,39 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
 	
 	ambient_occlusion_shader->bindUniform(&projection_info, "projection_info", UNIFORM_VEC4, 1);
 	ambient_occlusion_shader->bindUniform(&viewport.screen_size, "screen_size", UNIFORM_VEC2, 1);
-    
-//    glm::mat4 inverse_projection = glm::inverse(*data.projection_matrix);
-//    ambient_occlusion_shader->bindUniform(&inverse_projection, "inv_proj", UNIFORM_MAT4, 1);
 	
     SGL::renderRect(glm::vec2(0), viewport.screen_size);
 	
-    // Blur the framebuffer
-	glm::vec2 axis = glm::vec2(1.0, 0.0);
-	
+    // Do a horizontal blur first
     blur_framebuffer_w->bind();
     glClear(GL_COLOR_BUFFER_BIT);
     
     // Bind the shader
     blur_shader->bind();
 
-    // Bind the texture and its location
-    blur_shader->bindUniform(&data.texture_bind_start, "tex_occlusion", UNIFORM_INT, 1);
+    // We use the same shader for horizontal and vertical so we need to pass in an axis
+	glm::vec2 axis = glm::vec2(1.0, 0.0);
 	blur_shader->bindUniform(&axis, "axis", UNIFORM_VEC2, 1);
 	
+	blur_shader->bindUniform(&data.texture_bind_start, "tex_occlusion", UNIFORM_INT, 1);
 	glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);
     occlusion_framebuffer->bindTexture(0);
-//
-//    // Bind the data we need to blur
+
+	// Blur is dependant on screen size
     blur_shader->bindUniform(&viewport.screen_size, "screen_size", UNIFORM_VEC2, 1);
-//
-//    blur_shader->bindUniform(&noise_size, "noise_size", UNIFORM_INT, 1);
-//    
-//    // Get the viewport ready for the blur, done at 1/2 occlusion resolution
-//    viewport.screen_size = viewport.screen_size / 2.0f;
-//    SGL::setUpViewport(viewport);
-//    projection_matrix_2D = SGL::getProjectionMatrix2D(viewport);
-//    SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION);
-//    
+
     SGL::renderRect(glm::vec2(0.0), viewport.screen_size);
-//
-//    // Reset the viewport
-//    viewport.screen_size = viewport.screen_size * 2.0f;
-//
+
 	
-	// Blur the framebuffer
-	axis = glm::vec2(0.0, 1.0);
-	
+	// Do a vertical blur
 	blur_framebuffer_h->bind();
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	// Bind axis
+	axis = glm::vec2(0.0, 1.0);
 	blur_shader->bindUniform(&axis, "axis", UNIFORM_VEC2, 1);
 	
+	// Now we need to bind the texture or the horizontal pass
 	glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);
 	blur_framebuffer_w->bindTexture(0);
 	
@@ -153,13 +118,14 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
     
     blend_shader->bind();
 	
-    // Bind the texture
+    // Bind the textures
     attatchment = data.texture_bind_start;
     blend_shader->bindUniform(&attatchment, "blurred", UNIFORM_INT, 1);
     
     attatchment = data.texture_bind_start + 1;
     blend_shader->bindUniform(&attatchment, "final_render", UNIFORM_INT, 1);
-    
+	
+	// Horizontal blur is done second so it is what we use as the blurred framebuffer
     glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);
     blur_framebuffer_h->bindTexture(0);
     
