@@ -7,8 +7,6 @@
 //
 
 #include "SAmbientOcclusionPass.hpp"
-glm::vec3 SAmbientOcclusionPass::kernel[AO_KERNAL_SIZE];
-GLuint SAmbientOcclusionPass::noise_texture_id;
 
 SShader* SAmbientOcclusionPass::ambient_occlusion_shader;
 SShader* SAmbientOcclusionPass::blur_shader;
@@ -26,58 +24,12 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
         ambient_occlusion_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/ambient_occlusion.glsl"));
         blur_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/blur.glsl"));
         blend_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/blend.glsl"));
-    
-        // Create a random engine for the kernal and noise
-        std::default_random_engine random_engine;
-        std::uniform_real_distribution<float> random_distribution_xy(-1.0, 1.0);
-        std::uniform_real_distribution<float> random_distribution_z(0.0, 1.0);
-    
-        // Create a kernal for the ambient occlusion
-        for (int i = 0; i < AO_KERNAL_SIZE; i++) {
-        
-            // Make the value random
-            kernel[i] = glm::normalize(glm::vec3(random_distribution_xy(random_engine),
-                                                 random_distribution_xy(random_engine),
-                                                 random_distribution_z(random_engine)));
-        
-            // CURRENTLY NOT SCALING KERNAL, SEEMS TO LOOK BETTER WITHOUT IT
-            // Scale the point so we get more samples closer to the origin
-            //float scale = (float)i / (float)AO_KERNAL_SIZE;
-            //scale = glm::mix(0.1, 1.0, scale * scale);
-        
-            
-            //kernel[i] = kernel[i] * scale;
-        
-        }
-    
-        // Generate the data for a noise texture
-        glm::vec2* noise_data = new glm::vec2[AO_NOISE_SIZE];
-    
-        for (int i = 0; i < AO_NOISE_SIZE; i++)
-            noise_data[i] = glm::normalize(glm::vec2(random_distribution_xy(random_engine), random_distribution_xy(random_engine)));
-        
-        // Create a noise texture
-        glGenTextures(1, &noise_texture_id);
-        glBindTexture(GL_TEXTURE_2D, noise_texture_id);
-        
-        int noise_size = sqrt(AO_NOISE_SIZE);
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RG, noise_size, noise_size, 0, GL_RG, GL_FLOAT, &noise_data);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        
-        glBindTexture(GL_TEXTURE_2D, 0);
-        
-        delete [] noise_data;
-    
-    }
-    
+		
+	}
     
     // Create the framebuffer for ambient occlusion
     std::vector<SFramebufferAttatchment*> attatchments_occlusion;
-    attatchments_occlusion.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGB, GL_UNSIGNED_INT, 0));
+    attatchments_occlusion.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0));
     
     occlusion_framebuffer = new SFramebuffer(attatchments_occlusion, viewport.screen_size.x, viewport.screen_size.y);
     
@@ -85,8 +37,13 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
     std::vector<SFramebufferAttatchment*> attatchments_blur;
     attatchments_blur.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RED, GL_RED, GL_UNSIGNED_INT, 0));
     
-    blur_framebuffer = new SFramebuffer(attatchments_blur, viewport.screen_size.x / 2.0, viewport.screen_size.y / 2.0);
-    
+    blur_framebuffer_w = new SFramebuffer(attatchments_blur, viewport.screen_size.x, viewport.screen_size.y);
+	
+	attatchments_blur.clear();
+	attatchments_blur.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RED, GL_RED, GL_UNSIGNED_INT, 0));
+	
+	blur_framebuffer_h = new SFramebuffer(attatchments_blur, viewport.screen_size.x, viewport.screen_size.y);
+	
 }
 
 void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
@@ -137,30 +94,31 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
 	
 	ambient_occlusion_shader->bindUniform(&projection_info, "projection_info", UNIFORM_VEC4, 1);
 	ambient_occlusion_shader->bindUniform(&viewport.screen_size, "screen_size", UNIFORM_VEC2, 1);
-	
-    // Bind the matrices
-    ambient_occlusion_shader->bindUniform(data.view_matrix, "mat_view_scene", UNIFORM_MAT4, 1);
-    ambient_occlusion_shader->bindUniform(data.projection_matrix, "mat_projection_scene", UNIFORM_MAT4, 1);
     
 //    glm::mat4 inverse_projection = glm::inverse(*data.projection_matrix);
 //    ambient_occlusion_shader->bindUniform(&inverse_projection, "inv_proj", UNIFORM_MAT4, 1);
 	
     SGL::renderRect(glm::vec2(0), viewport.screen_size);
-    
+	
     // Blur the framebuffer
-//    blur_framebuffer->bind();
-//    glClear(GL_COLOR_BUFFER_BIT);
-//    
-//    // Bind the shader
-//    blur_shader->bind();
-//    
-//    // Bind the texture and its location
-//    blur_shader->bindUniform(&data.texture_bind_start, "tex_occlusion", UNIFORM_INT, 1);
-//    occlusion_framebuffer->bindTexture(0);
-//    
+	glm::vec2 axis = glm::vec2(1.0, 0.0);
+	
+    blur_framebuffer_w->bind();
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    // Bind the shader
+    blur_shader->bind();
+
+    // Bind the texture and its location
+    blur_shader->bindUniform(&data.texture_bind_start, "tex_occlusion", UNIFORM_INT, 1);
+	blur_shader->bindUniform(&axis, "axis", UNIFORM_VEC2, 1);
+	
+	glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);
+    occlusion_framebuffer->bindTexture(0);
+//
 //    // Bind the data we need to blur
-//    blur_shader->bindUniform(&viewport.screen_size, "occlusion_size", UNIFORM_VEC2, 1);
-//    
+    blur_shader->bindUniform(&viewport.screen_size, "screen_size", UNIFORM_VEC2, 1);
+//
 //    blur_shader->bindUniform(&noise_size, "noise_size", UNIFORM_INT, 1);
 //    
 //    // Get the viewport ready for the blur, done at 1/2 occlusion resolution
@@ -169,11 +127,27 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
 //    projection_matrix_2D = SGL::getProjectionMatrix2D(viewport);
 //    SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION);
 //    
-//    SGL::renderRect(glm::vec2(0.0), viewport.screen_size);
-//    
+    SGL::renderRect(glm::vec2(0.0), viewport.screen_size);
+//
 //    // Reset the viewport
 //    viewport.screen_size = viewport.screen_size * 2.0f;
-//    
+//
+	
+	// Blur the framebuffer
+	axis = glm::vec2(0.0, 1.0);
+	
+	blur_framebuffer_h->bind();
+	glClear(GL_COLOR_BUFFER_BIT);
+	
+	// Bind axis
+	blur_shader->bindUniform(&axis, "axis", UNIFORM_VEC2, 1);
+	
+	glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);
+	blur_framebuffer_w->bindTexture(0);
+	
+	SGL::renderRect(glm::vec2(0.0), viewport.screen_size);
+	
+	
     // Blend the main framebuffer with the new occlusion
     data.framebuffer->bind();
     
@@ -187,7 +161,7 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
     blend_shader->bindUniform(&attatchment, "final_render", UNIFORM_INT, 1);
     
     glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);
-    occlusion_framebuffer->bindTexture(0);
+    blur_framebuffer_h->bindTexture(0);
     
     glActiveTexture(GL_TEXTURE0 + data.texture_bind_start + 1);
     data.framebuffer->bindTexture(0);
@@ -204,9 +178,9 @@ void SAmbientOcclusionPass::unload() {
     
     // Unload the framebuffer and delete it
     occlusion_framebuffer->unload();
-    blur_framebuffer->unload();
+    blur_framebuffer_w->unload();
     
     delete occlusion_framebuffer;
-    delete blur_framebuffer;
+    delete blur_framebuffer_w;
     
 }

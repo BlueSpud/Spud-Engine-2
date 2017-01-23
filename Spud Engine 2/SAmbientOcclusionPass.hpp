@@ -33,11 +33,9 @@ class SAmbientOcclusionPass : public SPostProcessPass {
     private:
     
         SFramebuffer* occlusion_framebuffer;
-        SFramebuffer* blur_framebuffer;
+        SFramebuffer* blur_framebuffer_h;
+		SFramebuffer* blur_framebuffer_w;
         SViewport viewport;
-    
-        static glm::vec3 kernel[AO_KERNAL_SIZE];
-        static GLuint noise_texture_id;
     
         static SShader* ambient_occlusion_shader;
         static SShader* blur_shader;

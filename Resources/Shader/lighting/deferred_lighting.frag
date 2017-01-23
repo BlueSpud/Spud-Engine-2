@@ -122,7 +122,6 @@ void main() {
     roughness = orm.y;
     inverse_roughness = 1.0 - roughness;
     metalic = orm.z;
-    float occlusion = orm.x;
 
     // Get position from depth
     depth = texture(tex_depth, tex_coord0).x;

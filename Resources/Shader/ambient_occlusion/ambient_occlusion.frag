@@ -2,9 +2,6 @@
 
 uniform sampler2D tex_depth;
 
-uniform mat4 mat_view_scene;
-uniform mat4 mat_projection_scene;
-
 uniform vec4 projection_info;
 uniform vec2 screen_size;
 uniform vec2 planes;
@@ -18,8 +15,8 @@ out vec3 occlusion_out;
 #define EPSILON 0.01
 #define BIAS 0.01
 
-#define SIGMA 2.5
-#define KAPPA 3
+#define SIGMA 2.0
+#define KAPPA 1
 
 vec3 clip_info = vec3(planes.x * planes.y, planes.x - planes.y, planes.y);
 
@@ -41,10 +38,12 @@ vec3 reconstructNormal(vec3 C_pos) {
 	
 }
 
+const float TURNS_2PI = (TURNS * 6.28318);
+
 vec3 getSampleOffset(int s, float offset) {
 	
 	float a = (float(s) + 0.5) * (1.0 / SAMPLES);
-	float theta = a * (TURNS * 6.28318) + offset;
+	float theta = a * TURNS_2PI + offset;
 	
 	return vec3(cos(theta), sin(theta), a);
 	
@@ -103,6 +102,18 @@ void main() {
 	
 	occlusion = 1.0 - (occlusion * (2.0 * SIGMA / float(SAMPLES)));
 	
-	occlusion_out = vec3(occlusion);
+	// Now we pack the C_pos.z
+	float packed_z = clamp(C_pos.z * (1.0 / planes.y), 0.0, 1.0);
+	float packed_f = floor(packed_z * 256.0);
+	vec2 packed = vec2(packed_f * (1.0 / 256.0), packed_z * 256.0 - packed_f);
+	
+	// Now we do a small blur
+	if (abs(dFdx(C_pos.z)) < 0.02)
+		occlusion = occlusion - dFdx(occlusion) * (float(pixel_position.x & 1) - 0.5);
+	
+	if (abs(dFdy(C_pos.z)) < 0.02)
+		occlusion = occlusion - dFdy(occlusion) * (float(pixel_position.y & 1) - 0.5);
+	
+	occlusion_out = vec3(occlusion, packed);
 	
 }
