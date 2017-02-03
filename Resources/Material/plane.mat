@@ -1,4 +1,4 @@
-s:Shader/gbuffer.glsl
+s:Shader/gbuffer/gbuffer.glsl
 t:tex_albedo:Texture/plane/plane_albedo.png
 t:tex_orm:Texture/plane/plane_orm.png
 t:tex_normal:Texture/plane/plane_normal.png

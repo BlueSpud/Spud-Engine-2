@@ -13,6 +13,9 @@
 #include "SGLUpload.hpp"
 #include "SUniform.hpp"
 
+// Forward declaration
+class SGbufferShader;
+
 /******************************************************************************
  *  Definition for shader upload                                              *
  ******************************************************************************/
@@ -47,7 +50,9 @@ struct SShaderUnload : public SGLUpload {
  ******************************************************************************/
 
 class SShader : public SResource {
-    
+	
+	friend class SGbufferShader;
+	
     public:
     
         bool bind();
@@ -66,7 +71,9 @@ class SShader : public SResource {
         virtual void hotload(const SPath& path);
     
         bool force_rebind = false;
-    
+	
+		virtual bool load(const SPath& vert, const SPath& frag);
+	
     private:
     
         SFile* vert_file;

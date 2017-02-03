@@ -1,4 +1,4 @@
-s:Shader/gbuffer.glsl
+s:Shader/gbuffer/gbuffer.glsl
 t:tex_albedo:Texture/house/house_main_albedo.png
 t:tex_orm:Texture/house/house_main_orm.png
 t:tex_normal:Texture/house/house_main_normal.png

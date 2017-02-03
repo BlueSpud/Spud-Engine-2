@@ -28,7 +28,7 @@ void SModel::render(bool render_material, const std::vector<SMaterial*>& instanc
     for (int i = 0; i < draw_calls.size(); i++) {
         
         if (render_material)
-            instance_material[i]->bind();
+            instance_material[i]->bind(SGbufferShaderStatic);
         
         // Force an upload of the matricies, needs to be done for every material just in case there is a shader change
         SGL::flushMatrix(MAT_PROJECTION);

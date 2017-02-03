@@ -47,7 +47,7 @@ bool SMaterial::load(const SPath& path) {
                 
                 // Get the path of the shader and load it up
                 SPath shader_path = SPath(line.substr(2, line.length() - 2));
-                shader = SResourceManager::getResource<SShader>(shader_path);
+                shader = SResourceManager::getResource<SGbufferShader>(shader_path);
                 
             }
 
@@ -62,10 +62,10 @@ bool SMaterial::load(const SPath& path) {
 
 }
 
-void SMaterial::bind() {
+void SMaterial::bind(SGbufferShaderShaders shader_t) {
     
     // Make sure the shader is bound
-    bool did_bind = shader->bind();
+    bool did_bind = shader->bind(shader_t);
     
     // Check if this is already the currently bound material
     if (currently_bound_material != this || did_bind) {
@@ -83,23 +83,23 @@ void SMaterial::bind() {
         
         // If the shader was bound, reupload texture IDs
         if (did_bind)
-            uploadTextureIDs(shader);
+            uploadTextureIDs(shader_t);
         
         // Bind the uniforms
         for (int i = 0; i < uniforms.size(); i++)
-            shader->bindUniform(uniforms[i]);
+            shader->bindUniform(shader_t, uniforms[i]);
         
     }
     
 }
 
-void SMaterial::uploadTextureIDs(SShader* shader) {
+void SMaterial::uploadTextureIDs(SGbufferShaderShaders shader_t) {
     
     // Go through the textures and assign Ids for them
     int texture = 0;
     for (std::map<std::string, STexture*>::iterator i = textures.begin(); i != textures.end(); i++) {
         
-        glUniform1i(SShader::getUniformLocation(shader, i->first), texture);
+		shader->bindUniform(shader_t, &texture, i->first, UNIFORM_INT, 1);
         texture++;
         
     }

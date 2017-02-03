@@ -220,12 +220,12 @@ int main(int argc, char* argv[]) {
     // Create the light graph
     SSimpleLightGraph* light_graph = new SSimpleLightGraph();
     
-//    light = new SDirectionalLight();
-//    light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
-//    light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
-//    light->casts_shadow = true;
-//    
-//    light_graph->addLight(light);
+    light = new SDirectionalLight();
+    light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
+    light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
+    light->casts_shadow = true;
+    
+    light_graph->addLight(light);
     
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
     scene_graph->makeCurrent();
@@ -314,9 +314,6 @@ int main(int argc, char* argv[]) {
     
     SEventListener event_listener;
     event_listener.listenToEvent(EVENT_TICK, &update);
-	
-	SGbufferShader shader;
-	shader.compileShader(SPath("Shader/test/shader.vert"), SPath("Shader/test/static.master"), "static");
     
     // END TEMP CODE
     

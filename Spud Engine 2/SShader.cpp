@@ -103,31 +103,37 @@ void SShader::bindUniform(void* value, const std::string& name, int type, int co
 void SShader::bindUniform(SUniform* uniform) { bindUniform(uniform->value, uniform->name, uniform->type, uniform->count); }
 
 bool SShader::load(const SPath& path) {
+	
+	// Get two files, one for the frag and one for the vert
+	std::string file_name = path.getFilename();
+	
+	SPath path_vert = SPath(path.getPathAsString());
+	path_vert.removeLastPathComponent();
+	path_vert.appendPathComponent(file_name + ".vert");
+	
+	SPath path_frag = SPath(path.getPathAsString());
+	path_frag.removeLastPathComponent();
+	path_frag.appendPathComponent(file_name + ".frag");
+	
+	return load(path_vert, path_frag);
+	
+}
+
+bool SShader::load(const SPath& vert, const SPath& frag) {
     
     // Make sure the program is clear, just in case this is a hot load and we are forcing a rebind
     program_id = 0;
     
-    // Get two files, one for the frag and one for the vert
-    std::string file_name = path.getFilename();
-    
-    SPath path_vert = SPath(path.getPathAsString());
-    path_vert.removeLastPathComponent();
-    path_vert.appendPathComponent(file_name + ".vert");
-    
-    SPath path_frag = SPath(path.getPathAsString());
-    path_frag.removeLastPathComponent();
-    path_frag.appendPathComponent(file_name + ".frag");
-    
     // Save the other path
     if (paths.size() == 1) {
         
-        paths.push_back(path_vert);
-        paths.push_back(path_frag);
+        paths.push_back(vert);
+        paths.push_back(frag);
         
     }
     
-    vert_file = SFileSystem::loadFile(path_vert);
-    frag_file = SFileSystem::loadFile(path_frag);
+    vert_file = SFileSystem::loadFile(vert);
+    frag_file = SFileSystem::loadFile(frag);
     
     // Make sure that we were able to find the shader files
     if (!vert_file || !frag_file)

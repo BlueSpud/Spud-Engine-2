@@ -32,7 +32,6 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         // Stuff for rendering
         SFramebuffer* gbuffer;
     
-        SShader* gbuffer_shader;
         SShader* lit_shader;
         SShader* simple_shader;
     

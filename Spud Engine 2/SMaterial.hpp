@@ -9,7 +9,7 @@
 #ifndef SMaterial_hpp
 #define SMaterial_hpp
 
-#include "SShader.hpp"
+#include "SGbufferShader.hpp"
 #include "STexture.hpp"
 
 /******************************************************************************
@@ -20,18 +20,18 @@ class SMaterial : public SResource {
     
     public:
     
-        void bind();
+        void bind(SGbufferShaderShaders shader_t);
     
     protected:
     
         virtual bool load(const SPath& path);
         virtual void unload();
     
-        void uploadTextureIDs(SShader* shader);
+        void uploadTextureIDs(SGbufferShaderShaders shader_t);
     
     private:
 
-        SShader* shader;
+        SGbufferShader* shader;
     
         std::map<std::string, STexture*>textures;
         std::vector<SUniform*>uniforms;

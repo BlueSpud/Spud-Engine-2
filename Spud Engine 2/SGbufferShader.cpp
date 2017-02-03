@@ -8,9 +8,57 @@
 
 #include "SGbufferShader.hpp"
 
+/***********************************************************************************
+ *  Registration for supported shader extensions (GLSL used to load frag and vert) *
+ ***********************************************************************************/
+
+REGISTER_RESOURCE_CLASS(glsl, SGbufferShader)
+
 /******************************************************************************
  *  Implementation for Gbuffer shader                                         *
  ******************************************************************************/
+
+bool SGbufferShader::load(const SPath& path) {
+	
+	std::string filename = path.getFilename();
+	
+	// Get two files, one for the frag and one for the vert
+	std::string file_name = path.getFilename();
+	
+	SPath path_vert = SPath(path.getPathAsString());
+	path_vert.removeLastPathComponent();
+	path_vert.appendPathComponent(file_name + ".vert");
+	
+	SPath path_frag = SPath(path.getPathAsString());
+	path_frag.removeLastPathComponent();
+	path_frag.appendPathComponent(file_name + ".frag");
+	
+	for (int i = 0; i < SGbufferShaderCount; i++) {
+		
+		// Compile the vertex shader
+		compileShader(path_vert, SPath("Shader/master/" + std::string(SGbufferShaderExtensions[i]) + ".master"), SGbufferShaderExtensions[i]);
+		
+		// Now compile a GLSL shader for the extension
+		SPath compiled_vertex_path = path_vert;
+		compiled_vertex_path.removeLastPathComponent();
+		compiled_vertex_path.appendPathComponent(filename + "_" + SGbufferShaderExtensions[i] + ".vert");
+		
+		SShader* shader = new SShader();
+		
+		if (!shader->load(compiled_vertex_path, path_frag)) {
+			
+			SLog::verboseLog(SVerbosityLevel::Critical, "Failed to compile Gbuffer shader attatchment %s", SGbufferShaderExtensions[i]);
+			return false;
+			
+		}
+
+		shaders[(SGbufferShaderShaders)i] = shader;
+		
+	}
+	
+	return true;
+	
+}
 
 void SGbufferShader::compileShader(SPath shader_vert, const SPath& master_vert, const std::string& extension) {
 	
@@ -73,6 +121,24 @@ void SGbufferShader::compileShader(SPath shader_vert, const SPath& master_vert, 
 		shader_vert.appendPathComponent(new_file_name);
 		
 		SFileSystem::writeStringToFile(shader_vert, shader);
+		
+	}
+	
+}
+
+bool SGbufferShader::bind(SGbufferShaderShaders shader) { return shaders[shader]->bind(); }
+
+void SGbufferShader::bindUniform(SGbufferShaderShaders shader, void* value, const std::string& name, int type, int count) { shaders[shader]->bindUniform(value, name, type, count); }
+
+void SGbufferShader::bindUniform(SGbufferShaderShaders shader, SUniform* uniform) { shaders[shader]->bindUniform(uniform); }
+
+void SGbufferShader::unload() {
+	
+	// Unload all of the shaders
+	for (std::map<SGbufferShaderShaders, SShader*>::iterator i = shaders.begin(); i != shaders.end(); i++) {
+		
+		i->second->unload();
+		delete i->second;
 		
 	}
 	

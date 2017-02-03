@@ -29,7 +29,6 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     environment_map =  SResourceManager::getResource<SCubeMap>(SPath("Texture/room.cube"));
     
     // Get the lighting shader
-    gbuffer_shader = SResourceManager::getResource<SShader>(SPath("Shader/gbuffer.glsl"));
     lit_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/deferred_lighting.glsl"));
     simple_shader = SResourceManager::getResource<SShader>(SPath("Shader/simple/simple_texture.glsl"));
     
