@@ -54,6 +54,7 @@
 		02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B6B7DF1DDB40270068FCBA /* STextRenderer.cpp */; };
 		02B6B7E61DDBAE990068FCBA /* SConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B6B7E41DDBAE990068FCBA /* SConsole.cpp */; };
 		02B947F81D89FF7200822957 /* SUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B947F61D89FF7200822957 /* SUniform.cpp */; };
+		02B974181E425203002CA99C /* SGbufferShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B974161E425203002CA99C /* SGbufferShader.cpp */; };
 		02BD752E1E2B32F500593C11 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02BD752D1E2B32F500593C11 /* libglfw3.a */; };
 		02C35AE01DDE2E26007C361C /* SUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C35ADE1DDE2E26007C361C /* SUI.cpp */; };
 		02C427C41DDCAC620088039F /* SUITextField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C427C21DDCAC620088039F /* SUITextField.cpp */; };
@@ -199,6 +200,8 @@
 		02B6B7E51DDBAE990068FCBA /* SConsole.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SConsole.hpp; sourceTree = "<group>"; };
 		02B947F61D89FF7200822957 /* SUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUniform.cpp; sourceTree = "<group>"; };
 		02B947F71D89FF7200822957 /* SUniform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUniform.hpp; sourceTree = "<group>"; };
+		02B974161E425203002CA99C /* SGbufferShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGbufferShader.cpp; sourceTree = "<group>"; };
+		02B974171E425203002CA99C /* SGbufferShader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SGbufferShader.hpp; sourceTree = "<group>"; };
 		02BD752D1E2B32F500593C11 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = GLFW/lib/libglfw3.a; sourceTree = "<group>"; };
 		02BED0A91DA016D200AFBE59 /* SLightingConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLightingConstants.h; sourceTree = "<group>"; };
 		02C35ADE1DDE2E26007C361C /* SUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUI.cpp; sourceTree = "<group>"; };
@@ -601,12 +604,22 @@
 		02B947F51D89FF2500822957 /* Shader */ = {
 			isa = PBXGroup;
 			children = (
+				02B974151E4251F3002CA99C /* Compiler */,
 				025CB5941D83CD880059AF6C /* SShader.cpp */,
 				025CB5951D83CD880059AF6C /* SShader.hpp */,
 				02B947F61D89FF7200822957 /* SUniform.cpp */,
 				02B947F71D89FF7200822957 /* SUniform.hpp */,
 			);
 			name = Shader;
+			sourceTree = "<group>";
+		};
+		02B974151E4251F3002CA99C /* Compiler */ = {
+			isa = PBXGroup;
+			children = (
+				02B974161E425203002CA99C /* SGbufferShader.cpp */,
+				02B974171E425203002CA99C /* SGbufferShader.hpp */,
+			);
+			name = Compiler;
 			sourceTree = "<group>";
 		};
 		02C427C11DDCAC510088039F /* Widgets */ = {
@@ -771,6 +784,7 @@
 				02B6B7E11DDB40270068FCBA /* STextRenderer.cpp in Sources */,
 				025536541D8993B5003D04EE /* SCubeMap.cpp in Sources */,
 				0251FC401D7DC64300B3E63E /* SGL.cpp in Sources */,
+				02B974181E425203002CA99C /* SGbufferShader.cpp in Sources */,
 				02064B0D1D9D663000D49D4A /* SLightGraph.cpp in Sources */,
 				0201C78A1DEF4C1100AA0B24 /* SSound.cpp in Sources */,
 				02731C181E01A8B000A63389 /* SPhysicsSystem.cpp in Sources */,

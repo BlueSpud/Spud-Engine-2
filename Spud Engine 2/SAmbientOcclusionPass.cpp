@@ -37,12 +37,12 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
     std::vector<SFramebufferAttatchment*> attatchments_blur;
     attatchments_blur.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RED, GL_RED, GL_UNSIGNED_INT, 0));
     
-    blur_framebuffer_w = new SFramebuffer(attatchments_blur, viewport.screen_size.x, viewport.screen_size.y);
+    blur_framebuffer_w = new SFramebuffer(attatchments_blur, viewport.screen_size.x / 2.0f, viewport.screen_size.y / 2.0f);
 	
 	attatchments_blur.clear();
 	attatchments_blur.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RED, GL_RED, GL_UNSIGNED_INT, 0));
 	
-	blur_framebuffer_h = new SFramebuffer(attatchments_blur, viewport.screen_size.x, viewport.screen_size.y);
+	blur_framebuffer_h = new SFramebuffer(attatchments_blur, viewport.screen_size.x / 2.0f, viewport.screen_size.y / 2.0f);
 	
 }
 
@@ -67,8 +67,8 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
     ambient_occlusion_shader->bindUniform(&data.viewport_3D->planes, "planes", UNIFORM_VEC2, 1);
 	
 	// Calculate the projection information
-	glm::vec4 projection_info = glm::vec4((-2.0f / (viewport.screen_size.x * data.projection_matrix[0][0][0])),
-										   -2.0f / (viewport.screen_size.y * data.projection_matrix[0][0][0]),
+	glm::vec4 projection_info = glm::vec4( -2.0f / (viewport.screen_size.x * data.projection_matrix[0][0][0]),
+										   -2.0f / (viewport.screen_size.y * data.projection_matrix[0][1][1]),
 										   (1.0f - data.projection_matrix[0][0][2]) / data.projection_matrix[0][0][0],
 										   (1.0f + data.projection_matrix[0][1][2]) / data.projection_matrix[0][1][1]);
 	
@@ -80,7 +80,13 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
     // Do a horizontal blur first
     blur_framebuffer_w->bind();
     glClear(GL_COLOR_BUFFER_BIT);
-    
+	
+	// Here we change the projection a bit, blurring is done at 1/2 resolution
+	viewport.screen_size = viewport.screen_size / 2.0f;
+	SGL::setUpViewport(viewport);
+	projection_matrix_2D = SGL::getProjectionMatrix2D(viewport);
+	SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION);
+	
     // Bind the shader
     blur_shader->bind();
 
@@ -111,6 +117,12 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
 	blur_framebuffer_w->bindTexture(0);
 	
 	SGL::renderRect(glm::vec2(0.0), viewport.screen_size);
+	
+	// Reset the viewport
+	viewport.screen_size = viewport.screen_size * 2.0f;
+	SGL::setUpViewport(viewport);
+	projection_matrix_2D = SGL::getProjectionMatrix2D(viewport);
+	SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION);
 	
 	
     // Blend the main framebuffer with the new occlusion

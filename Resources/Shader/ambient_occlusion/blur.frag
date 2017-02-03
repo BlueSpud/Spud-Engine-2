@@ -8,10 +8,10 @@ in vec2 tex_coord0;
 
 out float blurred_occlusion;
 
-const float EDGE_SHARPNESS = 10.0;
+const float EDGE_SHARPNESS = 1.0;
 const float EDGE_SHARPNESS_2k = 2000.0 * EDGE_SHARPNESS;
 
-const float SCALE = 4.0;
+const float SCALE = 1.0;
 const int RADIUS = 4;
 //const float EPSILON = 0.0001;
 

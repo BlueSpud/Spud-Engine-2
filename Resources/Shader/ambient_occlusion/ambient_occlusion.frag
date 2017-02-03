@@ -10,13 +10,13 @@ in vec2 tex_coord0;
 
 out vec3 occlusion_out;
 
-#define TURNS 7.0
+#define TURNS 11.0
 #define SAMPLES 9.0
 #define EPSILON 0.01
-#define BIAS 0.01
+#define BIAS 0.001
 
-#define SIGMA 2.0
-#define KAPPA 1
+#define SIGMA 0.67
+#define KAPPA 1.0
 
 vec3 clip_info = vec3(planes.x * planes.y, planes.x - planes.y, planes.y);
 
@@ -72,10 +72,11 @@ float sampleAO(ivec2 pixel_position, vec3 C_pos, vec3 C_n, float disk_rad, int s
 	vec3 V = Q - C_pos;
 	
 	float V_dot_V = dot(V, V);
-	float V_dot_C_n = dot(V, C_n);
+	
+	// This is differnt than the orignal paper, use this to combat an issue with getting darker as it gets further away
+	float V_dot_C_n = dot(V, C_n) - C_pos.z * 0.001;
 	
 	float f = max(1.0 - V_dot_V, 0.0);
-	
 	return pow(f, KAPPA) * max((V_dot_C_n - BIAS) / (EPSILON + V_dot_V), 0.0);
 	
 }
@@ -94,7 +95,7 @@ void main() {
 	vec3 C_n = reconstructNormal(C_pos);
 	
 	// Get radius of disk
-	float disk_rad = -500.0 * 1.0 / C_pos.z;
+	float disk_rad = -200.0 * 1.0 / C_pos.z;
 	
 	float occlusion = 0.0;
 	for (int s = 0; s < SAMPLES; s++)
