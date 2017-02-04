@@ -63,6 +63,7 @@ class SShader : public SResource {
     
         void bindUniform(void* value, const std::string& name, int type, int count);
         void bindUniform(SUniform* uniform);
+		void bindTextureLocation(const std::string& name, int location);
     
     protected:
     

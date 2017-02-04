@@ -22,7 +22,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
     public:
     
-        SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport3D* _viewport_3D);
+        SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D);
         virtual ~SDeferredRenderingPipleline();
     
         virtual void render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation);

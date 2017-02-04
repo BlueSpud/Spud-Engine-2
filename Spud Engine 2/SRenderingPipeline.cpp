@@ -12,10 +12,11 @@
  *  Implementation for default rendering pipeline                             *
  ******************************************************************************/
 
-SRenderingPipeline::SRenderingPipeline(SViewport* _viewport_2D, SViewport3D* _viewport_3D) {
+SRenderingPipeline::SRenderingPipeline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D) {
     
     // Save the viewports
     viewport_2D = _viewport_2D;
+	screen_viewport = _screen_viewport;
     viewport_3D = _viewport_3D;
     
     // Get the shader
@@ -25,7 +26,7 @@ SRenderingPipeline::SRenderingPipeline(SViewport* _viewport_2D, SViewport3D* _vi
     std::vector<SFramebufferAttatchment*> attatchments;
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, 0));
     final_framebuffer = new SFramebuffer(attatchments, viewport_2D->screen_size.x, viewport_2D->screen_size.y);
-    
+	
 }
 
 void SRenderingPipeline::finalizeRender(SFramebuffer* output_framebuffer) {
@@ -37,22 +38,21 @@ void SRenderingPipeline::finalizeRender(SFramebuffer* output_framebuffer) {
         SFramebuffer::unbind();
     
     // Reset to the regular 2D viewport
-    glm::mat4 projection_matrix = SGL::getProjectionMatrix2D(*viewport_2D);
-    SGL::setUpViewport(*viewport_2D);
+    glm::mat4 projection_matrix = SGL::getProjectionMatrix2D(*screen_viewport);
+    SGL::setUpViewport(*screen_viewport);
     SGL::loadMatrix(projection_matrix, MAT_PROJECTION);
     SGL::clearMatrix(MAT_MODEL);
     SGL::clearMatrix(MAT_VIEW);
     
     // Bind the final texture, reset the simple shader
     simple_shader->bind();
-    
-    int zero = 0;
-    simple_shader->bindUniform(&zero, "tex_albedo", UNIFORM_INT, 1);
-    
+	
+	simple_shader->bindTextureLocation("tex_albedo", 0);
+	
     glActiveTexture(GL_TEXTURE0);
     final_framebuffer->bindTexture(0);
     
-    SGL::renderRect(viewport_2D->screen_pos, viewport_2D->screen_size);
+    SGL::renderRect(screen_viewport->screen_pos, screen_viewport->screen_size);
     
 }
 

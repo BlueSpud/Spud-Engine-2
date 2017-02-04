@@ -17,7 +17,7 @@ SShader* SAmbientOcclusionPass::blend_shader;
  ******************************************************************************/
 
 SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : viewport(main_framebuffer_size, glm::vec2(0)) {
-    
+	
     // Get the shader for an ambient occlusion pass if we dont have it
     if (!ambient_occlusion_shader) {
         
@@ -35,7 +35,7 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
     
     // Create the framebuffer for the blur
     std::vector<SFramebufferAttatchment*> attatchments_blur;
-    attatchments_blur.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RED, GL_RED, GL_UNSIGNED_INT, 0));
+    attatchments_blur.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0));
     
     blur_framebuffer_w = new SFramebuffer(attatchments_blur, viewport.screen_size.x / 2.0f, viewport.screen_size.y / 2.0f);
 	
@@ -59,9 +59,7 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
     
     // Use the shader
     ambient_occlusion_shader->bind();
-    
-    int attatchment = GBUFFER_DEPTH;
-    ambient_occlusion_shader->bindUniform(&attatchment, "tex_depth", UNIFORM_INT, 1);
+    ambient_occlusion_shader->bindTextureLocation("tex_depth", GBUFFER_DEPTH);
 	
     // Bind the near and far planes
     ambient_occlusion_shader->bindUniform(&data.viewport_3D->planes, "planes", UNIFORM_VEC2, 1);
@@ -94,7 +92,7 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
 	glm::vec2 axis = glm::vec2(1.0, 0.0);
 	blur_shader->bindUniform(&axis, "axis", UNIFORM_VEC2, 1);
 	
-	blur_shader->bindUniform(&data.texture_bind_start, "tex_occlusion", UNIFORM_INT, 1);
+	blur_shader->bindTextureLocation("tex_occlusion", data.texture_bind_start);
 	glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);
     occlusion_framebuffer->bindTexture(0);
 
@@ -131,11 +129,8 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
     blend_shader->bind();
 	
     // Bind the textures
-    attatchment = data.texture_bind_start;
-    blend_shader->bindUniform(&attatchment, "blurred", UNIFORM_INT, 1);
-    
-    attatchment = data.texture_bind_start + 1;
-    blend_shader->bindUniform(&attatchment, "final_render", UNIFORM_INT, 1);
+    blend_shader->bindTextureLocation("blurred", data.texture_bind_start);
+    blend_shader->bindTextureLocation("final_render", data.texture_bind_start + 1);
 	
 	// Horizontal blur is done second so it is what we use as the blurred framebuffer
     glActiveTexture(GL_TEXTURE0 + data.texture_bind_start);

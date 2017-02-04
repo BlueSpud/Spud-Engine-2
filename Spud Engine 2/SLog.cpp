@@ -72,16 +72,14 @@ void SLog::log(const char* format, ...) {
     
 }
 
-void SLog::writeLogToFile() {
+void SLog::writeLogToFile(std::string file) {
     
     // Write out everything we have logged by concainating all the strings
     std::string final_log;
     for (int i = 0; i < log_lines.size(); i++)
         final_log = final_log + log_lines[i] + "\n";
     
-    SPath log_path = SPath("Spud Engine.log");
-    
-    SFileSystem::writeStringToFile(log_path, final_log);
+    SFileSystem::writeStringToFile(file, final_log);
     
 }
 

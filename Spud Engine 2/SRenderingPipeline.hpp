@@ -46,7 +46,7 @@ class SRenderingPipeline {
     
     public:
     
-        SRenderingPipeline(SViewport* _viewport_2D, SViewport3D* _viewport_3D);
+        SRenderingPipeline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D);
         virtual ~SRenderingPipeline() { /* intentionally blank */ }
     
         virtual void render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation) = 0;
@@ -63,6 +63,7 @@ class SRenderingPipeline {
     
         SShader* simple_shader;
         SViewport* viewport_2D;
+		SViewport* screen_viewport;
         SViewport3D* viewport_3D;
 
     

@@ -132,6 +132,8 @@ void SGbufferShader::bindUniform(SGbufferShaderShaders shader, void* value, cons
 
 void SGbufferShader::bindUniform(SGbufferShaderShaders shader, SUniform* uniform) { shaders[shader]->bindUniform(uniform); }
 
+void SGbufferShader::bindTextureLocation(SGbufferShaderShaders shader, const std::string& name, int location) { shaders[shader]->bindTextureLocation(name, location); }
+
 void SGbufferShader::unload() {
 	
 	// Unload all of the shaders

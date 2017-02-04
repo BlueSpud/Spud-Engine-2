@@ -325,16 +325,18 @@ bool SFileSystem::fileExitsAtPath(const SPath& path) {
     
 }
 
-void SFileSystem::writeStringToFile(const SPath& path, const std::string& str) {
-    
-    // Write the contents of a string out to a file
-    std::ofstream output_stream = std::ofstream(root_directory + path.path_str);
-    
-    if (!output_stream.bad())
-        output_stream << str;
-    
-    
-    // Close it
-    output_stream.close();
-    
+void SFileSystem::writeStringToFile(const SPath& path, const std::string& str) { writeStringToFile(path.getPathAsAbsolutePath(), str); }
+
+void SFileSystem::writeStringToFile(const std::string& path, const std::string& str) {
+	
+	// Write the contents of a string out to a file
+	std::ofstream output_stream = std::ofstream(path);
+	
+	if (!output_stream.bad())
+		output_stream << str;
+	
+	
+	// Close it
+	output_stream.close();
+	
 }

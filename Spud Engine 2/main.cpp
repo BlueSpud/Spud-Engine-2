@@ -7,11 +7,9 @@
 //
 
 #include "SMainLoop.hpp"
-#include "SInputSystem.hpp"
 #include "SDeferredRenderingPipeline.hpp"
 #include "SCamera.hpp"
 #include "SHotLoadSystem.hpp"
-#include "SFramebuffer.hpp"
 
 #include "SConsole.hpp"
 #include "SUIButton.hpp"
@@ -26,8 +24,6 @@
 #include "SRigidBody.hpp"
 #include "SCharacterController.hpp"
 
-#include "SGbufferShader.hpp"
-
 double speed = 0.0;
 double speed_x = 0.0;
 
@@ -38,7 +34,8 @@ SSoundEmitter* sound_emitter;
 
 void moveLight(int key) {
     
-    light->transform = camera.transform;
+    light->transform.translation = camera.transform.translation;
+	light->transform.rotation = camera.transform.rotation;
     
 }
 
@@ -144,12 +141,20 @@ void update(const SEvent& event) {
     
     glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0.0,
                                  -cos(camera.transform.rotation.y) * speed);
+
     glm::vec3 strafe =  glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0.0,
                                  -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
+	
     glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
-    
-    camera.transform.translation_velocity = strafe + forward + fly;
-	//controller->setMoveDirection((strafe + forward) * 35.0f);
+
+	glm::vec3 move_vector = strafe + forward + fly;
+	
+	if (glm::length(move_vector)) {
+		
+		camera.transform.translation_velocity = glm::normalize(move_vector) * 0.2f;
+		//controller->setMoveDirection((strafe + forward) * 35.0f);
+		
+	} else camera.transform.translation_velocity = glm::vec3(0.0);
     
 }
 
@@ -197,24 +202,14 @@ int main(int argc, char* argv[]) {
     sound_emitter->transform.translation = camera.transform.translation;
     
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
-    
-//    physx::PxMaterial* material = PxGetPhysics().createMaterial(0.5, 0.5, 0.1);
 	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/cubes.smdl")));
-    scene_graph->addObject(mesh);
-
-//    mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sphere.smdl")));
-//    mesh->transform.translation.y = 50.0;
-//    scene_graph->addObject(mesh);
-//    
-//    SRigidBody* rigid_body = new SRigidBody(1000.0, new physx::PxSphereGeometry(1.0), material, &mesh->transform);
-//    rigid_body->addToPhysicsGraph(scene_graph->physics_graph);
-//    
-//    controller = new SCharacterController(scene_graph->physics_graph, material, glm::vec2(0.2, 1.0), 0.2, M_PI / 4.0,  &camera.transform);
+    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
+	scene_graph->addObject(mesh);
 	
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
-    SViewport viewport_2D = SViewport(window_framebuffer_size, glm::vec2());
+	SViewport viewport_2D = SViewport(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2());
+	SViewport screen_viewport = SViewport(window_framebuffer_size, glm::vec2());
     SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2(0), 45.0f, glm::vec2(0.1, 500.0));
     
     // Create the light graph
@@ -226,8 +221,8 @@ int main(int argc, char* argv[]) {
     light->casts_shadow = true;
     
     light_graph->addLight(light);
-    
-    SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &viewport_3D);
+	
+    SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
     scene_graph->makeCurrent();
     SRenderSystem::current_light_graph = light_graph;
     
@@ -336,21 +331,21 @@ int main(int argc, char* argv[]) {
     SResourceManager::shutdown();
     
     // Write out the log to a file
+	SPath log_root_path = SPath(argv[0]);
+	
     #ifdef __APPLE__
     
     // Because the root path is in the app bundle, which we cant write to, so we move the path to outside it
-    SPath log_root_path = SPath(argv[0]);
-    
     log_root_path.removeLastPathComponent();
     log_root_path.removeLastPathComponent();
     log_root_path.removeLastPathComponent();
     log_root_path.removeLastPathComponent();
     
     #endif
-    
-    SFileSystem::setRootDirectory(log_root_path);
-    SLog::writeLogToFile();
-    
+	
+	log_root_path.appendPathComponent("Spud Engine.log");
+	std::string log_path = log_root_path.getPathAsAbsolutePath();
+	
     SFileSystem::shutdown();
     
     SInputSystem::shutdown();
@@ -366,6 +361,8 @@ int main(int argc, char* argv[]) {
     SSoundSystem::shutdown();
     
     SEventSystem::shutdown();
-    
+	
+	SLog::writeLogToFile(log_path);
+	
     return 0;
 }

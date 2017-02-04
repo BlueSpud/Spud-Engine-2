@@ -109,6 +109,7 @@ class SFileSystem : public SSubsystem {
         static bool fileExitsAtPath(const SPath& path);
     
         static void writeStringToFile(const SPath& path, const std::string& str);
+		static void writeStringToFile(const std::string& path, const std::string& str);
     
     private:
     

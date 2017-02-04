@@ -35,8 +35,8 @@ class SLog {
         static void verboseLog(SVerbosityLevel verbosity, const char* format, ...);
         static void log(const char* format, ...);
     
-        static void writeLogToFile();
-    
+		static void writeLogToFile(std::string file);
+	
         static int getLineCount();
         static std::string& getLine(int line_number);
     

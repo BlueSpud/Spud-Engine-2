@@ -40,6 +40,7 @@ class SGbufferShader : public SResource {
 		bool bind(SGbufferShaderShaders shader);
 		void bindUniform(SGbufferShaderShaders shader, void* value, const std::string& name, int type, int count);
 		void bindUniform(SGbufferShaderShaders shader, SUniform* uniform);
+		void bindTextureLocation(SGbufferShaderShaders shader, const std::string& name, int location);
 	
 	protected:
 	

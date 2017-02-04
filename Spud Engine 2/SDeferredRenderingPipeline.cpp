@@ -12,7 +12,7 @@
  * Implementation for deferred rendering pipeline                             *
  ******************************************************************************/
 
-SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport3D* _viewport_3D) : SRenderingPipeline(_viewport_2D, _viewport_3D) {
+SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D) : SRenderingPipeline(_viewport_2D, _screen_viewport, _viewport_3D) {
     
     // Create the gbuffer and its attatchments
     std::vector<SFramebufferAttatchment*> attatchments;
@@ -122,23 +122,12 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     lit_shader->bind();
     
     // Bind the texture locations
-    int texture = GBUFFER_DEPTH;
-    lit_shader->bindUniform(&texture, "tex_depth", UNIFORM_INT, 1);
-    
-    texture = GBUFFER_ALBEDO;
-    lit_shader->bindUniform(&texture, "tex_albedo", UNIFORM_INT, 1);
-    
-    texture = GBUFFER_NORMAL;
-    lit_shader->bindUniform(&texture, "tex_normal", UNIFORM_INT, 1);
-    
-    texture = GBUFFER_ORM;
-    lit_shader->bindUniform(&texture, "tex_orm", UNIFORM_INT, 1);
-    
-    texture = ENVIRONMENT_MAP;
-    lit_shader->bindUniform(&texture, "tex_cube", UNIFORM_INT, 1);
-    
-    texture = SHADOW_ATLAS;
-    lit_shader->bindUniform(&texture, "tex_shadow", UNIFORM_INT, 1);
+	lit_shader->bindTextureLocation("tex_depth", GBUFFER_DEPTH);
+	lit_shader->bindTextureLocation("tex_albedo", GBUFFER_ALBEDO);
+    lit_shader->bindTextureLocation("tex_normal", GBUFFER_NORMAL);
+	lit_shader->bindTextureLocation("tex_orm", GBUFFER_ORM);
+    lit_shader->bindTextureLocation("tex_cube", ENVIRONMENT_MAP);
+    lit_shader->bindTextureLocation("tex_shadow", SHADOW_ATLAS);
     
     // Bind other uniforms needed for lighting
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);

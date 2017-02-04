@@ -210,7 +210,7 @@ bool SModel::load(const SPath& path) {
             }
             
         }
-        
+		
         // Create an upload
         upload = new SStaticMeshUpload();
         upload->verts = verts;

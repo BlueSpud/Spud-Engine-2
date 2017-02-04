@@ -15,8 +15,8 @@ out vec3 occlusion_out;
 #define EPSILON 0.01
 #define BIAS 0.001
 
-#define SIGMA 0.67
-#define KAPPA 1.0
+#define SIGMA 0.37
+#define KAPPA 3.0
 
 vec3 clip_info = vec3(planes.x * planes.y, planes.x - planes.y, planes.y);
 
@@ -106,6 +106,7 @@ void main() {
 	// Now we pack the C_pos.z
 	float packed_z = clamp(C_pos.z * (1.0 / planes.y), 0.0, 1.0);
 	float packed_f = floor(packed_z * 256.0);
+	
 	vec2 packed = vec2(packed_f * (1.0 / 256.0), packed_z * 256.0 - packed_f);
 	
 	// Now we do a small blur

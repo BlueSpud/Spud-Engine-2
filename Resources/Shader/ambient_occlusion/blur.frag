@@ -6,14 +6,13 @@ uniform vec2 screen_size;
 
 in vec2 tex_coord0;
 
-out float blurred_occlusion;
+out vec3 blurred;
 
-const float EDGE_SHARPNESS = 1.0;
+const float EDGE_SHARPNESS = 10.0;
 const float EDGE_SHARPNESS_2k = 2000.0 * EDGE_SHARPNESS;
 
 const float SCALE = 1.0;
-const int RADIUS = 4;
-//const float EPSILON = 0.0001;
+const int RADIUS = 2;
 
 const float kernel[5] = float[5](0.153170, 0.144893, 0.122649, 0.092902, 0.062970);
 
@@ -59,6 +58,6 @@ void main() {
 		
 	}
 	
-	blurred_occlusion = sum / weight_total;
+	blurred = vec3(sum / weight_total, main_sample.g, main_sample.b);
     
 }

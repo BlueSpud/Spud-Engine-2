@@ -102,6 +102,8 @@ void SShader::bindUniform(void* value, const std::string& name, int type, int co
 
 void SShader::bindUniform(SUniform* uniform) { bindUniform(uniform->value, uniform->name, uniform->type, uniform->count); }
 
+void SShader::bindTextureLocation(const std::string& name, int location) { bindUniform(&location, name, UNIFORM_INT, 1); }
+
 bool SShader::load(const SPath& path) {
 	
 	// Get two files, one for the frag and one for the vert

@@ -99,7 +99,7 @@ void SMaterial::uploadTextureIDs(SGbufferShaderShaders shader_t) {
     int texture = 0;
     for (std::map<std::string, STexture*>::iterator i = textures.begin(); i != textures.end(); i++) {
         
-		shader->bindUniform(shader_t, &texture, i->first, UNIFORM_INT, 1);
+		shader->bindTextureLocation(shader_t, i->first, texture);
         texture++;
         
     }
