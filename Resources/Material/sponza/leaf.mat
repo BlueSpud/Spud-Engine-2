@@ -1,0 +1,4 @@
+s:Shader/gbuffer/gbuffer.glsl
+t:tex_albedo:Texture/sponza/leaf/sponza_thorn_diff.tga
+t:tex_orm:Texture/blank/blank_orm.png
+t:tex_normal:Texture/sponza/leaf/sponza_thorn_ddn.tga

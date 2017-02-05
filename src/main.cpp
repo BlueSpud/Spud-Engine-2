@@ -202,16 +202,23 @@ int main(int argc, char* argv[]) {
 	
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
+    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
+	mesh->transform.scale = glm::vec3(0.5);
 	scene_graph->addObject(mesh);
 	
-	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
-	mesh->transform.translation.z = 2.8;
-	
-	scene_graph->addObject(mesh);
-	
-	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/plane.smdl")));
-	scene_graph->addObject(mesh);
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
+//	mesh->transform.translation.z = 2.8;
+//	
+//	scene_graph->addObject(mesh);
+//	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
+//	mesh->transform.translation.z = -3.4;
+//	mesh->transform.translation.y = 0.5;
+//
+//	scene_graph->addObject(mesh);
+//	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/plane.smdl")));
+//	scene_graph->addObject(mesh);
 	
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     

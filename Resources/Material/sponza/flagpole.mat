@@ -1,0 +1,4 @@
+s:Shader/gbuffer/gbuffer.glsl
+t:tex_albedo:Texture/sponza/flagpole/sponza_flagpole_diff.tga
+t:tex_orm:Texture/blank/blank_orm.png
+t:tex_normal:Texture/blank/blank_normal.png

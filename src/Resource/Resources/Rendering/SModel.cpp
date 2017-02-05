@@ -212,7 +212,7 @@ bool SModel::load(const SPath& path) {
         }
 		
         // Create an upload
-        upload = new SStaticMeshUpload();
+        upload = new SModelUpload();
         upload->verts = verts;
         upload->normals = normals;
         upload->tex_coords = tex_coords;
@@ -258,7 +258,7 @@ void SModel::hotload(const SPath& path) {
     if (uploaded) {
         
         // Send a deletion command
-        SStaticMeshUnload* unload = new SStaticMeshUnload();
+        SModelUnload* unload = new SModelUnload();
         unload->array_id = array_id;
         
         // Copy the array
@@ -276,7 +276,14 @@ void SModel::hotload(const SPath& path) {
         upload->unload();
         
     }
-    
+	
+	// General clean up
+	draw_calls.clear();
+	materials.clear();
+	
+	delete collision_geometry;
+	delete dynamic_collision_geometry;
+	
     // Close the old file and then load the new one
     SFileSystem::closeFile(file);
     load(path);
@@ -287,7 +294,7 @@ void SModel::hotload(const SPath& path) {
  *  Implementation for model upload                                           *
  ******************************************************************************/
 
-void SStaticMeshUpload::upload() {
+void SModelUpload::upload() {
 
     // Generate the buffer for indicies
     
@@ -340,7 +347,7 @@ void SStaticMeshUpload::upload() {
 
 }
 
-void SStaticMeshUpload::unload() {
+void SModelUpload::unload() {
     
     // Delete the buffers in regular RAM
     delete verts;
@@ -355,11 +362,11 @@ void SStaticMeshUpload::unload() {
  *  Implementation for model unload                                           *
  ******************************************************************************/
 
-void SStaticMeshUnload::upload() {
+void SModelUnload::upload() {
     
     // Delete model data
     glDeleteBuffers(buffer_count, buffer_ids);
     glDeleteVertexArrays(1, &array_id);
 }
 
-void SStaticMeshUnload::unload() { /* nothing */ }
+void SModelUnload::unload() { /* nothing */ }

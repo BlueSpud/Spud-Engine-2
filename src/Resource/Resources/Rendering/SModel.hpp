@@ -36,7 +36,7 @@ enum SStaticMeshBuffers {
  *  Definition for upload                                                     *
  ******************************************************************************/
 
-struct SStaticMeshUpload : public SGLUpload {
+struct SModelUpload : public SGLUpload {
     
     virtual void upload();
     virtual void unload();
@@ -63,7 +63,7 @@ struct SStaticMeshUpload : public SGLUpload {
  *  Definition for unload                                                     *
  ******************************************************************************/
 
-struct SStaticMeshUnload : public SGLUpload {
+struct SModelUnload : public SGLUpload {
   
     virtual void upload();
     virtual void unload();
@@ -122,7 +122,7 @@ class SModel : public SResource {
         // Storage for the VBOs
         GLuint buffer_ids[buffer_count];
     
-        SStaticMeshUpload* upload;
+        SModelUpload* upload;
     
         // Min and maxes of the model
         glm::vec3 mins;
@@ -130,10 +130,10 @@ class SModel : public SResource {
     
         // Collision stuff
         physx::PxTriangleMeshGeometry* collision_geometry = nullptr;
-        physx::PxTriangleMesh* collision_mesh;
+        physx::PxTriangleMesh* collision_mesh = nullptr;
     
-        physx::PxConvexMeshGeometry* dynamic_collision_geometry;
-        physx::PxConvexMesh* dynamic_collision_mesh;
+        physx::PxConvexMeshGeometry* dynamic_collision_geometry = nullptr;
+        physx::PxConvexMesh* dynamic_collision_mesh = nullptr;
     
 };
 
