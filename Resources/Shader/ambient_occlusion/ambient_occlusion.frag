@@ -12,11 +12,11 @@ out vec3 occlusion_out;
 
 #define TURNS 11.0
 #define SAMPLES 9.0
-#define EPSILON 0.01
+#define EPSILON 0.03
 #define BIAS 0.001
 
-#define SIGMA 0.37
-#define KAPPA 3.0
+#define SIGMA 0.67
+#define KAPPA 1.0
 
 vec3 clip_info = vec3(planes.x * planes.y, planes.x - planes.y, planes.y);
 

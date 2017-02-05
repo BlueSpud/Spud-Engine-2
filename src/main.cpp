@@ -190,6 +190,7 @@ int main(int argc, char* argv[]) {
     SConsole::startup();
     
     // TEMP CODE
+	camera.transform.translation.y = 2.0;
     SCamera::current_camera = &camera;
 //    
 //    SSound* sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
@@ -202,6 +203,14 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
     SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
+	scene_graph->addObject(mesh);
+	
+	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
+	mesh->transform.translation.z = 2.8;
+	
+	scene_graph->addObject(mesh);
+	
+	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/plane.smdl")));
 	scene_graph->addObject(mesh);
 	
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
