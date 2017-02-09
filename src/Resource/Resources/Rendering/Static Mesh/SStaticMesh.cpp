@@ -33,7 +33,9 @@ void SStaticMesh::render(bool render_material, double interpolation) {
     SGL::mulMatrix(transform_matrix, MAT_MODEL);
     
     // Call render on the parent model
-    parent_mesh->render(render_material, materials);
+	if (materials_identical)
+		parent_mesh->render(render_material, parent_mesh->materials);
+	else parent_mesh->render(render_material, materials);
 
 }
 
@@ -44,6 +46,7 @@ void SStaticMesh::setMaterial(SMaterial* new_material, int material_domain) {
         
         // Set the new material
         materials[material_domain] = new_material;
+		materials_identical = false;
         
     }
     

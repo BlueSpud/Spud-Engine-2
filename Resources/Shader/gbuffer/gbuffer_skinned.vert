@@ -6,12 +6,12 @@ uniform mat4 mat_view;
 
 uniform mat4 bones[16];
 
-layout(location = 0) in vec3 position;
-layout(location = 1) in vec3 normal;
-layout(location = 2) in vec2 tex_coord;
-layout(location = 3) in vec3 tangent;
-layout(location = 5) in vec4 bone_indicies;
-layout(location = 6) in vec4 vertex_weights;
+in vec3 position;
+in vec3 normal;
+in vec2 tex_coord;
+in vec3 tangent;
+in vec4 bone_indicies;
+in vec4 vertex_weights;
 
 out vec3 position0;
 out vec2 tex_coord0;

@@ -36,7 +36,8 @@ class SStaticMesh : public SObject {
     
         SModel* parent_mesh;
         std::vector<SMaterial*> materials;
-    
+		bool materials_identical = true;
+	
         SRigidBody* rigid_body = nullptr;
     
 };

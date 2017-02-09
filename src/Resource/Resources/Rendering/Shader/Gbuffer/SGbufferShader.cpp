@@ -20,18 +20,18 @@ REGISTER_RESOURCE_CLASS(glsl, SGbufferShader)
 
 bool SGbufferShader::load(const SPath& path) {
 	
-	std::string filename = path.getFilename();
-	
 	// Get two files, one for the frag and one for the vert
 	std::string file_name = path.getFilename();
 	
 	SPath path_vert = SPath(path.getPathAsString());
 	path_vert.removeLastPathComponent();
 	path_vert.appendPathComponent(file_name + ".vert");
+	paths.push_back(path_vert);
 	
 	SPath path_frag = SPath(path.getPathAsString());
 	path_frag.removeLastPathComponent();
 	path_frag.appendPathComponent(file_name + ".frag");
+	paths.push_back(path_frag);
 	
 	for (int i = 0; i < SGbufferShaderCount; i++) {
 		
@@ -41,9 +41,11 @@ bool SGbufferShader::load(const SPath& path) {
 		// Now compile a GLSL shader for the extension
 		SPath compiled_vertex_path = path_vert;
 		compiled_vertex_path.removeLastPathComponent();
-		compiled_vertex_path.appendPathComponent(filename + "_" + SGbufferShaderExtensions[i] + ".vert");
+		compiled_vertex_path.appendPathComponent(file_name + "_" + SGbufferShaderExtensions[i] + ".vert");
 		
 		SShader* shader = new SShader();
+		
+		std::cout << "Check" << path.getPathAsString() << std::endl;
 		
 		if (!shader->load(compiled_vertex_path, path_frag)) {
 			
@@ -57,6 +59,16 @@ bool SGbufferShader::load(const SPath& path) {
 	}
 	
 	return true;
+	
+}
+
+void SGbufferShader::hotload(const SPath& path) {
+	
+	// Create a hotload because we are deleting shaders and something might need them for this frame
+	SGbufferShaderHotload* hotload = new SGbufferShaderHotload(path);
+	hotload->shader = this;
+	
+	SGLUploadSystem::addUpload(hotload);
 	
 }
 
@@ -122,6 +134,9 @@ void SGbufferShader::compileShader(SPath shader_vert, const SPath& master_vert, 
 		
 		SFileSystem::writeStringToFile(shader_vert, shader);
 		
+		// Save the path for hotloading
+		paths.push_back(master_vert);
+		
 	}
 	
 }
@@ -145,3 +160,36 @@ void SGbufferShader::unload() {
 	}
 	
 }
+
+/******************************************************************************
+ *  Implementation for Gbuffer hotload                                        *
+ ******************************************************************************/
+
+void SGbufferShaderHotload::upload() {
+	
+	// Call unload on all of the shaders
+	for (std::map<SGbufferShaderShaders, SShader*>::iterator i = shader->shaders.begin(); i != shader->shaders.end(); i++) {
+		
+		// Unload the shader
+		i->second->unload();
+		delete i->second;
+		
+		// Erase the shader
+		shader->shaders.erase(i);
+		i = shader->shaders.begin();
+		
+	}
+	
+	// Start at 1 to skip the default .glsl path
+	for (int i = 1; i < shader->paths.size(); i++)
+		SFileSystem::closeFile(SFileSystem::loadFile(shader->paths[i]));
+	
+	// Clear the hotload paths
+	shader->paths.clear();
+	
+	// Reload the shader
+	shader->load(path);
+	
+}
+
+void SGbufferShaderHotload::unload() { /* intentionally empty */ }

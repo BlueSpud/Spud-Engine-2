@@ -62,6 +62,21 @@ bool SMaterial::load(const SPath& path) {
 
 }
 
+void SMaterial::hotload(const SPath& path) {
+	
+	// Clear textures
+	textures.clear();
+	
+	// Clear uniforms
+	for (int i = 0; i < uniforms.size(); i++)
+		delete uniforms[i];
+	uniforms.clear();
+	
+	// Reload
+	load(path);
+	
+}
+
 void SMaterial::bind(SGbufferShaderShaders shader_t) {
     
     // Make sure the shader is bound
@@ -103,10 +118,16 @@ void SMaterial::uploadTextureIDs(SGbufferShaderShaders shader_t) {
         texture++;
         
     }
-    
-    
+	
 }
 
-void SMaterial::unload() { /* intentionally empty */ }
+void SMaterial::unload() {
+
+	// Clear uniforms
+	for (int i = 0; i < uniforms.size(); i++)
+		delete uniforms[i];
+	uniforms.clear();
+
+}
 
 SGbufferShader* SMaterial::getShader() { return shader; }

@@ -27,15 +27,16 @@ class SMaterial : public SResource {
     
         virtual bool load(const SPath& path);
         virtual void unload();
-    
+		virtual void hotload(const SPath& path);
+	
         void uploadTextureIDs(SGbufferShaderShaders shader_t);
     
     private:
 
         SGbufferShader* shader;
     
-        std::map<std::string, STexture*>textures;
-        std::vector<SUniform*>uniforms;
+        std::map<std::string, STexture*> textures;
+        std::vector<SUniform*> uniforms;
     
         static SMaterial* currently_bound_material;
     

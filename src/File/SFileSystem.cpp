@@ -267,7 +267,7 @@ SFile* SFileSystem::loadFile(const SPath& path, bool binary) {
         return loaded_files[hash];
         
     }
-    
+	
     return nullptr;
     
 }

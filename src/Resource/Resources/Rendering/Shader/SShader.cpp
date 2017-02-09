@@ -178,33 +178,32 @@ bool SShader::load(const SPath& vert, const SPath& frag) {
 
 void SShader::unload() {
 
-    // Delete the program if it was successfully made
-    if (uploaded)
-        glDeleteProgram(program_id);
-    
+	// Delete the program in 2 ways, depending on if its already been uploaded
+	if (uploaded) {
+		
+		// Send a deletion command
+		SShaderUnload* unload = new SShaderUnload();
+		unload->program_id = program_id;
+		SGLUploadSystem::addUpload(unload);
+		
+	} else {
+		
+		// Cancel the upload we had already sent
+		upload->canceled = true;
+		
+		// Free the stuff we have
+		upload->unload();
+		
+	}
+
+	
 }
 
 void SShader::hotload(const SPath& path) {
-    
+	
     // Delete the last texture
-    if (uploaded) {
-        
-        // Send a deletion command
-        SShaderUnload* unload = new SShaderUnload();
-        unload->program_id = program_id;
-        SGLUploadSystem::addUpload(unload);
-        
-    } else {
-        
-        // Cancel the upload we had already sent
-        upload->canceled = true;
-        
-        // Free the stuff we have
-        upload->unload();
-        
-    }
-    
-    
+	unload();
+	
     // Close the files and then load the shader again
     SFileSystem::closeFile(vert_file);
     SFileSystem::closeFile(frag_file);
@@ -295,6 +294,8 @@ void SShaderUpload::upload() {
     glBindAttribLocation(*program_id, 1, "normal");
     glBindAttribLocation(*program_id, 2, "tex_coord");
     glBindAttribLocation(*program_id, 3, "tangent");
+	glBindAttribLocation(*program_id, 4, "bone_indicies");
+	glBindAttribLocation(*program_id, 5, "vertex_weights");
     
     glLinkProgram(*program_id);
     

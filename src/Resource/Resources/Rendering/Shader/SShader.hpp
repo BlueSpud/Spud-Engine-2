@@ -13,9 +13,6 @@
 #include "SGLUpload.hpp"
 #include "SUniform.hpp"
 
-// Forward declaration
-class SGbufferShader;
-
 /******************************************************************************
  *  Definition for shader upload                                              *
  ******************************************************************************/
@@ -52,6 +49,7 @@ struct SShaderUnload : public SGLUpload {
 class SShader : public SResource {
 	
 	friend class SGbufferShader;
+	friend class SGbufferShaderHotload;
 	
     public:
     

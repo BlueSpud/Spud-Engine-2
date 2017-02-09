@@ -11,6 +11,9 @@
 
 #include "SShader.hpp"
 
+// Forward declarations
+class SGbufferShader;
+
 /******************************************************************************
  *  Definition for Gbuffer shader attatchments information                    *
  ******************************************************************************/
@@ -21,7 +24,6 @@ enum SGbufferShaderShaders {
 	SGbufferShaderSkinned,
 	
 	
-	
 	SGbufferShaderCount
 	
 };
@@ -30,10 +32,28 @@ static const char* SGbufferShaderExtensions[] = { "static",
 												  "skinned" };
 
 /******************************************************************************
+ *  Definition for Gbuffer hotload                                            *
+ ******************************************************************************/
+
+struct SGbufferShaderHotload : public SGLUpload {
+	
+	SGbufferShaderHotload(const SPath& _path) : path(_path) {}
+	
+	virtual void upload();
+	virtual void unload();
+	
+	SGbufferShader* shader;
+	SPath path;
+	
+};
+
+/******************************************************************************
  *  Definition for Gbuffer shader                                             *
  ******************************************************************************/
 
 class SGbufferShader : public SResource {
+	
+	friend class SGbufferShaderHotload;
 	
 	public:
 	
@@ -46,6 +66,7 @@ class SGbufferShader : public SResource {
 	
 		virtual bool load(const SPath& path);
 		virtual void unload();
+		virtual void hotload(const SPath& path);
 	
 	private:
 	

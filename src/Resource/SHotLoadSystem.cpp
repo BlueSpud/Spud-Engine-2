@@ -62,7 +62,7 @@ void SHotLoadSystem::checkForUpdates() {
                         resource->modified_times[j] = new_time;
                 
                         // Hotload the resource
-                        resource->hotload(resource_path);
+                        resource->hotload(paths[0]);
                 
                     }
             

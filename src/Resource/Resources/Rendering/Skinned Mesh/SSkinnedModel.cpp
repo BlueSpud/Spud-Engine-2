@@ -22,7 +22,7 @@ void SSkinnedModel::render(bool render_material, const std::vector<SMaterial*>& 
 	
 	// Bind the array and then render
 	glBindVertexArray(array_id);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_ids[buffer_indicies]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicies_id);
 	
 	int sum = 0;
 	for (int i = 0; i < draw_calls.size(); i++) {

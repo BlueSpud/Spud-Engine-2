@@ -22,7 +22,7 @@ void SModel::render(bool render_material, const std::vector<SMaterial*>& instanc
     
     // Bind the array and then render
     glBindVertexArray(array_id);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_ids[buffer_indicies]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicies_id);
     
     int sum = 0;
     for (int i = 0; i < draw_calls.size(); i++) {
@@ -218,6 +218,7 @@ bool SModel::load(const SPath& path) {
         upload->tangents = tangents;
         
         upload->indicies = indicies;
+		upload->indicies_id = &indicies_id;
         
         upload->face_count = (unsigned int)indicies->size();
         upload->vertex_count = (unsigned int)vertex_count;
@@ -246,6 +247,7 @@ void SModel::unload() {
         
         // We had already uploaded the GPU
         glDeleteBuffers(m_buffer_count, buffer_ids);
+		glDeleteBuffers(1, &indicies_id);
         glDeleteVertexArrays(1, &array_id);
         
     }
@@ -269,6 +271,7 @@ void SModel::hotload(const SPath& path) {
             unload->buffer_ids[i] = buffer_ids[i];
 		
 		unload->buffer_count = m_buffer_count;
+		unload->indicies_id = indicies_id;
         
         SGLUploadSystem::addUpload(unload);
         
@@ -306,6 +309,7 @@ void SModelUpload::upload() {
     // Generate the array and the buffers
     glGenVertexArrays(1, array_id);
     glGenBuffers(m_buffer_count, buffer_ids);
+	glGenBuffers(1, indicies_id);
     
     // Bind the array and fill the buffers
     glBindVertexArray(*array_id);
@@ -357,7 +361,7 @@ void SModelUpload::upload() {
 	}
 	
 	// Fill up the indicies buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_ids[buffer_indicies]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *indicies_id);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(glm::ivec3) * face_count, indicies->data(), GL_STATIC_DRAW);
 	
     glBindVertexArray(0);
@@ -397,6 +401,7 @@ void SModelUnload::upload() {
     
     // Delete model data
     glDeleteBuffers(buffer_count, buffer_ids);
+	glDeleteBuffers(1, &indicies_id);
     glDeleteVertexArrays(1, &array_id);
 }
 

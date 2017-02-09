@@ -29,7 +29,6 @@ enum SStaticMeshBuffers {
     buffer_normal,
     buffer_tex_coord,
     buffer_tangent,
-    buffer_indicies,
 	buffer_bone_indicies,
 	buffer_weights,
     
@@ -64,6 +63,7 @@ struct SModelUpload : public SGLUpload {
     
     // Storage for the VBOs
     GLuint* buffer_ids;
+	GLuint* indicies_id;
     
 };
 
@@ -78,6 +78,7 @@ struct SModelUnload : public SGLUpload {
     
     GLuint array_id;
     GLuint buffer_ids[buffer_count];
+	GLuint indicies_id;
 	
 	unsigned int buffer_count;
     
@@ -131,6 +132,7 @@ class SModel : public SResource {
         // Storage for the VBOs
         GLuint buffer_ids[buffer_count];
 		unsigned int m_buffer_count;
+		GLuint indicies_id;
 	
         SModelUpload* upload;
     
