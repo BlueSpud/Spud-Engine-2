@@ -71,6 +71,7 @@
 		02B6B7DD1DDB39A80068FCBA /* Shader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 020604711DB7982800B6268F /* Shader */; };
 		02B6B7DE1DDB39AD0068FCBA /* Font in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02B6B7DC1DDB399B0068FCBA /* Font */; };
 		02BD752E1E2B32F500593C11 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02BD752D1E2B32F500593C11 /* libglfw3.a */; };
+		02BE01461E4CD3480031DD19 /* SAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02BE01441E4CD3480031DD19 /* SAnimation.cpp */; };
 		02E7FC831DB545D600955052 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E7FC821DB545D600955052 /* libfreeimage.a */; };
 		02F6D9011E0C16F100D78D80 /* libLowLevel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8F31E0C16F100D78D80 /* libLowLevel.a */; };
 		02F6D9021E0C16F100D78D80 /* libLowLevelCloth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F6D8F41E0C16F100D78D80 /* libLowLevelCloth.a */; };
@@ -236,6 +237,8 @@
 		0298659A1D84C38D005EED43 /* Texture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Texture; path = Resources/Texture; sourceTree = "<group>"; };
 		02B6B7DC1DDB399B0068FCBA /* Font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Font; path = Resources/Font; sourceTree = "<group>"; };
 		02BD752D1E2B32F500593C11 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = GLFW/lib/libglfw3.a; sourceTree = "<group>"; };
+		02BE01441E4CD3480031DD19 /* SAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SAnimation.cpp; sourceTree = "<group>"; };
+		02BE01451E4CD3480031DD19 /* SAnimation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SAnimation.hpp; sourceTree = "<group>"; };
 		02E7FC821DB545D600955052 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = FreeImage/lib/libfreeimage.a; sourceTree = "<group>"; };
 		02F6D8F31E0C16F100D78D80 /* libLowLevel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLowLevel.a; path = PhysX/lib/libLowLevel.a; sourceTree = "<group>"; };
 		02F6D8F41E0C16F100D78D80 /* libLowLevelCloth.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLowLevelCloth.a; path = PhysX/lib/libLowLevelCloth.a; sourceTree = "<group>"; };
@@ -295,6 +298,8 @@
 				0200D1A81E4C24E700FE128D /* SSkinnedMesh.hpp */,
 				0210045E1E4B645B00E00A24 /* SSkinnedModel.cpp */,
 				0210045F1E4B645B00E00A24 /* SSkinnedModel.hpp */,
+				02BE01441E4CD3480031DD19 /* SAnimation.cpp */,
+				02BE01451E4CD3480031DD19 /* SAnimation.hpp */,
 			);
 			name = "Skinned Mesh";
 			sourceTree = "<group>";
@@ -784,6 +789,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02BE01461E4CD3480031DD19 /* SAnimation.cpp in Sources */,
 				0291EBE41E46B2D50048DB92 /* SConsole.cpp in Sources */,
 				0200D1A91E4C24E700FE128D /* SSkinnedMesh.cpp in Sources */,
 				0291EBD91E46B2D50048DB92 /* SMaterial.cpp in Sources */,

@@ -25,6 +25,7 @@
 #include "SCharacterController.hpp"
 
 #include "SSkinnedMesh.hpp"
+#include "SAnimation.hpp"
 
 double speed = 0.0;
 double speed_x = 0.0;
@@ -209,8 +210,14 @@ int main(int argc, char* argv[]) {
 //	mesh->transform.scale = glm::vec3(0.5);
 //	scene_graph->addObject(mesh);
 	
-	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/physics_test1.smdl")));
+	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
+	skinned_mesh->transform.rotation.x = -M_PI / 2;
 	scene_graph->addObject(skinned_mesh);
+	
+	SAnimation* animation = SResourceManager::getResource<SAnimation>(SPath("Model/ak_reload.sanim"));
+	skinned_mesh->animation = animation;
+	animation->loops = true;
+	skinned_mesh->timer.start();
 	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
 //	mesh->transform.translation.z = 2.8;
@@ -250,7 +257,7 @@ int main(int argc, char* argv[]) {
 	light = new SDirectionalLight();
 	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
 	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
-	light->casts_shadow = true;
+//	light->casts_shadow = true;
 	
 	light_graph->addLight(light);
 	

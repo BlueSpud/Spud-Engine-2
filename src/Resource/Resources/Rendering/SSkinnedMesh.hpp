@@ -10,6 +10,9 @@
 #define SSkinnedMesh_hpp
 
 #include "SSkinnedModel.hpp"
+#include "SAnimation.hpp"
+#include "STime.hpp"
+
 #include "SObject.hpp"
 
 /******************************************************************************
@@ -25,10 +28,16 @@ class SSkinnedMesh : public SObject {
 			virtual void render(bool render_material, double interpolation);
 			virtual void update(const SEvent& event);
 	
+			glm::mat4 getMatrixForBone(int bone, float time);
+	
+			SAnimation* animation = nullptr;
+			SStopwatch timer;
+	
 		private:
 	
 			SSkinnedModel* parent_mesh;
 			std::vector<SMaterial*> materials;
+	
 	
 };
 

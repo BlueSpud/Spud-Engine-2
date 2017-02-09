@@ -30,7 +30,7 @@ void SSkinnedMesh::render(bool render_material, double interpolation) {
 	for (int i = 0; i < parent_mesh->bones.size(); i++) {
 		
 		// Calculate the world matrix (bone * parent) then calculate the full matrix with the bind pose
-		glm::mat4 world_matrix = parent_mesh->bones[i].matrix;
+		glm::mat4 world_matrix = getMatrixForBone(i, timer.getTime());
 		
 		int parent_index = parent_mesh->bones[i].parent_index;
 		if (parent_index != -1)
@@ -53,5 +53,14 @@ void SSkinnedMesh::update(const SEvent& event) {
 	
 	// Update the transform
 	transform.update();
+	
+}
+
+glm::mat4 SSkinnedMesh::getMatrixForBone(int bone, float time) {
+	
+	// If we have an animation, we can get it from the matrix, otherwise we use the default
+	if (animation)
+		return animation->getMatrixForBone(bone, time);
+	else return parent_mesh->bones[bone].matrix;
 	
 }

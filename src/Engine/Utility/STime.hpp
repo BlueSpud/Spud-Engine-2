@@ -85,7 +85,8 @@ class SStopwatch {
     
         void start();
         double stop();
-    
+		double getTime();
+	
     private:
     
         double time_start;

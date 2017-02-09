@@ -107,6 +107,8 @@ double SStopwatch::stop() {
     running = false;
     
     // Return elapsed time
-    return STime::getHighResolutionTime() - time_start;
+    return getTime();
     
 }
+
+double SStopwatch::getTime() { return STime::getHighResolutionTime() - time_start; }

@@ -42,12 +42,16 @@ class SSkinnedModel : public SModel {
 		virtual void unload();
 		virtual void hotload(const SPath& path);
 	
+		glm::mat4 getMatrixForBone(int bone, float time);
+	
 		glm::mat4 bind_pose;
 	
 		std::vector<SBone> bones;
 	
 		glm::vec4* vertex_weights;
 		glm::vec4* bone_indicies;
+	
+	
 	
 };
 

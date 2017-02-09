@@ -135,7 +135,5 @@ void SSkinnedModel::unload() {
 	
 }
 
-void SSkinnedModel::hotload(const SPath& path) {
-	
-	
-}
+void SSkinnedModel::hotload(const SPath& path) {}
+

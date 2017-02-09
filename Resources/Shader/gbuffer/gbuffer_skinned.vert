@@ -20,28 +20,40 @@ out mat3 tbn_matrix;
 void main() {
 
 
-	position0 = (mat_model * vec4(position, 1.0)).xyz;
+	position0 = position;
+	vec3 normal0 = normal;
+	vec3 tangent0 = tangent;
 
 	// Calculate the skinning
 	vec4 temp_position = vec4(position0, 1.0);
-	vec3 skinned_position;
+	position0 = vec3(0.0);
+
+	vec4 temp_normal = vec4(normal0, 0.0);
+	normal0 = vec3(0.0);
+
+	vec4 temp_tangent = vec4(tangent0, 0.0);
+	tangent0 = vec3(0.0);
 
 	for (int i = 0; i < 4; i++) {
 
-		if (bone_indicies[i] != -1)
-			skinned_position = skinned_position + ((temp_position * bones[int(bone_indicies[i])]) * vertex_weights[i]).xyz;
-		else break;
+		if (bone_indicies[i] != -1) {
+
+			position0 = position0 + ((temp_position * bones[int(bone_indicies[i])]) * vertex_weights[i]).xyz;
+			normal0 = normal0 + ((temp_normal * bones[int(bone_indicies[i])]) * vertex_weights[i]).xyz;
+			tangent0 = tangent0 + ((temp_tangent * bones[int(bone_indicies[i])]) * vertex_weights[i]).xyz;
+
+		} else break;
 
 	}
 
-	position0 = skinned_position;
+	// Transform it into world space
+	position0 = (mat_model * vec4(position0, 1.0)).xyz;
+	normal0 = normalize((mat_model * vec4(normal0, 0.0)).xyz);
+	tangent0 = normalize((mat_model * vec4(tangent0, 0.0)).xyz);
 
 	tex_coord0 = tex_coord;
 
 	// Calculate stuff for normal mapping
-	vec3 normal0 = normalize((mat_model * vec4(normal, 0.0)).xyz);
-
-	vec3 tangent0 = normalize((mat_model * vec4(tangent, 0.0)).xyz);
 	tangent0 = normalize(tangent0 - dot(tangent0, normal0) * normal0);
 
 	vec3 bitangent = normalize(cross(tangent0, normal0));
