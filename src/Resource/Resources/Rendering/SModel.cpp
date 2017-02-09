@@ -67,8 +67,7 @@ bool SModel::load(const SPath& path) {
         maxes = extents[1];
         
         // Grab the face count and vertex count
-        unsigned int vertex_count;
-        file->read((char*)&vertex_count, sizeof(unsigned int));
+        file->read(&vertex_count, sizeof(unsigned int));
         
         // Allocate the arrays for the data
         verts = new glm::vec3[vertex_count];
@@ -100,7 +99,7 @@ bool SModel::load(const SPath& path) {
             
             // Read the next token
             int token;
-            file->read((char*)&token, sizeof(int));
+            file->read(&token, sizeof(int));
             
             // If end of file was reached, we are done
             if (token == END_OF_FILE_TOKEN)
@@ -110,7 +109,7 @@ bool SModel::load(const SPath& path) {
                 
                 // Read the material name that we need
                 unsigned int material_name_length;
-                file->read((char*)&material_name_length, sizeof(unsigned int));
+                file->read(&material_name_length, sizeof(unsigned int));
                 
                 // Get the path of the material
                 char* material_path_s = new char[material_name_length + 1];
@@ -125,7 +124,7 @@ bool SModel::load(const SPath& path) {
                 
                 // Read the index count
                 unsigned int index_count;
-                file->read((char*)&index_count, sizeof(unsigned int));
+                file->read(&index_count, sizeof(unsigned int));
                 
                 // Save the number of indicies
                 draw_calls.push_back(index_count * 3);
@@ -134,7 +133,7 @@ bool SModel::load(const SPath& path) {
                     
                     // Read the indicies
                     indicies->push_back(glm::ivec3());
-                    file->read((char*)&indicies->back(), sizeof(glm::ivec3));
+                    file->read(&indicies->back(), sizeof(glm::ivec3));
                 }
                 
             }
@@ -143,7 +142,7 @@ bool SModel::load(const SPath& path) {
                 
                 // Read the number of verticies
                 unsigned int collision_vertex_count;
-                file->read((char*)&collision_vertex_count, sizeof(unsigned int));
+                file->read(&collision_vertex_count, sizeof(unsigned int));
                 
                 physx::PxVec3* collision_verticies = new physx::PxVec3[collision_vertex_count];
                 
@@ -152,7 +151,7 @@ bool SModel::load(const SPath& path) {
                 
                 // Read the indicies
                 unsigned int collision_index_count;
-                file->read((char*)&collision_index_count, sizeof(unsigned int));
+                file->read(&collision_index_count, sizeof(unsigned int));
                 
                 physx::PxU32* collision_indicies = new physx::PxU32[collision_index_count * 3];
                 
@@ -222,6 +221,10 @@ bool SModel::load(const SPath& path) {
         
         upload->face_count = (unsigned int)indicies->size();
         upload->vertex_count = (unsigned int)vertex_count;
+		
+		// Subtract 2 so we dont have the skinning data
+		upload->m_buffer_count = m_buffer_count = buffer_count - SKINNING_DATA_COUNT;
+		
         upload->array_id = &array_id;
         upload->buffer_ids = buffer_ids;
         upload->uploaded = &uploaded;
@@ -242,7 +245,7 @@ void SModel::unload() {
     if (uploaded) {
         
         // We had already uploaded the GPU
-        glDeleteBuffers(buffer_count, buffer_ids);
+        glDeleteBuffers(m_buffer_count, buffer_ids);
         glDeleteVertexArrays(1, &array_id);
         
     }
@@ -264,6 +267,8 @@ void SModel::hotload(const SPath& path) {
         // Copy the array
         for (int i = 0; i < buffer_count; i++)
             unload->buffer_ids[i] = buffer_ids[i];
+		
+		unload->buffer_count = m_buffer_count;
         
         SGLUploadSystem::addUpload(unload);
         
@@ -300,7 +305,7 @@ void SModelUpload::upload() {
     
     // Generate the array and the buffers
     glGenVertexArrays(1, array_id);
-    glGenBuffers(buffer_count, buffer_ids);
+    glGenBuffers(m_buffer_count, buffer_ids);
     
     // Bind the array and fill the buffers
     glBindVertexArray(*array_id);
@@ -332,11 +337,29 @@ void SModelUpload::upload() {
     
     glEnableVertexAttribArray(buffer_tangent);
     glVertexAttribPointer(buffer_tangent, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    
-    // Fill up the indicies buffer
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_ids[buffer_indicies]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(glm::ivec3) * face_count, indicies->data(), GL_STATIC_DRAW);
-    
+	
+	// If this is a SSkinnedMesh, m_buffer_count will be buffer_count because it includes the skinning data
+	if (m_buffer_count == buffer_count) {
+		
+		glBindBuffer(GL_ARRAY_BUFFER, buffer_ids[buffer_bone_indicies]);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * vertex_count, bone_indicies, GL_STATIC_DRAW);
+		
+		glEnableVertexAttribArray(buffer_bone_indicies);
+		glVertexAttribPointer(buffer_bone_indicies, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+		
+		// Fill up the indicies buffer
+		glBindBuffer(GL_ARRAY_BUFFER, buffer_ids[buffer_weights]);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * vertex_count, vertex_weights, GL_STATIC_DRAW);
+		
+		glEnableVertexAttribArray(buffer_weights);
+		glVertexAttribPointer(buffer_weights, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+		
+	}
+	
+	// Fill up the indicies buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_ids[buffer_indicies]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(glm::ivec3) * face_count, indicies->data(), GL_STATIC_DRAW);
+	
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
@@ -355,6 +378,14 @@ void SModelUpload::unload() {
     delete tex_coords;
     delete tangents;
     delete indicies;
+	
+	// If we had skinning data, delete it
+	if (bone_indicies) {
+		
+		delete bone_indicies;
+		delete vertex_weights;
+		
+	}
     
 }
 

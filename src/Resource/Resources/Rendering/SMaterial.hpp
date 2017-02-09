@@ -21,7 +21,8 @@ class SMaterial : public SResource {
     public:
     
         void bind(SGbufferShaderShaders shader_t);
-    
+		SGbufferShader* getShader();
+	
     protected:
     
         virtual bool load(const SPath& path);

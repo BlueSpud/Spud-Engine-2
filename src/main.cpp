@@ -24,6 +24,8 @@
 #include "SRigidBody.hpp"
 #include "SCharacterController.hpp"
 
+#include "SSkinnedMesh.hpp"
+
 double speed = 0.0;
 double speed_x = 0.0;
 
@@ -202,9 +204,13 @@ int main(int argc, char* argv[]) {
 	
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
-	mesh->transform.scale = glm::vec3(0.5);
-	scene_graph->addObject(mesh);
+//    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
+//	
+//	mesh->transform.scale = glm::vec3(0.5);
+//	scene_graph->addObject(mesh);
+	
+	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/physics_test1.smdl")));
+	scene_graph->addObject(skinned_mesh);
 	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
 //	mesh->transform.translation.z = 2.8;
@@ -228,13 +234,25 @@ int main(int argc, char* argv[]) {
     
     // Create the light graph
     SSimpleLightGraph* light_graph = new SSimpleLightGraph();
-    
-    light = new SDirectionalLight();
-    light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
-    light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
-    light->casts_shadow = true;
-    
-    light_graph->addLight(light);
+	
+//	light = new SPointLight();
+//	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
+//	light_graph->addLight(light);
+//	
+//	light = new SPointLight();
+//	light->transform.translation = glm::vec3(5.0, 1.0, 0.0);
+//	light_graph->addLight(light);
+//	
+//	light = new SPointLight();
+//	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
+//	light_graph->addLight(light);
+	
+	light = new SDirectionalLight();
+	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
+	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
+	light->casts_shadow = true;
+	
+	light_graph->addLight(light);
 	
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
     scene_graph->makeCurrent();

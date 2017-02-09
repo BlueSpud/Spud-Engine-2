@@ -167,7 +167,7 @@ void main() {
           L = position.xyz - light_positions[i];
 
           // Get attenuation and then normalize the light vector
-          att = length(L) / 2.0;
+          att = length(L);
           clamp(att = 1.0 / (att * att), 0.0, 1.0);
 
         }
@@ -199,7 +199,7 @@ void main() {
     vec3 metalic_reflection = reflection_color * metalic;
 
     // Combine lighting and texture
-    vec3 color = albedo * (lerp(specular_acc, diffuse_acc, metalic) + 0.2) + fresnel_reflection * inverse_roughness + metalic_reflection * albedo * inverse_roughness;
+    vec3 color = albedo * (lerp(specular_acc, diffuse_acc, metalic * inverse_roughness) + 0.3 + metalic_reflection) + fresnel_reflection * inverse_roughness;
     
     out_color = vec4(color, 1.0);
 

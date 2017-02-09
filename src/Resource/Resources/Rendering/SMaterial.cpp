@@ -108,3 +108,5 @@ void SMaterial::uploadTextureIDs(SGbufferShaderShaders shader_t) {
 }
 
 void SMaterial::unload() { /* intentionally empty */ }
+
+SGbufferShader* SMaterial::getShader() { return shader; }

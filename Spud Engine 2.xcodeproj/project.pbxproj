@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0200D1A91E4C24E700FE128D /* SSkinnedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0200D1A71E4C24E700FE128D /* SSkinnedMesh.cpp */; };
 		0201C77F1DEF4A9A00AA0B24 /* libopenal.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0201C77E1DEF4A9A00AA0B24 /* libopenal.1.dylib */; };
 		0201C7811DEF4ACB00AA0B24 /* libopenal.1.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 0201C77E1DEF4A9A00AA0B24 /* libopenal.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0202413D1D7C99130050E9D3 /* libboost_signals.a */; };
+		021004601E4B645B00E00A24 /* SSkinnedModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0210045E1E4B645B00E00A24 /* SSkinnedModel.cpp */; };
 		025903251D7793EA00EA6372 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259031E1D7793EA00EA6372 /* libboost_system.a */; };
 		025903261D7793EA00EA6372 /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259031F1D7793EA00EA6372 /* libboost_thread.a */; };
 		025903281D7793EA00EA6372 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903211D7793EA00EA6372 /* CoreVideo.framework */; };
@@ -115,10 +117,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0200D1A71E4C24E700FE128D /* SSkinnedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSkinnedMesh.cpp; sourceTree = "<group>"; };
+		0200D1A81E4C24E700FE128D /* SSkinnedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSkinnedMesh.hpp; sourceTree = "<group>"; };
 		0201C77E1DEF4A9A00AA0B24 /* libopenal.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopenal.1.dylib; path = OpenAL/lib/libopenal.1.dylib; sourceTree = "<group>"; };
 		0201C78B1DEF50FA00AA0B24 /* Sound */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Sound; path = Resources/Sound; sourceTree = "<group>"; };
 		0202413D1D7C99130050E9D3 /* libboost_signals.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_signals.a; path = ../../../../usr/local/lib/libboost_signals.a; sourceTree = "<group>"; };
 		020604711DB7982800B6268F /* Shader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shader; path = Resources/Shader; sourceTree = "<group>"; };
+		0210045E1E4B645B00E00A24 /* SSkinnedModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SSkinnedModel.cpp; path = "Skinned Mesh/SSkinnedModel.cpp"; sourceTree = "<group>"; };
+		0210045F1E4B645B00E00A24 /* SSkinnedModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SSkinnedModel.hpp; path = "Skinned Mesh/SSkinnedModel.hpp"; sourceTree = "<group>"; };
 		025903091D77933E00EA6372 /* Spud Engine 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Spud Engine 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0259031E1D7793EA00EA6372 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = /usr/local/lib/libboost_system.a; sourceTree = "<absolute>"; };
 		0259031F1D7793EA00EA6372 /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = /usr/local/lib/libboost_thread.a; sourceTree = "<absolute>"; };
@@ -282,6 +288,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0210045D1E4B621C00E00A24 /* Skinned Mesh */ = {
+			isa = PBXGroup;
+			children = (
+				0200D1A71E4C24E700FE128D /* SSkinnedMesh.cpp */,
+				0200D1A81E4C24E700FE128D /* SSkinnedMesh.hpp */,
+				0210045E1E4B645B00E00A24 /* SSkinnedModel.cpp */,
+				0210045F1E4B645B00E00A24 /* SSkinnedModel.hpp */,
+			);
+			name = "Skinned Mesh";
+			sourceTree = "<group>";
+		};
 		025903001D77933E00EA6372 = {
 			isa = PBXGroup;
 			children = (
@@ -575,6 +592,7 @@
 		0291EB831E46B2D40048DB92 /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
+				0210045D1E4B621C00E00A24 /* Skinned Mesh */,
 				0291EB941E46B2D40048DB92 /* Static Mesh */,
 				0291EB881E46B2D40048DB92 /* Shader */,
 				0291EB841E46B2D40048DB92 /* SCubeMap.cpp */,
@@ -767,7 +785,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0291EBE41E46B2D50048DB92 /* SConsole.cpp in Sources */,
+				0200D1A91E4C24E700FE128D /* SSkinnedMesh.cpp in Sources */,
 				0291EBD91E46B2D50048DB92 /* SMaterial.cpp in Sources */,
+				021004601E4B645B00E00A24 /* SSkinnedModel.cpp in Sources */,
 				0291EBE51E46B2D50048DB92 /* SUI.cpp in Sources */,
 				0291EBD31E46B2D50048DB92 /* SCamera.cpp in Sources */,
 				0291EBBF1E46B2D50048DB92 /* SFileSystem.cpp in Sources */,

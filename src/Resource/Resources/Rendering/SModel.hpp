@@ -21,6 +21,8 @@
  *  Definition for enum for VBOs                                              *
  ******************************************************************************/
 
+#define SKINNING_DATA_COUNT 2
+
 enum SStaticMeshBuffers {
     
     buffer_position,
@@ -28,6 +30,8 @@ enum SStaticMeshBuffers {
     buffer_tex_coord,
     buffer_tangent,
     buffer_indicies,
+	buffer_bone_indicies,
+	buffer_weights,
     
     buffer_count
 };
@@ -45,11 +49,15 @@ struct SModelUpload : public SGLUpload {
     glm::vec3* normals;
     glm::vec2* tex_coords;
     glm::vec3* tangents;
+	
+	glm::vec4* vertex_weights;
+	glm::vec4* bone_indicies;
     
     std::vector<glm::ivec3>* indicies;
     
     unsigned int face_count;
     unsigned int vertex_count;
+	unsigned int m_buffer_count;
     
     // Storage for the VAO
     GLuint* array_id;
@@ -70,6 +78,8 @@ struct SModelUnload : public SGLUpload {
     
     GLuint array_id;
     GLuint buffer_ids[buffer_count];
+	
+	unsigned int buffer_count;
     
 };
 
@@ -91,7 +101,7 @@ class SModel : public SResource {
     
     public:
     
-        void render(bool render_material, const std::vector<SMaterial*>& instance_material);
+		void render(bool render_material, const std::vector<SMaterial*>& instance_material);
         void getModelExtents(glm::vec3& _mins, glm::vec3& _maxes);
 
     
@@ -101,8 +111,6 @@ class SModel : public SResource {
         virtual void unload();
         virtual void hotload(const SPath& path);
     
-    private:
-    
         SFile* file;
     
         // Storage for the data before we upload it
@@ -110,7 +118,8 @@ class SModel : public SResource {
         glm::vec3* normals;
         glm::vec2* tex_coords;
         glm::vec3* tangents;
-    
+	
+		unsigned int vertex_count;
         std::vector<glm::ivec3>* indicies;
     
         std::vector<SMaterial*> materials;
@@ -121,7 +130,8 @@ class SModel : public SResource {
     
         // Storage for the VBOs
         GLuint buffer_ids[buffer_count];
-    
+		unsigned int m_buffer_count;
+	
         SModelUpload* upload;
     
         // Min and maxes of the model
