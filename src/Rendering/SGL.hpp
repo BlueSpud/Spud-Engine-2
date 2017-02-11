@@ -50,7 +50,20 @@ struct STransform {
         scale += scale_velocity;
         
     }
-    
+	
+	glm::vec3 getForwardVector() {
+		
+		// Calculate a few things we need more than once
+		float modified_yaw = rotation.y - M_PI / 2;
+		float cos_pitch = cos(rotation.x);
+		
+		// Calculate the vector
+		return glm::normalize(glm::vec3(cos(modified_yaw) * cos_pitch,
+										sin(rotation.x),
+										sin(modified_yaw) * cos_pitch));
+		
+	}
+	
 };
 
 /******************************************************************************

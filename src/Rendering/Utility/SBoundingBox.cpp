@@ -42,14 +42,13 @@ void SBoundingBox::project(const glm::mat4& matrix, bool homogonized) {
     };
     
     // Project all the points, also homogonize it
-    for (int i  = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         
         glm::vec4 point_projected = matrix * model_matrix * points[i];
         
         if (homogonized)
             point_projected = point_projected / point_projected.w;
-        
-        if (!i) {
+        if (i == 0) {
             
             // If this is the first point, it is immidately the min and max
             projected_mins = (glm::vec3)point_projected;

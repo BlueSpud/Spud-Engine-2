@@ -14,6 +14,8 @@
 #include "SCubeMap.hpp"
 #include "SAmbientOcclusionPass.hpp"
 
+#include "SDeferredTileController.hpp"
+
 /******************************************************************************
  *  Definition for deferred rendering pipeline                                *
  ******************************************************************************/
@@ -37,7 +39,9 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
         SCubeMap* environment_map;
         SUniform* view_pos_u;
-    
+	
+		SDeferredTileController tile_controller;
+	
 };
 
 #endif /* SDeferredRenderingPipeline_hpp */

@@ -18,6 +18,27 @@ REGISTER_RESOURCE_CLASS(sanim, SAnimation)
  *  Implementation for animation								     	      *
  ******************************************************************************/
 
+float SAnimation::getInterpolation(float percent, SAnimationTweening tweener) {
+	
+	switch (tweener) {
+			
+		case SAnimationTweeningNormal:
+			return percent;
+			break;
+
+		case SAnimationTweeningCos:
+			
+			// Cos interpolation
+			return 1.0 - (cosf(M_PI * percent) + 1.0) / 2.0;
+			
+			break;
+  
+	}
+	
+	return 0.0;
+	
+}
+
 glm::mat4 SAnimation::getMatrixForBone(int bone, float time) {
 	
 	// If we loop and we are over the time, we do a mod
@@ -55,6 +76,7 @@ glm::mat4 SAnimation::getMatrixForBone(int bone, float time) {
 	
 	// Calculate percent, for now only use linear
 	float percent = progress / delta_t;
+	float interpolation = getInterpolation(percent, keyframes[bone][start_keyframe].tweener);
 	
 	glm::mat4& start_matrix = keyframes[bone][start_keyframe].matrix;
 	glm::mat4& end_matrix = keyframes[bone][end_keyframe].matrix;
@@ -63,14 +85,14 @@ glm::mat4 SAnimation::getMatrixForBone(int bone, float time) {
 	glm::quat start_quat = glm::quat_cast(start_matrix);
 	glm::quat end_quat = glm::quat_cast(end_matrix);
 	
-	glm::quat interpolated_quat = glm::slerp(start_quat, end_quat, percent);
+	glm::quat interpolated_quat = glm::slerp(start_quat, end_quat, interpolation);
 	glm::mat4 interpolated_matrix = glm::mat4_cast(interpolated_quat);
 	
 	// Now we interpolate the transform components
 	glm::vec4 start_translation = glm::vec4(start_matrix[0][3], start_matrix[1][3], start_matrix[2][3], start_matrix[3][3]);
 	glm::vec4 end_translation = glm::vec4(end_matrix[0][3], end_matrix[1][3], end_matrix[2][3], end_matrix[3][3]);
 	
-	glm::vec4 interpolated_translation = glm::mix(start_translation, end_translation, percent);
+	glm::vec4 interpolated_translation = glm::mix(start_translation, end_translation, interpolation);
 	
 	// We have the interpolated rotation and translation, combine them into the final matrix
 	interpolated_matrix[0][3] = interpolated_translation.x;

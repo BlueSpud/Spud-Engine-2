@@ -27,11 +27,21 @@ SLight::SLight() {
     
 }
 
+void SLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec2& mins, glm::vec2& maxes) {
+	
+	// By default the light covers the entire screen
+	mins.x = -1.0;
+	mins.y = -1.0;
+	maxes.x = 1.0;
+	maxes.y = 1.0;
+	
+}
+
 /******************************************************************************
  *  Implementation for point light                                            *
  ******************************************************************************/
 
-SPointLight::SPointLight() : bounding_box(glm::vec3(-4.0), glm::vec3(4.0), &transform) { /* No initialization */ }
+SPointLight::SPointLight() : bounding_box(glm::vec3(-1.0), glm::vec3(1.0), &transform) { /* No initialization */ }
 
 void SPointLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
     
@@ -51,6 +61,17 @@ bool SPointLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
     return true;
     return bounding_box.frustrumCull(projection_view_matrix);
     
+}
+
+void SPointLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec2& mins, glm::vec2& maxes) {
+	
+	// We do homoginize it because we are doing projection
+	bounding_box.project(matrix, true);
+	
+	// Output projection result
+	mins = glm::vec2(bounding_box.projected_mins);
+	maxes = glm::vec2(bounding_box.projected_maxes);
+	
 }
 
 /******************************************************************************
@@ -140,4 +161,41 @@ bool SDirectionalLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
     // Directional lights are always rendered as a full screen quad, never culled
     return true;
     
+}
+
+/******************************************************************************
+ *  Implementation for spot light                                             *
+ ******************************************************************************/
+
+SSpotLight::SSpotLight() : bounding_box(glm::vec3(-1.0), glm::vec3(1.0), &transform) { /* No initialization */ }
+
+void SSpotLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
+	
+	// Shadows not supported currently!
+	
+}
+
+bool SSpotLight::needsShadowUpdate() {
+	
+	// For now always return false
+	return false;
+}
+
+bool SSpotLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
+	
+	// Project thhe bounding box
+	return true;
+	return bounding_box.frustrumCull(projection_view_matrix);
+	
+}
+
+void SSpotLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec2& mins, glm::vec2& maxes) {
+	
+	// We do homoginize it because we are doing projection
+	bounding_box.project(matrix, true);
+	
+	// Output projection result
+	mins = glm::vec2(bounding_box.projected_mins);
+	maxes = glm::vec2(bounding_box.projected_maxes);
+	
 }

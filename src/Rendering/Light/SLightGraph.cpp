@@ -149,75 +149,76 @@ void SSimpleLightGraph::removeLight(SLight* light) {
 
 }
 
+void SSimpleLightGraph::uploadCulledLightData(SShader* shader) {
+	
+	// Datas
+	std::vector<int> light_types;
+	std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> colors;
+	std::vector<glm::vec4> spot_data;
+	
+	// Shadow info
+	std::vector<int> shadows;
+	std::vector<glm::mat4> shadow_matricies;
+	std::vector<glm::vec2> shadow_coordinates;
+	
+	for (int i = 0; i < culled_lights.size(); i++) {
+		
+		SLight* light = culled_lights[i];
+		
+		// Get the type of the current light and positon
+		int type = light->getLightType();
+		light_types.push_back(type);
+		
+		glm::vec3 position = glm::vec3(light->transform.translation);
+		
+		// Check if the light was a spotlight
+		if (type == LIGHT_TYPE_SPOT) {
+			
+			// Get the spot cutoff and direction of the light
+			glm::vec4 spot_data_light = glm::vec4(light->transform.getForwardVector(), cos(M_PI / 4));
+			spot_data.push_back(spot_data_light);
+			
+		}
+		
+		positions.push_back(position);
+		
+		// Get the color
+		colors.push_back(light->light_color);
+		
+		// Get shadow information
+		int shadow = light->casts_shadow;
+		
+		if (shadow) {
+			
+			// Get matrix and shadow map positon
+			shadow_matricies.push_back(light->light_matrix);
+			shadow_coordinates.push_back(light->shadow_map_position);
+			
+		}
+		
+		shadows.push_back(shadow);
+		
+	}
+	
+	// Upload all of the data to the shader
+	int light_count = (int)culled_lights.size();
+	shader->bindUniform(&light_count, "light_count", UNIFORM_INT, 1);
+	
+	// Upload the regular light info
+	shader->bindUniform(positions.data(), "light_positions", UNIFORM_VEC3, light_count);
+	shader->bindUniform(colors.data(), "light_colors", UNIFORM_VEC3, light_count);
+	shader->bindUniform(shadows.data(), "lights_shadow", UNIFORM_INT, light_count);
+	shader->bindUniform(spot_data.data(), "spot_data", UNIFORM_VEC4, (int)spot_data.size());
+	shader->bindUniform(light_types.data(), "light_types", UNIFORM_INT, light_count);
+	
+	// Upload the shadow info
+	shader->bindUniform(shadow_matricies.data(), "light_matrices", UNIFORM_MAT4, (int)shadow_matricies.size());
+	shader->bindUniform(shadow_coordinates.data(), "shadow_map_coordinates", UNIFORM_VEC2, (int)shadow_coordinates.size());
 
-int SSimpleLightGraph::getLightCount() { return (int)culled_lights.size(); }
-
-std::vector<glm::vec3> SSimpleLightGraph::getLightPositions(double interpolation) {
-    
-    // Make a place we can store and return the positions
-    std::vector<glm::vec3> light_positions;
-    
-    // Collect the positions of the lights in an array
-    for (int i = 0; i < culled_lights.size(); i++)
-        light_positions.push_back(culled_lights[i]->transform.translation + culled_lights[i]->transform.translation_velocity * (float)interpolation);
-    
-    return light_positions;
-    
 }
 
-std::vector<glm::mat4> SSimpleLightGraph::getShadowMatrices() {
-
-    // Make a place we can store and return the matrices
-    std::vector<glm::mat4> light_matrices;
-    
-    // Collect the light matricies for upload
-    for (int i = 0; i < culled_lights.size(); i++)
-        if (culled_lights[i]->casts_shadow)
-            light_matrices.push_back(culled_lights[i]->light_matrix);
-    
-    return light_matrices;
-
-}
-
-std::vector<glm::vec2> SSimpleLightGraph::getShadowMapCoordinates() {
-    
-    // Make a place we can store and return the shadow map coordinates
-    std::vector<glm::vec2> shadow_map_coordinates;
-    
-    // Collect the shadow map coordinates for upload
-    for (int i = 0; i < culled_lights.size(); i++)
-        if (culled_lights[i]->casts_shadow)
-            shadow_map_coordinates.push_back(culled_lights[i]->shadow_map_position);
-    
-    return shadow_map_coordinates;
-    
-}
-
-std::vector<glm::vec3> SSimpleLightGraph::getColors() {
-    
-    // Make a place we can store and return the color
-    std::vector<glm::vec3> light_colors;
-    
-    // Collect the color of the lights in an array
-    for (int i = 0; i < culled_lights.size(); i++)
-        light_colors.push_back(culled_lights[i]->light_color);
-    
-    return light_colors;
-    
-}
-
-std::vector<int> SSimpleLightGraph::getShadowLights() {
-
-    // Make a place we can store and return the shadow bools
-    std::vector<int> lights_shadow;
-    
-    // Collect if the lights shadow
-    for (int i = 0; i < culled_lights.size(); i++)
-        lights_shadow.push_back(culled_lights[i]->casts_shadow);
-    
-    return lights_shadow;
-
-}
+std::vector<SLight*>& SSimpleLightGraph::getCulledLights() { return culled_lights; }
 
 SSimpleLightGraph::~SSimpleLightGraph() {
     

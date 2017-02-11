@@ -141,16 +141,11 @@ void update(const SEvent& event) {
     
     // Update camera position and calculate new velocity
     camera.transform.update();
-    
-    glm::vec3 forward = glm::vec3(sinf(camera.transform.rotation.y) * speed, 0.0,
-                                 -cos(camera.transform.rotation.y) * speed);
+	glm::vec3 strafe = glm::vec3(cos(camera.transform.rotation.y) * cos(camera.transform.rotation.x),
+								 0.0,
+								 sin(camera.transform.rotation.y) * cos(camera.transform.rotation.x)) * (float)speed_x;
 
-    glm::vec3 strafe =  glm::vec3(sinf(camera.transform.rotation.y + M_PI / 2) * speed_x, 0.0,
-                                 -cos(camera.transform.rotation.y  + M_PI / 2) * speed_x);
-	
-    glm::vec3 fly = glm::vec3(0, sinf(camera.transform.rotation.x) * speed, 0);
-
-	glm::vec3 move_vector = strafe + forward + fly;
+	glm::vec3 move_vector = strafe + camera.transform.getForwardVector() * (float)speed;
 	
 	if (glm::length(move_vector)) {
 		
@@ -195,29 +190,33 @@ int main(int argc, char* argv[]) {
     // TEMP CODE
 	camera.transform.translation.y = 2.0;
     SCamera::current_camera = &camera;
-//    
-//    SSound* sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
-//    sound_emitter = new SSoundEmitter();
-//    sound_emitter->setSound(sound);
-//    sound_emitter->play();
-//    sound_emitter->setLoops(true);
-//    sound_emitter->transform.translation = camera.transform.translation;
+    
+    SSound* sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
+    sound_emitter = new SSoundEmitter();
+    sound_emitter->setSound(sound);
+    sound_emitter->play();
+    sound_emitter->setLoops(true);
+    sound_emitter->transform.translation = camera.transform.translation;
 	
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
+    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
 	
 	mesh->transform.scale = glm::vec3(0.5);
 	scene_graph->addObject(mesh);
 	
-//	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
-//	skinned_mesh->transform.rotation.x = -M_PI / 2;
-//	scene_graph->addObject(skinned_mesh);
-//	
-//	SAnimation* animation = SResourceManager::getResource<SAnimation>(SPath("Model/ak_reload.sanim"));
-//	skinned_mesh->animation = animation;
-//	animation->loops = true;
-//	skinned_mesh->timer.start();
+	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
+	
+	skinned_mesh->transform.rotation.x = -M_PI / 2;
+	skinned_mesh->transform.translation = glm::vec3(0.0, 0.4, -0.5);
+	skinned_mesh->transform.scale = glm::vec3(0.15);
+	
+	scene_graph->addObject(skinned_mesh);
+	
+	SAnimation* animation = SResourceManager::getResource<SAnimation>(SPath("Model/ak_reload.sanim"));
+	skinned_mesh->animation = animation;
+	animation->loops = true;
+	skinned_mesh->timer.start();
 	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
 //	mesh->transform.translation.z = 2.8;
@@ -246,18 +245,19 @@ int main(int argc, char* argv[]) {
 //	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
 //	light_graph->addLight(light);
 //	
-//	light = new SPointLight();
-//	light->transform.translation = glm::vec3(5.0, 1.0, 0.0);
-//	light_graph->addLight(light);
-//	
-//	light = new SPointLight();
-//	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
-//	light_graph->addLight(light);
+	light = new SPointLight();
+	light->transform.translation = glm::vec3(5.0, 1.0, 0.0);
+	light->light_color = glm::vec3(1.0, 0.0, 0.0);
+	light_graph->addLight(light);
+
+	light = new SSpotLight();
+	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
+	light_graph->addLight(light);
 	
 	light = new SDirectionalLight();
 	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
 	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
-//	light->casts_shadow = true;
+	light->casts_shadow = true;
 	
 	light_graph->addLight(light);
 	
@@ -359,6 +359,12 @@ int main(int argc, char* argv[]) {
     
     // Do the main loop
     SMainLoop::loop();
+	
+	// TEMP CODE
+	
+	delete sound_emitter;
+	
+	// END TEMP CODE
     
     // Subsystem shutdown
     SConsole::shutdown();

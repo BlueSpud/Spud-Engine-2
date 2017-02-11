@@ -45,8 +45,6 @@ bool SGbufferShader::load(const SPath& path) {
 		
 		SShader* shader = new SShader();
 		
-		std::cout << "Check" << path.getPathAsString() << std::endl;
-		
 		if (!shader->load(compiled_vertex_path, path_frag)) {
 			
 			SLog::verboseLog(SVerbosityLevel::Critical, "Failed to compile Gbuffer shader attatchment %s", SGbufferShaderExtensions[i]);

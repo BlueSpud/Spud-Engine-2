@@ -70,6 +70,7 @@
 		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
 		02B6B7DD1DDB39A80068FCBA /* Shader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 020604711DB7982800B6268F /* Shader */; };
 		02B6B7DE1DDB39AD0068FCBA /* Font in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02B6B7DC1DDB399B0068FCBA /* Font */; };
+		02B9A95E1E4F7BB500A21784 /* SDeferredTileController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */; };
 		02BD752E1E2B32F500593C11 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02BD752D1E2B32F500593C11 /* libglfw3.a */; };
 		02BE01461E4CD3480031DD19 /* SAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02BE01441E4CD3480031DD19 /* SAnimation.cpp */; };
 		02E7FC831DB545D600955052 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E7FC821DB545D600955052 /* libfreeimage.a */; };
@@ -236,6 +237,8 @@
 		029865971D84AD4D005EED43 /* Model */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Model; path = Resources/Model; sourceTree = "<group>"; };
 		0298659A1D84C38D005EED43 /* Texture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Texture; path = Resources/Texture; sourceTree = "<group>"; };
 		02B6B7DC1DDB399B0068FCBA /* Font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Font; path = Resources/Font; sourceTree = "<group>"; };
+		02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDeferredTileController.cpp; sourceTree = "<group>"; };
+		02B9A95D1E4F7BB500A21784 /* SDeferredTileController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SDeferredTileController.hpp; sourceTree = "<group>"; };
 		02BD752D1E2B32F500593C11 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = GLFW/lib/libglfw3.a; sourceTree = "<group>"; };
 		02BE01441E4CD3480031DD19 /* SAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SAnimation.cpp; sourceTree = "<group>"; };
 		02BE01451E4CD3480031DD19 /* SAnimation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SAnimation.hpp; sourceTree = "<group>"; };
@@ -488,6 +491,7 @@
 		0291EB591E46B2D40048DB92 /* Light */ = {
 			isa = PBXGroup;
 			children = (
+				02B9A95B1E4F7B9A00A21784 /* Tile */,
 				0291EB5A1E46B2D40048DB92 /* SLight.cpp */,
 				0291EB5B1E46B2D40048DB92 /* SLight.hpp */,
 				0291EB5C1E46B2D40048DB92 /* SLightGraph.cpp */,
@@ -708,6 +712,15 @@
 			path = Widget;
 			sourceTree = "<group>";
 		};
+		02B9A95B1E4F7B9A00A21784 /* Tile */ = {
+			isa = PBXGroup;
+			children = (
+				02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */,
+				02B9A95D1E4F7BB500A21784 /* SDeferredTileController.hpp */,
+			);
+			name = Tile;
+			sourceTree = "<group>";
+		};
 		02F6D8EA1E0C135200D78D80 /* PhysX */ = {
 			isa = PBXGroup;
 			children = (
@@ -814,6 +827,7 @@
 				0291EBC91E46B2D50048DB92 /* SComponent.cpp in Sources */,
 				0291EBE11E46B2D50048DB92 /* SMainLoop.cpp in Sources */,
 				0291EBBA1E46B2D50048DB92 /* SLog.cpp in Sources */,
+				02B9A95E1E4F7BB500A21784 /* SDeferredTileController.cpp in Sources */,
 				0291EBD21E46B2D50048DB92 /* SBoundingBox.cpp in Sources */,
 				0291EBC01E46B2D50048DB92 /* main.cpp in Sources */,
 				0291EBE31E46B2D50048DB92 /* SSoundSystem.cpp in Sources */,

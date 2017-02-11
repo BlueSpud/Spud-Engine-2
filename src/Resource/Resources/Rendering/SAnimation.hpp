@@ -18,7 +18,8 @@
 
 enum SAnimationTweening {
 	
-	SAnimationTweeningNormal
+	SAnimationTweeningNormal,
+	SAnimationTweeningCos
 	
 };
 
@@ -51,6 +52,8 @@ class SAnimation : public SResource {
 	
 		virtual bool load(const SPath& path);
 		virtual void unload();
+	
+		float getInterpolation(float percent, SAnimationTweening tweener);
 	
 		std::vector<std::vector<SAnimationKeyFrame>> keyframes;
 	

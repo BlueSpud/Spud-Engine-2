@@ -55,7 +55,22 @@ void SSoundSystem::updateListenerPosition(double interpolation) {
     // Update the OpenAL listener positon and velocity
     alListenerfv(AL_POSITION, &listener_position[0]);
     alListenerfv(AL_VELOCITY, &listener_velocity[0]);
-    
+	
+	// Calculate the up vector
+	glm::vec3 at_up[] = {SCamera::current_camera->transform.getForwardVector(), glm::vec3()};
+	
+	float modified_yaw = SCamera::current_camera->transform.rotation.y - M_PI / 2;
+	float modified_pitch = SCamera::current_camera->transform.rotation.x + M_PI / 2;
+	float cos_pitch = cos(modified_pitch);
+	
+	at_up[1] = glm::normalize(glm::vec3(cos(modified_yaw) * cos_pitch,
+							 sin(modified_pitch),
+							 sin(modified_yaw) * cos_pitch));
+	
+	// Set the orientation
+	alListenerfv(AL_ORIENTATION, &at_up[0][0]);
+	
+	
     // Send out an event so the sound emitters can update their position if they are following the camera
     SSoundEventListenerMove event;
     SEventSystem::postEvent(EVENT_SOUND_SOUND_LISTENER_MOVE, event);

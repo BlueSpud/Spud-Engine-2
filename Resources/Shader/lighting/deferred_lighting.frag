@@ -14,14 +14,26 @@ in vec2 tex_coord0;
 out vec4 out_color;
 
 /******************************************************************************
+ *  Lighting constants                                                        *
+ ******************************************************************************/
+
+#define LIGHT_TYPE_POINT 1
+#define LIGHT_TYPE_DIRECTIONAL 2
+#define LIGHT_TYPE_SPOT 3
+
+/******************************************************************************
  *  Lighting parameters                                                       *
  ******************************************************************************/
 
 const float fresnel_pow = 5.0;
 
 uniform int light_count;
+
 uniform vec3 light_positions[64];
 uniform vec3 light_colors[64];
+uniform vec4 spot_data[64];
+uniform int light_types[64];
+
 uniform mat4 light_matrices[64];
 uniform vec2 shadow_map_coordinates[64];
 uniform int lights_shadow[64];
@@ -29,6 +41,8 @@ uniform int lights_shadow[64];
 const float tile_step = 1.0 / 8.0;
 
 uniform sampler2D tex_shadow;
+
+int spot_light = 0;
 
 /******************************************************************************
  *  Values that only need to be computed once per pixel                       *
@@ -47,6 +61,59 @@ vec3 lerp(vec3 a, vec3 b, float percent) {
     
     return a * percent + b * (1.0 - percent);
     
+}
+
+vec3 getLightVector(int light, vec3 position) {
+	
+	switch(light_types[light]) {
+			
+		case LIGHT_TYPE_DIRECTIONAL:
+			return -light_positions[light];
+			break;
+			
+		default:
+			return position - light_positions[light];
+			break;
+			
+	}
+	
+}
+
+float getAtt(int light, vec3 L) {
+	
+	switch(light_types[light]) {
+			
+		case LIGHT_TYPE_DIRECTIONAL:
+			return 1.0;
+			break;
+			
+		case LIGHT_TYPE_POINT:
+			
+			float att = length(L) * 2.0;
+			return clamp(1.0 / (att * att), 0.0, 1.0);
+			
+			break;
+			
+		case LIGHT_TYPE_SPOT:
+			
+			float att_spot = 0.0;
+			
+			// Check if this pixel is inside the spot light
+			float spot_dot = dot(spot_data[spot_light].xyz, normalize(L));
+			if (spot_dot > spot_data[spot_light].w) {
+				
+				att_spot = length(L) * 2.0;
+				att_spot = clamp(1.0 / (att_spot * att_spot), 0.0, 1.0);
+				
+			}
+			
+			spot_light++;
+			return att_spot;
+			
+			break;
+			
+	}
+	
 }
 
 float getShadowTerm(int matrix, vec3 L) {
@@ -147,32 +214,20 @@ void main() {
     for (int i = 0; i < light_count; i++) {
 
         // Get L
-        vec3 L;
+        vec3 L = getLightVector(i, position.xyz);
 
         float shadow = 1.0;
-        float att = 1.0;
+		float att = getAtt(i, L);
 
         if (lights_shadow[i] == 1) {
-
-            // Right now all thats supported is directional lights
-            L = -light_positions[i];
             
             shadow = getShadowTerm(shadow_light, L);
 
             shadow_light++;
 
-        } else {
-
-          // Standard point light
-          L = position.xyz - light_positions[i];
-
-          // Get attenuation and then normalize the light vector
-          att = length(L);
-          clamp(att = 1.0 / (att * att), 0.0, 1.0);
-
         }
 
-        // Make a threshhold for attenuation to be over to actualyl calculate light
+        // Make a threshhold for attenuation to be over to actually calculate light
         att = att * shadow;
         if (att > 0.01) {
 

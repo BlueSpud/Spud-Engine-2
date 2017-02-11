@@ -12,7 +12,9 @@
  * Implementation for deferred rendering pipeline                             *
  ******************************************************************************/
 
-SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D) : SRenderingPipeline(_viewport_2D, _screen_viewport, _viewport_3D) {
+SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D) :
+	SRenderingPipeline(_viewport_2D, _screen_viewport, _viewport_3D),
+	tile_controller(_viewport_3D->screen_size)																							{
     
     // Create the gbuffer and its attatchments
     std::vector<SFramebufferAttatchment*> attatchments;
@@ -84,7 +86,10 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     /******************************************************************************
      * Lighting pass                                                              *
      ******************************************************************************/
-    
+	
+	// Build the lighting tile grid
+	tile_controller.buildLightGrid(projection_view_matrix, &light_graph);
+	
     // No culling or depth testing for this stage
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
@@ -132,18 +137,8 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     // Bind other uniforms needed for lighting
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
     
-    // Lighting uniforms
-    int light_count = light_graph.getLightCount();
-    lit_shader->bindUniform(&light_count, "light_count", UNIFORM_INT, 1);
-    
-    lit_shader->bindUniform(light_graph.getLightPositions(interpolation).data(), "light_positions", UNIFORM_VEC3, light_count);
-    lit_shader->bindUniform(light_graph.getColors().data(), "light_colors", UNIFORM_VEC3, light_count);
-    lit_shader->bindUniform(light_graph.getShadowLights().data(), "lights_shadow", UNIFORM_INT, light_count);
-    
-    std::vector<glm::mat4> light_matrices = light_graph.getShadowMatrices();
-    lit_shader->bindUniform(light_matrices.data(), "light_matrices", UNIFORM_MAT4, (int)light_matrices.size());
-    
-    lit_shader->bindUniform(light_graph.getShadowMapCoordinates().data(), "shadow_map_coordinates", UNIFORM_VEC2, (int)light_matrices.size());
+	// Upload all the lighting information
+	light_graph.uploadCulledLightData(lit_shader);
     
     lit_shader->bindUniform(view_pos_u);
     

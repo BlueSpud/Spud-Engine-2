@@ -1,4 +1,0 @@
-s:Shader/gbuffer/gbuffer.glsl
-t:tex_albedo:Texture/cubes/cubes_albedo.png
-t:tex_orm:Texture/cubes/cubes_orm.png
-t:tex_normal:Texture/cubes/cubes_normal.png

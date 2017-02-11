@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "SLight.hpp"
+#include "SShader.hpp"
 
 /******************************************************************************
  *  Definition for basic light graph                                          *
@@ -30,14 +31,11 @@ class SLightGraph {
     
         virtual void addLight(SLight* light) = 0;
         virtual void removeLight(SLight* light) = 0;
-    
-        virtual int getLightCount() = 0;
-        virtual std::vector<glm::vec3> getLightPositions(double interpolation) = 0;
-        virtual std::vector<glm::mat4> getShadowMatrices() = 0;
-        virtual std::vector<glm::vec2> getShadowMapCoordinates() = 0;
-        virtual std::vector<glm::vec3> getColors() = 0;
-        virtual std::vector<int> getShadowLights() = 0;
-    
+	
+		virtual void uploadCulledLightData(SShader* shader) = 0;
+	
+		virtual std::vector<SLight*>& getCulledLights() = 0;
+	
         SFramebuffer* shadow_map_buffer;
         bool** shadow_map_atlas;
     
@@ -58,14 +56,11 @@ class SSimpleLightGraph : public SLightGraph {
     
         virtual void addLight(SLight* light);
         virtual void removeLight(SLight* light);
-    
-        virtual int getLightCount();
-        virtual std::vector<glm::vec3> getLightPositions(double interpolation);
-        virtual std::vector<glm::mat4> getShadowMatrices();
-        virtual std::vector<glm::vec2> getShadowMapCoordinates();
-        virtual std::vector<glm::vec3> getColors();
-        virtual std::vector<int> getShadowLights();
-    
+	
+		virtual void uploadCulledLightData(SShader* shader);
+	
+		virtual std::vector<SLight*>& getCulledLights();
+	
         virtual ~SSimpleLightGraph();
     
     private:
