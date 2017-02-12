@@ -1,4 +1,4 @@
 s:Shader/gbuffer/gbuffer.glsl
-t:tex_albedo:Texture/material_tests/metal/material_test_metal_albedo.png
-t:tex_orm:Texture/material_tests/metal/material_test_metal_orm.png
-t:tex_normal:Texture/material_tests/metal/material_test_metal_normal.png
+t:tex_albedo:Texture/material_tests/metal/material_test_metal_albedo.dds
+t:tex_orm:Texture/material_tests/metal/material_test_metal_orm.dds
+t:tex_normal:Texture/material_tests/metal/material_test_metal_normal.dds

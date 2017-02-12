@@ -9,6 +9,8 @@
 #ifndef SCubeMap_hpp
 #define SCubeMap_hpp
 
+#include <FreeImage.h>
+
 #include "STexture.hpp"
 
 /******************************************************************************

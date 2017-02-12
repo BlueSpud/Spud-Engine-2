@@ -200,21 +200,22 @@ int main(int argc, char* argv[]) {
 	
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
+    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
+	
 	scene_graph->addObject(mesh);
 	
-	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
-	
-	skinned_mesh->transform.rotation.x = -M_PI_2;
-	skinned_mesh->transform.translation = glm::vec3(0.0, 0.7, -0.5);
-	skinned_mesh->transform.scale = glm::vec3(0.4);
-	
-	scene_graph->addObject(skinned_mesh);
-	
-	SAnimation* animation = SResourceManager::getResource<SAnimation>(SPath("Model/ak_reload.sanim"));
-	skinned_mesh->animation = animation;
-	animation->loops = true;
-	skinned_mesh->timer.start();
+//	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
+//	
+//	skinned_mesh->transform.rotation.x = -M_PI_2;
+//	skinned_mesh->transform.translation = glm::vec3(0.0, 0.7, -0.5);
+//	skinned_mesh->transform.scale = glm::vec3(0.4);
+//	
+//	scene_graph->addObject(skinned_mesh);
+//	
+//	SAnimation* animation = SResourceManager::getResource<SAnimation>(SPath("Model/ak_reload.sanim"));
+//	skinned_mesh->animation = animation;
+//	animation->loops = true;
+//	skinned_mesh->timer.start();
 	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
 //	mesh->transform.translation.z = 2.8;
@@ -229,10 +230,6 @@ int main(int argc, char* argv[]) {
 //	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/plane.smdl")));
 //	scene_graph->addObject(mesh);
-	
-	if (glfwExtensionSupported("GL_EXT_texture_compression_s3tc"))
-		SLog::verboseLog(SVerbosityLevel::Critical, "Had compression");
-	else SLog::verboseLog(SVerbosityLevel::Critical, "No compression");
 	
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     

@@ -15,7 +15,7 @@ float b = 0.05;
 void main() {
 
     // Read the texture
-    vec4 texture_s = texture(tex_albedo, vec2(start.x, start.y) + tex_coord0 * size);
+    vec4 texture_s = texture(tex_albedo, start + tex_coord0 * size);
     
     // Do the signed distance field calculation
     final_color = vec4(1.0, 1.0, 1.0, smoothstep(a - b, a + b, texture_s.w));

@@ -1,4 +1,4 @@
 s:Shader/gbuffer/gbuffer.glsl
-t:tex_albedo:Texture/sponza/lion/lion.tga
-t:tex_orm:Texture/blank/blank_orm.png
-t:tex_normal:Texture/sponza/lion/lion_ddn.tga
+t:tex_albedo:Texture/sponza/lion/lion.dds
+t:tex_orm:Texture/blank/blank_orm.dds
+t:tex_normal:Texture/sponza/lion/lion_ddn.dds

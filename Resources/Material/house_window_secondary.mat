@@ -1,4 +1,4 @@
 s:Shader/gbuffer/gbuffer.glsl
-t:tex_albedo:Texture/house/house_window_secondary_albedo.png
-t:tex_orm:Texture/house/house_window_secondary_orm.png
-t:tex_normal:Texture/house/house_window_secondary_normal.png
+t:tex_albedo:Texture/house/house_window_secondary_albedo.dds
+t:tex_orm:Texture/house/house_window_secondary_orm.dds
+t:tex_normal:Texture/house/house_window_secondary_normal.dds

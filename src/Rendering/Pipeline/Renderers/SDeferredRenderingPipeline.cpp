@@ -20,8 +20,8 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     std::vector<SFramebufferAttatchment*> attatchments;
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT, GBUFFER_DEPTH));
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ALBEDO));
-    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_FLOAT, GBUFFER_NORMAL));
-    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ORM));
+    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGBA, GL_FLOAT, GBUFFER_NORMAL));
+    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ORM));
     gbuffer = new SFramebuffer(attatchments, viewport_3D->screen_size.x, viewport_3D->screen_size.y);
     
     // Create an ambient occlusion pass

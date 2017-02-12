@@ -35,6 +35,7 @@ void SGL::startup() {
     loadRect();
     
     // Set some basic parameters for OpenGL
+	glEnable(GL_TEXTURE_2D);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glCullFace(GL_BACK);
     

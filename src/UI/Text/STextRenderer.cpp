@@ -55,7 +55,7 @@ void STextRenderer::renderText(std::string text, SFont* font, float font_size, g
             text_shader->bindUniform(&font->characters[current_character].size, "size", UNIFORM_VEC2, 1);
             text_shader->bindUniform(&font->characters[current_character].position, "start", UNIFORM_VEC2, 1);
         
-            SGL::renderRect(cursor_head + font->characters[current_character].offset * font_size_multiplier, font->characters[current_character].size * (glm::vec2)font->font_atlas->size * font_size_multiplier);
+			SGL::renderRect(cursor_head + font->characters[current_character].offset * font_size_multiplier, glm::abs(font->characters[current_character].size) * (glm::vec2)font->font_atlas->size * font_size_multiplier);
         
             // Add the x-stride to the cursor
             cursor_head.x = cursor_head.x + font->characters[current_character].x_advance * font_size_multiplier;
@@ -150,7 +150,7 @@ void STextRenderer::renderTextWithCursor(std::string text, int cursor_pos, SFont
             text_shader->bindUniform(&font->characters[current_character].size, "size", UNIFORM_VEC2, 1);
             text_shader->bindUniform(&font->characters[current_character].position, "start", UNIFORM_VEC2, 1);
             
-            SGL::renderRect(cursor_head + font->characters[current_character].offset * font_size_multiplier, font->characters[current_character].size * (glm::vec2)font->font_atlas->size * font_size_multiplier);
+            SGL::renderRect(cursor_head + font->characters[current_character].offset * font_size_multiplier, glm::abs(font->characters[current_character].size) * (glm::vec2)font->font_atlas->size * font_size_multiplier);
             
             // Add the x-stride to the cursor
             cursor_head.x = cursor_head.x + font->characters[current_character].x_advance * font_size_multiplier;
@@ -189,7 +189,7 @@ void STextRenderer::renderCenteredTextLine(std::vector<SCharacterDrawCall>& char
         text_shader->bindUniform(&font->characters[character_draw_calls[j].character].position, "start", UNIFORM_VEC2, 1);
         
         SGL::renderRect(glm::vec2(character_draw_calls[j].position.x + offset_x, character_draw_calls[j].position.y),
-                      font->characters[character_draw_calls[j].character].size * (glm::vec2)font->font_atlas->size * font_size_multiplier);
+                        glm::abs(font->characters[character_draw_calls[j].character].size) * (glm::vec2)font->font_atlas->size * font_size_multiplier);
         
     }
     

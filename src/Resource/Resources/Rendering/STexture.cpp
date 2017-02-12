@@ -8,18 +8,11 @@
 
 #include "STexture.hpp"
 
-bool STexture::freeimage_initialized = false;
-
 /******************************************************************************
  *  Registration for supported texture extensions                             *
  ******************************************************************************/
 
-REGISTER_RESOURCE_CLASS(png, STexture)
-REGISTER_RESOURCE_CLASS(psd, STexture)
-REGISTER_RESOURCE_CLASS(jpg, STexture)
-REGISTER_RESOURCE_CLASS(jpeg, STexture)
-REGISTER_RESOURCE_CLASS(tiff, STexture)
-REGISTER_RESOURCE_CLASS(tga, STexture)
+REGISTER_RESOURCE_CLASS(dds, STexture)
 
 /******************************************************************************
  *  Implementation for texture                                                *
@@ -42,60 +35,149 @@ void STexture::bind(int texture_number) {
 }
 
 bool STexture::load(const SPath& path) {
-    
-    // We dont use a file here because free image handles its own loading
-    std::string absolute_path = path.getPathAsAbsolutePath();
-    if (!path.getIsDirectory()) {
-        
-        // Initialize free image and prepare storage
-        //if (!freeimage_initialized){
-            
-        FreeImage_Initialise();
-        //    freeimage_initialized = true;
-            
-        //}
-
-        FREE_IMAGE_FORMAT format;
-        
-        // Get the file format and load the image
-        format = FreeImage_GetFileType((const char*)absolute_path.c_str(),0);
-        bitmap = FreeImage_Load(format, (const char*)absolute_path.c_str());
-        
-        // Make sure we can actualy read the image
-        if (FreeImage_HasPixels(bitmap)) {
-            
-            // Create an upload and send it off
-            upload = new STextureUpload();
-            upload->image_data = FreeImage_GetBits(bitmap);
-            upload->bitmap = bitmap;
-            
-            // Get width and height for the upload and save it for ourselves
-            upload->width = FreeImage_GetWidth(bitmap);
-            upload->height =  FreeImage_GetHeight(bitmap);
-            size = glm::ivec2(upload->width, upload->height);
-            
-            upload->texture_id = &texture_id;
-            upload->uploaded = &uploaded;
-            
-            SGLUploadSystem::addUpload(upload);
-            
-            return true;
-            
-        }
-        
-        //FreeImage_DeInitialise();
-        
-    }
-
-    return false;
+	
+	file = SFileSystem::loadFile(path, true);
+	
+	if (file) {
+		
+		// Read the magic
+		std::uint32_t magic;
+		file->read((char*)&magic, sizeof(std::uint32_t));
+		
+		// Check that magic was right
+		if (magic != DDS_MAGIC) {
+			
+			SLog::verboseLog(SVerbosityLevel::Critical, "DDS magic was incorrect");
+			return false;
+			
+		}
+		
+		// Read the header
+		SDDSHeader header;
+		file->read((char*)&header, sizeof(header));
+		
+		// Make sure the header size was 124
+		if (header.size != DDS_HEADER_SIZE) {
+			
+			SLog::verboseLog(SVerbosityLevel::Critical, "DDS header size was not 124");
+			return false;
+			
+		}
+		
+		// Make sure we are using one of the supported formats
+		if (!(header.flags & DDPF_FOURCC)) {
+			
+			SLog::verboseLog(SVerbosityLevel::Critical, "DDS format was not supported");
+			return false;
+			
+		}
+		
+		int block_bytes;
+		GLenum internal_format;
+		
+		// Figure out which format we are using, DX1, DX3 or DX5
+		switch (header.format.four_CC) {
+				
+			case D3DFMT_DXT1:
+				
+				// DirectX 1
+				block_bytes = 8;
+				internal_format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+				
+				break;
+				
+			case D3DFMT_DXT3:
+				
+				// DirectX 3
+				block_bytes = 16;
+				internal_format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+				
+				break;
+				
+			case D3DFMT_DXT5:
+				
+				// DirectX 5
+				block_bytes = 16;
+				internal_format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+				
+				break;
+				
+			default:
+				
+				SLog::verboseLog(SVerbosityLevel::Critical, "DDS format was not supported");
+				return false;
+				
+				break;
+				
+		}
+		
+		// Get the number of mipmaps
+		int mip_maps = header.flags & DDSD_MIPMAPCOUNT;
+		
+		// If mipmap is absent from the flags, this was a single texture
+		if (!mip_maps)
+			mip_maps = 1;
+		else mip_maps = header.mipmaps;
+		
+		// Store mip map size seperately
+		unsigned int size_x = header.width;
+		unsigned int size_y = header.height;
+		
+		// Determine the size we need to read
+		size_t size_b = glm::max((unsigned int)DDS_DIV_SIZE, size_x) / DDS_DIV_SIZE * glm::max((unsigned int)DDS_DIV_SIZE, (unsigned int)size_y) / DDS_DIV_SIZE * block_bytes;
+		
+		// Read the mipmaps
+		for (int i = 0; i < mip_maps; i++) {
+			
+			// Allocate space for the data
+			char* data = (char*)malloc(size_b);
+			
+			// Read and upload
+			file->read(data, size_b);
+			
+			SMipMap mipmap;
+			mipmap.data = data;
+			mipmap.level = i;
+			mipmap.size = size_b;
+			mipmap.dimensions = glm::ivec2(size_x, size_y);
+			
+			mipmaps.push_back(mipmap);
+			
+			// Resize what we are going to read for the mipmaps
+			size_x = (size_x + 1) >> 1;
+			size_y = (size_y + 1) >> 1;
+			
+			size_b = glm::max((unsigned int)DDS_DIV_SIZE, size_x) / DDS_DIV_SIZE * glm::max((unsigned int)DDS_DIV_SIZE, (unsigned int)size_y) / DDS_DIV_SIZE * block_bytes;
+			
+		}
+		
+		// The size of the image is the size of the top mipmap
+		size = mipmaps[0].dimensions;
+		
+		// Create the upload
+		upload = new STextureUpload(mipmaps);
+		upload->texture_id = &texture_id;
+		upload->format = internal_format;
+		
+		upload->uploaded = &uploaded;
+		
+		SGLUploadSystem::addUpload(upload);
+		
+		return true;
+		
+	}
+	
+	return false;
     
 }
 
 void STexture::unload() {
 
-    // Delete the texture on the GPU
+    // Delete the texture on the GPU or the CPU data if we need to
     if (uploaded)
         glDeleteTextures(1, &texture_id);
+	else for (int i = 0; i < mipmaps.size(); i++)
+		free(mipmaps[i].data);
 
 }
 
@@ -118,8 +200,12 @@ void STexture::hotload(const SPath& path) {
         upload->unload();
         
     }
-    
-    
+	
+	// Clear mipmap
+	mipmaps.clear();
+	
+	SFileSystem::closeFile(file);
+	
     // Load the new texture
     load(path);
     
@@ -135,29 +221,24 @@ void STextureUpload::upload() {
     glGenTextures(1, texture_id);
     glBindTexture(GL_TEXTURE_2D, *texture_id);
 
-    // Figure out if we had alpha
-    GLint internal_format = GL_RGB;
-    GLint external_format = GL_BGR;
-    if (FreeImage_GetChannel(bitmap, FICC_ALPHA) != NULL) {
-        
-        internal_format = GL_RGBA;
-        external_format = GL_BGRA;
-        
-    }
-    
-    // Set the parameters of the texture
-    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0, external_format, GL_UNSIGNED_BYTE, image_data);
-    
+	// Upload the data
+	for (int i = 0; i < mipmaps.size(); i++)
+		glCompressedTexImage2D(GL_TEXTURE_2D, i, format, mipmaps[i].dimensions.x, mipmaps[i].dimensions.y, 0, (int)mipmaps[i].size, mipmaps[i].data);
+	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	
-	glGenerateMipmap(GL_TEXTURE_2D);
+	if (mipmaps.size() == 1)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	else glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, (int)mipmaps.size() - 1);
     
     unload();
-    
+	
+	*uploaded = true;
+	
     // Bind the default texture just in case
     glBindTexture(GL_TEXTURE_2D, 0);
     
@@ -165,9 +246,9 @@ void STextureUpload::upload() {
 
 void STextureUpload::unload() {
     
-    // Clean up image data
-    FreeImage_Unload(bitmap);
-    
+	for (int i = 0; i < mipmaps.size(); i++)
+		free(mipmaps[i].data);
+	
 }
 
 /******************************************************************************

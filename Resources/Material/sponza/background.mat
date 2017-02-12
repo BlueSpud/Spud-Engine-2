@@ -1,4 +1,4 @@
 s:Shader/gbuffer/gbuffer.glsl
-t:tex_albedo:Texture/sponza/background/background.tga
-t:tex_orm:Texture/blank/blank_orm.png
-t:tex_normal:Texture/sponza/background/background_ddn.tga
+t:tex_albedo:Texture/sponza/background/background.dds
+t:tex_orm:Texture/blank/blank_orm.dds
+t:tex_normal:Texture/sponza/background/background_ddn.dds

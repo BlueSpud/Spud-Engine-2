@@ -1,4 +1,4 @@
 s:Shader/gbuffer/gbuffer.glsl
-t:tex_albedo:Texture/sponza/column/sponza_column_c_diff.tga
-t:tex_orm:Texture/blank/blank_orm.png
-t:tex_normal:Texture/sponza/column/sponza_column_c_ddn.tga
+t:tex_albedo:Texture/sponza/column/sponza_column_c_diff.dds
+t:tex_orm:Texture/blank/blank_orm.dds
+t:tex_normal:Texture/sponza/column/sponza_column_c_ddn.dds

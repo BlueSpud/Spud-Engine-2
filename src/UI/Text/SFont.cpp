@@ -28,7 +28,7 @@ bool SFont::load(const SPath& path) {
     if (font_file) {
         
         // We got the font file now we load up the texture
-        font_atlas = SResourceManager::getResource<STexture>(SPath(path.getPathAsString() + "/atlas.png"));
+        font_atlas = SResourceManager::getResource<STexture>(SPath(path.getPathAsString() + "/atlas.dds"));
         if (font_atlas) {
             
             std::string line;
@@ -71,9 +71,9 @@ bool SFont::load(const SPath& path) {
                 // Convert the pixel data into UV data
                 // Position is 1.0 - y - height because given coordinates are from top
                 character.position = glm::vec2(x, y + height) / (glm::vec2)font_atlas->size;
-                character.position = glm::vec2(character.position.x, 1.0 - character.position.y);
+                character.position = glm::vec2(character.position.x, character.position.y);
                 
-                character.size = glm::vec2(width, height) / (glm::vec2)font_atlas->size;
+                character.size = glm::vec2(width, -height) / (glm::vec2)font_atlas->size;
                 character.offset = glm::vec2(x_offset, y_offset);
                 
                 character.x_advance = x_advance - padding;

@@ -1,4 +1,4 @@
 s:Shader/gbuffer/gbuffer.glsl
-t:tex_albedo:Texture/AK/AK_albedo.png
-t:tex_orm:Texture/AK/AK_orm.png
-t:tex_normal:Texture/AK/AK_normal.png
+t:tex_albedo:Texture/AK/AK_albedo.dds
+t:tex_orm:Texture/AK/AK_orm.dds
+t:tex_normal:Texture/AK/AK_normal.dds
