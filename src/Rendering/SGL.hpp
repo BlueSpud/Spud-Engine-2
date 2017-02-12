@@ -13,6 +13,7 @@
 #include <map>
 
 #define GLFW_INCLUDE_GLCOREARB
+#define GLFW_INCLUDE_GLEXT
 #include <glfw3.h>
 
 #include <glm/glm.hpp>
@@ -51,15 +52,15 @@ struct STransform {
         
     }
 	
-	glm::vec3 getForwardVector() {
+	glm::vec3 getForwardVector(double interpolation) {
 		
 		// Calculate a few things we need more than once
-		float modified_yaw = rotation.y - M_PI / 2;
-		float cos_pitch = cos(rotation.x);
+		float modified_yaw = (rotation.y + rotation_velocity.y * interpolation) - M_PI_2;
+		float cos_pitch = cos(rotation.x + rotation_velocity.x * interpolation);
 		
 		// Calculate the vector
 		return glm::normalize(glm::vec3(cos(modified_yaw) * cos_pitch,
-										sin(rotation.x),
+										sin(rotation.x + rotation_velocity.x * interpolation),
 										sin(modified_yaw) * cos_pitch));
 		
 	}

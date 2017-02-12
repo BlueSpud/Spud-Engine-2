@@ -115,6 +115,8 @@ class SSpotLight : public SLight {
 		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec2& mins, glm::vec2& maxes);
 	
 		int getLightType() { return LIGHT_TYPE_SPOT; }
+
+		float spotlight_cutoff = M_PI_4;
 	
 	private:
 	

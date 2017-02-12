@@ -138,7 +138,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
     
 	// Upload all the lighting information
-	light_graph.uploadCulledLightData(lit_shader);
+	light_graph.uploadCulledLightData(lit_shader, interpolation);
     
     lit_shader->bindUniform(view_pos_u);
     

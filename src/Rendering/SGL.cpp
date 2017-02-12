@@ -30,9 +30,6 @@ void SGL::startup() {
     
     // Create a window
     createWindow();
-    
-    // Make the current context
-    glfwMakeContextCurrent(window);
 
     // Load the rect we use
     loadRect();

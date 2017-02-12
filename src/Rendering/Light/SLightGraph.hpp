@@ -32,7 +32,7 @@ class SLightGraph {
         virtual void addLight(SLight* light) = 0;
         virtual void removeLight(SLight* light) = 0;
 	
-		virtual void uploadCulledLightData(SShader* shader) = 0;
+	virtual void uploadCulledLightData(SShader* shader, double interpolation) = 0;
 	
 		virtual std::vector<SLight*>& getCulledLights() = 0;
 	
@@ -57,7 +57,7 @@ class SSimpleLightGraph : public SLightGraph {
         virtual void addLight(SLight* light);
         virtual void removeLight(SLight* light);
 	
-		virtual void uploadCulledLightData(SShader* shader);
+		virtual void uploadCulledLightData(SShader* shader, double interpolation);
 	
 		virtual std::vector<SLight*>& getCulledLights();
 	

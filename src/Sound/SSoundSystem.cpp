@@ -57,15 +57,15 @@ void SSoundSystem::updateListenerPosition(double interpolation) {
     alListenerfv(AL_VELOCITY, &listener_velocity[0]);
 	
 	// Calculate the up vector
-	glm::vec3 at_up[] = {SCamera::current_camera->transform.getForwardVector(), glm::vec3()};
+	glm::vec3 at_up[] = {SCamera::current_camera->transform.getForwardVector(interpolation), glm::vec3()};
 	
-	float modified_yaw = SCamera::current_camera->transform.rotation.y - M_PI / 2;
-	float modified_pitch = SCamera::current_camera->transform.rotation.x + M_PI / 2;
+	float modified_yaw = (SCamera::current_camera->transform.rotation.y + SCamera::current_camera->transform.rotation_velocity.y * interpolation) - M_PI_2;
+	float modified_pitch = (SCamera::current_camera->transform.rotation.x + SCamera::current_camera->transform.rotation_velocity.x * interpolation) + M_PI_2;
 	float cos_pitch = cos(modified_pitch);
 	
 	at_up[1] = glm::normalize(glm::vec3(cos(modified_yaw) * cos_pitch,
-							 sin(modified_pitch),
-							 sin(modified_yaw) * cos_pitch));
+										sin(modified_pitch),
+										sin(modified_yaw) * cos_pitch));
 	
 	// Set the orientation
 	alListenerfv(AL_ORIENTATION, &at_up[0][0]);

@@ -145,7 +145,7 @@ void update(const SEvent& event) {
 								 0.0,
 								 sin(camera.transform.rotation.y) * cos(camera.transform.rotation.x)) * (float)speed_x;
 
-	glm::vec3 move_vector = strafe + camera.transform.getForwardVector() * (float)speed;
+	glm::vec3 move_vector = strafe + camera.transform.getForwardVector(0.0) * (float)speed;
 	
 	if (glm::length(move_vector)) {
 		
@@ -201,15 +201,13 @@ int main(int argc, char* argv[]) {
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
     SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
-	
-	mesh->transform.scale = glm::vec3(0.5);
 	scene_graph->addObject(mesh);
 	
 	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
 	
-	skinned_mesh->transform.rotation.x = -M_PI / 2;
-	skinned_mesh->transform.translation = glm::vec3(0.0, 0.4, -0.5);
-	skinned_mesh->transform.scale = glm::vec3(0.15);
+	skinned_mesh->transform.rotation.x = -M_PI_2;
+	skinned_mesh->transform.translation = glm::vec3(0.0, 0.7, -0.5);
+	skinned_mesh->transform.scale = glm::vec3(0.4);
 	
 	scene_graph->addObject(skinned_mesh);
 	
@@ -231,6 +229,10 @@ int main(int argc, char* argv[]) {
 //	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/plane.smdl")));
 //	scene_graph->addObject(mesh);
+	
+	if (glfwExtensionSupported("GL_EXT_texture_compression_s3tc"))
+		SLog::verboseLog(SVerbosityLevel::Critical, "Had compression");
+	else SLog::verboseLog(SVerbosityLevel::Critical, "No compression");
 	
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
