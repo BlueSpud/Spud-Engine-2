@@ -41,7 +41,7 @@ void SLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec2& mins, glm
  *  Implementation for point light                                            *
  ******************************************************************************/
 
-SPointLight::SPointLight() : bounding_box(glm::vec3(-1.0), glm::vec3(1.0), &transform) { /* No initialization */ }
+SPointLight::SPointLight() : bounding_box(glm::vec3(-1.7), glm::vec3(1.7), &transform) { /* No initialization */ }
 
 void SPointLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
     

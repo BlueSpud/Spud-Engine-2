@@ -42,7 +42,7 @@ SDeferredTileController::~SDeferredTileController() {
 const std::vector<int>& SDeferredTileController::getTileIndicies(int row, int column) const { return light_grid[row][column]; }
 glm::ivec2 SDeferredTileController::getGridSize() const { return tile_grid_size; }
 
-void SDeferredTileController::buildLightGrid(const glm::mat4& projection_model_matrix, SLightGraph* light_graph) {
+void SDeferredTileController::buildLightGrid(const glm::mat4& projection_view_matrix, SLightGraph* light_graph) {
 	
 	// Get the culled lights, lights that arent on the screen cant contribute
 	std::vector<SLight*>& lights = light_graph->getCulledLights();
@@ -56,14 +56,21 @@ void SDeferredTileController::buildLightGrid(const glm::mat4& projection_model_m
 	for (int i = 0; i < lights.size(); i++) {
 		
 		glm::vec2 mins, maxes;
-		lights[i]->getScreenSpaceExtents(projection_model_matrix, mins, maxes);
+		lights[i]->getScreenSpaceExtents(projection_view_matrix, mins, maxes);
 		
 		// These come as coordinates from [-1, 1], so change them to pixels because that is what the grid is built in
+		// Make sure to do 1 - y to compensate for differnt coordinates, we also have to swap min and max on y
 		mins = (mins + 1.0f) / 2.0f;
-		mins = glm::vec2(floor((mins.x * screen_size.x) / LIGHT_GRID_TILE_SIZE), floor((mins.y * screen_size.y) / LIGHT_GRID_TILE_SIZE));
+		mins.y = 1.0f - mins.y;
 		
 		maxes = (maxes + 1.0f) / 2.0f;
-		maxes = glm::vec2(floor((maxes.x * screen_size.x) / LIGHT_GRID_TILE_SIZE), floor((maxes.y * screen_size.y) / LIGHT_GRID_TILE_SIZE));
+		
+		float temp = 1.0f - maxes.y;
+		maxes.y = mins.y;
+		mins.y = temp;
+		
+		mins = glm::vec2(floor(mins.x * screen_size.x / LIGHT_GRID_TILE_SIZE), ceil(mins.y * screen_size.y / LIGHT_GRID_TILE_SIZE));
+		maxes = glm::vec2(floor(maxes.x * screen_size.x / LIGHT_GRID_TILE_SIZE), ceil(maxes.y * screen_size.y / LIGHT_GRID_TILE_SIZE));
 	
 		// Clamp the maxes and mins
 		mins.x = glm::clamp(mins.x, 0.0f, tile_grid_size.x - 1.0f);
@@ -79,4 +86,30 @@ void SDeferredTileController::buildLightGrid(const glm::mat4& projection_model_m
 		
 	}
 	
+}
+
+void SDeferredTileController::renderLightGrid(SShader* shader) {
+	
+	// For each tile
+	for (int r = 0; r < tile_grid_size.y; r++) {
+		
+
+		for (int c = 0; c < tile_grid_size.x; c++) {
+		
+			// Tell how many lights we are going to draw
+			int light_count = (int)light_grid[r][c].size();
+			shader->bindUniform(&light_count, "light_count", UNIFORM_INT, 1);
+			
+			// Bind the light indicies
+			shader->bindUniform(light_grid[r][c].data(), "light_indicies", UNIFORM_INT, light_count);
+		
+			// Draw a rect
+			SGL::renderRect(glm::vec2(c * LIGHT_GRID_TILE_SIZE, r * LIGHT_GRID_TILE_SIZE), glm::vec2(LIGHT_GRID_TILE_SIZE));
+		
+		
+		
+		
+		}
+	
+	}
 }

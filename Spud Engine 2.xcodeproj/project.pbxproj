@@ -237,8 +237,8 @@
 		029865971D84AD4D005EED43 /* Model */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Model; path = Resources/Model; sourceTree = "<group>"; };
 		0298659A1D84C38D005EED43 /* Texture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Texture; path = Resources/Texture; sourceTree = "<group>"; };
 		02B6B7DC1DDB399B0068FCBA /* Font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Font; path = Resources/Font; sourceTree = "<group>"; };
-		02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDeferredTileController.cpp; sourceTree = "<group>"; };
-		02B9A95D1E4F7BB500A21784 /* SDeferredTileController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SDeferredTileController.hpp; sourceTree = "<group>"; };
+		02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SDeferredTileController.cpp; path = ../../Light/SDeferredTileController.cpp; sourceTree = "<group>"; };
+		02B9A95D1E4F7BB500A21784 /* SDeferredTileController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SDeferredTileController.hpp; path = ../../Light/SDeferredTileController.hpp; sourceTree = "<group>"; };
 		02BD752D1E2B32F500593C11 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = GLFW/lib/libglfw3.a; sourceTree = "<group>"; };
 		02BE01441E4CD3480031DD19 /* SAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SAnimation.cpp; sourceTree = "<group>"; };
 		02BE01451E4CD3480031DD19 /* SAnimation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SAnimation.hpp; sourceTree = "<group>"; };
@@ -491,7 +491,6 @@
 		0291EB591E46B2D40048DB92 /* Light */ = {
 			isa = PBXGroup;
 			children = (
-				02B9A95B1E4F7B9A00A21784 /* Tile */,
 				0291EB5A1E46B2D40048DB92 /* SLight.cpp */,
 				0291EB5B1E46B2D40048DB92 /* SLight.hpp */,
 				0291EB5C1E46B2D40048DB92 /* SLightGraph.cpp */,
@@ -560,6 +559,8 @@
 				0291EB711E46B2D40048DB92 /* GBuffer.h */,
 				0291EB721E46B2D40048DB92 /* SDeferredRenderingPipeline.cpp */,
 				0291EB731E46B2D40048DB92 /* SDeferredRenderingPipeline.hpp */,
+				02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */,
+				02B9A95D1E4F7BB500A21784 /* SDeferredTileController.hpp */,
 			);
 			path = Renderers;
 			sourceTree = "<group>";
@@ -710,15 +711,6 @@
 				0291EBB91E46B2D50048DB92 /* SUIWidget.hpp */,
 			);
 			path = Widget;
-			sourceTree = "<group>";
-		};
-		02B9A95B1E4F7B9A00A21784 /* Tile */ = {
-			isa = PBXGroup;
-			children = (
-				02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */,
-				02B9A95D1E4F7BB500A21784 /* SDeferredTileController.hpp */,
-			);
-			name = Tile;
 			sourceTree = "<group>";
 		};
 		02F6D8EA1E0C135200D78D80 /* PhysX */ = {

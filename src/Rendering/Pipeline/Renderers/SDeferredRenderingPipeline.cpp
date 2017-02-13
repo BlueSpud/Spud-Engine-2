@@ -36,6 +36,8 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     
     // Get the view pos
     view_pos_u = SUniformManger::instance()->getUniformWithName("view_position");
+		
+	SLog::verboseLog(SVerbosityLevel::Debug, "Created deferred rendering pass of size %fx%f", _viewport_3D->screen_size.x, _viewport_3D->screen_size.y);
     
 }
 
@@ -136,14 +138,26 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     
     // Bind other uniforms needed for lighting
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
+	lit_shader->bindUniform(&viewport_3D->screen_size, "screen_size", UNIFORM_VEC2, 1);
     
 	// Upload all the lighting information
 	light_graph.uploadCulledLightData(lit_shader, interpolation);
     
     lit_shader->bindUniform(view_pos_u);
     
-    SGL::renderRect(glm::vec2(0, 0), viewport_2D->screen_size);
-    
+	//SGL::renderRect(glm::vec2(0, 0), viewport_2D->screen_size);
+	tile_controller.renderLightGrid(lit_shader);
+	
+//	STransform t;
+//	SBoundingBox b = SBoundingBox(glm::vec3(-2.0), glm::vec3(2.0), &t);
+//	b.project(projection_view_matrix, true);
+//	
+//	glm::vec2 start = (glm::vec2(b.projected_mins) + 1.0f) / 2.0f;
+//	glm::vec2 size = ((glm::vec2(b.projected_maxes) + 1.0f) / 2.0f) - start;
+//	
+//	simple_shader->bind();
+//	SGL::renderRect(glm::vec2(start.x, 1.0 - start.y) * viewport_3D->screen_size, glm::vec2(size.x, -size.y) * viewport_3D->screen_size);
+	
     // Perform post-processing
     runPostProcess(view_matrix, projection_matrix_3D, POST_RPOCESS_START);
     

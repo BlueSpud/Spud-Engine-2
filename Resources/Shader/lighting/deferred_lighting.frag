@@ -5,11 +5,11 @@ uniform sampler2D tex_albedo;
 uniform sampler2D tex_normal;
 uniform sampler2D tex_orm;
 uniform samplerCube tex_cube;
+uniform sampler2D tex_shadow;
 
 uniform vec3 view_position;
 uniform mat4 inverse_proj_view;
-
-in vec2 tex_coord0;
+uniform vec2 screen_size;
 
 out vec4 out_color;
 
@@ -27,8 +27,6 @@ out vec4 out_color;
 
 const float fresnel_pow = 5.0;
 
-uniform int light_count;
-
 uniform vec3 light_positions[64];
 uniform vec3 light_colors[64];
 uniform vec4 spot_data[64];
@@ -38,9 +36,12 @@ uniform mat4 light_matrices[64];
 uniform vec2 shadow_map_coordinates[64];
 uniform int lights_shadow[64];
 
-const float tile_step = 1.0 / 8.0;
 
-uniform sampler2D tex_shadow;
+// Tile shading
+uniform int light_indicies[64];
+uniform int light_count;
+
+const float tile_step = 1.0 / 8.0;
 
 int spot_light = 0;
 
@@ -90,7 +91,7 @@ float getAtt(int light, vec3 L) {
 		case LIGHT_TYPE_POINT:
 			
 			float att = length(L) * 2.0;
-			return clamp(1.0 / (att * att), 0.0, 1.0);
+			return clamp(0.5 / (att * att), 0.0, 1.0);
 			
 			break;
 			
@@ -103,7 +104,7 @@ float getAtt(int light, vec3 L) {
 			if (spot_dot > spot_data[spot_light].w) {
 				
 				att_spot = length(L) * 2.0;
-				att_spot = clamp(1.0 / (att_spot * att_spot), 0.0, 1.0);
+				att_spot = clamp(0.5 / (att_spot * att_spot), 0.0, 1.0);
 				
 			}
 			
@@ -174,6 +175,9 @@ float getSpecularTerm(vec3 L, float NDL) {
 
 void main() {
 
+	// Calculate the texture coordinate
+	vec2 tex_coord0 = (gl_FragCoord.xy) / screen_size;
+	
     // Get albedo and if we're transparent, discard
     vec4 albedo_s = texture(tex_albedo, tex_coord0);
     if (albedo_s.w == 0)
@@ -214,12 +218,12 @@ void main() {
     for (int i = 0; i < light_count; i++) {
 
         // Get L
-        vec3 L = getLightVector(i, position.xyz);
+        vec3 L = getLightVector(light_indicies[i], position.xyz);
 
         float shadow = 1.0;
-		float att = getAtt(i, L);
+		float att = getAtt(light_indicies[i], L);
 
-        if (lights_shadow[i] == 1) {
+        if (lights_shadow[light_indicies[i]] == 1) {
             
             shadow = getShadowTerm(shadow_light, L);
 
@@ -229,15 +233,15 @@ void main() {
 
         // Make a threshhold for attenuation to be over to actually calculate light
         att = att * shadow;
-        if (att > 0.01) {
+        if (att > 0.04) {
 
             // Get NDL
             L = normalize(L);
             float NDL = dot(normal, L);
 
             // Accumulate the lighting
-            diffuse_acc += light_colors[i] * getDiffuseTerm(NDL) * att;
-            specular_acc += light_colors[i] * getSpecularTerm(L, NDL) * att;
+            diffuse_acc += light_colors[light_indicies[i]] * getDiffuseTerm(NDL) * att;
+            specular_acc += light_colors[light_indicies[i]] * getSpecularTerm(L, NDL) * att;
 
         }
 

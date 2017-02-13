@@ -25,7 +25,9 @@ class SDeferredTileController {
 		const std::vector<int>& getTileIndicies(int row, int column) const;
 		glm::ivec2 getGridSize() const;
 	
-		void buildLightGrid(const glm::mat4& projection_model_matrix, SLightGraph* light_graph);
+		void buildLightGrid(const glm::mat4& projection_view_matrix, SLightGraph* light_graph);
+	
+		void renderLightGrid(SShader* shader);
 	
 	private:
 	
