@@ -36,8 +36,6 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     
     // Get the view pos
     view_pos_u = SUniformManger::instance()->getUniformWithName("view_position");
-		
-	SLog::verboseLog(SVerbosityLevel::Debug, "Created deferred rendering pass of size %fx%f", _viewport_3D->screen_size.x, _viewport_3D->screen_size.y);
     
 }
 

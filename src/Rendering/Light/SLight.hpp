@@ -36,7 +36,7 @@ class SLight {
         virtual bool needsShadowUpdate() = 0;
     
         virtual bool shouldBeCulled(glm::mat4& projection_view_matrix) = 0;
-		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec2& mins, glm::vec2& maxes);
+		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes);
 
         STransform transform;
         glm::vec3 light_color = glm::vec3(1.0);
@@ -70,7 +70,7 @@ class SPointLight : public SLight {
     
         virtual bool shouldBeCulled(glm::mat4& projection_view_matrix);
 	
-		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec2& mins, glm::vec2& maxes);
+		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes);
 	
 		int getLightType() { return LIGHT_TYPE_POINT; }
 	
@@ -112,7 +112,7 @@ class SSpotLight : public SLight {
 	
 		virtual bool shouldBeCulled(glm::mat4& projection_view_matrix);
 	
-		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec2& mins, glm::vec2& maxes);
+		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes);
 	
 		int getLightType() { return LIGHT_TYPE_SPOT; }
 

@@ -55,7 +55,7 @@ void SDeferredTileController::buildLightGrid(const glm::mat4& projection_view_ma
 	// Project the lights and figure out where they go
 	for (int i = 0; i < lights.size(); i++) {
 		
-		glm::vec2 mins, maxes;
+		glm::vec3 mins, maxes;
 		lights[i]->getScreenSpaceExtents(projection_view_matrix, mins, maxes);
 		
 		// These come as coordinates from [-1, 1], so change them to pixels because that is what the grid is built in
@@ -69,8 +69,8 @@ void SDeferredTileController::buildLightGrid(const glm::mat4& projection_view_ma
 		maxes.y = mins.y;
 		mins.y = temp;
 		
-		mins = glm::vec2(floor(mins.x * screen_size.x / LIGHT_GRID_TILE_SIZE), ceil(mins.y * screen_size.y / LIGHT_GRID_TILE_SIZE));
-		maxes = glm::vec2(floor(maxes.x * screen_size.x / LIGHT_GRID_TILE_SIZE), ceil(maxes.y * screen_size.y / LIGHT_GRID_TILE_SIZE));
+		mins = glm::vec3(floor(mins.x * screen_size.x / LIGHT_GRID_TILE_SIZE), ceil(mins.y * screen_size.y / LIGHT_GRID_TILE_SIZE), mins.z);
+		maxes = glm::vec3(floor(maxes.x * screen_size.x / LIGHT_GRID_TILE_SIZE), ceil(maxes.y * screen_size.y / LIGHT_GRID_TILE_SIZE), maxes.z);
 	
 		// Clamp the maxes and mins
 		mins.x = glm::clamp(mins.x, 0.0f, tile_grid_size.x - 1.0f);

@@ -243,26 +243,27 @@ int main(int argc, char* argv[]) {
 //	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
 //	light_graph->addLight(light);
 	
-	for (int i = 0; i < 50; i++) {
+	for (int j = -1; j < 1; j++)
+		for (int i = -15; i < 16; i++) {
 		
-		light = new SPointLight();
-		light->transform.translation = glm::vec3(i * 0.2, 0.5, 0.0);
-		light->light_color = glm::vec3(i / 50.0, i / 50.0, i / 50.0);
-		light_graph->addLight(light);
+			light = new SPointLight();
+			light->transform.translation = glm::vec3(i, 0.5, j);
+			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
+			light_graph->addLight(light);
 		
-	}
+		}
 	
 
 //	light = new SSpotLight();
 //	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
 //	light_graph->addLight(light);
 //	
-	light = new SDirectionalLight();
-	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
-	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
-	light->casts_shadow = true;
-	
-	light_graph->addLight(light);
+//	light = new SDirectionalLight();
+//	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
+//	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
+//	light->casts_shadow = true;
+//	
+//	light_graph->addLight(light);
 	
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
     scene_graph->makeCurrent();
@@ -392,7 +393,7 @@ int main(int argc, char* argv[]) {
     #endif
 	
 	log_root_path.appendPathComponent("Spud Engine.log");
-	std::string log_path = log_root_path.getPathAsAbsolutePath();
+	std::string log_path = log_root_path.getPathAsString();
 	
     SFileSystem::shutdown();
     

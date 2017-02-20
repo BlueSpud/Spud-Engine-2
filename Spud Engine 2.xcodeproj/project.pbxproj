@@ -68,6 +68,7 @@
 		029865851D84771F005EED43 /* Material in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865841D84771A005EED43 /* Material */; };
 		029865981D84AD52005EED43 /* Model in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865971D84AD4D005EED43 /* Model */; };
 		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
+		02A7556E1E526A3A00B8279C /* Sound in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0201C78B1DEF50FA00AA0B24 /* Sound */; };
 		02B6B7DD1DDB39A80068FCBA /* Shader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 020604711DB7982800B6268F /* Shader */; };
 		02B6B7DE1DDB39AD0068FCBA /* Font in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02B6B7DC1DDB399B0068FCBA /* Font */; };
 		02B9A95E1E4F7BB500A21784 /* SDeferredTileController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */; };
@@ -113,6 +114,7 @@
 				029865851D84771F005EED43 /* Material in CopyFiles */,
 				02B6B7DD1DDB39A80068FCBA /* Shader in CopyFiles */,
 				029865981D84AD52005EED43 /* Model in CopyFiles */,
+				02A7556E1E526A3A00B8279C /* Sound in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

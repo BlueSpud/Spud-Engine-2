@@ -72,15 +72,20 @@ void SLog::log(const char* format, ...) {
     
 }
 
-void SLog::writeLogToFile(std::string file) {
+void SLog::writeLogToFile(const std::string& file) {
     
     // Write out everything we have logged by concainating all the strings
     std::string final_log;
     for (int i = 0; i < log_lines.size(); i++)
         final_log = final_log + log_lines[i] + "\n";
-    
-    SFileSystem::writeStringToFile(file, final_log);
-    
+	
+	verboseLog(SVerbosityLevel::Debug, "Wrote log to file: %s", file.c_str());
+	
+	// We need to use a stream because there is a good chance the file system may not be avaliable
+	std::ofstream stream = std::ofstream(file);
+	stream << final_log;
+	stream.close();
+	
 }
 
 int SLog::getLineCount() { return (int)log_lines.size(); }
