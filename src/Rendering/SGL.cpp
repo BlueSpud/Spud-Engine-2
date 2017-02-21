@@ -151,10 +151,11 @@ glm::mat4 SGL::transformToMatrix(const STransform& transform, double interpolati
     
 }
 
-glm::mat4 SGL::getProjectionMatrix2D(const SViewport& viewport) { return glm::ortho(0.0f,
+glm::mat4 SGL::getProjectionMatrix2D(const SViewport& viewport) { return glm::ortho(viewport.screen_pos.x,
                                                                                     viewport.screen_size.x,
                                                                                     viewport.screen_size.y,
-                                                                                    0.0f, -100.0f, 100.0f); }
+                                                                                    viewport.screen_pos.y,
+																					-100.0f, 100.0f); }
 
 glm::mat4 SGL::getProjectionMatrix3D(const SViewport3D& viewport) { return glm::perspective(viewport.field_of_view,
                                                                                             viewport.screen_size.x / viewport.screen_size.y,

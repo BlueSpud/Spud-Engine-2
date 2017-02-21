@@ -18,7 +18,7 @@ REGISTER_RESOURCE_CLASS(smdl, SModel)
  *  Implementation for model                                                  *
  ******************************************************************************/
 
-void SModel::render(bool render_material, const std::vector<SMaterial*>& instance_material) {
+void SModel::render(const std::vector<SMaterial*>& instance_material) {
     
     // Bind the array and then render
     glBindVertexArray(array_id);
@@ -26,16 +26,15 @@ void SModel::render(bool render_material, const std::vector<SMaterial*>& instanc
     
     int sum = 0;
     for (int i = 0; i < draw_calls.size(); i++) {
-        
-        if (render_material)
-            instance_material[i]->bind(SGbufferShaderStatic);
+		
+		instance_material[i]->bind(SGbufferShaderStatic);
         
         // Force an upload of the matricies, needs to be done for every material just in case there is a shader change
         SGL::flushMatrix(MAT_PROJECTION);
         SGL::flushMatrix(MAT_MODEL);
         SGL::flushMatrix(MAT_VIEW);
         
-        // render the array with an offset based on what we have already rendern
+        // Render the array with an offset based on what we have already rendered
         glDrawElements(GL_TRIANGLES, draw_calls[i], GL_UNSIGNED_INT, (GLubyte*)(sizeof(unsigned int) * sum));
         sum += draw_calls[i];
         
@@ -44,6 +43,25 @@ void SModel::render(bool render_material, const std::vector<SMaterial*>& instanc
     // Dont need to unbind becasue the next thing that renders should bind
     //glBindVertexArray(0);
     
+}
+
+void SModel::render(SGbufferShader* shader) {
+	
+	// Bind the array and then render
+	glBindVertexArray(array_id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicies_id);
+	
+	// Bind the shader
+	shader->bind(SGbufferShaderStatic);
+	
+	// Force an upload of the matricies, needs to be done for every material just in case there is a shader change
+	SGL::flushMatrix(MAT_PROJECTION);
+	SGL::flushMatrix(MAT_MODEL);
+	SGL::flushMatrix(MAT_VIEW);
+	
+	// Render the array, because we are using a single shader, we dont need to use the draw calls for the materials
+	glDrawElements(GL_TRIANGLES, index_count * 3, GL_UNSIGNED_INT, 0);
+	
 }
 
 void SModel::getModelExtents(glm::vec3& _mins, glm::vec3& _maxes) {
@@ -220,7 +238,7 @@ bool SModel::load(const SPath& path) {
         upload->indicies = indicies;
 		upload->indicies_id = &indicies_id;
         
-        upload->face_count = (unsigned int)indicies->size();
+        upload->face_count = index_count = (unsigned int)indicies->size();
         upload->vertex_count = (unsigned int)vertex_count;
 		
 		// Subtract 2 so we dont have the skinning data

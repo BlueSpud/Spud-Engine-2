@@ -47,12 +47,17 @@ class SLight {
         glm::ivec2 shadow_map_position;
         bool casts_shadow = false;
     
-        static glm::mat4 bias;
-        static SShader* shadow_shader;
-    
         bool needs_shadow_update = true;
-    
-    
+	
+		static SFramebuffer* intermediate_blur_buffer;
+		static SShader* shadow_blur_shader;
+		static SShader* shadow_blur_shader_v;
+	
+	protected:
+	
+		static glm::mat4 bias;
+		static SGbufferShader* shadow_shader;
+	
 };
 
 /******************************************************************************

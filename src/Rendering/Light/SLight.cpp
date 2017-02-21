@@ -13,7 +13,10 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
                                    0.0, 0.0, 0.5, 0.0,
                                    0.5, 0.5, 0.5, 1.0);
 
-SShader* SLight::shadow_shader;
+SGbufferShader* SLight::shadow_shader;
+SShader* SLight::shadow_blur_shader;
+SShader* SLight::shadow_blur_shader_v;
+SFramebuffer* SLight::intermediate_blur_buffer;
 
 /******************************************************************************
  *  Implementation for generic light                                          *
@@ -21,10 +24,19 @@ SShader* SLight::shadow_shader;
 
 SLight::SLight() {
     
-    // Get the shader for shadow mapping if we dont already have it
-    if (!SLight::shadow_shader)
-        SLight::shadow_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow.glsl"));
-    
+    // Get the shaders for shadow mapping if we dont already have it
+	if (!shadow_shader) {
+		
+        shadow_shader = SResourceManager::getResource<SGbufferShader>(SPath("Shader/lighting/shadow/shadow.glsl"));
+		shadow_blur_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow/blur_h.glsl"));
+		shadow_blur_shader_v = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow/blur_v.glsl"));
+		
+		std::vector<SFramebufferAttatchment*> attatchments;
+		attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 0));
+		intermediate_blur_buffer = new SFramebuffer(attatchments, SHADOW_MAP_ATLAS_TILE_SIZE / 2.0, SHADOW_MAP_ATLAS_TILE_SIZE / 2.0);
+
+	}
+	
 }
 
 void SLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes) {
@@ -139,10 +151,10 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* clo
     light_projection_view_matrix = projection_matrix * view_matrix;
     
     // Clear the framebuffer and render the scene
-    glClear(GL_DEPTH_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     
     // Render the scene from the camera
-    scene_graph.render(camera, false, interpolation);
+    scene_graph.render(camera, shadow_shader, interpolation);
 
     light_matrix = SLight::bias * light_projection_view_matrix;
     

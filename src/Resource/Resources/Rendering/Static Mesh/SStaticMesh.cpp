@@ -26,7 +26,7 @@ SStaticMesh::SStaticMesh(SModel* _parent_mesh) {
     
 }
 
-void SStaticMesh::render(bool render_material, double interpolation) {
+void SStaticMesh::render(double interpolation) {
 
     // Set the model matrix to the proper matrix for this model
     glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
@@ -34,9 +34,19 @@ void SStaticMesh::render(bool render_material, double interpolation) {
     
     // Call render on the parent model
 	if (materials_identical)
-		parent_mesh->render(render_material, parent_mesh->materials);
-	else parent_mesh->render(render_material, materials);
+		parent_mesh->render(parent_mesh->materials);
+	else parent_mesh->render(materials);
 
+}
+
+void SStaticMesh::render(SGbufferShader* shader, double interpolation) {
+	
+	// Set the model matrix to the proper matrix for this model
+	glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
+	SGL::mulMatrix(transform_matrix, MAT_MODEL);
+
+	parent_mesh->render(shader);
+	
 }
 
 void SStaticMesh::setMaterial(SMaterial* new_material, int material_domain) {

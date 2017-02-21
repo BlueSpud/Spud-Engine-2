@@ -106,9 +106,6 @@ void SDeferredTileController::renderLightGrid(SShader* shader) {
 			// Draw a rect
 			SGL::renderRect(glm::vec2(c * LIGHT_GRID_TILE_SIZE, r * LIGHT_GRID_TILE_SIZE), glm::vec2(LIGHT_GRID_TILE_SIZE));
 		
-		
-		
-		
 		}
 	
 	}

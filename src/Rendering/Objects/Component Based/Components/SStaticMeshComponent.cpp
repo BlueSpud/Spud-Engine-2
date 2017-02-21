@@ -12,7 +12,7 @@
  *  Implementation for static mesh component                                  *
  ******************************************************************************/
 
-void SStaticMeshComponent::render(bool render_material, double interpolation) {
+void SStaticMeshComponent::render(double interpolation) {
 
     // If we have a mesh attatched, we can render it
     if (mesh_instance) {
@@ -21,12 +21,12 @@ void SStaticMeshComponent::render(bool render_material, double interpolation) {
         mesh_instance->transform = transform;
         
         // Render the mesh
-        mesh_instance->render(render_material, interpolation);
+        mesh_instance->render(interpolation);
         
     }
     
     // Render the children
-    SComponent::render(render_material, interpolation);
+    SComponent::render(interpolation);
 
 }
 

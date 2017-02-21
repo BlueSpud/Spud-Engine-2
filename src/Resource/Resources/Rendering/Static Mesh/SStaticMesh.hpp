@@ -24,7 +24,9 @@ class SStaticMesh : public SObject {
     
         SStaticMesh(SModel* _parent_mesh);
     
-        virtual void render(bool render_material, double interpolation);
+        virtual void render(double interpolation);
+		virtual void render(SGbufferShader* shader, double interpolation);
+	
         virtual void update(const SEvent& event);
     
         void setMaterial(SMaterial* new_material, int material_domain);

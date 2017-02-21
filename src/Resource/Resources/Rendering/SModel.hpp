@@ -102,9 +102,10 @@ class SModel : public SResource {
     
     public:
     
-		void render(bool render_material, const std::vector<SMaterial*>& instance_material);
+		void render(const std::vector<SMaterial*>& instance_material);
+		void render(SGbufferShader* shader);
+	
         void getModelExtents(glm::vec3& _mins, glm::vec3& _maxes);
-
     
     protected:
     
@@ -125,7 +126,8 @@ class SModel : public SResource {
     
         std::vector<SMaterial*> materials;
         std::vector<unsigned int> draw_calls;
-    
+		unsigned int index_count;
+	
         // Storage for the VAO
         GLuint array_id;
     

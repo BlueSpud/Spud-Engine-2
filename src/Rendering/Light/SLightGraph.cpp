@@ -9,7 +9,7 @@
 #include "SLightGraph.hpp"
 
 /******************************************************************************
- *  Implementation for default light graph                                         *
+ *  Implementation for default light graph                                    *
  ******************************************************************************/
 
 SLightGraph::SLightGraph() {
@@ -17,6 +17,7 @@ SLightGraph::SLightGraph() {
     // Create a massive framebuffer for a bunch of shadow maps
     std::vector<SFramebufferAttatchment*> attatchments;
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0));
+	attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 1));
     shadow_map_buffer = new SFramebuffer(attatchments, SHADOW_MAP_ATLAS_SIZE, SHADOW_MAP_ATLAS_SIZE);
     
     // Create the 2D array for the shadow maps
@@ -89,14 +90,57 @@ void SSimpleLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& proje
                 
                 // Enable scissor testing
                 glEnable(GL_SCISSOR_TEST);
-                
-                // Bind the shader
-                SLight::shadow_shader->bind();
-                
+				
             }
             
-            culled_lights[i]->renderShadowMap(scene_graph, close_frustum, interpolation);
-            
+			culled_lights[i]->renderShadowMap(scene_graph, close_frustum, interpolation);
+			
+			glDisable(GL_DEPTH_TEST);
+			glDisable(GL_SCISSOR_TEST);
+			glDisable(GL_CULL_FACE);
+			
+			// Blur the shadow map
+			SLight::intermediate_blur_buffer->bind();
+			
+			// Bind the shader and upload the information
+			SLight::shadow_blur_shader->bind();
+			SLight::shadow_blur_shader->bindTextureLocation("tex_shadow", 0);
+			
+			glm::vec2 direction = glm::vec2(0.0, 1.0);
+			SLight::shadow_blur_shader->bindUniform(&direction, "direction", UNIFORM_VEC2, 1);
+			SLight::shadow_blur_shader->bindUniform(&culled_lights[i]->shadow_map_position, "shadow_tile", UNIFORM_VEC2, 1);
+			
+			// Change the viewport
+			SViewport viewport = SViewport(glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE / 2.0), glm::vec2(0.0));
+			SGL::loadMatrix(SGL::getProjectionMatrix2D(viewport), MAT_PROJECTION);
+			SGL::setUpViewport(viewport);
+			
+			glActiveTexture(GL_TEXTURE0);
+			shadow_map_buffer->bindTexture(1);
+			
+			// Draw
+			SGL::renderRect(glm::vec2(0.0), glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE / 2.0));
+			
+			SLight::shadow_blur_shader_v->bind();
+			int shadow_map_tile_size = SHADOW_MAP_ATLAS_TILE_SIZE / 2.0;
+			SLight::shadow_blur_shader_v->bindUniform(&shadow_map_tile_size, "tile_size", UNIFORM_INT, 1);
+			
+			shadow_map_buffer->bind();
+			
+			// Bind the newly blurred texture
+			SLight::intermediate_blur_buffer->bindTexture(0);
+			
+			// Change the viewport
+			viewport = SViewport(glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE), culled_lights[i]->shadow_map_position * SHADOW_MAP_ATLAS_TILE_SIZE);
+			SGL::setUpViewport(viewport);
+			SGL::loadMatrix(SGL::getProjectionMatrix2D(viewport), MAT_PROJECTION);
+			
+			SGL::renderRect(viewport.screen_pos, glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE));
+			
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_SCISSOR_TEST);
+			glEnable(GL_CULL_FACE);
+			
         }
     
     if (bound_shadow_map_buffer) {

@@ -18,3 +18,11 @@ SObject::SObject() {
     event_listener.listenToEvent(EVENT_TICK, EVENT_MEMBER(SObject::update));
     
 }
+
+
+void SObject::render(SGbufferShader* shader, double interpolation) {
+	
+	// This is going to be object specific, so by default we just render normally
+	render(interpolation);
+	
+}

@@ -200,7 +200,7 @@ int main(int argc, char* argv[]) {
 	
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
+    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/physics_test.smdl")));
 	scene_graph->addObject(mesh);
 	
 //	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
@@ -243,27 +243,27 @@ int main(int argc, char* argv[]) {
 //	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
 //	light_graph->addLight(light);
 	
-	for (int j = -1; j < 1; j++)
-		for (int i = -15; i < 16; i++) {
-		
-			light = new SPointLight();
-			light->transform.translation = glm::vec3(i, 0.5, j);
-			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
-			light_graph->addLight(light);
-		
-		}
-	
+//	for (int j = -1; j < 1; j++)
+//		for (int i = -15; i < 16; i++) {
+//		
+//			light = new SPointLight();
+//			light->transform.translation = glm::vec3(i, 0.5, j);
+//			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
+//			light_graph->addLight(light);
+//		
+//		}
+//	
 
 //	light = new SSpotLight();
 //	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
 //	light_graph->addLight(light);
 //	
-//	light = new SDirectionalLight();
-//	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
-//	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
-//	light->casts_shadow = true;
-//	
-//	light_graph->addLight(light);
+	light = new SDirectionalLight();
+	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
+	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
+	light->casts_shadow = true;
+
+	light_graph->addLight(light);
 	
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
     scene_graph->makeCurrent();
@@ -291,61 +291,61 @@ int main(int argc, char* argv[]) {
     
     listener.setHasFocus();
     
-    SUIGraph* ui_graph = new SUIGraph();
-    
-    SUIButton* button = new SUIButton();
-    
-    button->background_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_normal.dds"));
-    button->hover_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_hover.dds"));
-    button->press_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_press.dds"));
-    
-    button->hover_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_hover.wav"));
-    button->press_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_press.wav"));
-    
-    button->frame.origin = glm::vec2(5.0, 5.0);
-    button->frame.size = glm::vec2(280, 50);
-    
-    button->font = SResourceManager::getResource<SFont>(SPath("Font/Arial.font"));
-    button->label = "Button 1";
-    button->font_size = 13.0;
-    
-    button->action = &mouseClick;
-    
-    ui_graph->addWidget(button);
-    
-    button = new SUIButton();
-    
-    button->background_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_normal.dds"));
-    button->hover_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_hover.dds"));
-    button->press_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_press.dds"));
-    
-    button->hover_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_hover.wav"));
-    button->press_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_press.wav"));
-    
-    button->frame.origin = glm::vec2(5.0, 60.0);
-    button->frame.size = glm::vec2(280, 50);
-    
-    button->font = SResourceManager::getResource<SFont>(SPath("Font/Arial.font"));
-    button->label = "Button 2";
-    button->font_size = 13.0;
-    
-    button->action = &mouseClick;
-    
-    ui_graph->addWidget(button);
-    
-    SUITextField* text_field = new SUITextField();
-    
-    text_field->font = button->font;
-    text_field->font_size = CONSOLE_FONT_SIZE;
-    
-    text_field->background_color = glm::vec4(0.1, 0.1, 0.1, 1.0);
-    
-    text_field->frame.origin = glm::vec2(5.0, 115);
-    text_field->frame.size = glm::vec2(280, 37.5);
-    
-    ui_graph->addWidget(text_field);
-	
-    SUI::current_ui_graph = ui_graph;
+//    SUIGraph* ui_graph = new SUIGraph();
+//    
+//    SUIButton* button = new SUIButton();
+//    
+//    button->background_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_normal.dds"));
+//    button->hover_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_hover.dds"));
+//    button->press_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_press.dds"));
+//    
+//    button->hover_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_hover.wav"));
+//    button->press_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_press.wav"));
+//    
+//    button->frame.origin = glm::vec2(5.0, 5.0);
+//    button->frame.size = glm::vec2(280, 50);
+//    
+//    button->font = SResourceManager::getResource<SFont>(SPath("Font/Arial.font"));
+//    button->label = "Button 1";
+//    button->font_size = 13.0;
+//    
+//    button->action = &mouseClick;
+//    
+//    ui_graph->addWidget(button);
+//    
+//    button = new SUIButton();
+//    
+//    button->background_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_normal.dds"));
+//    button->hover_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_hover.dds"));
+//    button->press_image = SResourceManager::getResource<STexture>(SPath("Texture/ui/button/button_press.dds"));
+//    
+//    button->hover_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_hover.wav"));
+//    button->press_sound = SResourceManager::getResource<SSound>(SPath("Sound/ui/button/button_press.wav"));
+//    
+//    button->frame.origin = glm::vec2(5.0, 60.0);
+//    button->frame.size = glm::vec2(280, 50);
+//    
+//    button->font = SResourceManager::getResource<SFont>(SPath("Font/Arial.font"));
+//    button->label = "Button 2";
+//    button->font_size = 13.0;
+//    
+//    button->action = &mouseClick;
+//    
+//    ui_graph->addWidget(button);
+//    
+//    SUITextField* text_field = new SUITextField();
+//    
+//    text_field->font = button->font;
+//    text_field->font_size = CONSOLE_FONT_SIZE;
+//    
+//    text_field->background_color = glm::vec4(0.1, 0.1, 0.1, 1.0);
+//    
+//    text_field->frame.origin = glm::vec2(5.0, 115);
+//    text_field->frame.size = glm::vec2(280, 37.5);
+//    
+//    ui_graph->addWidget(text_field);
+//	
+//    SUI::current_ui_graph = ui_graph;
     
     SCursor* cursor = SResourceManager::getResource<SCursor>(SPath("Texture/ui/cursor/pointer.png"));
     cursor->bind();

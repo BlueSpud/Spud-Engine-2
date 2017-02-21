@@ -117,20 +117,32 @@ float getAtt(int light, vec3 L) {
 	
 }
 
+float getVSM(float pos, vec2 moments) {
+	
+	float p = step(pos, moments.x);
+	float variance = max(moments.y - moments.x * moments.x, 0.00002);
+	
+	float d = (moments.x - pos);
+	float p_max = smoothstep(0.2, 1.0, variance / (variance + d * d));
+	
+	return min(max(p, p_max), 1.0);
+	
+}
+
 float getShadowTerm(int matrix, vec3 L) {
     
     // Get the position in the shadow map
-    vec4 position_shadow = light_matrices[matrix] * vec4(position + normal * 0.04, 1.0);
-    position_shadow = position_shadow / position_shadow.w;
+    vec4 position_shadow = light_matrices[matrix] * vec4(position, 1.0);
+	//position_shadow = position_shadow / position_shadow.w;
 
     // Calculate the texture coordinates based off of the shadow atlas
-    vec2 tex_coord_shadow = position_shadow.xy / 8.0 + vec2(tile_step, tile_step) * shadow_map_coordinates[matrix];
-    float z = texture(tex_shadow, tex_coord_shadow).r;
+    vec2 tex_coord_shadow = position_shadow.xy / 8.0 + vec2(tile_step) * shadow_map_coordinates[matrix];
+    vec2 moments = texture(tex_shadow, tex_coord_shadow).xy;
 
     // Figure out if we are outside of the shadow map
     float outside = 1.0 - length(clamp(position_shadow.xy, 0.0, 1.0) - position_shadow.xy);
     
-    return step(position_shadow.z * outside, z);
+    return getVSM(position_shadow.z * outside, moments);
 
 
 }

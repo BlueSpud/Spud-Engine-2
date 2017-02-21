@@ -81,7 +81,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     gbuffer->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    scene_graph.render(camera, true, interpolation);
+    scene_graph.render(camera, interpolation);
     
     /******************************************************************************
      * Lighting pass                                                              *
@@ -111,7 +111,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     gbuffer->bindTexture(GBUFFER_ORM);
     environment_map->bind(ENVIRONMENT_MAP);
     glActiveTexture(GL_TEXTURE5);
-    light_graph.shadow_map_buffer->bindTexture(0);
+    light_graph.shadow_map_buffer->bindTexture(1);
     
     // Render the lit buffer to the screen
     final_framebuffer->bind();
@@ -157,6 +157,6 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
 //	SGL::renderRect(glm::vec2(start.x, 1.0 - start.y) * viewport_3D->screen_size, glm::vec2(size.x, -size.y) * viewport_3D->screen_size);
 	
     // Perform post-processing
-    runPostProcess(view_matrix, projection_matrix_3D, POST_RPOCESS_START);
+	runPostProcess(view_matrix, projection_matrix_3D, POST_RPOCESS_START);
     
 }

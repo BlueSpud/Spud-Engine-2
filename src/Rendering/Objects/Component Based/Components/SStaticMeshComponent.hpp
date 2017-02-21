@@ -20,7 +20,7 @@ class SStaticMeshComponent : public SComponent {
     
     public:
     
-        virtual void render(bool render_material, double interpolation);
+        virtual void render(double interpolation);
         void setStaticMesh(SStaticMesh* new_mesh_instance);
     
         virtual void onMoveToSceneGraph(SPhysicsGraph* physics_graph);

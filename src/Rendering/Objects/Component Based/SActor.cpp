@@ -19,14 +19,14 @@ SActor::SActor() {
     
 }
 
-void SActor::render(bool render_material, double interpolation) {
+void SActor::render(double interpolation) {
 
     // Get the transform matrix and make it the model matrix
     glm::mat4 model_matrix = SGL::transformToMatrix(transform);
     SGL::mulMatrix(model_matrix, MAT_MODEL);
     
     // Render the root component, the others should follow
-    root_component->render(render_material, interpolation);
+    root_component->render(interpolation);
 
 }
 

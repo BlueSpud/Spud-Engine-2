@@ -10,7 +10,7 @@
 #define SObject_hpp
 
 #include "SEventSystem.hpp"
-#include "SShader.hpp"
+#include "SGbufferShader.hpp"
 
 #include "SPhysicsSystem.hpp"
 
@@ -26,7 +26,8 @@ class SObject {
     
         virtual ~SObject() { /* intentionally empty */ }
     
-        virtual void render(bool render_material, double interpolation) = 0;
+        virtual void render(double interpolation) = 0;
+		virtual void render(SGbufferShader* shader, double interpolation);
         virtual void update(const SEvent& event) = 0;
     
         virtual bool shouldBeRendered(const glm::mat4& projection_view_matrix) { return true; }

@@ -12,7 +12,7 @@
  *  Implementation for generic component                                      *
  ******************************************************************************/
 
-void SComponent::render(bool render_material, double interpolation) {
+void SComponent::render(double interpolation) {
     
     // First we render this component, but there is nothing to render in the default component
     
@@ -28,7 +28,7 @@ void SComponent::render(bool render_material, double interpolation) {
         
         // Because the children can change the model matrix, we need to upload the original again
         SGL::loadMatrix(model_matrix, MAT_MODEL);
-        child_components[i]->render(render_material, interpolation);
+        child_components[i]->render(interpolation);
         
     }
     
