@@ -14,9 +14,7 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
                                    0.5, 0.5, 0.5, 1.0);
 
 SGbufferShader* SLight::shadow_shader;
-SShader* SLight::shadow_blur_shader;
-SShader* SLight::shadow_blur_shader_v;
-SFramebuffer* SLight::intermediate_blur_buffer;
+
 
 /******************************************************************************
  *  Implementation for generic light                                          *
@@ -24,18 +22,9 @@ SFramebuffer* SLight::intermediate_blur_buffer;
 
 SLight::SLight() {
     
-    // Get the shaders for shadow mapping if we dont already have it
-	if (!shadow_shader) {
-		
+    // Get the shader for shadow mapping if we dont already have it
+	if (!shadow_shader)
         shadow_shader = SResourceManager::getResource<SGbufferShader>(SPath("Shader/lighting/shadow/shadow.glsl"));
-		shadow_blur_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow/blur_h.glsl"));
-		shadow_blur_shader_v = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow/blur_v.glsl"));
-		
-		std::vector<SFramebufferAttatchment*> attatchments;
-		attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 0));
-		intermediate_blur_buffer = new SFramebuffer(attatchments, SHADOW_MAP_ATLAS_TILE_SIZE / 2.0, SHADOW_MAP_ATLAS_TILE_SIZE / 2.0);
-
-	}
 	
 }
 

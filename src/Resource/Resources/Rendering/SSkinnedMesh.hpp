@@ -25,7 +25,8 @@ class SSkinnedMesh : public SObject {
 	
 			SSkinnedMesh(SSkinnedModel* _parent_mesh);
 	
-			virtual void render(bool render_material, double interpolation);
+			virtual void render(double interpolation);
+			virtual void render(SGbufferShader* shader, double interpolation);
 			virtual void update(const SEvent& event);
 	
 			glm::mat4 getMatrixForBone(int bone, float time);

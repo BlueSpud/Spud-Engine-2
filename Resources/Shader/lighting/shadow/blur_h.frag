@@ -2,8 +2,7 @@
 
 uniform sampler2D tex_shadow;
 
-uniform ivec2 shadow_tile;
-uniform vec2 direction;
+uniform vec2 shadow_tile;
 
 const int diameter = 3;
 const int radius = diameter / 2;
@@ -21,7 +20,7 @@ void main() {
 	
 	for (int i = -radius; i <= radius; i++) {
 		
-		vec2 tex_coord_shadow = tex_coord0.xy / 8.0 + vec2(tile_step) * shadow_tile + vec2(float(i) / 8192.0, 0.0);
+		vec2 tex_coord_shadow = tex_coord0.xy / 8.0 + vec2(tile_step * shadow_tile) + vec2(float(i) / 8192.0, 0.0);
 		sum = sum + texture(tex_shadow, tex_coord_shadow).rg;
 		samples++;
 		

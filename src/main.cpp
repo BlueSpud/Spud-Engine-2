@@ -82,7 +82,7 @@ void keyPress(int key) {
     
 			//if (controller->isOnGround())
 			//    controller->jump();
-            
+			
         break;
 
     }
@@ -150,9 +150,14 @@ void update(const SEvent& event) {
 	if (glm::length(move_vector)) {
 		
 		camera.transform.translation_velocity = glm::normalize(move_vector) * 0.2f;
-		//controller->setMoveDirection((strafe + forward) * 35.0f);
+		//controller->setMoveDirection(move_vector * 35.0f);
 		
-	} else camera.transform.translation_velocity = glm::vec3(0.0);
+	} else {
+		
+		camera.transform.translation_velocity = glm::vec3(0.0);
+		//controller->setMoveDirection(glm::vec3(0.0));
+		
+	}
     
 }
 
@@ -200,7 +205,8 @@ int main(int argc, char* argv[]) {
 	
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/physics_test.smdl")));
+    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
+//	mesh->transform.scale = glm::vec3(0.5);
 	scene_graph->addObject(mesh);
 	
 //	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
@@ -239,31 +245,32 @@ int main(int argc, char* argv[]) {
     // Create the light graph
     SSimpleLightGraph* light_graph = new SSimpleLightGraph();
 	
-//	light = new SPointLight();
-//	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
-//	light_graph->addLight(light);
+	light = new SPointLight();
+	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
+	light_graph->addLight(light);
 	
-//	for (int j = -1; j < 1; j++)
-//		for (int i = -15; i < 16; i++) {
-//		
-//			light = new SPointLight();
-//			light->transform.translation = glm::vec3(i, 0.5, j);
-//			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
-//			light_graph->addLight(light);
-//		
-//		}
-//	
+	for (int j = -1; j < 1; j++)
+		for (int i = -15; i < 16; i++) {
+		
+			light = new SPointLight();
+			light->transform.translation = glm::vec3(i, 0.5, j);
+			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
+			light_graph->addLight(light);
+		
+		}
+	
 
-//	light = new SSpotLight();
-//	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
-//	light_graph->addLight(light);
-//	
 	light = new SDirectionalLight();
 	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
 	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
 	light->casts_shadow = true;
-
+	light->light_color = glm::vec3(0.5);
+	
 	light_graph->addLight(light);
+	
+//	light = new SSpotLight();
+//	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
+//	light_graph->addLight(light);
 	
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
     scene_graph->makeCurrent();
@@ -352,6 +359,9 @@ int main(int argc, char* argv[]) {
     
     SEventListener event_listener;
     event_listener.listenToEvent(EVENT_TICK, &update);
+	
+	//physx::PxMaterial* material = PxGetPhysics().createMaterial(0.5, 0.5, 0.1);
+	//controller = new SCharacterController(scene_graph->physics_graph, material, glm::vec2(0.2, 1.0), 0.2, M_PI / 4.0,  &camera.transform);
     
     // END TEMP CODE
     

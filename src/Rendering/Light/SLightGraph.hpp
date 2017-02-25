@@ -38,7 +38,15 @@ class SLightGraph {
 	
         SFramebuffer* shadow_map_buffer;
         bool** shadow_map_atlas;
-    
+	
+	protected:
+	
+		void blurLightTile(glm::ivec2& tile);
+	
+		static SFramebuffer* intermediate_blur_buffer;
+		static SShader* shadow_blur_shader_h;
+		static SShader* shadow_blur_shader_v;
+	
 };
 
 /******************************************************************************

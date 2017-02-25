@@ -49,10 +49,6 @@ class SLight {
     
         bool needs_shadow_update = true;
 	
-		static SFramebuffer* intermediate_blur_buffer;
-		static SShader* shadow_blur_shader;
-		static SShader* shadow_blur_shader_v;
-	
 	protected:
 	
 		static glm::mat4 bias;

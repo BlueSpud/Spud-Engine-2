@@ -34,7 +34,8 @@ class SSkinnedModel : public SModel {
 	
 	public:
 	
-		void render(bool render_material, const std::vector<SMaterial*>& instance_material, const std::vector<glm::mat4>& matricies);
+		void render(const std::vector<SMaterial*>& instance_material, const std::vector<glm::mat4>& matricies);
+		void render(SGbufferShader* shader, const std::vector<glm::mat4>& matricies);
 	
 	protected:
 	

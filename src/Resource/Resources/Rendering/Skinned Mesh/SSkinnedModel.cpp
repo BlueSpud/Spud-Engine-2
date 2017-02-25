@@ -18,7 +18,7 @@ REGISTER_RESOURCE_CLASS(smdl, SSkinnedModel)
  *  Implementation for skinned model                                          *
  ******************************************************************************/
 
-void SSkinnedModel::render(bool render_material, const std::vector<SMaterial*>& instance_material, const std::vector<glm::mat4>& matricies) {
+void SSkinnedModel::render(const std::vector<SMaterial*>& instance_material, const std::vector<glm::mat4>& matricies) {
 	
 	// Bind the array and then render
 	glBindVertexArray(array_id);
@@ -27,8 +27,8 @@ void SSkinnedModel::render(bool render_material, const std::vector<SMaterial*>& 
 	int sum = 0;
 	for (int i = 0; i < draw_calls.size(); i++) {
 		
-		if (render_material)
-			instance_material[i]->bind(SGbufferShaderSkinned);
+		// Bind the material
+		instance_material[i]->bind(SGbufferShaderSkinned);
 		
 		// Force an upload of the matricies, needs to be done for every material just in case there is a shader change
 		SGL::flushMatrix(MAT_PROJECTION);
@@ -45,6 +45,29 @@ void SSkinnedModel::render(bool render_material, const std::vector<SMaterial*>& 
 		sum += draw_calls[i];
 		
 	}
+	
+}
+
+void SSkinnedModel::render(SGbufferShader* shader, const std::vector<glm::mat4>& matricies) {
+	
+	// Bind the array and then render
+	glBindVertexArray(array_id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicies_id);
+	
+	// Bind the shader
+	shader->bind(SGbufferShaderSkinned);
+	
+	// Force an upload of the matricies, needs to be done for every material just in case there is a shader change
+	SGL::flushMatrix(MAT_PROJECTION);
+	SGL::flushMatrix(MAT_MODEL);
+	SGL::flushMatrix(MAT_VIEW);
+	
+	// Upload the data
+	const void* data = matricies.data();
+	shader->bindUniform(SGbufferShaderSkinned, const_cast<void*>(data), "bones", UNIFORM_MAT4, (int)matricies.size());
+		
+	// render the array with an offset based on what we have already rendern
+	glDrawElements(GL_TRIANGLES, index_count * 3, GL_UNSIGNED_INT, 0);
 	
 }
 

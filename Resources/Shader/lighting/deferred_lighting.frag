@@ -29,6 +29,7 @@ const float fresnel_pow = 5.0;
 
 uniform vec3 light_positions[64];
 uniform vec3 light_colors[64];
+uniform vec2 light_infos[64];
 uniform vec4 spot_data[64];
 uniform int light_types[64];
 
@@ -42,8 +43,6 @@ uniform int light_indicies[64];
 uniform int light_count;
 
 const float tile_step = 1.0 / 8.0;
-
-int spot_light = 0;
 
 /******************************************************************************
  *  Values that only need to be computed once per pixel                       *
@@ -98,17 +97,17 @@ float getAtt(int light, vec3 L) {
 		case LIGHT_TYPE_SPOT:
 			
 			float att_spot = 0.0;
+			int spot_index = int(light_infos[light].y);
 			
 			// Check if this pixel is inside the spot light
-			float spot_dot = dot(spot_data[spot_light].xyz, normalize(L));
-			if (spot_dot > spot_data[spot_light].w) {
+			float spot_dot = dot(spot_data[spot_index].xyz, normalize(L));
+			if (spot_dot > spot_data[spot_index].w) {
 				
 				att_spot = length(L) * 2.0;
 				att_spot = clamp(0.5 / (att_spot * att_spot), 0.0, 1.0);
 				
 			}
 			
-			spot_light++;
 			return att_spot;
 			
 			break;
@@ -123,7 +122,7 @@ float getVSM(float pos, vec2 moments) {
 	float variance = max(moments.y - moments.x * moments.x, 0.00002);
 	
 	float d = (moments.x - pos);
-	float p_max = smoothstep(0.2, 1.0, variance / (variance + d * d));
+	float p_max = smoothstep(0.25, 1.0, variance / (variance + d * d));
 	
 	return min(max(p, p_max), 1.0);
 	

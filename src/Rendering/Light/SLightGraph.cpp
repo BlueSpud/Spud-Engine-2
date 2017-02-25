@@ -8,12 +8,28 @@
 
 #include "SLightGraph.hpp"
 
+SShader* SLightGraph::shadow_blur_shader_h = nullptr;
+SShader* SLightGraph::shadow_blur_shader_v;
+SFramebuffer* SLightGraph::intermediate_blur_buffer;
+
 /******************************************************************************
  *  Implementation for default light graph                                    *
  ******************************************************************************/
 
 SLightGraph::SLightGraph() {
-    
+	
+	// If we havent performed the static init, do it TEMP
+	if (!shadow_blur_shader_h) {
+		
+		shadow_blur_shader_h = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow/blur_h.glsl"));
+		shadow_blur_shader_v = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow/blur_v.glsl"));
+		
+		std::vector<SFramebufferAttatchment*> attatchments;
+		attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 0));
+		intermediate_blur_buffer = new SFramebuffer(attatchments, SHADOW_MAP_ATLAS_TILE_SIZE / 2.0, SHADOW_MAP_ATLAS_TILE_SIZE / 2.0);
+		
+	}
+	
     // Create a massive framebuffer for a bunch of shadow maps
     std::vector<SFramebufferAttatchment*> attatchments;
     attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0));
@@ -37,6 +53,59 @@ SLightGraph::~SLightGraph() {
     // Unload and delete the shadow map framebuffer
     shadow_map_buffer->unload();
     delete shadow_map_buffer;
+}
+
+void SLightGraph::blurLightTile(glm::ivec2& tile) {
+	
+	// Convert ivec2 to vec2
+	glm::vec2 tile_c = glm::vec2(tile);
+	
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_SCISSOR_TEST);
+	glDisable(GL_CULL_FACE);
+	
+	// Blur the shadow map
+	intermediate_blur_buffer->bind();
+	
+	// Bind the horizontal blur shader and perform a blur
+	shadow_blur_shader_h->bind();
+	shadow_blur_shader_h->bindUniform(&tile_c, "shadow_tile", UNIFORM_VEC2, 1);
+	
+	// Change the viewport to fit the framebuffer
+	SViewport viewport = SViewport(glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE / 2.0), glm::vec2(0.0));
+	SGL::loadMatrix(SGL::getProjectionMatrix2D(viewport), MAT_PROJECTION);
+	SGL::setUpViewport(viewport);
+	
+	glActiveTexture(GL_TEXTURE0);
+	shadow_map_buffer->bindTexture(1);
+	
+	// Draw, pulling the shadow map from the atlas to the framebuffer and blurring it in the process
+	SGL::renderRect(glm::vec2(0.0), glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE / 2.0));
+	
+	// Bind the vertical blur shader
+	shadow_blur_shader_v->bind();
+	
+	// Upload the size of the blur, this is half of the resolution of a single shadow map tile
+	int shadow_map_tile_size = SHADOW_MAP_ATLAS_TILE_SIZE / 2.0;
+	shadow_blur_shader_v->bindUniform(&shadow_map_tile_size, "tile_size", UNIFORM_INT, 1);
+	
+	// Rebind the shadow map atlas so the new, fully blurred shadow map can be put back
+	shadow_map_buffer->bind();
+	
+	// Bind the already blurred texture
+	intermediate_blur_buffer->bindTexture(0);
+	
+	// Change the viewport to be where the tile is going to be
+	viewport = SViewport(glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE), tile_c * (float)SHADOW_MAP_ATLAS_TILE_SIZE);
+	SGL::setUpViewport(viewport);
+	SGL::loadMatrix(SGL::getProjectionMatrix2D(viewport), MAT_PROJECTION);
+	
+	SGL::renderRect(glm::vec2(0.0, 0.0), glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE));
+	
+	glEnable(GL_SCISSOR_TEST);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	
 }
 
 /******************************************************************************
@@ -80,8 +149,7 @@ void SSimpleLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& proje
     // Take the list of lights that need to be updated and render their shadow maps
     for (int i= 0; i < culled_lights.size(); i++)
         if (culled_lights[i]->needsShadowUpdate()) {
-            
-            
+			
             // Check if we havent bound the shadow map buffer yet, if we have no lights we dont need to bind it
             if(!bound_shadow_map_buffer) {
                 
@@ -92,54 +160,10 @@ void SSimpleLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& proje
                 glEnable(GL_SCISSOR_TEST);
 				
             }
-            
+			
+			// Render the shadow map and then blur it
 			culled_lights[i]->renderShadowMap(scene_graph, close_frustum, interpolation);
-			
-			glDisable(GL_DEPTH_TEST);
-			glDisable(GL_SCISSOR_TEST);
-			glDisable(GL_CULL_FACE);
-			
-			// Blur the shadow map
-			SLight::intermediate_blur_buffer->bind();
-			
-			// Bind the shader and upload the information
-			SLight::shadow_blur_shader->bind();
-			SLight::shadow_blur_shader->bindTextureLocation("tex_shadow", 0);
-			
-			glm::vec2 direction = glm::vec2(0.0, 1.0);
-			SLight::shadow_blur_shader->bindUniform(&direction, "direction", UNIFORM_VEC2, 1);
-			SLight::shadow_blur_shader->bindUniform(&culled_lights[i]->shadow_map_position, "shadow_tile", UNIFORM_VEC2, 1);
-			
-			// Change the viewport
-			SViewport viewport = SViewport(glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE / 2.0), glm::vec2(0.0));
-			SGL::loadMatrix(SGL::getProjectionMatrix2D(viewport), MAT_PROJECTION);
-			SGL::setUpViewport(viewport);
-			
-			glActiveTexture(GL_TEXTURE0);
-			shadow_map_buffer->bindTexture(1);
-			
-			// Draw
-			SGL::renderRect(glm::vec2(0.0), glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE / 2.0));
-			
-			SLight::shadow_blur_shader_v->bind();
-			int shadow_map_tile_size = SHADOW_MAP_ATLAS_TILE_SIZE / 2.0;
-			SLight::shadow_blur_shader_v->bindUniform(&shadow_map_tile_size, "tile_size", UNIFORM_INT, 1);
-			
-			shadow_map_buffer->bind();
-			
-			// Bind the newly blurred texture
-			SLight::intermediate_blur_buffer->bindTexture(0);
-			
-			// Change the viewport
-			viewport = SViewport(glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE), culled_lights[i]->shadow_map_position * SHADOW_MAP_ATLAS_TILE_SIZE);
-			SGL::setUpViewport(viewport);
-			SGL::loadMatrix(SGL::getProjectionMatrix2D(viewport), MAT_PROJECTION);
-			
-			SGL::renderRect(viewport.screen_pos, glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE));
-			
-			glEnable(GL_DEPTH_TEST);
-			glEnable(GL_SCISSOR_TEST);
-			glEnable(GL_CULL_FACE);
+			blurLightTile(culled_lights[i]->shadow_map_position);
 			
         }
     
@@ -169,7 +193,7 @@ void SSimpleLightGraph::addLight(SLight* light) {
                 if (!shadow_map_atlas[i][j]) {
                 
                     // Save that we used this tile in the atlas and then return
-                    shadow_map_atlas[i][j] = true;
+                    shadow_map_atlas[j][i] = true;
                     light->shadow_map_position = glm::vec2(i, j);
                     return;
                 
@@ -198,6 +222,7 @@ void SSimpleLightGraph::uploadCulledLightData(SShader* shader, double interpolat
 	// Datas
 	std::vector<int> light_types;
 	std::vector<glm::vec3> positions;
+	std::vector<glm::vec2> light_infos;
 	std::vector<glm::vec3> colors;
 	std::vector<glm::vec4> spot_data;
 	
@@ -210,6 +235,8 @@ void SSimpleLightGraph::uploadCulledLightData(SShader* shader, double interpolat
 		
 		SLight* light = culled_lights[i];
 		
+		glm::vec2 light_info = glm::vec2(1.0, -1.0);
+		
 		// Get the type of the current light and positon
 		int type = light->getLightType();
 		light_types.push_back(type);
@@ -221,11 +248,16 @@ void SSimpleLightGraph::uploadCulledLightData(SShader* shader, double interpolat
 			
 			// Get the spot cutoff and direction of the light
 			glm::vec4 spot_data_light = glm::vec4(light->transform.getForwardVector(interpolation), cos(((SSpotLight*)light)->spotlight_cutoff));
+			
+			// Save the index of the spot
+			light_info.y = spot_data.size();
 			spot_data.push_back(spot_data_light);
 			
 		}
 		
+		
 		positions.push_back(position);
+		light_infos.push_back(light_info);
 		
 		// Get the color
 		colors.push_back(light->light_color);
@@ -251,6 +283,7 @@ void SSimpleLightGraph::uploadCulledLightData(SShader* shader, double interpolat
 	
 	// Upload the regular light info
 	shader->bindUniform(positions.data(), "light_positions", UNIFORM_VEC3, light_count);
+	shader->bindUniform(light_infos.data(), "light_infos", UNIFORM_VEC2, light_count);
 	shader->bindUniform(colors.data(), "light_colors", UNIFORM_VEC3, light_count);
 	shader->bindUniform(shadows.data(), "lights_shadow", UNIFORM_INT, light_count);
 	shader->bindUniform(spot_data.data(), "spot_data", UNIFORM_VEC4, (int)spot_data.size());

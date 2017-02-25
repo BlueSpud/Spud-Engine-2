@@ -158,5 +158,5 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
 	
     // Perform post-processing
 	runPostProcess(view_matrix, projection_matrix_3D, POST_RPOCESS_START);
-    
+	
 }
