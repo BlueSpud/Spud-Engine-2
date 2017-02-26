@@ -33,7 +33,7 @@ double speed_x = 0.0;
 SCamera camera;
 SLight* light;
 SSoundEmitter* sound_emitter;
-//SCharacterController* controller;
+SCharacterController* controller;
 
 void moveLight(int key) {
     
@@ -80,8 +80,8 @@ void keyPress(int key) {
         
         case GLFW_KEY_SPACE:
     
-			//if (controller->isOnGround())
-			//    controller->jump();
+			if (controller->isOnGround())
+			    controller->jump();
 			
         break;
 
@@ -149,13 +149,13 @@ void update(const SEvent& event) {
 	
 	if (glm::length(move_vector)) {
 		
-		camera.transform.translation_velocity = glm::normalize(move_vector) * 0.2f;
-		//controller->setMoveDirection(move_vector * 35.0f);
+		//camera.transform.translation_velocity = glm::normalize(move_vector) * 0.2f;
+		controller->setMoveDirection(move_vector * 35.0f);
 		
 	} else {
 		
-		camera.transform.translation_velocity = glm::vec3(0.0);
-		//controller->setMoveDirection(glm::vec3(0.0));
+		//camera.transform.translation_velocity = glm::vec3(0.0);
+		controller->setMoveDirection(glm::vec3(0.0));
 		
 	}
     
@@ -193,7 +193,7 @@ int main(int argc, char* argv[]) {
     SConsole::startup();
     
     // TEMP CODE
-	camera.transform.translation.y = 2.0;
+	camera.transform.translation.y = 3.0;
     SCamera::current_camera = &camera;
     
     SSound* sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
@@ -205,9 +205,13 @@ int main(int argc, char* argv[]) {
 	
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
+    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/physics_test.smdl")));
 //	mesh->transform.scale = glm::vec3(0.5);
 	scene_graph->addObject(mesh);
+	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
+//	mesh->transform.scale = glm::vec3(0.5);
+//	scene_graph->addObject(mesh);
 	
 //	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
 //	
@@ -245,20 +249,20 @@ int main(int argc, char* argv[]) {
     // Create the light graph
     SSimpleLightGraph* light_graph = new SSimpleLightGraph();
 	
-	light = new SPointLight();
-	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
-	light_graph->addLight(light);
-	
-	for (int j = -1; j < 1; j++)
-		for (int i = -15; i < 16; i++) {
-		
-			light = new SPointLight();
-			light->transform.translation = glm::vec3(i, 0.5, j);
-			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
-			light_graph->addLight(light);
-		
-		}
-	
+//	light = new SPointLight();
+//	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
+//	light_graph->addLight(light);
+//	
+//	for (int j = -1; j < 1; j++)
+//		for (int i = -15; i < 16; i++) {
+//		
+//			light = new SPointLight();
+//			light->transform.translation = glm::vec3(i, 0.5, j);
+//			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
+//			light_graph->addLight(light);
+//		
+//		}
+//	
 
 	light = new SDirectionalLight();
 	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
@@ -360,9 +364,10 @@ int main(int argc, char* argv[]) {
     SEventListener event_listener;
     event_listener.listenToEvent(EVENT_TICK, &update);
 	
-	//physx::PxMaterial* material = PxGetPhysics().createMaterial(0.5, 0.5, 0.1);
-	//controller = new SCharacterController(scene_graph->physics_graph, material, glm::vec2(0.2, 1.0), 0.2, M_PI / 4.0,  &camera.transform);
-    
+	physx::PxMaterial* material = PxGetPhysics().createMaterial(0.5, 0.5, 0.1);
+	controller = new SCharacterController(scene_graph->physics_graph, material, glm::vec2(0.2, 1.0), 0.2, M_PI / 4.0,  &camera.transform);
+	controller->movement_speed = 2.5;
+	
     // END TEMP CODE
     
     // Clear all the uploads

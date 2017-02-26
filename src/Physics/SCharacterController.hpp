@@ -12,13 +12,13 @@
 #include "SPhysicsSystem.hpp"
 
 #define SQRT_2G sqrt(2.0f * PHYSICS_G)
-#define CHARACTER_VELOCITY_EPSILON 0.005
+#define CHARACTER_GROUND_EPSILON 0.005
 
 /******************************************************************************
  *  Definition for character controller                                       *
  ******************************************************************************/
 
-class SCharacterController : physx::PxUserControllerHitReport {
+class SCharacterController {
     
     public:
     
@@ -31,10 +31,6 @@ class SCharacterController : physx::PxUserControllerHitReport {
     
         virtual void prePhysicsUpdate(const SEvent& event);
         virtual void postPhysicsUpdate(const SEvent& event);
-    
-        virtual void onShapeHit(const physx::PxControllerShapeHit& hit);
-        virtual void onControllerHit(const physx::PxControllersHit& hit);
-        virtual void onObstacleHit(const physx::PxControllerObstacleHit& hit);
     
         void setMoveDirection(glm::vec3 direction);
         bool isOnGround();
@@ -52,7 +48,7 @@ class SCharacterController : physx::PxUserControllerHitReport {
         physx::PxVec3 walking_direction;
         physx::PxVec3 floor_normal;
         float y_velocity;
-        float jump_vel = sqrtf(2.0) * SQRT_2G;
+        float jump_vel = sqrtf(1.0) * SQRT_2G;
     
         bool is_on_ground = false;
     

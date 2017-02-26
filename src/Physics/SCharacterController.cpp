@@ -37,10 +37,6 @@ SCharacterController::SCharacterController(SPhysicsGraph* physics_graph,
     controller_desc.material = material;
     controller_desc.density = 0.0001;
     
-    // Set the callback to recieve collision
-    controller_desc.reportCallback = this;
-    
-    
     // Create the controller
     physx_controller = physics_graph->createCharacterController(controller_desc);
     physx_controller->setPosition(physx::PxExtendedVec3(parent_transform->translation.x,
@@ -58,13 +54,24 @@ void SCharacterController::prePhysicsUpdate(const SEvent& event) {
     const SEventPhysicsUpdate& event_p = (const SEventPhysicsUpdate&)event;
     
     physx::PxVec3 movement_direction = walking_direction * movement_speed;
-    
+	
+	// We do a raycast to determine the floor normal to slide across it
+	// We have to remove the actor from the scene because if we dont we will hit it
+	physx_controller->getScene()->removeActor(*physx_controller->getActor());
+
+	physx::PxRaycastHit hit;
+	physx_controller->getScene()->raycastSingle(physx::toVec3(physx_controller->getPosition()), physx::PxVec3(0.0, -1.0, 0.0), PHYSICS_G * 100.0, physx::PxHitFlag::eNORMAL, hit);
+	floor_normal = hit.normal;
+	
+	physx_controller->getScene()->addActor(*physx_controller->getActor());
+	
     // If we're on the ground we change the movement vector along the normal
     // Check the normal threshold to make sure we can actually climb it
     float dot = physx_controller->getUpDirection().dot(floor_normal);
     float normal_angle = acos(dot);
+	
     if (isOnGround() && normal_angle < physx_controller->getSlopeLimit()) {
-        
+		
         // Do some math to get a rotation matrix
         physx::PxQuat quat;
         physx::PxVec3 cross_product = physx_controller->getUpDirection().cross(floor_normal);
@@ -84,9 +91,9 @@ void SCharacterController::prePhysicsUpdate(const SEvent& event) {
     
     // Set the walking direction to the y-velocity
     movement_direction.y = movement_direction.y + y_velocity;
-    
+	
     // Update the controller walking
-    physx_controller->move(movement_direction * event_p.time_elapsed, 0.01f, event_p.time_elapsed, physx::PxControllerFilters());
+    physx_controller->move(movement_direction * event_p.time_elapsed, 0.0, event_p.time_elapsed, physx::PxControllerFilters());
     
     // Calculate new y-velocity
     if (!isOnGround())
@@ -104,25 +111,23 @@ void SCharacterController::postPhysicsUpdate(const SEvent& event) {
     parent_transform->translation_velocity = glm::vec3(0.0);
 
 }
-
-void SCharacterController::onShapeHit(const physx::PxControllerShapeHit& hit) {
-    
-    // If the motion direction was the up direction, take the floor normal
-    if (hit.dir == -physx_controller->getUpDirection())
-        floor_normal = hit.worldNormal.getNormalized();
-    
-}
-
-void SCharacterController::onControllerHit(const physx::PxControllersHit& hit) { /* intentionally blank */ }
-void SCharacterController::onObstacleHit(const physx::PxControllerObstacleHit& hit) { /* intentionally blank */ }
-
 void SCharacterController::setMoveDirection(glm::vec3 direction) {
 
     physx::PxVec3 new_walking_direction = physx::PxVec3(direction.x, 0.0, direction.z);
     
     // Check if the direction has a magnitude, if so normalize
-    if (glm::length(direction))
+	if (glm::length(direction)) {
+		
+		// Make sure that its normalized
         new_walking_direction.normalize();
+		
+	} else {
+		
+		// Fade out the velocity
+		if (walking_direction.magnitude() > 0.01)
+			new_walking_direction = walking_direction * 0.65;
+		
+	}
     
     walking_direction = new_walking_direction;
 
@@ -132,10 +137,10 @@ bool SCharacterController::isOnGround() {
     
     // Move the capsule down and see it it ended up in the same position
     physx::PxExtendedVec3 last_position = physx_controller->getPosition();
-    physx_controller->move(physx::PxVec3(0.0, -PHYSICS_G * 100.0, 0.0), 0.01f, 1.0, physx::PxControllerFilters());
+    physx_controller->move(physx::PxVec3(0.0, -PHYSICS_G * 100.0, 0.0), 0.0, 1.0, physx::PxControllerFilters());
     float delta_y = physx_controller->getPosition().y - last_position.y;
     
-    if (delta_y < -CHARACTER_VELOCITY_EPSILON) {
+    if (delta_y < -CHARACTER_GROUND_EPSILON) {
         
         // Reset position
         physx_controller->setPosition(last_position);
