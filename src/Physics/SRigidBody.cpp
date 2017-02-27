@@ -22,8 +22,8 @@ SRigidBody::SRigidBody(float _mass, physx::PxGeometry* _collision_geometry, phys
     physx_shape = PxGetPhysics().createShape(*_collision_geometry, *physx_material);
     
     // Create a rigid body, static or dynamic, with an identity transform
-    physx::PxTransform transform;
-    
+	physx::PxTransform transform = physx::PxTransform(physx::PxVec3(0.0, 0.0, 0.0));
+	
     if (mass) {
         
         // Dynamic needs to be cast

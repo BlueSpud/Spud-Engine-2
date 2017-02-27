@@ -57,7 +57,7 @@ class SPhysicsSystem : public SSubsystem {
     
         static physx::PxCooking* getCooking();
     
-	//private:
+	private:
     
         static physx::PxFoundation* physx_foundation;
         static physx::PxPhysics* physx_SDK;
@@ -85,7 +85,7 @@ class SPhysicsGraph {
     
         physx::PxController* createCharacterController(const physx::PxControllerDesc& description);
     
-	//private:
+	private:
     
         physx::PxScene* physx_scene;
         physx::PxDefaultCpuDispatcher* cpu_dispatcher;

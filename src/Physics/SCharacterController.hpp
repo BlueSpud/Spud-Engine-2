@@ -12,7 +12,7 @@
 #include "SPhysicsSystem.hpp"
 
 #define SQRT_2G sqrt(2.0f * PHYSICS_G)
-#define CHARACTER_GROUND_EPSILON 0.005
+#define CHARACTER_GROUND_EPSILON 0.0005
 
 /******************************************************************************
  *  Definition for character controller                                       *
@@ -43,12 +43,15 @@ class SCharacterController {
     protected:
     
         STransform* parent_transform;
-        physx::PxController* physx_controller;
-    
+        physx::PxCapsuleController* physx_controller;
+	
+		physx::PxConvexMesh* cylinder_mesh;
+		physx::PxGeometry* cylinder;
+		void createCylinder(const glm::vec2& size);
+	
         physx::PxVec3 walking_direction;
-        physx::PxVec3 floor_normal;
         float y_velocity;
-        float jump_vel = sqrtf(1.0) * SQRT_2G;
+        float jump_vel = sqrtf(0.5) * SQRT_2G;
     
         bool is_on_ground = false;
     
