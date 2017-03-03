@@ -12,7 +12,8 @@
 #include "SPhysicsSystem.hpp"
 
 #define SQRT_2G sqrt(2.0f * PHYSICS_G)
-#define CHARACTER_GROUND_EPSILON 0.0005
+#define CHARACTER_GROUND_EPSILON 0.01f
+#define CHARACTER_COLLISION_EPSILON 0.001f
 
 /******************************************************************************
  *  Definition for character controller                                       *
@@ -22,8 +23,7 @@ class SCharacterController {
     
     public:
     
-        SCharacterController(SPhysicsGraph* physics_graph,
-                             physx::PxMaterial* material,
+        SCharacterController(SPhysicsGraph* _physics_graph,
                              glm::vec2 size,
                              float _step_size,
                              float _slope_limit,
@@ -44,7 +44,7 @@ class SCharacterController {
     protected:
     
         STransform* parent_transform;
-        physx::PxRigidDynamic* body;
+		SPhysicsGraph* physics_graph;
 		physx::PxTransform transform;
 	
 		physx::PxConvexMesh* cylinder_mesh;
@@ -55,11 +55,9 @@ class SCharacterController {
         float jump_vel = sqrtf(0.5) * SQRT_2G;
 		float y_velocity = 0.0;
     
-        bool is_on_ground = false;
-    
         SEventListener event_listener;
 	
-		void performMoveSweep(physx::PxVec3 movement_direction);
+		void performMoveSweep(physx::PxVec3 movement_direction, int itterations = 5);
     
     
 };

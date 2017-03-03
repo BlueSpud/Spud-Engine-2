@@ -364,9 +364,8 @@ int main(int argc, char* argv[]) {
     SEventListener event_listener;
     event_listener.listenToEvent(EVENT_TICK, &update);
 	
-	physx::PxMaterial* material = PxGetPhysics().createMaterial(0.0, 0.0, 0.0);
-	controller = new SCharacterController(scene_graph->physics_graph, material, glm::vec2(0.2, 1.0), 0.2, M_PI / 4.0,  &camera.transform);
-	controller->movement_speed = 5.0;
+	controller = new SCharacterController(scene_graph->physics_graph, glm::vec2(0.2, 1.0), 0.2, M_PI / 4.0,  &camera.transform);
+	controller->movement_speed = 2.5;
 	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/model.smdl")));
 //	mesh->transform.translation.y = 0.0;

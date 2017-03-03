@@ -83,9 +83,9 @@ class SPhysicsGraph {
         void addActor(physx::PxActor* actor);
         void removeActor(physx::PxActor* actor);
     
-        physx::PxController* createCharacterController(const physx::PxControllerDesc& description);
-    
-	//private:
+		physx::PxScene* getScene() { return physx_scene; }
+	
+	private:
     
         physx::PxScene* physx_scene;
         physx::PxDefaultCpuDispatcher* cpu_dispatcher;

@@ -135,10 +135,3 @@ SPhysicsGraph::~SPhysicsGraph() {
 void SPhysicsGraph::addActor(physx::PxActor* actor) { physx_scene->addActor(*actor); }
 void SPhysicsGraph::removeActor(physx::PxActor* actor) { physx_scene->removeActor(*actor); }
 
-physx::PxController* SPhysicsGraph::createCharacterController(const physx::PxControllerDesc& description) {
-    
-    // Create a character controller with the given description
-    return character_manager->createController(description);
-    
-}
-

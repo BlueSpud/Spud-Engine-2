@@ -58,35 +58,23 @@ void SCharacterController::createCylinder(glm::vec2& size) {
 		
 	}
 	
-	
-//	physx::PxShape* physx_shape = PxGetPhysics().createShape(*cylinder, *PxGetPhysics().createMaterial(0.5, 0.5, 0.1));
-//	
-//	// Create a rigid body, static or dynamic, with an identity transform
-//	physx::PxTransform transform = physx::PxTransform(physx::PxVec3(0.0, 0.0, 0.0));
-//	physx::PxRigidStatic* rigid_body = PxGetPhysics().createRigidStatic(transform);
-//	rigid_body->attachShape(*physx_shape);
-//	
-//	physx_controller->getScene()->addActor(*rigid_body);
-
-	
 }
 
 /******************************************************************************
  *  Implementation for character controller                                   *
  ******************************************************************************/
 
-SCharacterController::SCharacterController(SPhysicsGraph* physics_graph,
-                                           physx::PxMaterial* material,
+SCharacterController::SCharacterController(SPhysicsGraph* _physics_graph,
                                            glm::vec2 size,
                                            float _step_size,
                                            float _slope_limit,
                                            STransform* _parent_transform) {
-    
+	
+	physics_graph = _physics_graph;
     parent_transform = _parent_transform;
 
 	// Create the cylinder
 	createCylinder(size);
-	//cylinder = new physx::PxSphereGeometry(0.5);
 
 	// Create a rigid body, static or dynamic, with an identity transform
 	transform = physx::PxTransform(physx::PxVec3(parent_transform->translation.x, parent_transform->translation.y, parent_transform->translation.z));
@@ -104,73 +92,70 @@ void SCharacterController::prePhysicsUpdate(const SEvent& event) {
 	// The direction we plan to move in
 	physx::PxVec3 movement_direction = walking_direction * movement_speed;
 	
+	// Check if we are on the ground. If we are we sweep along the normal to cleanly slide up and down
 	physx::PxVec3 normal;
-	if (isOnGround(normal)) {
-		
+	if (isOnGround(normal))
 		movement_direction = movement_direction - normal * normal.dot(movement_direction);
-		
-	}
 	
-	
+	// Perform the movement, this is recursive
 	performMoveSweep((physx::PxVec3(0.0, y_velocity, 0.0) + movement_direction) * event_p.time_elapsed);
 	
+	// If we are not on the groumd, continue accelerating, otherwise stop
 	if (!isOnGround())
 		y_velocity = y_velocity - PHYSICS_G * event_p.time_elapsed;
 	else y_velocity = 0.0;
-	
-	std::cout << transform.p.y << std::endl;
 
 }
 
-void SCharacterController::performMoveSweep(physx::PxVec3 movement_direction) {
+void SCharacterController::performMoveSweep(physx::PxVec3 movement_direction, int itterations) {
 	
-	//if (movement_direction.magnitude()) {
+	// If we are not moving, there is no sense in doing a check
+	if (movement_direction.magnitude()) {
 		
 		physx::PxSweepHit hit;
 	
 		physx::PxVec3 normalized = movement_direction;
 		normalized.normalize();
 		
-		if (SPhysicsSystem::current_physics_graph->physx_scene->sweepSingle(*cylinder, transform, normalized, movement_direction.magnitude(), physx::PxHitFlag::eDISTANCE | physx::PxHitFlag::eNORMAL, hit)) {
+		if (physics_graph->getScene()->sweepSingle(*cylinder, transform, normalized, movement_direction.magnitude(), physx::PxHitFlag::eDISTANCE | physx::PxHitFlag::eNORMAL, hit)) {
 		
-			//std::cout << "Collision " << hit.distance << std::endl;
-			
+			// Resolve initial overlap
 			if (hit.hadInitialOverlap() || hit.distance == 0.0) {
 				
+				SLog::verboseLog(SVerbosityLevel::Critical, "Character controller had initial overlap that needed to be resolved");
+				
 				// Resolve, this may cause some jumping, but its better than a stack overflow
-				SPhysicsSystem::current_physics_graph->physx_scene->sweepSingle(*cylinder, transform, normalized, movement_direction.magnitude(),  physx::PxHitFlag::eMTD, hit);
+				physics_graph->getScene()->sweepSingle(*cylinder, transform, normalized, movement_direction.magnitude(),  physx::PxHitFlag::eMTD, hit);
 				
 				transform.p = transform.p - hit.normal * hit.distance;
 				return;
 				
 			}
-
-			
-			// If there was a collision, we need to move as close as we can
-			//physx::PxF32 shape_size = 0.2f;
-			//physx::PxF32 collision_distance = physx::PxClamp(hit.distance - shape_size, 0.0f, hit.distance);
 		
-			transform.p = transform.p + movement_direction.getNormalized() * (hit.distance - 0.001f);
+			// This was the closest collision, move along the ray to where it happened
+			transform.p = transform.p + movement_direction.getNormalized() * physx::PxClamp(hit.distance - CHARACTER_COLLISION_EPSILON, 0.0f, hit.distance);
 			
-			physx::PxF64 remaining_dist = physx::PxClamp(movement_direction.magnitude() - (hit.distance - 0.001f), 0.0f, movement_direction.magnitude());
+			// We then get the distance left to go and perform a sliding response 
+			physx::PxF64 remaining_dist = physx::PxClamp(movement_direction.magnitude() - (hit.distance - CHARACTER_COLLISION_EPSILON), 0.0f, movement_direction.magnitude());
 			physx::PxVec3 slide_response = movement_direction - hit.normal * hit.normal.dot(movement_direction);
+			
+			// Slide response is capped at a tiny magnitude because if the magnitude is small it means they are almost perpendicular
+			if (slide_response.magnitude() > 0.0001) {
+			
+				slide_response = slide_response.getNormalized() * remaining_dist;
+			
+				// Check if we can do another itteration, we do this to prevent stack overflows
+				itterations--;
+			
+				if (itterations)
+					performMoveSweep(slide_response, itterations);
 				
-			slide_response = slide_response.getNormalized() * remaining_dist;
-			performMoveSweep(slide_response);
-	
-			
-			
-			
-			
-			
-			
-			
-			
-		
+			}
+
 		
 		} else transform.p = transform.p + movement_direction;
 		
-	//}
+	}
 	
 	
 }
@@ -216,17 +201,14 @@ bool SCharacterController::isOnGround() {
 
 bool SCharacterController::isOnGround(physx::PxVec3& normal) {
 	
-	// Do a sweep downwards, what we are looking for is 0 distance, which would mean that we are on the ground
+	// Do a sweep downwards, what we are looking for is ~0 distance, which would mean that we are on the ground
 	physx::PxSweepHit hit;
 	
-	if (SPhysicsSystem::current_physics_graph->physx_scene->sweepSingle(*cylinder, transform, physx::PxVec3(0.0, -1.0, 0.0), 1.0, physx::PxHitFlag::eDISTANCE | physx::PxHitFlag::eNORMAL, hit)) {
-
-		//std::cout << "Ground distance " << hit.distance << std::endl;
+	if (physics_graph->getScene()->sweepSingle(*cylinder, transform, physx::PxVec3(0.0, -1.0, 0.0), 1.0, physx::PxHitFlag::eDISTANCE | physx::PxHitFlag::eNORMAL, hit)) {
 		
 		// This means there was a hit, make sure it is what we are looking for
-		if (hit.distance <= 0.01) {
+		if (hit.distance <= physx::PxF32(0.01f)) {
 		
-			//std::cout << "Ground!\n";
 			normal = hit.normal;
 			return true;
 			
