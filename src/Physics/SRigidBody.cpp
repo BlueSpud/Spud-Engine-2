@@ -34,7 +34,7 @@ SRigidBody::SRigidBody(float _mass, physx::PxGeometry* _collision_geometry, phys
     
     // Attatch the shape and calculate inertia
     rigid_body->attachShape(*physx_shape);
-    
+	
     // Move the rigid body to the parent
     moveRigidBodyToParent(0.0);
     

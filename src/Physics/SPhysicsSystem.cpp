@@ -120,36 +120,6 @@ SPhysicsGraph::SPhysicsGraph() {
     // Create the characer manager
     character_manager = PxCreateControllerManager(*physx_scene);
     character_manager->setOverlapRecoveryModule(true);
-	
-	if (!SPhysicsSystem::physx_SDK->getPvdConnectionManager())
-	{
-		std::cout << "Warning: PhysX Visual Debugger not found running!\n";
-		return;
-	}
-	
-	const char* pvdHostIP = "127.0.0.1";
-	int port = 5425;
-	unsigned int timeout = 100;
-	physx::PxVisualDebuggerConnectionFlags flags =
-	physx::PxVisualDebuggerConnectionFlag::eDEBUG
-	| physx::PxVisualDebuggerConnectionFlag::eMEMORY
-	| physx::PxVisualDebuggerConnectionFlag::ePROFILE;
-	
-	// Create connection with PhysX Visual Debugger
-	physx::debugger::comm::PvdConnection* conn = physx::PxVisualDebuggerExt::createConnection(
-																							  SPhysicsSystem::physx_SDK->getPvdConnectionManager(),
-																							  pvdHostIP,
-																							  port,
-																							  timeout,
-																							  flags);
-	
-	if (conn)
-	{
-		std::cout << "Connected to PhysX Visual Debugger!\n";
-		
-		SPhysicsSystem::physx_SDK->getVisualDebugger()->setVisualizeConstraints(true);
-		SPhysicsSystem::physx_SDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS, true);
-	}
     
 }
 

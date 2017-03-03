@@ -193,7 +193,7 @@ int main(int argc, char* argv[]) {
     SConsole::startup();
     
     // TEMP CODE
-	camera.transform.translation.y = 3.0;
+	camera.transform.translation.y = 10.0;
     SCamera::current_camera = &camera;
     
     SSound* sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
@@ -364,9 +364,9 @@ int main(int argc, char* argv[]) {
     SEventListener event_listener;
     event_listener.listenToEvent(EVENT_TICK, &update);
 	
-	physx::PxMaterial* material = PxGetPhysics().createMaterial(0.5, 0.5, 0.1);
-	controller = new SCharacterController(scene_graph->physics_graph, material, glm::vec2(0.2, 4.0), 0.2, M_PI / 4.0,  &camera.transform);
-	controller->movement_speed = 2.5;
+	physx::PxMaterial* material = PxGetPhysics().createMaterial(0.0, 0.0, 0.0);
+	controller = new SCharacterController(scene_graph->physics_graph, material, glm::vec2(0.2, 1.0), 0.2, M_PI / 4.0,  &camera.transform);
+	controller->movement_speed = 5.0;
 	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/model.smdl")));
 //	mesh->transform.translation.y = 0.0;
@@ -386,6 +386,7 @@ int main(int argc, char* argv[]) {
 	// TEMP CODE
 	
 	delete sound_emitter;
+	delete controller;
 	
 	// END TEMP CODE
     

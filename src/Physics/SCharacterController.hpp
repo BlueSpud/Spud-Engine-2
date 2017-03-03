@@ -34,6 +34,7 @@ class SCharacterController {
     
         void setMoveDirection(glm::vec3 direction);
         bool isOnGround();
+		bool isOnGround(physx::PxVec3& normal);
     
         void jump();
         void setJumpHeight(float _jump_height);
@@ -43,19 +44,22 @@ class SCharacterController {
     protected:
     
         STransform* parent_transform;
-        physx::PxCapsuleController* physx_controller;
+        physx::PxRigidDynamic* body;
+		physx::PxTransform transform;
 	
 		physx::PxConvexMesh* cylinder_mesh;
 		physx::PxGeometry* cylinder;
-		void createCylinder(const glm::vec2& size);
+		void createCylinder(glm::vec2& size);
 	
-        physx::PxVec3 walking_direction;
-        float y_velocity;
+		physx::PxVec3 walking_direction = physx::PxVec3(0.0, 0.0, 0.0);
         float jump_vel = sqrtf(0.5) * SQRT_2G;
+		float y_velocity = 0.0;
     
         bool is_on_ground = false;
     
         SEventListener event_listener;
+	
+		void performMoveSweep(physx::PxVec3 movement_direction);
     
     
 };

@@ -11,7 +11,7 @@ out vec3 blurred;
 const float EDGE_SHARPNESS = 2.0;
 const float EDGE_SHARPNESS_2k = 2000.0 * EDGE_SHARPNESS;
 
-const float SCALE = 2.0;
+const float SCALE = 1.0;
 const int RADIUS = 4;
 
 const float kernel[5] = float[5](0.153170, 0.144893, 0.122649, 0.092902, 0.062970);
