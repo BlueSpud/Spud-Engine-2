@@ -18,6 +18,7 @@
 		025903291D7793EA00EA6372 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903221D7793EA00EA6372 /* IOKit.framework */; };
 		0259032A1D7793EA00EA6372 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903231D7793EA00EA6372 /* Cocoa.framework */; };
 		0259032B1D7793EA00EA6372 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903241D7793EA00EA6372 /* OpenGL.framework */; };
+		0259F1B41E6E4BD400BE5158 /* SSerialization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0259F1B21E6E4BD400BE5158 /* SSerialization.cpp */; };
 		0291EBBA1E46B2D50048DB92 /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB391E46B2D40048DB92 /* SLog.cpp */; };
 		0291EBBB1E46B2D50048DB92 /* SRectPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB3F1E46B2D40048DB92 /* SRectPacker.cpp */; };
 		0291EBBC1E46B2D50048DB92 /* STime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB411E46B2D40048DB92 /* STime.cpp */; };
@@ -136,6 +137,8 @@
 		025903221D7793EA00EA6372 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		025903231D7793EA00EA6372 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		025903241D7793EA00EA6372 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		0259F1B21E6E4BD400BE5158 /* SSerialization.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSerialization.cpp; sourceTree = "<group>"; };
+		0259F1B31E6E4BD400BE5158 /* SSerialization.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSerialization.hpp; sourceTree = "<group>"; };
 		0291EB391E46B2D40048DB92 /* SLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLog.cpp; sourceTree = "<group>"; };
 		0291EB3A1E46B2D40048DB92 /* SLog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLog.hpp; sourceTree = "<group>"; };
 		0291EB3B1E46B2D40048DB92 /* driver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = driver.hpp; path = src/driver.hpp; sourceTree = "<group>"; };
@@ -365,6 +368,15 @@
 			name = GLFW;
 			sourceTree = "<group>";
 		};
+		0259F1B11E6E4BC100BE5158 /* Level */ = {
+			isa = PBXGroup;
+			children = (
+				0259F1B21E6E4BD400BE5158 /* SSerialization.cpp */,
+				0259F1B31E6E4BD400BE5158 /* SSerialization.hpp */,
+			);
+			path = Level;
+			sourceTree = "<group>";
+		};
 		025CB5A61D83D6AE0059AF6C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -381,6 +393,7 @@
 		0291EB371E46B2D40048DB92 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				0259F1B11E6E4BC100BE5158 /* Level */,
 				0291EB381E46B2D40048DB92 /* Debug */,
 				0291EB3C1E46B2D40048DB92 /* Engine */,
 				0291EB431E46B2D40048DB92 /* Event */,
@@ -816,6 +829,7 @@
 				0291EBD51E46B2D50048DB92 /* SCursor.cpp in Sources */,
 				0291EBE71E46B2D50048DB92 /* STextRenderer.cpp in Sources */,
 				0291EBDE1E46B2D50048DB92 /* SGLUpload.cpp in Sources */,
+				0259F1B41E6E4BD400BE5158 /* SSerialization.cpp in Sources */,
 				0291EBCE1E46B2D50048DB92 /* SFramebuffer.cpp in Sources */,
 				0291EBDF1E46B2D50048DB92 /* SHotLoadSystem.cpp in Sources */,
 				0291EBC91E46B2D50048DB92 /* SComponent.cpp in Sources */,

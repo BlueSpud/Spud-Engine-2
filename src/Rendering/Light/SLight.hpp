@@ -43,13 +43,19 @@ class SLight {
 	
 		virtual int getLightType() = 0;
 	
+		virtual void setRadius(float _radius);
+		float getRadius();
+	
         glm::mat4 light_matrix;
         glm::ivec2 shadow_map_position;
         bool casts_shadow = false;
     
         bool needs_shadow_update = true;
 	
+	
 	protected:
+	
+		float radius = 1.0;
 	
 		static glm::mat4 bias;
 		static SGbufferShader* shadow_shader;
@@ -74,6 +80,8 @@ class SPointLight : public SLight {
 		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes);
 	
 		int getLightType() { return LIGHT_TYPE_POINT; }
+	
+		virtual void setRadius(float _radius);
 	
     private:
     
@@ -116,6 +124,8 @@ class SSpotLight : public SLight {
 		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes);
 	
 		int getLightType() { return LIGHT_TYPE_SPOT; }
+	
+		virtual void setRadius(float _radius);
 
 		float spotlight_cutoff = M_PI_4;
 	

@@ -19,6 +19,7 @@
 #define GBUFFER_ORM 3
 #define ENVIRONMENT_MAP 4
 #define SHADOW_ATLAS 5
-#define POST_RPOCESS_START 6
+#define GBUFFER_AO 6
+#define POST_RPOCESS_START 7
 
 #endif /* GBuffer_h */

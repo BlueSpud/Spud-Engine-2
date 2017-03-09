@@ -120,6 +120,17 @@ void SUI::renderRect(SUIRect& rect, STexture* texture) {
 
 void SUI::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
+	// Reserve the tilde for the console
+	if (key == GLFW_KEY_GRAVE_ACCENT) {
+		
+		if (action == INPUT_ACTION_DOWN)
+			SConsole::activate(0);
+		
+		return;
+		
+	}
+	
+	
     // If we have a widget that can take keybaord input, we send it off
     if (current_widget_input)
         current_widget_input->input_listener.keyCallback(window, key, scancode, action, mods);
@@ -128,6 +139,10 @@ void SUI::keyCallback(GLFWwindow* window, int key, int scancode, int action, int
 
 void SUI::charCallback(GLFWwindow* window, unsigned int unicode_value) {
 
+	// Reserve the tilde for the console
+	if (unicode_value == '`')
+		return;
+	
     // If we have a widget that can take keybaord input, we send it off
     if (current_widget_input && current_widget_input->input_listener.char_func)
         current_widget_input->input_listener.char_func(unicode_value);

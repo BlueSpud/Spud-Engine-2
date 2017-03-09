@@ -8,7 +8,7 @@ in vec2 tex_coord0;
 
 out vec3 blurred;
 
-const float EDGE_SHARPNESS = 2.0;
+const float EDGE_SHARPNESS = 0.0;
 const float EDGE_SHARPNESS_2k = 2000.0 * EDGE_SHARPNESS;
 
 const float SCALE = 1.0;

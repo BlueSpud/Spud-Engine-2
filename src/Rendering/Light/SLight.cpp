@@ -38,11 +38,15 @@ void SLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm
 	
 }
 
+
+void SLight::setRadius(float _radius) { radius = _radius; }
+float SLight::getRadius() { return radius; }
+
 /******************************************************************************
  *  Implementation for point light                                            *
  ******************************************************************************/
 
-SPointLight::SPointLight() : bounding_box(glm::vec3(-2.0), glm::vec3(2.0), &transform) { /* No initialization */ }
+SPointLight::SPointLight() : bounding_box(glm::vec3(-1.0), glm::vec3(1.0), &transform) { /* No initialization */ }
 
 void SPointLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
     
@@ -72,6 +76,15 @@ void SPointLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins
 	// Output projection result
 	mins = bounding_box.projected_mins;
 	maxes = bounding_box.projected_maxes;
+	
+}
+
+void SPointLight::setRadius(float _radius) {
+	
+	// Save the radius and update the bounds of the bounding box for tiles
+	radius = _radius;
+	bounding_box.mins = glm::vec3(-radius);
+	bounding_box.maxes = glm::vec3(radius);
 	
 }
 
@@ -168,18 +181,39 @@ bool SDirectionalLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
  *  Implementation for spot light                                             *
  ******************************************************************************/
 
-SSpotLight::SSpotLight() : bounding_box(glm::vec3(-2.0), glm::vec3(2.0), &transform) { /* No initialization */ }
+SSpotLight::SSpotLight() : bounding_box(glm::vec3(-1.0), glm::vec3(1.0), &transform) { /* No initialization */ }
 
 void SSpotLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
 	
-	// Shadows not supported currently!
+	SCamera camera;
+	camera.transform = transform;
+	
+	// Make a viewport and scissor so we only clear our part of the shadow atlas
+	SViewport3D viewport = SViewport3D(glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE), shadow_map_position * SHADOW_MAP_ATLAS_TILE_SIZE, 180.0, glm::vec2(0.1, 500.0));
+	
+	glm::mat4 projection_matrix = SGL::getProjectionMatrix3D(viewport);
+	glm::mat4 view_matrix = camera.getCameraMatrix(interpolation);
+	
+	SGL::setUpViewport(viewport);
+	SGL::loadMatrix(projection_matrix, MAT_PROJECTION);
+	
+	// Scissor
+	glScissor(viewport.screen_pos.x, viewport.screen_pos.y, viewport.screen_size.x, viewport.screen_size.y);
+	
+	// Clear the framebuffer and render the scene
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	
+	// Render the scene from the camera
+	scene_graph.render(camera, shadow_shader, interpolation);
+	
+	light_matrix = SLight::bias * projection_matrix * view_matrix;
 	
 }
 
 bool SSpotLight::needsShadowUpdate() {
 	
 	// For now always return false
-	return false;
+	return true;
 }
 
 bool SSpotLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
@@ -198,5 +232,14 @@ void SSpotLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins,
 	// Output projection result
 	mins = glm::vec3(bounding_box.projected_mins);
 	maxes = glm::vec3(bounding_box.projected_maxes);
+	
+}
+
+void SSpotLight::setRadius(float _radius) {
+	
+	// Save the radius and update the bounds of the bounding box for tiles
+	radius = _radius;
+	bounding_box.mins = glm::vec3(-radius);
+	bounding_box.maxes = glm::vec3(radius);
 	
 }

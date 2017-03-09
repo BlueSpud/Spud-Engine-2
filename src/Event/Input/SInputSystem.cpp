@@ -7,6 +7,7 @@
 //
 
 #include "SInputSystem.hpp"
+#include "SConsole.hpp"
 
 SInputMode SInputSystem::input_mode;
 
@@ -44,10 +45,20 @@ void SInputListener::unbind(int key, int action) {
 void SInputListener::setHasFocus() { SInputSystem::current_input_listener = this; }
 
 void SInputListener::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    
+	
+	// Reserve the tilde for the console
+	if (key == GLFW_KEY_GRAVE_ACCENT) {
+		
+		if (action == INPUT_ACTION_DOWN)
+			SConsole::activate(GLFW_KEY_GRAVE_ACCENT);
+		
+		return;
+		
+	}
+	
     // Send the action to the corret map and function
     if (action == INPUT_ACTION_DOWN || (action == INPUT_ACTION_REPEAT && repeats)) {
-        
+		
         if (down_funcs.count(key)) {
             
             // Fire off the function

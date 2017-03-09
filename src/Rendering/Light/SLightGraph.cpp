@@ -223,7 +223,7 @@ void SSimpleLightGraph::uploadCulledLightData(SShader* shader, double interpolat
 	std::vector<int> light_types;
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec2> light_infos;
-	std::vector<glm::vec3> colors;
+	std::vector<glm::vec4> params;
 	std::vector<glm::vec4> spot_data;
 	
 	// Shadow info
@@ -260,7 +260,7 @@ void SSimpleLightGraph::uploadCulledLightData(SShader* shader, double interpolat
 		light_infos.push_back(light_info);
 		
 		// Get the color
-		colors.push_back(light->light_color);
+		params.push_back(glm::vec4(light->light_color, light->getRadius()));
 		
 		// Get shadow information
 		int shadow = light->casts_shadow;
@@ -284,7 +284,7 @@ void SSimpleLightGraph::uploadCulledLightData(SShader* shader, double interpolat
 	// Upload the regular light info
 	shader->bindUniform(positions.data(), "light_positions", UNIFORM_VEC3, light_count);
 	shader->bindUniform(light_infos.data(), "light_infos", UNIFORM_VEC2, light_count);
-	shader->bindUniform(colors.data(), "light_colors", UNIFORM_VEC3, light_count);
+	shader->bindUniform(params.data(), "light_params", UNIFORM_VEC4, light_count);
 	shader->bindUniform(shadows.data(), "lights_shadow", UNIFORM_INT, light_count);
 	shader->bindUniform(spot_data.data(), "spot_data", UNIFORM_VEC4, (int)spot_data.size());
 	shader->bindUniform(light_types.data(), "light_types", UNIFORM_INT, light_count);

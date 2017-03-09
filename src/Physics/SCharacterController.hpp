@@ -14,6 +14,7 @@
 #define SQRT_2G sqrt(2.0f * PHYSICS_G)
 #define CHARACTER_GROUND_EPSILON 0.01f
 #define CHARACTER_COLLISION_EPSILON 0.001f
+#define CHARACTER_SLIDE_EPSILON 0.0001f
 
 /******************************************************************************
  *  Definition for character controller                                       *
@@ -22,13 +23,12 @@
 class SCharacterController {
     
     public:
-    
-        SCharacterController(SPhysicsGraph* _physics_graph,
-                             glm::vec2 size,
-                             float _step_size,
-                             float _slope_limit,
-                             STransform* _parent_transform);
-    
+	
+		SCharacterController(SPhysicsGraph* _physics_graph, physx::PxGeometry* _shape, glm::vec2 size, STransform* _parent_transform);
+		SCharacterController(SPhysicsGraph* _physics_graph, glm::vec2 size, STransform* _parent_transform);
+	
+		~SCharacterController();
+	
         virtual void prePhysicsUpdate(const SEvent& event);
         virtual void postPhysicsUpdate(const SEvent& event);
     
@@ -44,12 +44,14 @@ class SCharacterController {
     protected:
     
         STransform* parent_transform;
-		SPhysicsGraph* physics_graph;
 		physx::PxTransform transform;
+		SPhysicsGraph* physics_graph;
 	
 		physx::PxConvexMesh* cylinder_mesh;
-		physx::PxGeometry* cylinder;
+		physx::PxGeometry* shape;
 		void createCylinder(glm::vec2& size);
+	
+		void performMoveSweep(physx::PxVec3 movement_direction, int itterations = 5);
 	
 		physx::PxVec3 walking_direction = physx::PxVec3(0.0, 0.0, 0.0);
         float jump_vel = sqrtf(0.5) * SQRT_2G;
@@ -57,7 +59,6 @@ class SCharacterController {
     
         SEventListener event_listener;
 	
-		void performMoveSweep(physx::PxVec3 movement_direction, int itterations = 5);
     
     
 };

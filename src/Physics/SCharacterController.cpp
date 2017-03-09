@@ -54,7 +54,7 @@ void SCharacterController::createCylinder(glm::vec2& size) {
 																					  convex_cooked_buffer.getSize());
 		
 		cylinder_mesh = PxGetPhysics().createConvexMesh(read_buffer);
-		cylinder = new physx::PxConvexMeshGeometry(cylinder_mesh);
+		shape = new physx::PxConvexMeshGeometry(cylinder_mesh);
 		
 	}
 	
@@ -64,17 +64,13 @@ void SCharacterController::createCylinder(glm::vec2& size) {
  *  Implementation for character controller                                   *
  ******************************************************************************/
 
-SCharacterController::SCharacterController(SPhysicsGraph* _physics_graph,
-                                           glm::vec2 size,
-                                           float _step_size,
-                                           float _slope_limit,
-                                           STransform* _parent_transform) {
+SCharacterController::SCharacterController(SPhysicsGraph* _physics_graph, physx::PxGeometry* _shape, glm::vec2 size, STransform* _parent_transform) {
 	
 	physics_graph = _physics_graph;
     parent_transform = _parent_transform;
 
-	// Create the cylinder
-	createCylinder(size);
+	// Save the shape
+	shape = _shape;
 
 	// Create a rigid body, static or dynamic, with an identity transform
 	transform = physx::PxTransform(physx::PxVec3(parent_transform->translation.x, parent_transform->translation.y, parent_transform->translation.z));
@@ -83,6 +79,30 @@ SCharacterController::SCharacterController(SPhysicsGraph* _physics_graph,
     event_listener.listenToEvent(EVENT_PHYSICS_PREUPDATE, EVENT_MEMBER(SCharacterController::prePhysicsUpdate));
     event_listener.listenToEvent(EVENT_PHYSICS_POSTUPDATE, EVENT_MEMBER(SCharacterController::postPhysicsUpdate));
     
+}
+
+SCharacterController::SCharacterController(SPhysicsGraph* _physics_graph, glm::vec2 size, STransform* _parent_transform) : SCharacterController(_physics_graph, nullptr, size, _parent_transform) {
+	
+	// We performed the normal initialization with a null shape, so now we create the clinder
+	createCylinder(size);
+	
+	// Done :)
+	
+}
+
+SCharacterController::~SCharacterController() {
+	
+	// Stop listening
+	event_listener.stopListeningToEvent(EVENT_PHYSICS_PREUPDATE);
+	event_listener.stopListeningToEvent(EVENT_PHYSICS_POSTUPDATE);
+	
+	// Unload the shape
+	delete shape;
+	
+	// We may not have created the mesh, so we need to remove it
+	if (cylinder_mesh)
+		cylinder_mesh->release();
+	
 }
 
 void SCharacterController::prePhysicsUpdate(const SEvent& event) {
@@ -117,7 +137,7 @@ void SCharacterController::performMoveSweep(physx::PxVec3 movement_direction, in
 		physx::PxVec3 normalized = movement_direction;
 		normalized.normalize();
 		
-		if (physics_graph->getScene()->sweepSingle(*cylinder, transform, normalized, movement_direction.magnitude(), physx::PxHitFlag::eDISTANCE | physx::PxHitFlag::eNORMAL, hit)) {
+		if (physics_graph->getScene()->sweepSingle(*shape, transform, normalized, movement_direction.magnitude(), physx::PxHitFlag::eDISTANCE | physx::PxHitFlag::eNORMAL, hit)) {
 		
 			// Resolve initial overlap
 			if (hit.hadInitialOverlap() || hit.distance == 0.0) {
@@ -125,7 +145,7 @@ void SCharacterController::performMoveSweep(physx::PxVec3 movement_direction, in
 				SLog::verboseLog(SVerbosityLevel::Critical, "Character controller had initial overlap that needed to be resolved");
 				
 				// Resolve, this may cause some jumping, but its better than a stack overflow
-				physics_graph->getScene()->sweepSingle(*cylinder, transform, normalized, movement_direction.magnitude(),  physx::PxHitFlag::eMTD, hit);
+				physics_graph->getScene()->sweepSingle(*shape, transform, normalized, movement_direction.magnitude(),  physx::PxHitFlag::eMTD, hit);
 				
 				transform.p = transform.p - hit.normal * hit.distance;
 				return;
@@ -140,7 +160,7 @@ void SCharacterController::performMoveSweep(physx::PxVec3 movement_direction, in
 			physx::PxVec3 slide_response = movement_direction - hit.normal * hit.normal.dot(movement_direction);
 			
 			// Slide response is capped at a tiny magnitude because if the magnitude is small it means they are almost perpendicular
-			if (slide_response.magnitude() > 0.0001) {
+			if (slide_response.magnitude() > CHARACTER_SLIDE_EPSILON) {
 			
 				slide_response = slide_response.getNormalized() * remaining_dist;
 			
@@ -152,7 +172,6 @@ void SCharacterController::performMoveSweep(physx::PxVec3 movement_direction, in
 				
 			}
 
-		
 		} else transform.p = transform.p + movement_direction;
 		
 	}
@@ -204,10 +223,10 @@ bool SCharacterController::isOnGround(physx::PxVec3& normal) {
 	// Do a sweep downwards, what we are looking for is ~0 distance, which would mean that we are on the ground
 	physx::PxSweepHit hit;
 	
-	if (physics_graph->getScene()->sweepSingle(*cylinder, transform, physx::PxVec3(0.0, -1.0, 0.0), 1.0, physx::PxHitFlag::eDISTANCE | physx::PxHitFlag::eNORMAL, hit)) {
+	if (physics_graph->getScene()->sweepSingle(*shape, transform, physx::PxVec3(0.0, -1.0, 0.0), 1.0, physx::PxHitFlag::eDISTANCE | physx::PxHitFlag::eNORMAL, hit)) {
 		
 		// This means there was a hit, make sure it is what we are looking for
-		if (hit.distance <= physx::PxF32(0.01f)) {
+		if (hit.distance <= CHARACTER_GROUND_EPSILON) {
 		
 			normal = hit.normal;
 			return true;

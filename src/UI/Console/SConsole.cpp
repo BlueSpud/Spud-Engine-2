@@ -66,14 +66,18 @@ void SConsole::shutdown() {
 }
 
 void SConsole::activate(int arg) {
+	
+	if (!console_active) {
+	
+		// Give control of the keyboard to the text field
+		text_field->startEditing();
+		SInputSystem::setInputMode(SInputModeUI);
     
-    // Give control of the keyboard to the text field
-    text_field->startEditing();
-    SInputSystem::setInputMode(SInputModeUI);
-    
-    // Show that the console is active
-    console_active = true;
-    
+		// Show that the console is active
+		console_active = true;
+		
+	}
+	
 }
 
 void SConsole::deactivateConsole() {

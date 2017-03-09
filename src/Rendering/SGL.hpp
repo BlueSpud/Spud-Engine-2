@@ -157,7 +157,7 @@ class SGL : public SSubsystem {
         static glm::mat4 getProjectionMatrix3D(const SViewport3D& viewport);
         static void setUpViewport(const SViewport& viewport);
     
-        static void renderRect(glm::vec2 position, glm::vec2 size);
+        static void renderRect(const glm::vec2& position, const glm::vec2& size);
     
 /******************************************************************************
 *  Definition for the matrix operations                                       *

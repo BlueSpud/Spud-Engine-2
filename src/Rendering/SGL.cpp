@@ -166,7 +166,7 @@ void SGL::setUpViewport(const SViewport& viewport) { glViewport(viewport.screen_
                                                                 viewport.screen_size.x,
                                                                 viewport.screen_size.y); }
 
-void SGL::renderRect(glm::vec2 position, glm::vec2 size) {
+void SGL::renderRect(const glm::vec2& position, const glm::vec2& size) {
     
     // Make the matrix for the rect
     glm::mat4 matrix = glm::mat4(1.0);

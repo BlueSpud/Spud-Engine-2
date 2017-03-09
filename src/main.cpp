@@ -27,6 +27,8 @@
 #include "SSkinnedMesh.hpp"
 #include "SAnimation.hpp"
 
+#include "SSerialization.hpp"
+
 double speed = 0.0;
 double speed_x = 0.0;
 
@@ -80,8 +82,8 @@ void keyPress(int key) {
         
         case GLFW_KEY_SPACE:
     
-			if (controller->isOnGround())
-			    controller->jump();
+			//if (controller->isOnGround())
+			//	    controller->jump();
 			
         break;
 
@@ -149,13 +151,13 @@ void update(const SEvent& event) {
 	
 	if (glm::length(move_vector)) {
 		
-		//camera.transform.translation_velocity = glm::normalize(move_vector) * 0.2f;
-		controller->setMoveDirection(move_vector * 35.0f);
+		camera.transform.translation_velocity = glm::normalize(move_vector) * 0.2f;
+		//controller->setMoveDirection(move_vector * 35.0f);
 		
 	} else {
 		
-		//camera.transform.translation_velocity = glm::vec3(0.0);
-		controller->setMoveDirection(glm::vec3(0.0));
+		camera.transform.translation_velocity = glm::vec3(0.0);
+		//controller->setMoveDirection(glm::vec3(0.0));
 		
 	}
     
@@ -193,21 +195,45 @@ int main(int argc, char* argv[]) {
     SConsole::startup();
     
     // TEMP CODE
-	camera.transform.translation.y = 10.0;
+	camera.transform.translation.y = 2.0;
     SCamera::current_camera = &camera;
     
-    SSound* sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
-    sound_emitter = new SSoundEmitter();
-    sound_emitter->setSound(sound);
-    sound_emitter->play();
-    sound_emitter->setLoops(true);
-    sound_emitter->transform.translation = camera.transform.translation;
+//    SSound* sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
+//    sound_emitter = new SSoundEmitter();
+//    sound_emitter->setSound(sound);
+//    sound_emitter->play();
+//    sound_emitter->setLoops(true);
+//    sound_emitter->transform.translation = camera.transform.translation;
 	
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
     SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/physics_test.smdl")));
 //	mesh->transform.scale = glm::vec3(0.5);
 	scene_graph->addObject(mesh);
+	
+//	SSerializer serializer;
+//	
+//	glm::vec2 test = glm::vec2(0.0, 100.0);
+//	serializer.addItem(&test);
+//	
+//	glm::vec2 test1 = glm::vec2(245, 123);
+//	serializer.addItem(&test1);
+//	
+//	SDeserializer deserializer = SDeserializer(serializer.serialize());
+//	
+//	glm::vec2 test2;
+//	deserializer.deserialize(&test2);
+//	
+//	glm::vec2 test3;
+//	deserializer.deserialize(&test3);
+//	deserializer.deserialize(&test3);
+//	
+//	std::cout << test2.x << " " << test2.y << std::endl;
+//	std::cout << test3.x << " " << test3.y << std::endl;
+	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
+//	mesh->transform.scale = glm::vec3(0.5);
+//	scene_graph->addObject(mesh);
 	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
 //	mesh->transform.scale = glm::vec3(0.5);
@@ -248,34 +274,37 @@ int main(int argc, char* argv[]) {
     
     // Create the light graph
     SSimpleLightGraph* light_graph = new SSimpleLightGraph();
-	
-//	light = new SPointLight();
-//	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
-//	light_graph->addLight(light);
-//	
-//	for (int j = -1; j < 1; j++)
-//		for (int i = -15; i < 16; i++) {
-//		
-//			light = new SPointLight();
-//			light->transform.translation = glm::vec3(i, 0.5, j);
-//			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
-//			light_graph->addLight(light);
-//		
-//		}
-//	
 
-	light = new SDirectionalLight();
-	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
-	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
-	light->casts_shadow = true;
-	light->light_color = glm::vec3(0.5);
-	
-	light_graph->addLight(light);
+	for (int j = -1; j < 1; j++)
+		for (int i = -15; i < 16; i++) {
+		
+			light = new SPointLight();
+			light->transform.translation = glm::vec3(i, 0.5, j * 5.0);
+			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
+			light->setRadius(rand() % 10);
+			
+			light_graph->addLight(light);
+		
+		}
+//
+
+//	light = new SDirectionalLight();
+//	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
+//	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
+//	light->casts_shadow = true;
+//
+//	light_graph->addLight(light);
 	
 //	light = new SSpotLight();
 //	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
+//	light->casts_shadow = true;
+//	light->setRadius(5.0);
 //	light_graph->addLight(light);
 	
+//	light = new SPointLight();
+//	light->transform.translation = glm::vec3(2.0, 0.0, 0.0);
+//	light_graph->addLight(light);
+
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
     scene_graph->makeCurrent();
     SRenderSystem::current_light_graph = light_graph;
@@ -289,7 +318,7 @@ int main(int argc, char* argv[]) {
     
     listener.bind(&moveLight, GLFW_KEY_P, INPUT_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_G, INPUT_ACTION_DOWN);
-    listener.bind(&SConsole::activate, GLFW_KEY_GRAVE_ACCENT, INPUT_ACTION_UP);
+//    listener.bind(&SConsole::activate, GLFW_KEY_GRAVE_ACCENT, INPUT_ACTION_UP);
     
     listener.bind(&keyRelease, GLFW_KEY_S, INPUT_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_W, INPUT_ACTION_UP);
@@ -364,8 +393,8 @@ int main(int argc, char* argv[]) {
     SEventListener event_listener;
     event_listener.listenToEvent(EVENT_TICK, &update);
 	
-	controller = new SCharacterController(scene_graph->physics_graph, glm::vec2(0.2, 1.0), 0.2, M_PI / 4.0,  &camera.transform);
-	controller->movement_speed = 2.5;
+	//controller = new SCharacterController(scene_graph->physics_graph, glm::vec2(0.2, 1.0), &camera.transform);
+	//controller->movement_speed = 3.25;
 	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/model.smdl")));
 //	mesh->transform.translation.y = 0.0;
@@ -385,7 +414,7 @@ int main(int argc, char* argv[]) {
 	// TEMP CODE
 	
 	delete sound_emitter;
-	delete controller;
+	//delete controller;
 	
 	// END TEMP CODE
     

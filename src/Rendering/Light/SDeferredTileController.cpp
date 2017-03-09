@@ -69,8 +69,8 @@ void SDeferredTileController::buildLightGrid(const glm::mat4& projection_view_ma
 		maxes.y = mins.y;
 		mins.y = temp;
 		
-		mins = glm::vec3(floor(mins.x * screen_size.x / LIGHT_GRID_TILE_SIZE), ceil(mins.y * screen_size.y / LIGHT_GRID_TILE_SIZE), mins.z);
-		maxes = glm::vec3(floor(maxes.x * screen_size.x / LIGHT_GRID_TILE_SIZE), ceil(maxes.y * screen_size.y / LIGHT_GRID_TILE_SIZE), maxes.z);
+		mins = glm::vec3(floor(mins.x * screen_size.x / LIGHT_GRID_TILE_SIZE), floor(mins.y * screen_size.y / LIGHT_GRID_TILE_SIZE), mins.z);
+		maxes = glm::vec3(ceil(maxes.x * screen_size.x / LIGHT_GRID_TILE_SIZE), ceil(maxes.y * screen_size.y / LIGHT_GRID_TILE_SIZE), maxes.z);
 	
 		// Clamp the maxes and mins
 		mins.x = glm::clamp(mins.x, 0.0f, tile_grid_size.x - 1.0f);

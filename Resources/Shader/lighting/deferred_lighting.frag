@@ -28,7 +28,7 @@ out vec4 out_color;
 const float fresnel_pow = 5.0;
 
 uniform vec3 light_positions[64];
-uniform vec3 light_colors[64];
+uniform vec4 light_params[64];
 uniform vec2 light_infos[64];
 uniform vec4 spot_data[64];
 uniform int light_types[64];
@@ -89,9 +89,16 @@ float getAtt(int light, vec3 L) {
 			
 		case LIGHT_TYPE_POINT:
 			
-			float att = length(L) * 2.0;
-			return clamp(0.5 / (att * att), 0.0, 1.0);
+			//float att = length(L) * 2.0;
+			//return clamp(0.5 / (att * att + att), 0.0, 1.0);
 			
+			// Epic's falloff algorithm from https://de45xmedrsdbp.cloudfront.net/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf
+			float dist = length(L);
+			float scaled_dist = dist / light_params[light].w;
+			float fourth_root = pow(scaled_dist, 4);
+			
+			return pow(clamp(1.0 - fourth_root, 0.0, 1.0), 2) / (dist * dist + 1.0);
+
 			break;
 			
 		case LIGHT_TYPE_SPOT:
@@ -103,8 +110,12 @@ float getAtt(int light, vec3 L) {
 			float spot_dot = dot(spot_data[spot_index].xyz, normalize(L));
 			if (spot_dot > spot_data[spot_index].w) {
 				
-				att_spot = length(L) * 2.0;
-				att_spot = clamp(0.5 / (att_spot * att_spot), 0.0, 1.0);
+				// Epic's falloff algorithm
+				float dist = length(L);
+				float scaled_dist = dist / light_params[light].w;
+				float fourth_root = pow(scaled_dist, 4);
+				
+				att_spot = pow(clamp(1.0 - fourth_root, 0.0, 1.0), 2) / (dist * dist + 1.0);
 				
 			}
 			
@@ -132,7 +143,7 @@ float getShadowTerm(int matrix, vec3 L) {
     
     // Get the position in the shadow map
     vec4 position_shadow = light_matrices[matrix] * vec4(position, 1.0);
-	//position_shadow = position_shadow / position_shadow.w;
+	position_shadow = position_shadow / position_shadow.w;
 
     // Calculate the texture coordinates based off of the shadow atlas
     vec2 tex_coord_shadow = position_shadow.xy / 8.0 + vec2(tile_step) * shadow_map_coordinates[matrix];
@@ -141,8 +152,7 @@ float getShadowTerm(int matrix, vec3 L) {
     // Figure out if we are outside of the shadow map
     float outside = 1.0 - length(clamp(position_shadow.xy, 0.0, 1.0) - position_shadow.xy);
     
-    return getVSM(position_shadow.z * outside, moments);
-
+    return getVSM(position_shadow.z, moments);
 
 }
 
@@ -244,15 +254,15 @@ void main() {
 
         // Make a threshhold for attenuation to be over to actually calculate light
         att = att * shadow;
-        if (att > 0.01) {
+        if (att > 0.001) {
 
             // Get NDL
             L = normalize(L);
             float NDL = dot(normal, L);
 
             // Accumulate the lighting
-            diffuse_acc += light_colors[light_indicies[i]] * getDiffuseTerm(NDL) * att;
-            specular_acc += light_colors[light_indicies[i]] * getSpecularTerm(L, NDL) * att;
+            diffuse_acc += light_params[light_indicies[i]].xyz * getDiffuseTerm(NDL) * att;
+            specular_acc += light_params[light_indicies[i]].xyz * getSpecularTerm(L, NDL) * att;
 
         }
 
