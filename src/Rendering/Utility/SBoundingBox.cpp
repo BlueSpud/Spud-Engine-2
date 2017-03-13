@@ -40,14 +40,17 @@ void SBoundingBox::project(const glm::mat4& matrix, bool homogonized) {
         glm::vec4(mins.x, maxes.y, maxes.z, 1.0)
     
     };
-    
+	
+	glm::mat4 input_matrix_model_matrix = matrix * model_matrix;
+	
     // Project all the points, also homogonize it
     for (int i = 0; i < 8; i++) {
         
-        glm::vec4 point_projected = matrix * model_matrix * points[i];
+        glm::vec4 point_projected = input_matrix_model_matrix * points[i];
         
         if (homogonized)
             point_projected = point_projected / point_projected.w;
+		
         if (i == 0) {
             
             // If this is the first point, it is immidately the min and max
@@ -71,24 +74,46 @@ void SBoundingBox::project(const glm::mat4& matrix, bool homogonized) {
     
 }
 
-bool SBoundingBox::frustrumCull(const glm::mat4& projection_view_matrix) {
-    
-    // Project ourselves
-    project(projection_view_matrix, true);
-    
-    // Check if it is behind the camera
-    if (projected_mins.z > 1.0)
-        return false;
-    
-//    // Check X
-//    if (projected_maxes.x < -1.0 || projected_mins.x > 1.0)
-//        return false;
-//    
-//    // Check Y
-//    if (projected_maxes.y < -1.0 || projected_mins.y > 1.0)
-//        return false;
-    
-    // If no condition was found to be true, then we were inside the camera frustrum
+bool SBoundingBox::frustrumCull(const SFrustum& frustum) {
+
+	// First we project ourselves with a identity matrix
+	// This transforms the bounding box to transformed space (rotation, translation, scale, etc)
+	project(glm::mat4(1.0), false);
+	
+	// Get the points we need to test
+	glm::vec3 points[8] = {
+		
+		glm::vec3(projected_mins.x, projected_mins.y, projected_mins.z),
+		glm::vec3(projected_maxes.x, projected_mins.y, projected_mins.z),
+		glm::vec3(projected_maxes.x, projected_maxes.y, projected_mins.z),
+		glm::vec3(projected_mins.x, projected_maxes.y, projected_mins.z),
+		glm::vec3(projected_mins.x, projected_mins.y, projected_maxes.z),
+		glm::vec3(projected_maxes.x, projected_mins.y, projected_maxes.z),
+		glm::vec3(projected_maxes.x, projected_maxes.y, projected_maxes.z),
+		glm::vec3(projected_mins.x, projected_maxes.y, projected_maxes.z)
+		
+	};
+	
+	// If all 8 points are outside a plane, we are culled, otherwise we are good to go
+	for (int plane = 0; plane < 6; plane++) {
+		
+		int inside = 8;
+		
+		for (int p = 0; p < 8; p++) {
+			
+			// Do a regular point frustum cull
+			if (glm::dot(points[p], glm::vec3(frustum.planes[plane])) + frustum.planes[plane].w < 0.0)
+				inside--;
+			
+		}
+		
+		// If we had 0 inside, then we are outside
+		if (inside == 0)
+			return false;
+		
+	}
+	
+	
     return true;
-    
+	
 }

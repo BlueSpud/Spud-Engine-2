@@ -69,18 +69,19 @@ std::list<SSortedObject> SSimpleSceneGraph::collectObjects(SCamera& camera, doub
 	// Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling
 	SGL::clearMatrix(MAT_VIEW);
 	glm::mat4 view_matrix = camera.translateToCameraSpace(interpolation);
-	glm::mat4 projection_view_matrix = SGL::getMatrix(MAT_PROJECTION) * view_matrix;
+
+	// Generate a frustum
+	SFrustum frustum = SFrustum(SGL::getMatrix(MAT_PROJECTION) * view_matrix);
 	
 	// Make sure that anything we want to render is added to the reder que
 	// The array is sorted by z value of an object relative to the camera
 	std::list<SSortedObject>rendered_objects;
-	
 	std::list<SSortedObject>::iterator j;
 	
 	for (std::list<SObject*>::iterator i = objects.begin(); i != objects.end(); i++) {
 		
 		// Check if we should render this object
-		if ((*i)->shouldBeRendered(projection_view_matrix)) {
+		if ((*i)->shouldBeRendered(frustum)) {
 			
 			//Save the object and sort it based on how close its transform is to the camera to reduce overdraw
 			SSortedObject object_s;

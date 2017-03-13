@@ -35,8 +35,8 @@ class SLight {
  
         virtual bool needsShadowUpdate() = 0;
     
-        virtual bool shouldBeCulled(glm::mat4& projection_view_matrix) = 0;
-		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes);
+        virtual bool shouldBeCulled(const SFrustum& frustum) = 0;
+		virtual void getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes);
 
         STransform transform;
         glm::vec3 light_color = glm::vec3(1.0);
@@ -75,9 +75,9 @@ class SPointLight : public SLight {
         virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation);
         virtual bool needsShadowUpdate();
     
-        virtual bool shouldBeCulled(glm::mat4& projection_view_matrix);
+        virtual bool shouldBeCulled(const SFrustum& frustum);
 	
-		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes);
+		virtual void getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes);
 	
 		int getLightType() { return LIGHT_TYPE_POINT; }
 	
@@ -100,7 +100,7 @@ class SDirectionalLight : public SLight {
         virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation);
         virtual bool needsShadowUpdate();
     
-        virtual bool shouldBeCulled(glm::mat4& projection_view_matrix);
+        virtual bool shouldBeCulled(const SFrustum& frustum);
 	
 		int getLightType() { return LIGHT_TYPE_DIRECTIONAL; }
     
@@ -119,9 +119,9 @@ class SSpotLight : public SLight {
 		virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation);
 		virtual bool needsShadowUpdate();
 	
-		virtual bool shouldBeCulled(glm::mat4& projection_view_matrix);
+		virtual bool shouldBeCulled(const SFrustum& frustum);
 	
-		virtual void getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes);
+		virtual void getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes);
 	
 		int getLightType() { return LIGHT_TYPE_SPOT; }
 	

@@ -30,7 +30,7 @@ class SObject {
 		virtual void render(SGbufferShader* shader, double interpolation);
         virtual void update(const SEvent& event) = 0;
     
-        virtual bool shouldBeRendered(const glm::mat4& projection_view_matrix) { return true; }
+        virtual bool shouldBeRendered(const SFrustum& frustum) { return true; }
     
         virtual void onMoveToSceneGraph(SPhysicsGraph* physics_graph) { /* intentionally empty */ }
         virtual void onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) { /* intentionally empty */ }

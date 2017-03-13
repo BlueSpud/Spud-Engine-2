@@ -64,13 +64,17 @@ int SMainLoop::loop() {
         // Before we render we set where the listener is
         SSoundSystem::updateListenerPosition(interpolation);
         
-        // Render a frame, UI and game
-        SRenderSystem::render(interpolation);
-        SUI::renderUI(interpolation);
+        // Render a frame, UI and game, only if we are focused
+		if (SGL::getWindowFocused()) {
+			
+			SRenderSystem::render(interpolation);
+			SUI::renderUI(interpolation);
         
-        // Swap back and front buffer to display
-        SGL::swapBuffers();
-        
+			// Swap back and front buffer to display
+			SGL::swapBuffers();
+			
+		}
+		
         // Save that we drew a frame
         //frames_counted++;
         

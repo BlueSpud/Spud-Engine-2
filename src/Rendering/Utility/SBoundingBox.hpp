@@ -20,7 +20,7 @@ struct SBoundingBox {
     SBoundingBox(glm::vec3 _mins, glm::vec3 _maxes, STransform* _transform);
     
     void project(const glm::mat4& matrix, bool homogonized);
-    bool frustrumCull(const glm::mat4& projection_view_matrix);
+    bool frustrumCull(const SFrustum& frustum);
     
     STransform* transform;
     

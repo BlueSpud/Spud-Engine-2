@@ -28,7 +28,7 @@ SLight::SLight() {
 	
 }
 
-void SLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes) {
+void SLight::getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes) {
 	
 	// By default the light covers the entire screen
 	mins.x = -1.0;
@@ -60,19 +60,27 @@ bool SPointLight::needsShadowUpdate() {
     return false;
 }
 
-bool SPointLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
+bool SPointLight::shouldBeCulled(const SFrustum& frustum) {
     
     // Project thhe bounding box
-    return true;
-    return bounding_box.frustrumCull(projection_view_matrix);
+    return bounding_box.frustrumCull(frustum);
     
 }
 
-void SPointLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes) {
+void SPointLight::getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes) {
+	
+	// Figure out if the camera was inside of the light
+	if (glm::distance(cam_position, transform.translation) <= radius) {
+		
+		mins = glm::vec3(-1.0);
+		maxes = glm::vec3(1.0);
+		return;
+		
+	}
 	
 	// We do homoginize it because we are doing projection
 	bounding_box.project(matrix, true);
-	
+		
 	// Output projection result
 	mins = bounding_box.projected_mins;
 	maxes = bounding_box.projected_maxes;
@@ -170,7 +178,7 @@ bool SDirectionalLight::needsShadowUpdate() {
    
 }
 
-bool SDirectionalLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
+bool SDirectionalLight::shouldBeCulled(const SFrustum& frustum) {
     
     // Directional lights are always rendered as a full screen quad, never culled
     return true;
@@ -216,15 +224,23 @@ bool SSpotLight::needsShadowUpdate() {
 	return true;
 }
 
-bool SSpotLight::shouldBeCulled(glm::mat4& projection_view_matrix) {
+bool SSpotLight::shouldBeCulled(const SFrustum& frustum) {
 	
 	// Project thhe bounding box
-	return true;
-	return bounding_box.frustrumCull(projection_view_matrix);
+	return bounding_box.frustrumCull(frustum);
 	
 }
 
-void SSpotLight::getScreenSpaceExtents(const glm::mat4& matrix, glm::vec3& mins, glm::vec3& maxes) {
+void SSpotLight::getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes) {
+	
+	// Figure out if the camera was inside of the light
+	if (glm::distance(cam_position, transform.translation) <= radius) {
+	
+		mins = glm::vec3(-1.0);
+		maxes = glm::vec3(1.0);
+		return;
+		
+	}
 	
 	// We do homoginize it because we are doing projection
 	bounding_box.project(matrix, true);

@@ -15,7 +15,7 @@ out vec3 occlusion_out;
 #define EPSILON 0.02
 #define BIAS 0.001
 
-#define SIGMA 0.67
+#define SIGMA 0.77
 #define KAPPA 3.0
 
 vec3 clip_info = vec3(planes.x * planes.y, planes.x - planes.y, planes.y);
@@ -95,7 +95,7 @@ void main() {
 	vec3 C_n = reconstructNormal(C_pos);
 	
 	// Get radius of disk
-	float disk_rad = 200.0 * 1.0 / C_pos.z;
+	float disk_rad = 100.0 / C_pos.z;
 	
 	float occlusion = 0.0;
 	for (int s = 0; s < SAMPLES; s++)

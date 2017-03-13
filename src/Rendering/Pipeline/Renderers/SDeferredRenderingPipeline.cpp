@@ -88,7 +88,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
      ******************************************************************************/
 	
 	// Build the lighting tile grid
-	tile_controller.buildLightGrid(projection_view_matrix, &light_graph);
+	tile_controller.buildLightGrid(projection_view_matrix, camera.transform.translation, &light_graph);
 	
     // No culling or depth testing for this stage
     glDisable(GL_CULL_FACE);

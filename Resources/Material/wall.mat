@@ -1,0 +1,4 @@
+s:Shader/gbuffer/gbuffer.glsl
+t:tex_albedo:Texture/wall/wall_albedo.dds
+t:tex_orm:Texture/wall/wall_orm.dds
+t:tex_normal:Texture/wall/wall_normal.dds

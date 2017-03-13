@@ -207,9 +207,19 @@ int main(int argc, char* argv[]) {
 	
     SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/physics_test.smdl")));
-//	mesh->transform.scale = glm::vec3(0.5);
+    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
+	mesh->transform.translation.y = 0.4;
+	//mesh->transform.rotation.x = M_PI_2;
 	scene_graph->addObject(mesh);
+	
+	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/wall.smdl")));
+	mesh->transform.scale = glm::vec3(0.25);
+	mesh->transform.translation.y = 1.65;
+	mesh->transform.translation.z = -1.20;
+	mesh->transform.rotation.x = M_PI_2;
+	scene_graph->addObject(mesh);
+	
+	
 	
 //	SSerializer serializer;
 //	
@@ -275,35 +285,30 @@ int main(int argc, char* argv[]) {
     // Create the light graph
     SSimpleLightGraph* light_graph = new SSimpleLightGraph();
 
-	for (int j = -1; j < 1; j++)
-		for (int i = -15; i < 16; i++) {
-		
-			light = new SPointLight();
-			light->transform.translation = glm::vec3(i, 0.5, j * 5.0);
-			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
-			light->setRadius(rand() % 10);
-			
-			light_graph->addLight(light);
-		
-		}
-//
+//	for (int j = -1; j < 1; j++)
+//		for (int i = -15; i < 16; i++) {
+//		
+//			light = new SPointLight();
+//			light->transform.translation = glm::vec3(i / 10.0, 0.5, j * 2.0);
+//			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
+//			
+//			light_graph->addLight(light);
+//		
+//		}
 
 //	light = new SDirectionalLight();
 //	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
 //	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
+//	light->light_color = glm::vec3(0.5);
 //	light->casts_shadow = true;
 //
 //	light_graph->addLight(light);
 	
-//	light = new SSpotLight();
-//	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
-//	light->casts_shadow = true;
-//	light->setRadius(5.0);
-//	light_graph->addLight(light);
-	
-//	light = new SPointLight();
-//	light->transform.translation = glm::vec3(2.0, 0.0, 0.0);
-//	light_graph->addLight(light);
+	light = new SSpotLight();
+	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
+	light->casts_shadow = true;
+	light->setRadius(5.0);
+	light_graph->addLight(light);
 
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
     scene_graph->makeCurrent();

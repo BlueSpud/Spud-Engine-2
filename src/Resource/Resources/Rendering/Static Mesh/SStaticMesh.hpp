@@ -11,6 +11,7 @@
 
 #include "SModel.hpp"
 #include "SObject.hpp"
+#include "SBoundingBox.hpp"
 
 #include "SRigidBody.hpp"
 
@@ -26,6 +27,7 @@ class SStaticMesh : public SObject {
     
         virtual void render(double interpolation);
 		virtual void render(SGbufferShader* shader, double interpolation);
+		virtual bool shouldBeRendered(const SFrustum& frustum);
 	
         virtual void update(const SEvent& event);
     
@@ -39,6 +41,8 @@ class SStaticMesh : public SObject {
         SModel* parent_mesh;
         std::vector<SMaterial*> materials;
 		bool materials_identical = true;
+	
+		SBoundingBox bounding_box;
 	
         SRigidBody* rigid_body = nullptr;
     

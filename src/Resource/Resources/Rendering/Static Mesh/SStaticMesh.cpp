@@ -12,7 +12,7 @@
  *  Implementation for static mesh instance                                   *
  ******************************************************************************/
 
-SStaticMesh::SStaticMesh(SModel* _parent_mesh) {
+SStaticMesh::SStaticMesh(SModel* _parent_mesh) : bounding_box(glm::vec3(0.0), glm::vec3(0.0), &transform) {
     
     // Store the parent mesh
     parent_mesh = _parent_mesh;
@@ -23,6 +23,9 @@ SStaticMesh::SStaticMesh(SModel* _parent_mesh) {
     // Check if there is a colliison mesh for the parent
     if (parent_mesh->collision_geometry)
         rigid_body = new SRigidBody(0.0, parent_mesh->collision_geometry, PxGetPhysics().createMaterial(0.5, 0.5, 0.1), &transform);
+	
+	// Keep maxes and mins for boudning box
+	parent_mesh->getModelExtents(bounding_box.mins, bounding_box.maxes);
     
 }
 
@@ -48,6 +51,8 @@ void SStaticMesh::render(SGbufferShader* shader, double interpolation) {
 	parent_mesh->render(shader);
 	
 }
+
+bool SStaticMesh::shouldBeRendered(const SFrustum& frustum) { return bounding_box.frustrumCull(frustum); }
 
 void SStaticMesh::setMaterial(SMaterial* new_material, int material_domain) {
     

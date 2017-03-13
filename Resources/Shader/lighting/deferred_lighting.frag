@@ -79,6 +79,13 @@ vec3 getLightVector(int light, vec3 position) {
 	
 }
 
+float getAttPoint(float dist) {
+	
+	float fourth_pow = pow(dist, 4);
+	return pow(clamp(1.0 - fourth_pow, 0.0, 1.0), 2) / (dist * dist + 1.0);
+	
+}
+
 float getAtt(int light, vec3 L) {
 	
 	switch(light_types[light]) {
@@ -95,9 +102,8 @@ float getAtt(int light, vec3 L) {
 			// Epic's falloff algorithm from https://de45xmedrsdbp.cloudfront.net/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf
 			float dist = length(L);
 			float scaled_dist = dist / light_params[light].w;
-			float fourth_root = pow(scaled_dist, 4);
 			
-			return pow(clamp(1.0 - fourth_root, 0.0, 1.0), 2) / (dist * dist + 1.0);
+			return getAttPoint(scaled_dist);
 
 			break;
 			
@@ -108,14 +114,19 @@ float getAtt(int light, vec3 L) {
 			
 			// Check if this pixel is inside the spot light
 			float spot_dot = dot(spot_data[spot_index].xyz, normalize(L));
+			
+			float spot_dist = length(L);
+			float spot_scaled_dist = spot_dist / light_params[light].w;
+			
 			if (spot_dot > spot_data[spot_index].w) {
 				
-				// Epic's falloff algorithm
-				float dist = length(L);
-				float scaled_dist = dist / light_params[light].w;
-				float fourth_root = pow(scaled_dist, 4);
+				att_spot = getAttPoint(spot_scaled_dist);
 				
-				att_spot = pow(clamp(1.0 - fourth_root, 0.0, 1.0), 2) / (dist * dist + 1.0);
+			} else {
+				
+				// Dot product was further than cutoff
+				float fade = clamp(1.0 - (spot_data[spot_index].w - spot_dot) * 15.0, 0.0, 1.0);
+				att_spot = getAttPoint(spot_scaled_dist) * fade;
 				
 			}
 			
@@ -144,13 +155,13 @@ float getShadowTerm(int matrix, vec3 L) {
     // Get the position in the shadow map
     vec4 position_shadow = light_matrices[matrix] * vec4(position, 1.0);
 	position_shadow = position_shadow / position_shadow.w;
+	
+	if (length(clamp(position_shadow.xy, 0.0, 1.0) - position_shadow.xy) > 0.0)
+		return 1.0;
 
     // Calculate the texture coordinates based off of the shadow atlas
     vec2 tex_coord_shadow = position_shadow.xy / 8.0 + vec2(tile_step) * shadow_map_coordinates[matrix];
     vec2 moments = texture(tex_shadow, tex_coord_shadow).xy;
-
-    // Figure out if we are outside of the shadow map
-    float outside = 1.0 - length(clamp(position_shadow.xy, 0.0, 1.0) - position_shadow.xy);
     
     return getVSM(position_shadow.z, moments);
 
@@ -275,11 +286,11 @@ void main() {
     float reflection_mip_map = (pow(roughness, 0.3333333)) * 12.0;
     vec3 reflection_color = textureLod(tex_cube, reflection, reflection_mip_map).xyz;
 
-    vec3 fresnel_reflection = reflection_color * fresnel_pow * inverse_roughness;
+    vec3 fresnel_reflection = clamp(reflection_color * fresnel_pow * inverse_roughness, 0.0, 1.0);
     vec3 metalic_reflection = reflection_color * metalic;
 
     // Combine lighting and texture
-    vec3 color = albedo * (lerp(specular_acc, diffuse_acc, metalic * inverse_roughness) + 0.3 + metalic_reflection) + fresnel_reflection * inverse_roughness;
+    vec3 color = albedo * (lerp(specular_acc, diffuse_acc, metalic * inverse_roughness) + 0.3 + metalic_reflection) + fresnel_reflection * inverse_roughness * orm.x;
     
     out_color = vec4(color, 1.0);
 

@@ -16,6 +16,47 @@ std::map<const char*, glm::mat4>SGL::matrices;
 GLuint SGL::rect_id;
 GLuint SGL::rect_buffers[2];
 
+bool SGL::window_focused = true;
+
+/******************************************************************************
+ *  Implementation for frustum						     					  *
+ ******************************************************************************/
+
+SFrustum::SFrustum(const glm::mat4 projection_view_matrix) {
+	
+	// Extract a frustum's planes from the projection view matrix
+	planes[0] = glm::normalize(glm::vec4(projection_view_matrix[0][3] + projection_view_matrix[0][0],
+										 projection_view_matrix[1][3] + projection_view_matrix[1][0],
+										 projection_view_matrix[2][3] + projection_view_matrix[2][0],
+										 projection_view_matrix[3][3] + projection_view_matrix[3][0]));
+		
+	planes[1] = glm::normalize(glm::vec4(projection_view_matrix[0][3] - projection_view_matrix[0][0],
+										 projection_view_matrix[1][3] - projection_view_matrix[1][0],
+										 projection_view_matrix[2][3] - projection_view_matrix[2][0],
+										 projection_view_matrix[3][3] - projection_view_matrix[3][0]));
+		
+	planes[2] = glm::normalize(glm::vec4(projection_view_matrix[0][3] + projection_view_matrix[0][1],
+										 projection_view_matrix[1][3] + projection_view_matrix[1][1],
+										 projection_view_matrix[2][3] + projection_view_matrix[2][1],
+										 projection_view_matrix[3][3] + projection_view_matrix[3][1]));
+		
+	planes[3] = glm::normalize(glm::vec4(projection_view_matrix[0][3] - projection_view_matrix[0][1],
+										 projection_view_matrix[1][3] - projection_view_matrix[1][1],
+										 projection_view_matrix[2][3] - projection_view_matrix[2][1],
+										 projection_view_matrix[3][3] - projection_view_matrix[3][1]));
+		
+	planes[4] = glm::normalize(glm::vec4(projection_view_matrix[0][2],
+										 projection_view_matrix[1][2],
+										 projection_view_matrix[2][2],
+										 projection_view_matrix[3][2]));
+		
+	planes[5] = glm::normalize(glm::vec4(projection_view_matrix[0][3] - projection_view_matrix[0][2],
+										 projection_view_matrix[1][3] - projection_view_matrix[1][2],
+										 projection_view_matrix[2][3] - projection_view_matrix[2][2],
+										 projection_view_matrix[3][3] - projection_view_matrix[3][2]));
+	
+}
+
 /******************************************************************************
  *  Implementation for OpenGL system                                          *
  ******************************************************************************/
@@ -78,7 +119,10 @@ void SGL::createWindow() {
     // Turn of VSync by default
     glfwMakeContextCurrent(window);
     //glfwSwapInterval(0);
-    
+	
+	// Set the window callback to know when we have focus
+	glfwSetWindowFocusCallback(window, windowFocusCallback);
+	
 }
 
 bool SGL::windowIsGood() { return !glfwWindowShouldClose(window); }
@@ -88,6 +132,9 @@ void SGL::swapBuffers() { glfwSwapBuffers(window); }
 void SGL::setKeyCallback(GLFWkeyfun func) { glfwSetKeyCallback(window, func); }
 void SGL::setCharCallback(GLFWcharfun func) { glfwSetCharCallback(window, func); }
 void SGL::setMouseCallback(GLFWmousebuttonfun func) { glfwSetMouseButtonCallback(window, func); }
+
+void SGL::windowFocusCallback(GLFWwindow* window, int state) { window_focused = (bool)state; }
+bool SGL::getWindowFocused() { return window_focused; }
 
 int SGL::getKeyState(int key) { return glfwGetKey(window, key); }
 

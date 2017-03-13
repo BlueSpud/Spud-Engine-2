@@ -69,7 +69,9 @@
 		029865851D84771F005EED43 /* Material in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865841D84771A005EED43 /* Material */; };
 		029865981D84AD52005EED43 /* Model in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865971D84AD4D005EED43 /* Model */; };
 		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
+		029AE7C91E75E38400B53CF5 /* SOctree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 029AE7C71E75E38400B53CF5 /* SOctree.cpp */; };
 		02A7556E1E526A3A00B8279C /* Sound in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0201C78B1DEF50FA00AA0B24 /* Sound */; };
+		02B5A6191E75B02D00B85040 /* Icon.icns in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02B5A6181E75B01100B85040 /* Icon.icns */; };
 		02B6B7DD1DDB39A80068FCBA /* Shader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 020604711DB7982800B6268F /* Shader */; };
 		02B6B7DE1DDB39AD0068FCBA /* Font in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02B6B7DC1DDB399B0068FCBA /* Font */; };
 		02B9A95E1E4F7BB500A21784 /* SDeferredTileController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */; };
@@ -110,6 +112,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				02B5A6191E75B02D00B85040 /* Icon.icns in CopyFiles */,
 				02B6B7DE1DDB39AD0068FCBA /* Font in CopyFiles */,
 				0298659B1D84C3A8005EED43 /* Texture in CopyFiles */,
 				029865851D84771F005EED43 /* Material in CopyFiles */,
@@ -241,6 +244,10 @@
 		029865841D84771A005EED43 /* Material */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Material; path = Resources/Material; sourceTree = "<group>"; };
 		029865971D84AD4D005EED43 /* Model */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Model; path = Resources/Model; sourceTree = "<group>"; };
 		0298659A1D84C38D005EED43 /* Texture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Texture; path = Resources/Texture; sourceTree = "<group>"; };
+		029AE7C71E75E38400B53CF5 /* SOctree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOctree.cpp; path = Octree/SOctree.cpp; sourceTree = "<group>"; };
+		029AE7C81E75E38400B53CF5 /* SOctree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SOctree.hpp; path = Octree/SOctree.hpp; sourceTree = "<group>"; };
+		02B5A6171E75AFFF00B85040 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Spud Engine 2/Info.plist"; sourceTree = "<group>"; };
+		02B5A6181E75B01100B85040 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Icon.icns; path = "Spud Engine 2/Icon.icns"; sourceTree = "<group>"; };
 		02B6B7DC1DDB399B0068FCBA /* Font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Font; path = Resources/Font; sourceTree = "<group>"; };
 		02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SDeferredTileController.cpp; path = ../../Light/SDeferredTileController.cpp; sourceTree = "<group>"; };
 		02B9A95D1E4F7BB500A21784 /* SDeferredTileController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SDeferredTileController.hpp; path = ../../Light/SDeferredTileController.hpp; sourceTree = "<group>"; };
@@ -322,6 +329,8 @@
 				0291EBA21E46B2D50048DB92 /* SMainLoop.cpp */,
 				0291EBA31E46B2D50048DB92 /* SMainLoop.hpp */,
 				0291EB4D1E46B2D40048DB92 /* main.cpp */,
+				02B5A6171E75AFFF00B85040 /* Info.plist */,
+				02B5A6181E75B01100B85040 /* Icon.icns */,
 				0259030A1D77933E00EA6372 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -371,6 +380,7 @@
 		0259F1B11E6E4BC100BE5158 /* Level */ = {
 			isa = PBXGroup;
 			children = (
+				029AE7C61E75E31700B53CF5 /* Octree */,
 				0259F1B21E6E4BD400BE5158 /* SSerialization.cpp */,
 				0259F1B31E6E4BD400BE5158 /* SSerialization.hpp */,
 			);
@@ -728,6 +738,15 @@
 			path = Widget;
 			sourceTree = "<group>";
 		};
+		029AE7C61E75E31700B53CF5 /* Octree */ = {
+			isa = PBXGroup;
+			children = (
+				029AE7C71E75E38400B53CF5 /* SOctree.cpp */,
+				029AE7C81E75E38400B53CF5 /* SOctree.hpp */,
+			);
+			name = Octree;
+			sourceTree = "<group>";
+		};
 		02F6D8EA1E0C135200D78D80 /* PhysX */ = {
 			isa = PBXGroup;
 			children = (
@@ -846,6 +865,7 @@
 				0291EBBE1E46B2D50048DB92 /* SEventSystem.cpp in Sources */,
 				0291EBD71E46B2D50048DB92 /* SShader.cpp in Sources */,
 				0291EBDC1E46B2D50048DB92 /* STexture.cpp in Sources */,
+				029AE7C91E75E38400B53CF5 /* SOctree.cpp in Sources */,
 				0291EBC41E46B2D50048DB92 /* SSceneGraph.cpp in Sources */,
 				0291EBD81E46B2D50048DB92 /* SUniform.cpp in Sources */,
 				0291EBD11E46B2D50048DB92 /* SRenderSystem.cpp in Sources */,

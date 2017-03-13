@@ -42,7 +42,7 @@ SDeferredTileController::~SDeferredTileController() {
 const std::vector<int>& SDeferredTileController::getTileIndicies(int row, int column) const { return light_grid[row][column]; }
 glm::ivec2 SDeferredTileController::getGridSize() const { return tile_grid_size; }
 
-void SDeferredTileController::buildLightGrid(const glm::mat4& projection_view_matrix, SLightGraph* light_graph) {
+void SDeferredTileController::buildLightGrid(const glm::mat4& projection_view_matrix, const glm::vec3& cam_position, SLightGraph* light_graph) {
 	
 	// Get the culled lights, lights that arent on the screen cant contribute
 	std::vector<SLight*>& lights = light_graph->getCulledLights();
@@ -56,7 +56,7 @@ void SDeferredTileController::buildLightGrid(const glm::mat4& projection_view_ma
 	for (int i = 0; i < lights.size(); i++) {
 		
 		glm::vec3 mins, maxes;
-		lights[i]->getScreenSpaceExtents(projection_view_matrix, mins, maxes);
+		lights[i]->getScreenSpaceExtents(projection_view_matrix, cam_position, mins, maxes);
 		
 		// These come as coordinates from [-1, 1], so change them to pixels because that is what the grid is built in
 		// Make sure to do 1 - y to compensate for differnt coordinates, we also have to swap min and max on y

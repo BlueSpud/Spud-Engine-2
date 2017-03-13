@@ -76,6 +76,17 @@ struct STransform {
 #define MAT_PROJECTION "mat_projection"
 
 /******************************************************************************
+ *  Definition for frustum													  *
+ ******************************************************************************/
+
+struct SFrustum {
+	
+	SFrustum(const glm::mat4 projection_view_matrix);
+	glm::vec4 planes[6];
+	
+};
+
+/******************************************************************************
  *  Definition for 2D viewport                                                *
  ******************************************************************************/
 
@@ -137,7 +148,10 @@ class SGL : public SSubsystem {
         static void setKeyCallback(GLFWkeyfun func);
         static void setCharCallback(GLFWcharfun func);
         static void setMouseCallback(GLFWmousebuttonfun func);
-    
+	
+		static void windowFocusCallback(GLFWwindow* window, int state);
+		static bool getWindowFocused();
+	
         static int getKeyState(int key);
     
         static void setMouseInputMode(int mode);
@@ -181,7 +195,9 @@ class SGL : public SSubsystem {
     
         static GLuint rect_id;
         static GLuint rect_buffers[2];
-    
+	
+		static bool window_focused;
+	
     
 };
 

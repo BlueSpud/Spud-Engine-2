@@ -125,6 +125,9 @@ void SSimpleLightGraph::cullLights(glm::mat4& projection_view_matrix) {
      *  Cull lights that cant be seen by the camera                               *
      *  Save light list so that we can use it for the lighting pass later         *
      ******************************************************************************/
+	
+	// Generate a frustum
+	SFrustum frustum = SFrustum(projection_view_matrix);
     
     // Clear the old list of lights
     culled_lights.clear();
@@ -132,11 +135,11 @@ void SSimpleLightGraph::cullLights(glm::mat4& projection_view_matrix) {
     for (std::list<SLight*>::iterator i = lights.begin(); i != lights.end(); i++) {
         
         // Check if the light needs a shadow update and if we can see it in the frustrum
-        if ((*i)->shouldBeCulled(projection_view_matrix))
+        if ((*i)->shouldBeCulled(frustum))
             culled_lights.push_back(*i);
         
     }
-    
+	
 }
 
 void SSimpleLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_matrix, glm::mat4& view_matrix, double interpolation) {
