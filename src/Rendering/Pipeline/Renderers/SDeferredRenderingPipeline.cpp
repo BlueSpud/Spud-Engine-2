@@ -44,6 +44,7 @@ SDeferredRenderingPipleline::~SDeferredRenderingPipleline() {
     // Unload the gbuffer
     gbuffer->unload();
     delete gbuffer;
+	
 }
 
 void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation) {

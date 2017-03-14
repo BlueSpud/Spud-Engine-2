@@ -9,6 +9,49 @@
 #ifndef SOctree_hpp
 #define SOctree_hpp
 
-#include <stdio.h>
+#include "SObject.hpp"
+
+#define OCTREE_MAX_LEVELS 12
+
+/******************************************************************************
+ *  Definition for Octree node                                                *
+ ******************************************************************************/
+
+struct SOctreeNode {
+	
+	~SOctreeNode();
+	
+	glm::vec3 center;
+	float radius;
+	int level = 0;
+	
+	SOctreeNode* children[8];
+	bool has_children = false;
+	
+	std::vector<SObject*> objects;
+	
+	bool insert(SObject* object, glm::vec3* points);
+	void collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects);
+	
+};
+
+/******************************************************************************
+ *  Definition for Octree												      *
+ ******************************************************************************/
+
+class SOctree {
+	
+	public:
+	
+		SOctree();
+		bool insert(SObject* object);
+		void collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects);
+	
+	private:
+	
+		SOctreeNode root_node;
+		std::vector<SObject*> excess;
+	
+};
 
 #endif /* SOctree_hpp */

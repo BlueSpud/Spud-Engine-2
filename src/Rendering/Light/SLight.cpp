@@ -46,7 +46,7 @@ float SLight::getRadius() { return radius; }
  *  Implementation for point light                                            *
  ******************************************************************************/
 
-SPointLight::SPointLight() : bounding_box(glm::vec3(-1.0), glm::vec3(1.0), &transform) { /* No initialization */ }
+SPointLight::SPointLight() { /* No initialization */ }
 
 void SPointLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
     
@@ -60,7 +60,7 @@ bool SPointLight::needsShadowUpdate() {
     return false;
 }
 
-bool SPointLight::shouldBeCulled(const SFrustum& frustum) {
+bool SPointLight::shouldBeRendered(const SFrustum& frustum) {
     
     // Project thhe bounding box
     return bounding_box.frustrumCull(frustum);
@@ -178,7 +178,7 @@ bool SDirectionalLight::needsShadowUpdate() {
    
 }
 
-bool SDirectionalLight::shouldBeCulled(const SFrustum& frustum) {
+bool SDirectionalLight::shouldBeRendered(const SFrustum& frustum) {
     
     // Directional lights are always rendered as a full screen quad, never culled
     return true;
@@ -189,7 +189,7 @@ bool SDirectionalLight::shouldBeCulled(const SFrustum& frustum) {
  *  Implementation for spot light                                             *
  ******************************************************************************/
 
-SSpotLight::SSpotLight() : bounding_box(glm::vec3(-1.0), glm::vec3(1.0), &transform) { /* No initialization */ }
+SSpotLight::SSpotLight() { /* No initialization */ }
 
 void SSpotLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
 	
@@ -224,7 +224,7 @@ bool SSpotLight::needsShadowUpdate() {
 	return true;
 }
 
-bool SSpotLight::shouldBeCulled(const SFrustum& frustum) {
+bool SSpotLight::shouldBeRendered(const SFrustum& frustum) {
 	
 	// Project thhe bounding box
 	return bounding_box.frustrumCull(frustum);

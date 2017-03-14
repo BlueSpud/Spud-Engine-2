@@ -135,7 +135,7 @@ void SSimpleLightGraph::cullLights(glm::mat4& projection_view_matrix) {
     for (std::list<SLight*>::iterator i = lights.begin(); i != lights.end(); i++) {
         
         // Check if the light needs a shadow update and if we can see it in the frustrum
-        if ((*i)->shouldBeCulled(frustum))
+        if ((*i)->shouldBeRendered(frustum))
             culled_lights.push_back(*i);
         
     }

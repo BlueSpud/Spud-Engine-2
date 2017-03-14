@@ -21,6 +21,8 @@ struct SBoundingBox {
     
     void project(const glm::mat4& matrix, bool homogonized);
     bool frustrumCull(const SFrustum& frustum);
+	
+	void getOrientedPoints(glm::vec3* _points) const;
     
     STransform* transform;
     

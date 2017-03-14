@@ -33,10 +33,11 @@ struct SSortedObject {
 class SSceneGraph {
     
     public:
-    
+	
+		SSceneGraph();
         virtual ~SSceneGraph();
     
-        virtual void makeCurrent() = 0;
+        virtual void makeCurrent();
     
 		void render(SCamera& camera, double interpolation);
 		void render(SCamera& camera, SGbufferShader* shader, double interpolation);
@@ -59,10 +60,6 @@ class SSceneGraph {
 class SSimpleSceneGraph : public SSceneGraph {
     
     public:
-    
-        SSimpleSceneGraph();
-    
-        virtual void makeCurrent();
     
         virtual void addObject(SObject* object);
         virtual void removeObject(SObject* object);

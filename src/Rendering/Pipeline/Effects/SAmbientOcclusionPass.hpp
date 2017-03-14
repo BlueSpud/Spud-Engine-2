@@ -26,7 +26,7 @@ class SAmbientOcclusionPass : public SPostProcessPass {
     public:
     
         SAmbientOcclusionPass(glm::vec2 main_framebuffer_size);
-        void unload();
+        virtual ~SAmbientOcclusionPass();
     
         virtual void render(SPostProcessPassData& data);
     

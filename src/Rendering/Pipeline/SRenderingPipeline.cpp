@@ -29,6 +29,14 @@ SRenderingPipeline::SRenderingPipeline(SViewport* _viewport_2D, SViewport* _scre
 	
 }
 
+SRenderingPipeline::~SRenderingPipeline() {
+	
+	// Delete post processes
+	for (int i = 0; i < post_process_passes.size(); i++)
+		delete post_process_passes[i];
+	
+}
+
 void SRenderingPipeline::finalizeRender(SFramebuffer* output_framebuffer) {
     
     // Unbind the framebuffer and draw

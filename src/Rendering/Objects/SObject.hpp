@@ -13,6 +13,7 @@
 #include "SGbufferShader.hpp"
 
 #include "SPhysicsSystem.hpp"
+#include "SBoundingBox.hpp"
 
 /******************************************************************************
  *  Definition for generic renderable object                                  *
@@ -34,12 +35,15 @@ class SObject {
     
         virtual void onMoveToSceneGraph(SPhysicsGraph* physics_graph) { /* intentionally empty */ }
         virtual void onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) { /* intentionally empty */ }
-    
+	
+		const SBoundingBox& getBoundingBox();
+	
         STransform transform;
     
     protected:
     
         SEventListener event_listener;
+		SBoundingBox bounding_box;
     
     
 };

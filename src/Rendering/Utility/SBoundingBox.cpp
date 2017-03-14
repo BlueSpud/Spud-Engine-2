@@ -117,3 +117,32 @@ bool SBoundingBox::frustrumCull(const SFrustum& frustum) {
     return true;
 	
 }
+
+void SBoundingBox::getOrientedPoints(glm::vec3* _points) const {
+	
+	// Make 8 points to project
+	glm::vec4 points[8] = {
+		
+		glm::vec4(mins.x, mins.y, mins.z, 1.0),
+		glm::vec4(maxes.x, mins.y, mins.z, 1.0),
+		glm::vec4(maxes.x, maxes.y, mins.z, 1.0),
+		glm::vec4(mins.x, maxes.y, mins.z, 1.0),
+		glm::vec4(mins.x, mins.y, maxes.z, 1.0),
+		glm::vec4(maxes.x, mins.y, maxes.z, 1.0),
+		glm::vec4(maxes.x, maxes.y, maxes.z, 1.0),
+		glm::vec4(mins.x, maxes.y, maxes.z, 1.0)
+		
+	};
+	
+	
+	glm::mat4 model_matrix = SGL::transformToMatrix(*transform);
+	
+	// Project all the points
+	for (int i = 0; i < 8; i++) {
+		
+		glm::vec4 point_projected = model_matrix * points[i];
+		_points[i] = glm::vec3(point_projected);
+		
+	}
+
+}

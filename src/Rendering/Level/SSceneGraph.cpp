@@ -9,6 +9,21 @@
 #include "SSceneGraph.hpp"
 #include "SRenderSystem.hpp"
 
+SSceneGraph::SSceneGraph() {
+	
+	// Create a physics graph
+	physics_graph = new SPhysicsGraph();
+	
+}
+
+void SSceneGraph::makeCurrent() {
+	
+	// This is bad, TEMP
+	SRenderSystem::current_scene_graph = this;
+	SPhysicsSystem::current_physics_graph = physics_graph;
+	
+}
+
 SSceneGraph::~SSceneGraph() { /* blank, destroy objects, scene graph manages memory for them */ }
 
 void SSceneGraph::render(SCamera& camera, double interpolation) {
@@ -49,21 +64,6 @@ void SSceneGraph::render(SCamera& camera, SGbufferShader* shader, double interpo
  *  Implementation for basic scene graph                                      *
  ******************************************************************************/
 
-SSimpleSceneGraph::SSimpleSceneGraph() {
-    
-    // Create a physics graph
-    physics_graph = new SPhysicsGraph();
-
-}
-
-void SSimpleSceneGraph::makeCurrent() {
-    
-    // This is bad, TEMP
-    SRenderSystem::current_scene_graph = this;
-    SPhysicsSystem::current_physics_graph = physics_graph;
-    
-}
-
 std::list<SSortedObject> SSimpleSceneGraph::collectObjects(SCamera& camera, double interpolation) {
 	
 	// Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling
@@ -75,7 +75,7 @@ std::list<SSortedObject> SSimpleSceneGraph::collectObjects(SCamera& camera, doub
 	
 	// Make sure that anything we want to render is added to the reder que
 	// The array is sorted by z value of an object relative to the camera
-	std::list<SSortedObject>rendered_objects;
+	std::list<SSortedObject> sorted_objects;
 	std::list<SSortedObject>::iterator j;
 	
 	for (std::list<SObject*>::iterator i = objects.begin(); i != objects.end(); i++) {
@@ -93,13 +93,13 @@ std::list<SSortedObject> SSimpleSceneGraph::collectObjects(SCamera& camera, doub
 			
 			// Do an insertion sort of the new object into the array
 			bool added = false;
-			for (j = rendered_objects.begin(); j != rendered_objects.end(); j++) {
+			for (j = sorted_objects.begin(); j != sorted_objects.end(); j++) {
 				
 				// Check if the object has a z value greater than us
 				if ((*j).z_value < object_s.z_value) {
 					
 					// Insert the object here and break
-					rendered_objects.insert(j, object_s);
+					sorted_objects.insert(j, object_s);
 					added = true;
 					break;
 					
@@ -109,13 +109,13 @@ std::list<SSortedObject> SSimpleSceneGraph::collectObjects(SCamera& camera, doub
 			
 			// If it wasnt added, add it back
 			if (!added)
-				rendered_objects.push_back(object_s);
+				sorted_objects.push_back(object_s);
 			
 		}
 		
 	}
 	
-	return rendered_objects;
+	return sorted_objects;
 	
 }
 

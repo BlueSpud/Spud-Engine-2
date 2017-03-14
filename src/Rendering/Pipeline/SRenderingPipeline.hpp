@@ -35,7 +35,8 @@ class SPostProcessPass {
     public:
     
         virtual void render(SPostProcessPassData& data) = 0;
-    
+		virtual ~SPostProcessPass() { /* intentionally empty */ };
+	
 };
 
 /******************************************************************************
@@ -47,7 +48,7 @@ class SRenderingPipeline {
     public:
     
         SRenderingPipeline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D);
-        virtual ~SRenderingPipeline() { /* intentionally blank */ }
+		virtual ~SRenderingPipeline();
     
         virtual void render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation) = 0;
         void finalizeRender(SFramebuffer* output_framebuffer);

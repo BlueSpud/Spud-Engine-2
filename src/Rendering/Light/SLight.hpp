@@ -13,7 +13,6 @@
 #include "SSceneGraph.hpp"
 #include "SCamera.hpp"
 #include "SLightingConstants.h"
-#include "SBoundingBox.hpp"
 
 // Forward declarations
 class SLightGraph;
@@ -22,7 +21,7 @@ class SLightGraph;
  *  Definition for default kind of light                                      *
  ******************************************************************************/
 
-class SLight {
+class SLight : public SObject {
     
     friend class SLightGraph;
     
@@ -30,15 +29,16 @@ class SLight {
     
         SLight();
         virtual ~SLight() { /* intentionally empty */ }
-    
+	
+		// SObject methods
+		virtual void render(double interpolation) { /* intentionally empty */ };
+		virtual void update(const SEvent& event) { /* intentionally empty */ };
+	
 		virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) = 0;
  
         virtual bool needsShadowUpdate() = 0;
-    
-        virtual bool shouldBeCulled(const SFrustum& frustum) = 0;
 		virtual void getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes);
 
-        STransform transform;
         glm::vec3 light_color = glm::vec3(1.0);
 	
 		virtual int getLightType() = 0;
@@ -71,21 +71,17 @@ class SPointLight : public SLight {
     public:
     
         SPointLight();
-    
+	
         virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation);
         virtual bool needsShadowUpdate();
     
-        virtual bool shouldBeCulled(const SFrustum& frustum);
+        virtual bool shouldBeRendered(const SFrustum& frustum);
 	
 		virtual void getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes);
 	
 		int getLightType() { return LIGHT_TYPE_POINT; }
 	
 		virtual void setRadius(float _radius);
-	
-    private:
-    
-        SBoundingBox bounding_box;
     
 };
 
@@ -100,7 +96,7 @@ class SDirectionalLight : public SLight {
         virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation);
         virtual bool needsShadowUpdate();
     
-        virtual bool shouldBeCulled(const SFrustum& frustum);
+        virtual bool shouldBeRendered(const SFrustum& frustum);
 	
 		int getLightType() { return LIGHT_TYPE_DIRECTIONAL; }
     
@@ -119,7 +115,7 @@ class SSpotLight : public SLight {
 		virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation);
 		virtual bool needsShadowUpdate();
 	
-		virtual bool shouldBeCulled(const SFrustum& frustum);
+		virtual bool shouldBeRendered(const SFrustum& frustum);
 	
 		virtual void getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes);
 	
@@ -128,12 +124,7 @@ class SSpotLight : public SLight {
 		virtual void setRadius(float _radius);
 
 		float spotlight_cutoff = M_PI_4;
-	
-	private:
-	
-		SBoundingBox bounding_box;
 
-	
 };
 
 #endif /* SLight_hpp */

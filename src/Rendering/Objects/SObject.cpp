@@ -12,7 +12,7 @@
  *  Implementation for generic renderable object                              *
  ******************************************************************************/
 
-SObject::SObject() {
+SObject::SObject() : bounding_box(glm::vec3(0.0), glm::vec3(0.0), &transform) {
     
     // Listen to the tick event for subclasses
     event_listener.listenToEvent(EVENT_TICK, EVENT_MEMBER(SObject::update));
@@ -26,3 +26,5 @@ void SObject::render(SGbufferShader* shader, double interpolation) {
 	render(interpolation);
 	
 }
+
+const SBoundingBox& SObject::getBoundingBox() { return bounding_box; }

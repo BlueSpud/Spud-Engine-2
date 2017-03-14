@@ -147,7 +147,7 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
     
 }
 
-void SAmbientOcclusionPass::unload() {
+SAmbientOcclusionPass::~SAmbientOcclusionPass() {
     
     // Unload the framebuffer and delete it
     occlusion_framebuffer->unload();
