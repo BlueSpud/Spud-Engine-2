@@ -12,7 +12,7 @@
  *  Implementation for static mesh instance                                   *
  ******************************************************************************/
 
-SStaticMesh::SStaticMesh(SModel* _parent_mesh) : bounding_box(glm::vec3(0.0), glm::vec3(0.0), &transform) {
+SStaticMesh::SStaticMesh(SModel* _parent_mesh) {
     
     // Store the parent mesh
     parent_mesh = _parent_mesh;

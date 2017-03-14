@@ -42,8 +42,6 @@ class SStaticMesh : public SObject {
         std::vector<SMaterial*> materials;
 		bool materials_identical = true;
 	
-		SBoundingBox bounding_box;
-	
         SRigidBody* rigid_body = nullptr;
     
 };

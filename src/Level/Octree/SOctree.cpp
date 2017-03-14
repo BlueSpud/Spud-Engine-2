@@ -123,10 +123,35 @@ bool SOctreeNode::insert(SObject* object, glm::vec3* points) {
 
 void SOctreeNode::collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects) {
 	
-	// We use a sphere aproximation because that seems to work much better
+	// First we frustum cull the actual node itself, we dont use a bounding box to do this to save on the matrix multiplication
+	// Get the points we need to test
+	glm::vec3 points[8] = {
+		
+		center + glm::vec3( radius,  radius,  radius),
+		center + glm::vec3(-radius,  radius,  radius),
+		center + glm::vec3( radius,  radius, -radius),
+		center + glm::vec3(-radius,  radius, -radius),
+		center + glm::vec3( radius, -radius,  radius),
+		center + glm::vec3(-radius, -radius,  radius),
+		center + glm::vec3( radius, -radius, -radius),
+		center + glm::vec3(-radius, -radius, -radius)
+		
+	};
+	
+	// If all 8 points are outside a plane, we are culled, otherwise we are good to go
 	for (int plane = 0; plane < 6; plane++) {
 		
-		if (glm::dot(center, glm::vec3(frustum.planes[plane])) + frustum.planes[plane].w + radius < 0.0)
+		int inside = 8;
+		for (int p = 0; p < 8; p++) {
+			
+			// Do a regular point frustum cull
+			if (glm::dot(points[p], glm::vec3(frustum.planes[plane])) + frustum.planes[plane].w < 0.0)
+				inside--;
+			
+		}
+		
+		// If we had 0 inside, then we are outside
+		if (inside == 0)
 			return;
 		
 	}
