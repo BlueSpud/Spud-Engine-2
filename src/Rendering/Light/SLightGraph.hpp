@@ -57,8 +57,6 @@ class SSimpleLightGraph : public SLightGraph {
     
     public:
     
-        SSimpleLightGraph();
-    
         virtual void cullLights(glm::mat4& projection_view_matrix);
         virtual void updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_matrix, glm::mat4& view_matrix, double interpolation);
     
@@ -75,7 +73,6 @@ class SSimpleLightGraph : public SLightGraph {
     
         std::list<SLight*> lights;
         std::vector<SLight*> culled_lights;
-        glm::vec3* light_positions;
     
 };
 

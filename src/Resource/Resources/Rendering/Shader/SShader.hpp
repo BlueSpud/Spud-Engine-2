@@ -73,8 +73,12 @@ class SShader : public SResource {
 	
 		virtual bool load(const SPath& vert, const SPath& frag);
 	
+		int getUniformLocation(const std::string& uniform);
+	
     private:
-    
+	
+		std::map<size_t, int> locations;
+	
         SFile* vert_file;
         SFile* frag_file;
     
@@ -86,7 +90,9 @@ class SShader : public SResource {
         static SShader* bound_shader;
     
         SShaderUpload* upload;
-    
+	
+		static std::hash<std::string> hasher;
+	
     
 };
 

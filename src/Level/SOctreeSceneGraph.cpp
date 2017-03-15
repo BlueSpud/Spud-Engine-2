@@ -83,6 +83,7 @@ void SOctreeSceneGraph::removeObject(SObject* object) {
 
 SOctreeSceneGraph::~SOctreeSceneGraph() {
 	
-	
+	// Purge the tree
+	octree.purge();
 	
 }

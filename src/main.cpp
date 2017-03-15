@@ -206,31 +206,29 @@ int main(int argc, char* argv[]) {
 //    sound_emitter->setLoops(true);
 //    sound_emitter->transform.translation = camera.transform.translation;
 	
-    SOctreeSceneGraph* scene_graph = new SOctreeSceneGraph();
+    SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
     SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
 	mesh->transform.translation.y = 0.4;
-	mesh->transform.translation.y = 9.0;
-	mesh->transform.translation.z = -9.0;
 	scene_graph->addObject(mesh);
 	
-	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/wall.smdl")));
+	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
 	mesh->transform.scale = glm::vec3(0.25);
-	mesh->transform.translation.y = 10.65;
-	mesh->transform.translation.z = -10.20;
+	mesh->transform.translation.y = 1.65;
+	mesh->transform.translation.z = -1.20;
 	mesh->transform.rotation.x = M_PI_2;
 	scene_graph->addObject(mesh);
 	
-	for (int i = 0; i < 1000; i++) {
-		
-		mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
-		mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/machine_material_test.mat")), 0);
-		mesh->transform.translation.x = rand() % 100;
-		mesh->transform.translation.z = rand() % 100;
-		mesh->transform.translation.y = rand() % 100;
-		scene_graph->addObject(mesh);
-		
-	}
+//	for (int i = 0; i < 1000; i++) {
+//		
+//		mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
+//		mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/machine_material_test.mat")), 0);
+//		mesh->transform.translation.x = rand() % 100;
+//		mesh->transform.translation.z = rand() % 100;
+//		mesh->transform.translation.y = rand() % 100;
+//		scene_graph->addObject(mesh);
+//		
+//	}
 	
 	
 //	SSerializer serializer;

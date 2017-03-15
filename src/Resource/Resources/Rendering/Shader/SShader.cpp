@@ -9,6 +9,7 @@
 #include "SShader.hpp"
 
 SShader* SShader::bound_shader;
+std::hash<std::string> SShader::hasher;
 
 /***********************************************************************************
  *  Registration for supported shader extensions (GLSL used to load frag and vert) *
@@ -54,6 +55,18 @@ int SShader::getUniformLocation(SShader* shader, const std::string& name) {
     
 }
 
+int SShader::getUniformLocation(const std::string& uniform) {
+	
+	// Hash the name
+	size_t hash = hasher(uniform);
+	
+	if (!locations.count(hash))
+		locations[hash] = glGetUniformLocation(program_id, uniform.c_str());
+		
+	return locations[hash];
+	
+}
+
 void SShader::bindUniform(void* value, const std::string& name, int type, int count) {
     
     // Keep track of the current shader and attempt to bind ourself
@@ -64,32 +77,32 @@ void SShader::bindUniform(void* value, const std::string& name, int type, int co
     switch (type) {
             
             case UNIFORM_INT:
-                glUniform1iv(glGetUniformLocation(program_id, name.c_str()), count, (GLint*)value);
+                glUniform1iv(getUniformLocation(name), count, (GLint*)value);
                 break;
             
             case UNIFORM_FLOAT:
-                glUniform1fv(glGetUniformLocation(program_id, name.c_str()), count, (GLfloat*)value);
+                glUniform1fv(getUniformLocation(name), count, (GLfloat*)value);
                 break;
             
             case UNIFORM_VEC2:
-                glUniform2fv(glGetUniformLocation(program_id, name.c_str()), count, (GLfloat*)value);
+                glUniform2fv(getUniformLocation(name), count, (GLfloat*)value);
                 break;
             
             case UNIFORM_VEC3:
-                glUniform3fv(glGetUniformLocation(program_id, name.c_str()), count, (GLfloat*)value);
+                glUniform3fv(getUniformLocation(name), count, (GLfloat*)value);
                 break;
             
             case UNIFORM_VEC4:
-                glUniform4fv(glGetUniformLocation(program_id, name.c_str()), count, (GLfloat*)value);
+                glUniform4fv(getUniformLocation(name), count, (GLfloat*)value);
                 break;
             
-            
+	
             case UNIFORM_MAT3:
-                glUniformMatrix3fv(glGetUniformLocation(program_id, name.c_str()), count, GL_FALSE, (GLfloat*)value);
+                glUniformMatrix3fv(getUniformLocation(name), count, GL_FALSE, (GLfloat*)value);
                 break;
             
             case UNIFORM_MAT4:
-                glUniformMatrix4fv(glGetUniformLocation(program_id, name.c_str()), count, GL_FALSE, (GLfloat*)value);
+                glUniformMatrix4fv(getUniformLocation(name), count, GL_FALSE, (GLfloat*)value);
                 break;
             
     }

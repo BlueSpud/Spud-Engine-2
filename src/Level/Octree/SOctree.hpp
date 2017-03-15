@@ -33,6 +33,8 @@ struct SOctreeNode {
 	bool insert(SObject* object, glm::vec3* points);
 	void collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects);
 	
+	void purge();
+	
 };
 
 /******************************************************************************
@@ -46,6 +48,8 @@ class SOctree {
 		SOctree();
 		bool insert(SObject* object);
 		void collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects);
+	
+		void purge();
 	
 	private:
 	

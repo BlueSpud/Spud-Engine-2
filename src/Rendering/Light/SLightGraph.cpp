@@ -112,13 +112,6 @@ void SLightGraph::blurLightTile(glm::ivec2& tile) {
  *  Implementation for simple light graph                                     *
  ******************************************************************************/
 
-SSimpleLightGraph::SSimpleLightGraph() : SLightGraph() {
-
-    // Create the array for the light positions
-    light_positions = new glm::vec3[0];
-
-}
-
 void SSimpleLightGraph::cullLights(glm::mat4& projection_view_matrix) {
     
     /******************************************************************************
@@ -305,9 +298,6 @@ SSimpleLightGraph::~SSimpleLightGraph() {
     // Delete all the lights in the graph
     for (std::list<SLight*>::iterator i = lights.begin(); i != lights.end(); i++)
         delete *i;
-    
-    // Delete the light position array
-    delete light_positions;
 
 }
 

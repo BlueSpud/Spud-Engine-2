@@ -174,6 +174,29 @@ void SOctreeNode::collectObjects(const SFrustum& frustum, std::vector<SObject*>&
 	
 }
 
+void SOctreeNode::purge() {
+	
+	// Clean out all of the objects
+	for (int i = 0; i < objects.size(); i++)
+		delete objects[i];
+	
+	// If we have children, purge them too
+	if (has_children) {
+		
+		for (int i = 0; i < 8; i++) {
+			
+			children[i]->purge();
+			delete children[i];
+			
+		}
+		
+		// Save that we no longer have children
+		has_children = false;
+	
+	}
+	
+}
+
 /******************************************************************************
  *  Implementation for Octree                                                 *
  ******************************************************************************/
@@ -214,5 +237,12 @@ void SOctree::collectObjects(const SFrustum& frustum, std::vector<SObject*>& cul
 			culled_objects.push_back(excess[i]);
 			
 	}
+	
+}
+
+void SOctree::purge() {
+	
+	// Call purge on the root node
+	root_node.purge();
 	
 }
