@@ -71,9 +71,9 @@ struct STransform {
  *  Definition for matrix locations                                           *
  ******************************************************************************/
 
-#define MAT_MODEL "mat_model"
-#define MAT_VIEW "mat_view"
-#define MAT_PROJECTION "mat_projection"
+#define MAT_MODEL 0
+#define MAT_VIEW 1
+#define MAT_PROJECTION 2
 
 /******************************************************************************
  *  Definition for frustum													  *
@@ -177,16 +177,16 @@ class SGL : public SSubsystem {
 *  Definition for the matrix operations                                       *
 ******************************************************************************/
     
-        static void loadMatrix(const glm::mat4& mat, const char* mat_name);
-        static void mulMatrix(const glm::mat4& mat, const char* mat_name);
-        static glm::mat4 getMatrix(const char* mat_name);
-        static void clearMatrix(const char* mat_name);
+        static void loadMatrix(const glm::mat4& mat, int matrix);
+        static void mulMatrix(const glm::mat4& mat, int matrix);
+        static glm::mat4 getMatrix(int matrix);
+        static void clearMatrix(int matrix);
     
-        static void flushMatrix(const char* mat_name);
+        static void flushMatrix(int matrix);
     
     private:
     
-        static std::map<const char*, glm::mat4>matrices;
+		static glm::mat4 matrices[3];
     
         static GLFWwindow* window;
     
@@ -197,6 +197,8 @@ class SGL : public SSubsystem {
         static GLuint rect_buffers[2];
 	
 		static bool window_focused;
+	
+		static const char* matrix_names[3];
 	
     
 };

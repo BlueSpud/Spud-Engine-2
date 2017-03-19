@@ -10,8 +10,9 @@
 #include "SShader.hpp"
 
 GLFWwindow* SGL::window;
-std::map<const char*, glm::mat4>SGL::matrices;
+glm::mat4 SGL::matrices[3] = {glm::mat4(1.0), glm::mat4(1.0), glm::mat4(1.0)};
 
+const char* SGL::matrix_names[3] = {"mat_model", "mat_view", "mat_projection"};
 
 GLuint SGL::rect_id;
 GLuint SGL::rect_buffers[2];
@@ -239,55 +240,42 @@ void SGL::renderRect(const glm::vec2& position, const glm::vec2& size) {
  *  Implementation for the matricies                                          *
  ******************************************************************************/
 
-void SGL::loadMatrix(const glm::mat4& mat, const char* mat_name) {
+void SGL::loadMatrix(const glm::mat4& mat, int matrix) {
     
     // Load the matrix into the storage
-    matrices[mat_name] = mat;
+    matrices[matrix] = mat;
 
 }
 
-void SGL::mulMatrix(const glm::mat4& mat, const char* mat_name) {
-    
-    // Check if there is already a matrix with this name
-    if (matrices.count(mat_name)) {
-        
-        // Multiply it and upload it
-        const glm::mat4& mat_current = matrices[mat_name];
-        matrices[mat_name] = mat_current * mat;
-        
-    } else {
-        
-        // Behave like a regular upload
-        loadMatrix(mat, mat_name);
-        
-    }
+void SGL::mulMatrix(const glm::mat4& mat, int matrix) {
+
+	// Multiply it and upload it
+	const glm::mat4& mat_current = matrices[matrix];
+	matrices[matrix] = mat_current * mat;
 
 }
 
-glm::mat4 SGL::getMatrix(const char* mat_name) {
+glm::mat4 SGL::getMatrix(int matrix) {
  
     // See if there is a matrix that exists by that name, otherwise return identity
-    if (matrices.count(mat_name))
-        return matrices[mat_name];
-    else return glm::mat4(1.0);
+	return matrices[matrix];
+}
+
+void SGL::clearMatrix(int matrix) {
+
+	// Load identity matrix
+    loadMatrix(glm::mat4(1.0), matrix);
     
 }
 
-void SGL::clearMatrix(const char* mat_name) {
-    
-    glm::mat4 mat_new = glm::mat4(1.0);
-    loadMatrix(mat_new, mat_name);
-    
-}
-
-void SGL::flushMatrix(const char* mat_name) {
+void SGL::flushMatrix(int matrix) {
     
     // Get the currently bound shader
     SShader* shader = SShader::getBoundShader();
     if (shader) {
         
         // Now tell it to upload a uniform of type matrix
-        shader->bindUniform(&matrices[mat_name], mat_name, UNIFORM_MAT4, 1);
+        shader->bindUniform(&matrices[matrix], matrix_names[matrix], UNIFORM_MAT4, 1);
         
     }
     

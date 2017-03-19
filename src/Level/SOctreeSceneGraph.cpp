@@ -12,7 +12,7 @@
  *  Implementation for octree scene graph                                     *
  ******************************************************************************/
 
-std::list<SSortedObject> SOctreeSceneGraph::collectObjects(SCamera& camera, double interpolation) {
+void SOctreeSceneGraph::collectObjects(SCamera& camera, double interpolation, std::list<SSortedObject>& sorted_objects) {
 	
 	// Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling
 	SGL::clearMatrix(MAT_VIEW);
@@ -27,7 +27,6 @@ std::list<SSortedObject> SOctreeSceneGraph::collectObjects(SCamera& camera, doub
 	
 	// Make sure that anything we want to render is added to the reder que
 	// The array is sorted by z value of an object relative to the camera
-	std::list<SSortedObject> sorted_objects;
 	std::list<SSortedObject>::iterator j;
 	
 	for (int i = 0; i < culled_objects.size(); i++) {
@@ -61,8 +60,6 @@ std::list<SSortedObject> SOctreeSceneGraph::collectObjects(SCamera& camera, doub
 			sorted_objects.push_back(object_s);
 		
 	}
-	
-	return sorted_objects;
 	
 }
 

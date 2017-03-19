@@ -27,7 +27,7 @@ class SOctreeSceneGraph : public SSceneGraph {
 	
 	protected:
 	
-		virtual std::list<SSortedObject> collectObjects(SCamera& camera, double interpolation);
+		virtual void collectObjects(SCamera& camera, double interpolation, std::list<SSortedObject>& sorted_objects);
 
 	
 	private:

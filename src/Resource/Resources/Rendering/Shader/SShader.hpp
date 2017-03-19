@@ -57,8 +57,6 @@ class SShader : public SResource {
         void static unbind();
         static SShader* getBoundShader();
     
-        static int getUniformLocation(SShader* shader, const std::string& name);
-    
         void bindUniform(void* value, const std::string& name, int type, int count);
         void bindUniform(SUniform* uniform);
 		void bindTextureLocation(const std::string& name, int location);

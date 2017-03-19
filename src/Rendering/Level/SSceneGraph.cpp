@@ -28,7 +28,8 @@ SSceneGraph::~SSceneGraph() { /* blank, destroy objects, scene graph manages mem
 
 void SSceneGraph::render(SCamera& camera, double interpolation) {
 	
-	std::list<SSortedObject>rendered_objects = collectObjects(camera, interpolation);
+	std::list<SSortedObject>rendered_objects;
+	collectObjects(camera, interpolation, rendered_objects);
 	
 	// Objects are collected, now they are rendered
 	for (std::list<SSortedObject>::iterator j = rendered_objects.begin(); j != rendered_objects.end(); j++) {
@@ -45,7 +46,8 @@ void SSceneGraph::render(SCamera& camera, double interpolation) {
 
 void SSceneGraph::render(SCamera& camera, SGbufferShader* shader, double interpolation) {
 
-	std::list<SSortedObject>rendered_objects = collectObjects(camera, interpolation);
+	std::list<SSortedObject>rendered_objects;
+	collectObjects(camera, interpolation, rendered_objects);
 	
 	// Objects are collected, now they are rendered
 	for (std::list<SSortedObject>::iterator j = rendered_objects.begin(); j != rendered_objects.end(); j++) {
@@ -64,7 +66,7 @@ void SSceneGraph::render(SCamera& camera, SGbufferShader* shader, double interpo
  *  Implementation for basic scene graph                                      *
  ******************************************************************************/
 
-std::list<SSortedObject> SSimpleSceneGraph::collectObjects(SCamera& camera, double interpolation) {
+void SSimpleSceneGraph::collectObjects(SCamera& camera, double interpolation, std::list<SSortedObject>& sorted_objects) {
 	
 	// Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling
 	SGL::clearMatrix(MAT_VIEW);
@@ -75,7 +77,6 @@ std::list<SSortedObject> SSimpleSceneGraph::collectObjects(SCamera& camera, doub
 	
 	// Make sure that anything we want to render is added to the reder que
 	// The array is sorted by z value of an object relative to the camera
-	std::list<SSortedObject> sorted_objects;
 	std::list<SSortedObject>::iterator j;
 	
 	for (std::list<SObject*>::iterator i = objects.begin(); i != objects.end(); i++) {
@@ -114,8 +115,6 @@ std::list<SSortedObject> SSimpleSceneGraph::collectObjects(SCamera& camera, doub
 		}
 		
 	}
-	
-	return sorted_objects;
 	
 }
 
