@@ -28,3 +28,20 @@ void SObject::render(SGbufferShader* shader, double interpolation) {
 }
 
 const SBoundingBox& SObject::getBoundingBox() { return bounding_box; }
+
+void SObject::serialize(SSerializer& serializer) {
+
+	// Object is abstract and therefore does not need to write out its class hash
+	
+	// Serialize the transform
+	transform.serialize(serializer);
+
+}
+
+
+void SObject::deserialize(SDeserializer& deserializer) {
+
+	// Deserialize the transform
+	transform.deserialize(deserializer);
+
+}

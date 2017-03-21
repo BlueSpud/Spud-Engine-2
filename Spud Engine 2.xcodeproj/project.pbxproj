@@ -30,7 +30,6 @@
 		0291EBC11E46B2D50048DB92 /* SCharacterController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB4F1E46B2D40048DB92 /* SCharacterController.cpp */; };
 		0291EBC21E46B2D50048DB92 /* SPhysicsSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB511E46B2D40048DB92 /* SPhysicsSystem.cpp */; };
 		0291EBC31E46B2D50048DB92 /* SRigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB531E46B2D40048DB92 /* SRigidBody.cpp */; };
-		0291EBC41E46B2D50048DB92 /* SSceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB571E46B2D40048DB92 /* SSceneGraph.cpp */; };
 		0291EBC51E46B2D50048DB92 /* SLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB5A1E46B2D40048DB92 /* SLight.cpp */; };
 		0291EBC61E46B2D50048DB92 /* SLightGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB5C1E46B2D40048DB92 /* SLightGraph.cpp */; };
 		0291EBC71E46B2D50048DB92 /* SStaticMeshComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB621E46B2D40048DB92 /* SStaticMeshComponent.cpp */; };
@@ -67,6 +66,8 @@
 		0291EBE71E46B2D50048DB92 /* STextRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EBB21E46B2D50048DB92 /* STextRenderer.cpp */; };
 		0291EBE81E46B2D50048DB92 /* SUIButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EBB51E46B2D50048DB92 /* SUIButton.cpp */; };
 		0291EBE91E46B2D50048DB92 /* SUITextField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EBB71E46B2D50048DB92 /* SUITextField.cpp */; };
+		0293F7771E8015DD00B1AE11 /* SLevelFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0293F7751E8015DD00B1AE11 /* SLevelFactory.cpp */; };
+		0293F77A1E80160A00B1AE11 /* SSceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0293F7781E80160900B1AE11 /* SSceneGraph.cpp */; };
 		029865851D84771F005EED43 /* Material in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865841D84771A005EED43 /* Material */; };
 		029865981D84AD52005EED43 /* Model in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865971D84AD4D005EED43 /* Model */; };
 		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
@@ -167,8 +168,6 @@
 		0291EB521E46B2D40048DB92 /* SPhysicsSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SPhysicsSystem.hpp; sourceTree = "<group>"; };
 		0291EB531E46B2D40048DB92 /* SRigidBody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRigidBody.cpp; sourceTree = "<group>"; };
 		0291EB541E46B2D40048DB92 /* SRigidBody.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SRigidBody.hpp; sourceTree = "<group>"; };
-		0291EB571E46B2D40048DB92 /* SSceneGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSceneGraph.cpp; sourceTree = "<group>"; };
-		0291EB581E46B2D40048DB92 /* SSceneGraph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SSceneGraph.hpp; sourceTree = "<group>"; };
 		0291EB5A1E46B2D40048DB92 /* SLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLight.cpp; sourceTree = "<group>"; };
 		0291EB5B1E46B2D40048DB92 /* SLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLight.hpp; sourceTree = "<group>"; };
 		0291EB5C1E46B2D40048DB92 /* SLightGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLightGraph.cpp; sourceTree = "<group>"; };
@@ -244,6 +243,10 @@
 		0291EBB71E46B2D50048DB92 /* SUITextField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SUITextField.cpp; sourceTree = "<group>"; };
 		0291EBB81E46B2D50048DB92 /* SUITextField.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUITextField.hpp; sourceTree = "<group>"; };
 		0291EBB91E46B2D50048DB92 /* SUIWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SUIWidget.hpp; sourceTree = "<group>"; };
+		0293F7751E8015DD00B1AE11 /* SLevelFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLevelFactory.cpp; sourceTree = "<group>"; };
+		0293F7761E8015DD00B1AE11 /* SLevelFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLevelFactory.hpp; sourceTree = "<group>"; };
+		0293F7781E80160900B1AE11 /* SSceneGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SSceneGraph.cpp; path = "src/Rendering/Scene Graph/SSceneGraph.cpp"; sourceTree = SOURCE_ROOT; };
+		0293F7791E80160A00B1AE11 /* SSceneGraph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SSceneGraph.hpp; path = "src/Rendering/Scene Graph/SSceneGraph.hpp"; sourceTree = SOURCE_ROOT; };
 		029865841D84771A005EED43 /* Material */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Material; path = Resources/Material; sourceTree = "<group>"; };
 		029865971D84AD4D005EED43 /* Model */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Model; path = Resources/Model; sourceTree = "<group>"; };
 		0298659A1D84C38D005EED43 /* Texture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Texture; path = Resources/Texture; sourceTree = "<group>"; };
@@ -383,8 +386,11 @@
 		0259F1B11E6E4BC100BE5158 /* Level */ = {
 			isa = PBXGroup;
 			children = (
+				029AE7C61E75E31700B53CF5 /* Octree */,
 				0259F1B21E6E4BD400BE5158 /* SSerialization.cpp */,
 				0259F1B31E6E4BD400BE5158 /* SSerialization.hpp */,
+				0293F7751E8015DD00B1AE11 /* SLevelFactory.cpp */,
+				0293F7761E8015DD00B1AE11 /* SLevelFactory.hpp */,
 			);
 			path = Level;
 			sourceTree = "<group>";
@@ -493,7 +499,7 @@
 		0291EB551E46B2D40048DB92 /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
-				0291EB561E46B2D40048DB92 /* Level */,
+				0291EB561E46B2D40048DB92 /* Scene Graph */,
 				0291EB591E46B2D40048DB92 /* Light */,
 				0291EB5F1E46B2D40048DB92 /* Objects */,
 				0291EB6C1E46B2D40048DB92 /* Pipeline */,
@@ -506,13 +512,13 @@
 			path = Rendering;
 			sourceTree = "<group>";
 		};
-		0291EB561E46B2D40048DB92 /* Level */ = {
+		0291EB561E46B2D40048DB92 /* Scene Graph */ = {
 			isa = PBXGroup;
 			children = (
-				029AE7C61E75E31700B53CF5 /* Octree */,
-				0291EB571E46B2D40048DB92 /* SSceneGraph.cpp */,
-				0291EB581E46B2D40048DB92 /* SSceneGraph.hpp */,
+				0293F7781E80160900B1AE11 /* SSceneGraph.cpp */,
+				0293F7791E80160A00B1AE11 /* SSceneGraph.hpp */,
 			);
+			name = "Scene Graph";
 			path = Level;
 			sourceTree = "<group>";
 		};
@@ -750,7 +756,6 @@
 				02673D481E78530500FF9E3A /* SOctreeSceneGraph.hpp */,
 			);
 			name = Octree;
-			path = ../../Level;
 			sourceTree = "<group>";
 		};
 		02F6D8EA1E0C135200D78D80 /* PhysX */ = {
@@ -837,10 +842,12 @@
 				02BE01461E4CD3480031DD19 /* SAnimation.cpp in Sources */,
 				0291EBE41E46B2D50048DB92 /* SConsole.cpp in Sources */,
 				0200D1A91E4C24E700FE128D /* SSkinnedMesh.cpp in Sources */,
+				0293F7771E8015DD00B1AE11 /* SLevelFactory.cpp in Sources */,
 				0291EBD91E46B2D50048DB92 /* SMaterial.cpp in Sources */,
 				021004601E4B645B00E00A24 /* SSkinnedModel.cpp in Sources */,
 				0291EBE51E46B2D50048DB92 /* SUI.cpp in Sources */,
 				0291EBD31E46B2D50048DB92 /* SCamera.cpp in Sources */,
+				0293F77A1E80160A00B1AE11 /* SSceneGraph.cpp in Sources */,
 				0291EBBF1E46B2D50048DB92 /* SFileSystem.cpp in Sources */,
 				0291EBCC1E46B2D50048DB92 /* SAmbientOcclusionPass.cpp in Sources */,
 				0291EBE81E46B2D50048DB92 /* SUIButton.cpp in Sources */,
@@ -872,7 +879,6 @@
 				0291EBD71E46B2D50048DB92 /* SShader.cpp in Sources */,
 				0291EBDC1E46B2D50048DB92 /* STexture.cpp in Sources */,
 				029AE7C91E75E38400B53CF5 /* SOctree.cpp in Sources */,
-				0291EBC41E46B2D50048DB92 /* SSceneGraph.cpp in Sources */,
 				0291EBD81E46B2D50048DB92 /* SUniform.cpp in Sources */,
 				0291EBD11E46B2D50048DB92 /* SRenderSystem.cpp in Sources */,
 				02673D491E78530500FF9E3A /* SOctreeSceneGraph.cpp in Sources */,

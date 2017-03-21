@@ -266,7 +266,7 @@ void main() {
         // Make a threshhold for attenuation to be over to actually calculate light
         att = att * shadow;
         if (att > 0.001) {
-
+			
             // Get NDL
             L = normalize(L);
             float NDL = dot(normal, L);

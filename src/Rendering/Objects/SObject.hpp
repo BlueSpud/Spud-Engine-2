@@ -19,7 +19,7 @@
  *  Definition for generic renderable object                                  *
  ******************************************************************************/
 
-class SObject {
+class SObject : public SSerializable {
     
     public:
     
@@ -39,7 +39,10 @@ class SObject {
 		const SBoundingBox& getBoundingBox();
 	
         STransform transform;
-    
+	
+		virtual void serialize(SSerializer& serializer);
+		virtual void deserialize(SDeserializer& deserializer);
+	
     protected:
     
         SEventListener event_listener;

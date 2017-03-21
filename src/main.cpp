@@ -198,7 +198,7 @@ int main(int argc, char* argv[]) {
     // TEMP CODE
 	camera.transform.translation.y = 2.0;
     SCamera::current_camera = &camera;
-    
+	
 //    SSound* sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
 //    sound_emitter = new SSoundEmitter();
 //    sound_emitter->setSound(sound);
@@ -212,7 +212,7 @@ int main(int argc, char* argv[]) {
 	mesh->transform.translation.y = 0.4;
 	scene_graph->addObject(mesh);
 	
-	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
+	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/wall.smdl")));
 	mesh->transform.scale = glm::vec3(0.25);
 	mesh->transform.translation.y = 1.65;
 	mesh->transform.translation.z = -1.20;
@@ -285,6 +285,20 @@ int main(int argc, char* argv[]) {
 //	
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/plane.smdl")));
 //	scene_graph->addObject(mesh);
+	
+	// Test
+	SSerializer s;
+	mesh->serialize(s);
+	SSerializedData* data = s.serialize();
+	
+	SDeserializer d = SDeserializer(data);
+	size_t hash;
+	d.deserialize(&hash);
+	
+	SObject* o = SLevelFactory::allocate<SObject>(hash);
+	o->deserialize(d);
+	
+	SLog::verboseLog(SVerbosityLevel::Debug, "Decoded y pos %f", o->transform.translation.y);
 	
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     

@@ -20,6 +20,64 @@ GLuint SGL::rect_buffers[2];
 bool SGL::window_focused = true;
 
 /******************************************************************************
+ *  Implementation for transform                                              *
+ ******************************************************************************/
+
+void STransform::update() {
+	
+	// Add the velocities on
+	translation += translation_velocity;
+	rotation += rotation_velocity;
+	scale += scale_velocity;
+	
+}
+
+glm::vec3 STransform::getForwardVector(double interpolation) {
+	
+	// Calculate a few things we need more than once
+	float modified_yaw = (rotation.y + rotation_velocity.y * interpolation) - M_PI_2;
+	float cos_pitch = cos(rotation.x + rotation_velocity.x * interpolation);
+	
+	// Calculate the vector
+	return glm::normalize(glm::vec3(cos(modified_yaw) * cos_pitch,
+									sin(rotation.x + rotation_velocity.x * interpolation),
+									sin(modified_yaw) * cos_pitch));
+	
+}
+
+void STransform::serialize(SSerializer& serializer) {
+	
+	// Transform should never be written out alone, so it doesnt need a class hash
+	
+	// Add all of the various vectors we store
+	serializer.addItem(&translation);
+	serializer.addItem(&translation_velocity);
+	
+	serializer.addItem(&rotation);
+	serializer.addItem(&rotation_velocity);
+	
+	serializer.addItem(&scale);
+	serializer.addItem(&scale_velocity);
+	
+}
+
+
+void STransform::deserialize(SDeserializer& deserializer) {
+	
+	// Get back all of what we serialized in order
+	deserializer.deserialize(&translation);
+	deserializer.deserialize(&translation_velocity);
+	
+	deserializer.deserialize(&rotation);
+	deserializer.deserialize(&rotation_velocity);
+	
+	deserializer.deserialize(&scale);
+	deserializer.deserialize(&scale_velocity);
+	
+}
+
+
+/******************************************************************************
  *  Implementation for frustum						     					  *
  ******************************************************************************/
 
@@ -232,7 +290,7 @@ void SGL::renderRect(const glm::vec2& position, const glm::vec2& size) {
     // render the array
     glBindVertexArray(rect_id);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindVertexArray(0);
+	//glBindVertexArray(0);
     
 }
 
@@ -323,7 +381,7 @@ void SGL::loadRect() {
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
     
-    glBindVertexArray(0);
+	//glBindVertexArray(0);
 
 }
 

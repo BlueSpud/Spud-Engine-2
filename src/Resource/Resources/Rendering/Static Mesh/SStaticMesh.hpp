@@ -22,7 +22,8 @@
 class SStaticMesh : public SObject {
     
     public:
-    
+	
+		SStaticMesh();
         SStaticMesh(SModel* _parent_mesh);
     
         virtual void render(double interpolation);
@@ -35,7 +36,10 @@ class SStaticMesh : public SObject {
     
         virtual void onMoveToSceneGraph(SPhysicsGraph* physics_graph);
         virtual void onRemoveFromSceneGraph(SPhysicsGraph* physics_graph);
-    
+	
+		virtual void serialize(SSerializer& serializer);
+		virtual void deserialize(SDeserializer& deserializer);
+	
     private:
     
         SModel* parent_mesh;

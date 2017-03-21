@@ -21,6 +21,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include "SSubsystem.hpp"
+#include "SSerialization.hpp"
 
 #define WINDOW_WIDTH 1440
 #define WINDOW_HEIGHT 900
@@ -33,7 +34,7 @@ class SCursor;
  *  Definition for transform                                                  *
  ******************************************************************************/
 
-struct STransform {
+struct STransform : public SSerializable {
     
     glm::vec3 translation = glm::vec3(0.0);
     glm::vec3 rotation = glm::vec3(0.0);
@@ -42,28 +43,13 @@ struct STransform {
     glm::vec3 translation_velocity = glm::vec3(0.0);
     glm::vec3 rotation_velocity = glm::vec3(0.0);
     glm::vec3 scale_velocity = glm::vec3(0.0);
-    
-    void update() {
-        
-        // Add the velocities on
-        translation += translation_velocity;
-        rotation += rotation_velocity;
-        scale += scale_velocity;
-        
-    }
 	
-	glm::vec3 getForwardVector(double interpolation) {
-		
-		// Calculate a few things we need more than once
-		float modified_yaw = (rotation.y + rotation_velocity.y * interpolation) - M_PI_2;
-		float cos_pitch = cos(rotation.x + rotation_velocity.x * interpolation);
-		
-		// Calculate the vector
-		return glm::normalize(glm::vec3(cos(modified_yaw) * cos_pitch,
-										sin(rotation.x + rotation_velocity.x * interpolation),
-										sin(modified_yaw) * cos_pitch));
-		
-	}
+	void update();
+	glm::vec3 getForwardVector(double interpolation);
+	
+	virtual void serialize(SSerializer& serializer);
+	virtual void deserialize(SDeserializer& deserializer);
+	
 	
 };
 

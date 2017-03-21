@@ -10,6 +10,7 @@
 #define SSerialization_hpp
 
 #include "SLog.hpp"
+#include "SLevelFactory.hpp"
 
 /******************************************************************************
  *  Definition for serializer que items									      *
@@ -25,7 +26,7 @@ struct SSerializerQueueItem {
 };
 
 template <class T>
-struct SSerializerQueueItemDerrived : SSerializerQueueItem {
+struct SSerializerQueueItemDerrived : public SSerializerQueueItem {
 	
 	SSerializerQueueItemDerrived(T* _item) {
 		
@@ -45,6 +46,21 @@ struct SSerializerQueueItemDerrived : SSerializerQueueItem {
 	}
 	
 	T* item;
+	
+};
+
+struct SSerializerQueueItemClass : public SSerializerQueueItem {
+	
+	size_t hash;
+	
+	virtual size_t getSize() { return sizeof(size_t); }
+	
+	virtual void copy(void* data) {
+		
+		// Copy the hash
+		memcpy(data, &hash, sizeof(size_t));
+		
+	}
 	
 };
 
@@ -74,8 +90,21 @@ class SSerializer {
 		void addItem(T* item) {
 		
 			// Create a new queue node to hold this item and add it
-			item_queue.emplace_back(new SSerializerQueueItemDerrived<T>(item));
-			size = size + sizeof(*item);
+			SSerializerQueueItemDerrived<T>* storage = new SSerializerQueueItemDerrived<T>(item);
+			item_queue.emplace_back(storage);
+			size = size + storage->getSize();
+		
+		}
+	
+		template <class T>
+		void startClass() {
+		
+			// Go to the level factory and retrieve the hash
+			SSerializerQueueItemClass* class_storage = new SSerializerQueueItemClass();
+			class_storage->hash = SLevelFactory::getClassHash<T>();
+			
+			item_queue.emplace_back(class_storage);
+			size = size + class_storage->getSize();
 		
 		}
 

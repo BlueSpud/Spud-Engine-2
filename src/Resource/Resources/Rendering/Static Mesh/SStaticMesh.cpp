@@ -8,9 +8,13 @@
 
 #include "SStaticMesh.hpp"
 
+bool registered = SLevelFactoryRegistry::instance()->registerClass<SStaticMesh>("SStaticMesh");
+
 /******************************************************************************
  *  Implementation for static mesh instance                                   *
  ******************************************************************************/
+
+SStaticMesh::SStaticMesh() { /* default constructor, meant for deserialization */ }
 
 SStaticMesh::SStaticMesh(SModel* _parent_mesh) {
     
@@ -89,3 +93,31 @@ void SStaticMesh::update(const SEvent& event) {
     transform.update();
     
 }
+
+void SStaticMesh::serialize(SSerializer& serializer) {
+	
+	// Save the class
+	serializer.startClass<SStaticMesh>();
+	
+	// Serialize the model
+	
+	// Serialize the materials
+	
+	// Serialize the base object
+	SObject::serialize(serializer);
+	
+}
+
+
+void SStaticMesh::deserialize(SDeserializer& deserializer) {
+	
+	// The class is already deserialized for us
+	// Deserialize the model
+	
+	// Deserialize the materials
+	
+	// Deerialize the base objects
+	SObject::deserialize(deserializer);
+	
+}
+
