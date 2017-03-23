@@ -53,7 +53,7 @@ class SAnimation : public SResource {
 		virtual bool load(const SPath& path);
 		virtual void unload();
 	
-		float getInterpolation(float percent, SAnimationTweening tweener);
+		float getInterpolation(float percent, SAnimationTweening tweener) const;
 	
 		std::vector<std::vector<SAnimationKeyFrame>> keyframes;
 	

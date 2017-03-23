@@ -32,15 +32,16 @@ class SResource {
     public:
     
         virtual ~SResource();
-    
+		const SPath& getPath() const;
+		size_t getHash() const;
+	
     protected:
-    
+	
+		size_t hash;
+	
         virtual bool load(const SPath& path) = 0;
         virtual void unload() = 0;
         virtual void hotload(const SPath& path);
-    
-        virtual SResource* resource();
-    
         bool uploaded = false;
         std::vector<SPath> paths;
         std::vector<long> modified_times;
@@ -81,8 +82,11 @@ class SResourceManager : public SSubsystem {
     
         template <class T>
         static T* getResource(const SPath& resource_path);
+	
+		template <class T>
+		static T* getResource(size_t hash);
 
-    
+	
     private:
     
         static long getModifiedTimeForFileAtPath(const char* path);
@@ -143,7 +147,8 @@ T* SResourceManager::getResource(const SPath& resource_path) {
             // Get the time it was modified
             for (int i = 0; i < resource->paths.size(); i++)
                 resource->modified_times.push_back(getModifiedTimeForFileAtPath(resource->paths[i].getPathAsAbsolutePath().c_str()));
-            
+			
+			resource->hash = hash;
             loaded_resources[hash] = resource;
             
         } else {
@@ -156,8 +161,20 @@ T* SResourceManager::getResource(const SPath& resource_path) {
         
     }
     
-    return (T*)loaded_resources[hash]->resource();
-    
+	return (T*)loaded_resources[hash];
+	
+}
+
+template <class T>
+T* SResourceManager::getResource(size_t hash) {
+	
+	// See if we have loaded a resource
+	if (loaded_resources.count(hash))
+		return (T*)loaded_resources[hash];
+	else SLog::verboseLog(SVerbosityLevel::Critical, "Attempted to access resource by hash that was not loaded, nullptr was returned which will likely cause a crash");
+	
+	return nullptr;
+	
 }
 
 #endif /* SResourceManager_hpp */

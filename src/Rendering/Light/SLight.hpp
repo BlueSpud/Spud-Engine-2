@@ -38,6 +38,9 @@ class SLight : public SObject {
  
         virtual bool needsShadowUpdate() = 0;
 		virtual void getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes);
+	
+		virtual void serialize(SSerializer& serializer);
+		virtual void deserialize(SDeserializer& deserializer);
 
         glm::vec3 light_color = glm::vec3(1.0);
 	
@@ -82,7 +85,10 @@ class SPointLight : public SLight {
 		int getLightType() { return LIGHT_TYPE_POINT; }
 	
 		virtual void setRadius(float _radius);
-    
+	
+		virtual void serialize(SSerializer& serializer);
+		virtual void deserialize(SDeserializer& deserializer);
+	
 };
 
 /******************************************************************************
@@ -124,6 +130,9 @@ class SSpotLight : public SLight {
 		virtual void setRadius(float _radius);
 
 		float spotlight_cutoff = M_PI_4;
+	
+		virtual void serialize(SSerializer& serializer);
+		virtual void deserialize(SDeserializer& deserializer);
 
 };
 

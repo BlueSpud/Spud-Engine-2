@@ -47,10 +47,29 @@ SSerializedData* SSerializer::serialize() {
 	// Clear the queue
 	item_queue.clear();
 	
+	// Clear the paths
+	resource_paths.clear();
+	
 	// Return the data
 	return data;
 	
 }
+
+void SSerializer::addResource(SResource* resource) {
+	
+	// Add the resource hash
+	SSerializerQueueItemStorage<size_t>* resource_storage = new SSerializerQueueItemStorage<size_t>();
+	resource_storage->value = resource->getHash();
+	
+	item_queue.emplace_back(resource_storage);
+	size = size + resource_storage->getSize();
+
+	// Save the path
+	resource_paths.push_back(resource->getPath().getPathAsString());
+	
+}
+
+const std::vector<std::string>& SSerializer::getPaths() const { return resource_paths; }
 
 /******************************************************************************
  *  Implementation for de-serializer									      *

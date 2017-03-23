@@ -45,7 +45,7 @@ struct STransform : public SSerializable {
     glm::vec3 scale_velocity = glm::vec3(0.0);
 	
 	void update();
-	glm::vec3 getForwardVector(double interpolation);
+	glm::vec3 getForwardVector(double interpolation) const;
 	
 	virtual void serialize(SSerializer& serializer);
 	virtual void deserialize(SDeserializer& deserializer);

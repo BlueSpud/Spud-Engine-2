@@ -217,7 +217,8 @@ int main(int argc, char* argv[]) {
 	mesh->transform.translation.y = 1.65;
 	mesh->transform.translation.z = -1.20;
 	mesh->transform.rotation.x = M_PI_2;
-	scene_graph->addObject(mesh);
+	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/blank.mat")), 0);
+	//scene_graph->addObject(mesh);
 	
 //	for (int i = 0; i < 1000; i++) {
 //		
@@ -286,20 +287,6 @@ int main(int argc, char* argv[]) {
 //	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/plane.smdl")));
 //	scene_graph->addObject(mesh);
 	
-	// Test
-	SSerializer s;
-	mesh->serialize(s);
-	SSerializedData* data = s.serialize();
-	
-	SDeserializer d = SDeserializer(data);
-	size_t hash;
-	d.deserialize(&hash);
-	
-	SObject* o = SLevelFactory::allocate<SObject>(hash);
-	o->deserialize(d);
-	
-	SLog::verboseLog(SVerbosityLevel::Debug, "Decoded y pos %f", o->transform.translation.y);
-	
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
 	SViewport viewport_2D = SViewport(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2());
@@ -332,7 +319,28 @@ int main(int argc, char* argv[]) {
 	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
 	light->casts_shadow = true;
 	light->setRadius(10.0);
+	//light_graph->addLight(light);
+	
+	// Test
+	SSerializer s;
+	light->serialize(s);
+	mesh->serialize(s);
+	SSerializedData* data = s.serialize();
+	
+	SDeserializer d = SDeserializer(data);
+	size_t hash;
+	d.deserialize(&hash);
+	
+	light = SLevelFactory::allocate<SLight>(hash);
+	light->deserialize(d);
 	light_graph->addLight(light);
+	
+	d.deserialize(&hash);
+	
+	mesh = SLevelFactory::allocate<SStaticMesh>(hash);
+	mesh->deserialize(d);
+	scene_graph->addObject(mesh);
+
 
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
     scene_graph->makeCurrent();

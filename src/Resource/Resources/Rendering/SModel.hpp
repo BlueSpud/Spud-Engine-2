@@ -9,7 +9,6 @@
 #ifndef SStaticMesh_hpp
 #define SStaticMesh_hpp
 
-#include "SResourceManager.hpp"
 #include "SGLUpload.hpp"
 #include "SMaterial.hpp"
 

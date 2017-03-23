@@ -32,7 +32,7 @@ void STransform::update() {
 	
 }
 
-glm::vec3 STransform::getForwardVector(double interpolation) {
+glm::vec3 STransform::getForwardVector(double interpolation) const {
 	
 	// Calculate a few things we need more than once
 	float modified_yaw = (rotation.y + rotation_velocity.y * interpolation) - M_PI_2;

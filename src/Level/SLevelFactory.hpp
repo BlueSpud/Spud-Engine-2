@@ -106,4 +106,6 @@ class SLevelFactory {
 	
 };
 
+#define REGISTER_CLASS(a) bool a##_registered = SLevelFactoryRegistry::instance()->registerClass<a>(#a);
+
 #endif /* SLevelFactory_hpp */

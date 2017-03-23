@@ -11,6 +11,7 @@
 
 #include "SLog.hpp"
 #include "SLevelFactory.hpp"
+#include "SResourceManager.hpp"
 
 /******************************************************************************
  *  Definition for serializer que items									      *
@@ -49,16 +50,17 @@ struct SSerializerQueueItemDerrived : public SSerializerQueueItem {
 	
 };
 
-struct SSerializerQueueItemClass : public SSerializerQueueItem {
+template <class T>
+struct SSerializerQueueItemStorage : public SSerializerQueueItem {
 	
-	size_t hash;
+	T value;
 	
-	virtual size_t getSize() { return sizeof(size_t); }
+	virtual T getSize() { return sizeof(T); }
 	
 	virtual void copy(void* data) {
 		
 		// Copy the hash
-		memcpy(data, &hash, sizeof(size_t));
+		memcpy(data, &value, sizeof(T));
 		
 	}
 	
@@ -97,11 +99,23 @@ class SSerializer {
 		}
 	
 		template <class T>
+		void addValue(const T& value) {
+		
+			// Go to the level factory and retrieve the hash
+			SSerializerQueueItemStorage<T>* storage = new SSerializerQueueItemStorage<T>();
+			storage->value = value;
+		
+			item_queue.emplace_back(storage);
+			size = size + storage->getSize();
+		
+		}
+	
+		template <class T>
 		void startClass() {
 		
 			// Go to the level factory and retrieve the hash
-			SSerializerQueueItemClass* class_storage = new SSerializerQueueItemClass();
-			class_storage->hash = SLevelFactory::getClassHash<T>();
+			SSerializerQueueItemStorage<size_t>* class_storage = new SSerializerQueueItemStorage<size_t>();
+			class_storage->value = SLevelFactory::getClassHash<T>();
 			
 			item_queue.emplace_back(class_storage);
 			size = size + class_storage->getSize();
@@ -110,8 +124,12 @@ class SSerializer {
 
 		SSerializedData* serialize();
 	
+		void addResource(SResource* resource);
+		const std::vector<std::string>& getPaths() const;
+	
 	private:
 	
+		std::vector<std::string> resource_paths;
 		std::vector<SSerializerQueueItem*> item_queue;
 		size_t size;
 	
@@ -142,6 +160,29 @@ class SDeserializer {
 				
 			} else SLog::verboseLog(SVerbosityLevel::Critical, "Did not have enough data to serialize object\n");
 		
+		}
+	
+		template <class T>
+		T* deserializeResource() {
+		
+			size_t hash;
+			
+			if (data->size - offset >= sizeof(size_t)) {
+				
+				// Get the hash of the resource
+				memcpy(&hash, data->data + offset, sizeof(size_t));
+				
+				// Add offset
+				offset = offset + sizeof(size_t);
+				
+				// Access the resource (assume it to be loaded)
+				return SResourceManager::getResource<T>(hash);
+				
+			}
+			
+			SLog::verboseLog(SVerbosityLevel::Critical, "Did not have enough data to serialize object\n");
+			return nullptr;
+			
 		}
 	
 	private:

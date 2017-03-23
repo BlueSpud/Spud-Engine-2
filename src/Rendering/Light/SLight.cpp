@@ -15,6 +15,9 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
 
 SGbufferShader* SLight::shadow_shader;
 
+REGISTER_CLASS(SPointLight)
+REGISTER_CLASS(SSpotLight)
+REGISTER_CLASS(SDirectionalLight)
 
 /******************************************************************************
  *  Implementation for generic light                                          *
@@ -38,6 +41,31 @@ void SLight::getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam
 	
 }
 
+void SLight::serialize(SSerializer& serializer) {
+
+	// Serialize the light color
+	serializer.addItem(&light_color);
+	
+	// Serialize if we cast shadow
+	serializer.addItem(&casts_shadow);
+	
+	// Normal object
+	SObject::serialize(serializer);
+
+}
+
+void SLight::deserialize(SDeserializer& deserializer) {
+
+	// Deserialize the color
+	deserializer.deserialize(&light_color);
+
+	// Deserialize if we cast shadow
+	deserializer.deserialize(&casts_shadow);
+	
+	// Normal object
+	SObject::deserialize(deserializer);
+
+}
 
 void SLight::setRadius(float _radius) { radius = _radius; }
 float SLight::getRadius() { return radius; }
@@ -95,6 +123,32 @@ void SPointLight::setRadius(float _radius) {
 	bounding_box.maxes = glm::vec3(radius);
 	
 }
+
+void SPointLight::serialize(SSerializer& serializer) {
+	
+	// Serialize the class
+	serializer.startClass<SPointLight>();
+	
+	// Serialize the radius
+	serializer.addItem(&radius);
+	
+	// Serialize the base
+	SLight::serialize(serializer);
+	
+}
+
+
+void SPointLight::deserialize(SDeserializer& deserializer) {
+	
+	// Deserialize the radius
+	deserializer.deserialize(&radius);
+	setRadius(radius);
+	
+	// Deserialize base
+	SLight::deserialize(deserializer);
+	
+}
+
 
 /******************************************************************************
  *  Implementation for directional light                                      *
@@ -173,7 +227,6 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* clo
 bool SDirectionalLight::needsShadowUpdate() {
    
     // Directional lights are now using perspective shadow mapping so they need to be updated every frame
-    // TODO give option to not use perspective shadow mapping so it doesnt need to be updated every frame
     return true;
    
 }
@@ -259,3 +312,35 @@ void SSpotLight::setRadius(float _radius) {
 	bounding_box.maxes = glm::vec3(radius);
 	
 }
+
+void SSpotLight::serialize(SSerializer& serializer) {
+	
+	// Serialize the class
+	serializer.startClass<SSpotLight>();
+	
+	// Serialize the radius
+	serializer.addItem(&radius);
+	
+	// Serialize cutoff
+	serializer.addItem(&spotlight_cutoff);
+	
+	// Serialize the base
+	SLight::serialize(serializer);
+	
+}
+
+
+void SSpotLight::deserialize(SDeserializer& deserializer) {
+	
+	// Deserialize the radius
+	deserializer.deserialize(&radius);
+	setRadius(radius);
+	
+	// Deserialize cutoff
+	deserializer.deserialize(&spotlight_cutoff);
+	
+	// Deserialize base
+	SLight::deserialize(deserializer);
+	
+}
+

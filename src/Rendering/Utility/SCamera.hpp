@@ -22,11 +22,11 @@ class SCamera {
     
         STransform transform;
     
-        glm::mat4 getCameraMatrix();
-        glm::mat4 getCameraMatrix(double interpolation);
+        glm::mat4 getCameraMatrix() const;
+        glm::mat4 getCameraMatrix(double interpolation) const;
     
-        glm::mat4 translateToCameraSpace();
-        glm::mat4 translateToCameraSpace(double interpolation);
+        glm::mat4 translateToCameraSpace() const;
+        glm::mat4 translateToCameraSpace(double interpolation) const;
     
         static glm::vec3* getFrustumWithPlanes(glm::mat4& projection_matrix, glm::mat4& view_matrix, float near_plane, float far_plane);
     

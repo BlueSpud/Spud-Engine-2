@@ -18,7 +18,7 @@ REGISTER_RESOURCE_CLASS(sanim, SAnimation)
  *  Implementation for animation								     	      *
  ******************************************************************************/
 
-float SAnimation::getInterpolation(float percent, SAnimationTweening tweener) {
+float SAnimation::getInterpolation(float percent, SAnimationTweening tweener) const {
 	
 	switch (tweener) {
 			

@@ -25,7 +25,9 @@ class SStaticMesh : public SObject {
 	
 		SStaticMesh();
         SStaticMesh(SModel* _parent_mesh);
-    
+	
+		void setModel(SModel* model);
+	
         virtual void render(double interpolation);
 		virtual void render(SGbufferShader* shader, double interpolation);
 		virtual bool shouldBeRendered(const SFrustum& frustum);

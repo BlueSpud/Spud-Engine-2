@@ -8,7 +8,7 @@
 
 #include "SStaticMesh.hpp"
 
-bool registered = SLevelFactoryRegistry::instance()->registerClass<SStaticMesh>("SStaticMesh");
+REGISTER_CLASS(SStaticMesh)
 
 /******************************************************************************
  *  Implementation for static mesh instance                                   *
@@ -16,21 +16,29 @@ bool registered = SLevelFactoryRegistry::instance()->registerClass<SStaticMesh>(
 
 SStaticMesh::SStaticMesh() { /* default constructor, meant for deserialization */ }
 
-SStaticMesh::SStaticMesh(SModel* _parent_mesh) {
-    
-    // Store the parent mesh
-    parent_mesh = _parent_mesh;
-    
-    // Copy over the material
-    materials = parent_mesh->materials;
-    
-    // Check if there is a colliison mesh for the parent
-    if (parent_mesh->collision_geometry)
-        rigid_body = new SRigidBody(0.0, parent_mesh->collision_geometry, PxGetPhysics().createMaterial(0.5, 0.5, 0.1), &transform);
+SStaticMesh::SStaticMesh(SModel* _parent_mesh) { setModel(_parent_mesh); }
+
+void SStaticMesh::setModel(SModel* model) {
+	
+	// Store the parent mesh
+	parent_mesh = model;
+	
+	// Copy over the material
+	materials = parent_mesh->materials;
+	
+	// If we had a collision before, we delete it
+	if (rigid_body)
+		delete rigid_body;
+	
+	// Check if there is a colliison mesh for the parent
+	if (parent_mesh->collision_geometry)
+		rigid_body = new SRigidBody(0.0, parent_mesh->collision_geometry, PxGetPhysics().createMaterial(0.5, 0.5, 0.1), &transform);
+	
+	// TODO add to physics graph if object is already in the scene
 	
 	// Keep maxes and mins for boudning box
 	parent_mesh->getModelExtents(bounding_box.mins, bounding_box.maxes);
-    
+	
 }
 
 void SStaticMesh::render(double interpolation) {
@@ -61,7 +69,7 @@ bool SStaticMesh::shouldBeRendered(const SFrustum& frustum) { return bounding_bo
 void SStaticMesh::setMaterial(SMaterial* new_material, int material_domain) {
     
     // Check if we have a material domain for the material we tried to replace
-    if (material_domain < materials.size()) {
+    if (material_domain < materials.size() && materials[material_domain] != new_material) {
         
         // Set the new material
         materials[material_domain] = new_material;
@@ -100,8 +108,14 @@ void SStaticMesh::serialize(SSerializer& serializer) {
 	serializer.startClass<SStaticMesh>();
 	
 	// Serialize the model
+	serializer.addResource(parent_mesh);
 	
 	// Serialize the materials
+	//size_t size = materials.size();
+	//serializer.addValue(size);
+	
+	for (int i = 0; i < materials.size(); i++)
+		serializer.addResource(materials[i]);
 	
 	// Serialize the base object
 	SObject::serialize(serializer);
@@ -113,9 +127,12 @@ void SStaticMesh::deserialize(SDeserializer& deserializer) {
 	
 	// The class is already deserialized for us
 	// Deserialize the model
+	setModel(deserializer.deserializeResource<SModel>());
 	
 	// Deserialize the materials
-	
+	for (int i = 0; i < materials.size(); i++)
+		setMaterial(deserializer.deserializeResource<SMaterial>(), i);
+		
 	// Deerialize the base objects
 	SObject::deserialize(deserializer);
 	

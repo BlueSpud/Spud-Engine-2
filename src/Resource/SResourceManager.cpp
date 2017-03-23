@@ -17,7 +17,8 @@ std::hash<std::string>SResourceManager::hasher;
 
 SResource::~SResource() { /* intentionally empty */ }
 void SResource::hotload(const SPath& path) { /* intentionally empty */ }
-SResource* SResource::resource() { return this; }
+const SPath& SResource::getPath() const { return paths[0]; }
+size_t SResource::getHash() const { return hash; }
 
 /******************************************************************************
  *  Implementation for resource allocation manager                            *

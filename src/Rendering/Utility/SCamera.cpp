@@ -17,7 +17,7 @@ SCamera* SCamera::current_camera;;
  *  Implementation for camera                                                 *
  ******************************************************************************/
 
-glm::mat4 SCamera::getCameraMatrix() {
+glm::mat4 SCamera::getCameraMatrix() const {
     
     glm::mat4 to_return = glm::mat4(1.0);
     
@@ -31,7 +31,7 @@ glm::mat4 SCamera::getCameraMatrix() {
     
 }
 
-glm::mat4 SCamera::getCameraMatrix(double interpolation) {
+glm::mat4 SCamera::getCameraMatrix(double interpolation) const {
     
     glm::mat4 to_return = glm::mat4(1.0);
     
@@ -45,7 +45,7 @@ glm::mat4 SCamera::getCameraMatrix(double interpolation) {
     
 }
 
-glm::mat4 SCamera::translateToCameraSpace() {
+glm::mat4 SCamera::translateToCameraSpace() const {
     
     // Get the matrix and upload it
     glm::mat4 mat = getCameraMatrix();
@@ -58,7 +58,7 @@ glm::mat4 SCamera::translateToCameraSpace() {
     
 }
 
-glm::mat4 SCamera::translateToCameraSpace(double interpolation) {
+glm::mat4 SCamera::translateToCameraSpace(double interpolation) const {
     
     // Get the matrix and upload it
     glm::mat4 mat = getCameraMatrix(interpolation);
