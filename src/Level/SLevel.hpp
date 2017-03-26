@@ -11,7 +11,7 @@
 
 #include "SResourceManager.hpp"
 #include "SOctreeSceneGraph.hpp"
-#include "SLightGraph.hpp"
+#include "SOctreeLightGraph.hpp"
 
 #include "SRenderSystem.hpp"
 

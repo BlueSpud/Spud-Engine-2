@@ -99,7 +99,9 @@ class SPointLight : public SLight {
 class SDirectionalLight : public SLight {
     
     public:
-    
+	
+		SDirectionalLight();
+	
         virtual void renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation);
         virtual bool needsShadowUpdate();
     

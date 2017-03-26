@@ -85,7 +85,7 @@ bool SLevel::load(const SPath& path) {
 		}
 		
 		// Create the light graph and the lights
-		scene_graph->light_graph = new SSimpleLightGraph();
+		scene_graph->light_graph = new SOctreeLightGraph();
 	
 		for (int i = 0; i < light_count; i++) {
 			

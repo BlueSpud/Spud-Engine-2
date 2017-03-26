@@ -154,6 +154,14 @@ void SPointLight::deserialize(SDeserializer& deserializer) {
  *  Implementation for directional light                                      *
  ******************************************************************************/
 
+SDirectionalLight::SDirectionalLight() {
+	
+	// We need to make the bounding box massive so it is never culled in an octree
+	bounding_box.mins = glm::vec3(-1048576.0);
+	bounding_box.maxes = glm::vec3(1048576.0);
+	
+}
+
 void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
     
     // Create a camera that we can use to render the scene

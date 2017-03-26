@@ -148,44 +148,6 @@ void SLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_
 	
 }
 
-void SSimpleLightGraph::addLight(SLight* light) {
-	
-	// Add the light to the graph
-	lights.push_back(light);
-	
-	if (light->casts_shadow) {
-		
-		// Find a spot for the shadow map
-		for (int i = 0; i < SHADOW_MAP_ATLAS_TILE_COUNT; i++) {
-			for (int j = 0; j < SHADOW_MAP_ATLAS_TILE_COUNT; j++) {
-				
-				if (!shadow_map_atlas[i][j]) {
-					
-					// Save that we used this tile in the atlas and then return
-					shadow_map_atlas[j][i] = true;
-					light->shadow_map_position = glm::vec2(i, j);
-					return;
-					
-				}
-				
-			}
-		}
-		
-	}
-	
-}
-
-void SSimpleLightGraph::removeLight(SLight* light) {
-	
-	// Free up the spot in the shadow map atlas
-	if (light->casts_shadow)
-		shadow_map_atlas[light->shadow_map_position.x][light->shadow_map_position.y] = false;
-	
-	// Remove the light from the graph
-	lights.remove(light);
-	
-}
-
 void SLightGraph::uploadCulledLightData(SShader* shader, double interpolation) {
 	
 	// Datas
@@ -299,5 +261,43 @@ SSimpleLightGraph::~SSimpleLightGraph() {
     for (std::list<SLight*>::iterator i = lights.begin(); i != lights.end(); i++)
         delete *i;
 
+}
+
+void SSimpleLightGraph::addLight(SLight* light) {
+	
+	// Add the light to the graph
+	lights.push_back(light);
+	
+	if (light->casts_shadow) {
+		
+		// Find a spot for the shadow map
+		for (int i = 0; i < SHADOW_MAP_ATLAS_TILE_COUNT; i++) {
+			for (int j = 0; j < SHADOW_MAP_ATLAS_TILE_COUNT; j++) {
+				
+				if (!shadow_map_atlas[i][j]) {
+					
+					// Save that we used this tile in the atlas and then return
+					shadow_map_atlas[j][i] = true;
+					light->shadow_map_position = glm::vec2(i, j);
+					return;
+					
+				}
+				
+			}
+		}
+		
+	}
+	
+}
+
+void SSimpleLightGraph::removeLight(SLight* light) {
+	
+	// Free up the spot in the shadow map atlas
+	if (light->casts_shadow)
+		shadow_map_atlas[light->shadow_map_position.x][light->shadow_map_position.y] = false;
+	
+	// Remove the light from the graph
+	lights.remove(light);
+	
 }
 
