@@ -9,7 +9,6 @@
 #include "SShader.hpp"
 
 SShader* SShader::bound_shader;
-std::hash<std::string> SShader::hasher;
 
 /***********************************************************************************
  *  Registration for supported shader extensions (GLSL used to load frag and vert) *
@@ -49,7 +48,7 @@ SShader* SShader::getBoundShader() { return bound_shader; }
 int SShader::getUniformLocation(const std::string& uniform) {
 	
 	// Hash the name
-	size_t hash = hasher(uniform);
+	size_t hash = SHash::hashString(uniform);
 	
 	if (!locations.count(hash))
 		locations[hash] = glGetUniformLocation(program_id, uniform.c_str());

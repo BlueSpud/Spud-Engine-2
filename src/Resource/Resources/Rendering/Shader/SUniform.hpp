@@ -12,6 +12,8 @@
 #include <iostream>
 #include <map>
 
+#include "SHash.hpp"
+
 /******************************************************************************
  *  Definition for types of uniforms                                          *
  ******************************************************************************/
@@ -55,7 +57,6 @@ class SUniformManger {
     private:
     
         std::map<size_t, SUniform> uniforms;
-        std::hash<std::string> hasher;
     
 };
 

@@ -238,6 +238,17 @@ bool SDirectionalLight::shouldBeRendered(const SFrustum& frustum) {
     
 }
 
+void SDirectionalLight::serialize(SSerializer& serializer) {
+	
+	// Directional light needs a serialize to add the class, but we do not need a deserialize because there is no class-specific info there
+	// Serialize the class
+	serializer.startClass<SDirectionalLight>();
+	
+	// Serialize the base
+	SLight::serialize(serializer);
+	
+}
+
 /******************************************************************************
  *  Implementation for spot light                                             *
  ******************************************************************************/

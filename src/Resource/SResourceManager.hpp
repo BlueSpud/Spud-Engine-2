@@ -92,8 +92,6 @@ class SResourceManager : public SSubsystem {
         static long getModifiedTimeForFileAtPath(const char* path);
     
         static std::map<size_t, SResource*>loaded_resources;
-        static std::hash<std::string>hasher;
-    
     
 };
 
@@ -105,7 +103,7 @@ template <class T>
 T* SResourceManager::getResource(const SPath& resource_path) {
     
     // Hash the name of the resource
-    size_t hash = hasher(resource_path.getPathAsString());
+    size_t hash = SHash::hashString(resource_path.getPathAsString());
     
     // Check for loaded resource
     if (!loaded_resources.count(hash)) {

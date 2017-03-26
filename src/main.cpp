@@ -27,8 +27,7 @@
 #include "SSkinnedMesh.hpp"
 #include "SAnimation.hpp"
 
-#include "SSerialization.hpp"
-#include "SOctreeSceneGraph.hpp"
+#include "SLevel.hpp"
 
 double speed = 0.0;
 double speed_x = 0.0;
@@ -206,59 +205,72 @@ int main(int argc, char* argv[]) {
 //    sound_emitter->setLoops(true);
 //    sound_emitter->transform.translation = camera.transform.translation;
 	
-    SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
+	//SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
 	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
-	mesh->transform.translation.y = 0.4;
-	scene_graph->addObject(mesh);
-	
-	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/wall.smdl")));
-	mesh->transform.scale = glm::vec3(0.25);
-	mesh->transform.translation.y = 1.65;
-	mesh->transform.translation.z = -1.20;
-	mesh->transform.rotation.x = M_PI_2;
-	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/blank.mat")), 0);
-	//scene_graph->addObject(mesh);
-	
-//	for (int i = 0; i < 1000; i++) {
+//	SSerializer s;
+//	
+//    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
+//	mesh->transform.translation.y = 0.4;
+//	mesh->serialize(s);
+//	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/wall.smdl")));
+//	mesh->transform.scale = glm::vec3(0.25);
+//	mesh->transform.translation.y = 1.65;
+//	mesh->transform.translation.z = -1.20;
+//	mesh->transform.rotation.x = M_PI_2;
+//	mesh->serialize(s);
+//	
+//	light = new SSpotLight();
+//	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
+//	light->casts_shadow = true;
+//	light->setRadius(10.0);
+//	light->serialize(s);
+//	
+//	light = new SDirectionalLight();
+//	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
+//	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
+//	light->light_color = glm::vec3(0.5);
+//	light->casts_shadow = true;
+//	light->serialize(s);
+//	
+//	SFileWritable* file = SFileSystem::loadFileWritable(SPath("test.slevel"));
+//	
+//	const std::vector<std::string>& paths = s.getPaths();
+//	unsigned int writable_int = (unsigned int)paths.size();
+//	
+//	file->write(&writable_int, sizeof(unsigned int));
+//	
+//	for (int i = 0; i < paths.size(); i++) {
+//	
+//		writable_int = (unsigned int)paths[i].length();
+//		file->write(&writable_int, sizeof(unsigned int));
 //		
-//		mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
-//		mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/machine_material_test.mat")), 0);
-//		mesh->transform.translation.x = rand() % 100;
-//		mesh->transform.translation.z = rand() % 100;
-//		mesh->transform.translation.y = rand() % 100;
-//		scene_graph->addObject(mesh);
+//		char* c = const_cast<char*>(paths[i].c_str());
+//		file->write(c, writable_int * sizeof(char));
 //		
 //	}
+//	
+//	// Object count
+//	writable_int = 2;
+//	file->write(&writable_int, sizeof(unsigned int));
+//	
+//	// Light count
+//	writable_int = 2;
+//	file->write(&writable_int, sizeof(unsigned int));
+//	
+//	// Write out the data
+//	SSerializedData* data_s = s.serialize();
+//	
+//	file->write(&data_s->size, sizeof(size_t));
+//	file->write(data_s->data, data_s->size);
+//	
+//	delete data_s;
+//	
+//	file->close();
 	
+	// Access the level
+	SLevel* level = SResourceManager::getResource<SLevel>(SPath("Level/test.slevel"));
 	
-//	SSerializer serializer;
-//	
-//	glm::vec2 test = glm::vec2(0.0, 100.0);
-//	serializer.addItem(&test);
-//	
-//	glm::vec2 test1 = glm::vec2(245, 123);
-//	serializer.addItem(&test1);
-//	
-//	SDeserializer deserializer = SDeserializer(serializer.serialize());
-//	
-//	glm::vec2 test2;
-//	deserializer.deserialize(&test2);
-//	
-//	glm::vec2 test3;
-//	deserializer.deserialize(&test3);
-//	deserializer.deserialize(&test3);
-//	
-//	std::cout << test2.x << " " << test2.y << std::endl;
-//	std::cout << test3.x << " " << test3.y << std::endl;
-	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
-//	mesh->transform.scale = glm::vec3(0.5);
-//	scene_graph->addObject(mesh);
-	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/sponza.smdl")));
-//	mesh->transform.scale = glm::vec3(0.5);
-//	scene_graph->addObject(mesh);
 	
 //	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
 //	
@@ -273,78 +285,14 @@ int main(int argc, char* argv[]) {
 //	animation->loops = true;
 //	skinned_mesh->timer.start();
 	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/house.smdl")));
-//	mesh->transform.translation.z = 2.8;
-//	
-//	scene_graph->addObject(mesh);
-//	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
-//	mesh->transform.translation.z = -3.4;
-//	mesh->transform.translation.y = 0.5;
-//
-//	scene_graph->addObject(mesh);
-//	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/plane.smdl")));
-//	scene_graph->addObject(mesh);
 	
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
 	SViewport viewport_2D = SViewport(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2());
 	SViewport screen_viewport = SViewport(window_framebuffer_size, glm::vec2());
     SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2(0), 45.0f, glm::vec2(0.1, 500.0));
-    
-    // Create the light graph
-    SSimpleLightGraph* light_graph = new SSimpleLightGraph();
-
-//	for (int j = -1; j < 1; j++)
-//		for (int i = -15; i < 16; i++) {
-//		
-//			light = new SPointLight();
-//			light->transform.translation = glm::vec3(i / 10.0, 0.5, j * 2.0);
-//			light->light_color = glm::vec3(rand() % 256 / 256.0, rand() % 256 / 256.0, rand() % 256 / 256.0);
-//			
-//			light_graph->addLight(light);
-//		
-//		}
-
-//	light = new SDirectionalLight();
-//	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
-//	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
-//	light->light_color = glm::vec3(0.5);
-//	light->casts_shadow = true;
-//
-//	light_graph->addLight(light);
-	
-	light = new SSpotLight();
-	light->transform.translation = glm::vec3(-5.0, 1.0, 0.0);
-	light->casts_shadow = true;
-	light->setRadius(10.0);
-	//light_graph->addLight(light);
-	
-	// Test
-	SSerializer s;
-	light->serialize(s);
-	mesh->serialize(s);
-	SSerializedData* data = s.serialize();
-	
-	SDeserializer d = SDeserializer(data);
-	size_t hash;
-	d.deserialize(&hash);
-	
-	light = SLevelFactory::allocate<SLight>(hash);
-	light->deserialize(d);
-	light_graph->addLight(light);
-	
-	d.deserialize(&hash);
-	
-	mesh = SLevelFactory::allocate<SStaticMesh>(hash);
-	mesh->deserialize(d);
-	scene_graph->addObject(mesh);
-
 
     SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
-    scene_graph->makeCurrent();
-    SRenderSystem::current_light_graph = light_graph;
 
     SInputListener listener;
     listener.bind(&keyPress, GLFW_KEY_S, INPUT_ACTION_DOWN);
@@ -355,7 +303,6 @@ int main(int argc, char* argv[]) {
     
     listener.bind(&moveLight, GLFW_KEY_P, INPUT_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_G, INPUT_ACTION_DOWN);
-//    listener.bind(&SConsole::activate, GLFW_KEY_GRAVE_ACCENT, INPUT_ACTION_UP);
     
     listener.bind(&keyRelease, GLFW_KEY_S, INPUT_ACTION_UP);
     listener.bind(&keyRelease, GLFW_KEY_W, INPUT_ACTION_UP);

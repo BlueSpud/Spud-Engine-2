@@ -19,8 +19,6 @@ bool SConsole::console_active = false;
 SFont* SConsole::console_font;
 SUITextField* SConsole::text_field;
 
-std::hash<std::string> SConsoleCommandRegistry::hasher;
-
 /******************************************************************************
  *  Console command registry static members                                   *
  ******************************************************************************/
@@ -140,7 +138,7 @@ void SConsole::commitCommand() {
         std::getline(command_stream, command_name, ' ');
         
         // Hash the command so we can get it from the map
-        size_t command_hash = SConsoleCommandRegistry::hasher(command_name);
+        size_t command_hash = SHash::hashString(command_name);
         
         if (SConsoleCommandRegistry::instance()->commands.count(command_hash)) {
             
@@ -170,7 +168,7 @@ void SConsole::commitCommand() {
 bool SConsoleCommandRegistry::registerCommand(const std::string& command_name, void (*function)(const std::vector<std::string>&)) {
     
     // Hash the name of the command and keep the function
-    size_t command_hash = SConsoleCommandRegistry::hasher(command_name);
+    size_t command_hash = SHash::hashString(command_name);
     commands[command_hash] = function;
     
     return true;

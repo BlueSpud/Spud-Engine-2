@@ -88,9 +88,6 @@ class SShader : public SResource {
         static SShader* bound_shader;
     
         SShaderUpload* upload;
-	
-		static std::hash<std::string> hasher;
-	
     
 };
 

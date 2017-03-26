@@ -9,7 +9,6 @@
 #include "SResourceManager.hpp"
 
 std::map<size_t, SResource*>SResourceManager::loaded_resources;
-std::hash<std::string>SResourceManager::hasher;
 
 /******************************************************************************
  *  Implementation for generic resource                                       *

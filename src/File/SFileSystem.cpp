@@ -13,7 +13,6 @@
  ******************************************************************************/
 
 std::map<unsigned long, SFile*> SFileSystem::loaded_files;
-std::hash<std::string> SFileSystem::hasher;
 
 std::string root_directory;
 
@@ -100,8 +99,6 @@ bool SPath::getIsDirectory() const { return is_directory; }
  *  Implementation for the file class                                         *
  ******************************************************************************/
 
-SFile::SFile() { /* default constructor, nothing*/ }
-
 SFile::SFile(const std::string& _path, bool binary) {
     
     // Shortcut to load
@@ -170,11 +167,43 @@ bool SFile::bad() {
     return false;
 }
 
-void SFile::read(void* to_place, std::streamsize size) {
+void SFile::read(void* to_place, size_t size) {
     
     // Read from the stream
     in_stream.read((char*)to_place, size);
     
+}
+
+/******************************************************************************
+ *  Implementation for the writable file class                                *
+ ******************************************************************************/
+
+SFileWritable::SFileWritable(const std::string& _path, bool binary) {
+	
+	// If we requested to load it from binary, use the binary flag
+	if (binary)
+		out_stream = std::ofstream(_path, std::ios::binary);
+	else
+		out_stream = std::ofstream(_path);
+	
+	// Save the path
+	path = _path;
+	
+}
+
+void SFileWritable::close() {
+
+	// Close the stream if open
+	if (out_stream.is_open())
+		out_stream.close();
+
+}
+
+void SFileWritable::write(void* data, size_t size) {
+	
+	// Write out binary data
+	out_stream.write((char*)data, size);
+	
 }
 
 /******************************************************************************
@@ -241,7 +270,7 @@ SFile* SFileSystem::loadFile(const SPath& path, bool binary) {
     if (!path.is_directory) {
     
         // Get the hash and check if we have it
-        unsigned long hash = hasher(path.path_str);
+		unsigned long hash = SHash::hashString(path.path_str);
     
         if (!loaded_files.count(hash)) {
     
@@ -270,6 +299,14 @@ SFile* SFileSystem::loadFile(const SPath& path, bool binary) {
 	
     return nullptr;
     
+}
+
+SFileWritable* SFileSystem::loadFileWritable(const SPath& path, bool binary) {
+	
+	// Create a new file
+	SFileWritable* file = new SFileWritable(root_directory + path.path_str, binary);
+	return file;
+	
 }
 
 void SFileSystem::closeFile(SFile* file) {

@@ -105,7 +105,9 @@ class SDirectionalLight : public SLight {
         virtual bool shouldBeRendered(const SFrustum& frustum);
 	
 		int getLightType() { return LIGHT_TYPE_DIRECTIONAL; }
-    
+	
+		virtual void serialize(SSerializer& serializer);
+	
 };
 
 /******************************************************************************

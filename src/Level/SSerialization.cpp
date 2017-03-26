@@ -75,5 +75,18 @@ const std::vector<std::string>& SSerializer::getPaths() const { return resource_
  *  Implementation for de-serializer									      *
  ******************************************************************************/
 
-SDeserializer::SDeserializer(SSerializedData* _data) { data = _data; }
+SDeserializer::SDeserializer(SSerializedData* _data, const std::vector<std::string>& paths) {
+ 
+	data = _data;
+	
+	// Hash all of the paths and save the path
+	for (int i = 0; i < paths.size(); i++) {
+		
+		size_t hash = SHash::hashString(paths[i]);
+		hashed_paths[hash] = paths.at(i);
+		
+	}
+
+}
+
 SDeserializer::~SDeserializer() { delete data; }

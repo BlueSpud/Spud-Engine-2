@@ -8,8 +8,6 @@
 
 #include "SLevelFactory.hpp"
 
-std::hash<std::string> SLevelFactoryRegistry::hasher;
-
 /******************************************************************************
  *  Implementation for factory manager										  *
  ******************************************************************************/
@@ -25,8 +23,3 @@ SLevelFactoryRegistry* SLevelFactoryRegistry::instance() {
 	
 }
 
-/******************************************************************************
- *  Implementation for factory												  *
- ******************************************************************************/
-
-size_t SLevelFactory::hashClassName(const std::string& name) { return SLevelFactoryRegistry::hasher(name); }

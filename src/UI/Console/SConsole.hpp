@@ -59,8 +59,6 @@ class SConsoleCommandRegistry {
     private:
     
         static std::map<size_t, void(*)(const std::vector<std::string>&)> commands;
-        static std::hash<std::string> hasher;
-    
     
 };
 

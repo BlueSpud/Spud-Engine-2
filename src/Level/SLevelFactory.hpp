@@ -12,6 +12,8 @@
 #include <iostream>
 #include <map>
 
+#include "SHash.hpp"
+
 // Forward declaration
 class SLevelFactory;
 
@@ -41,15 +43,15 @@ class SLevelFactoryRegistry {
 		static SLevelFactoryRegistry* instance();
 	
 		template <class T>
-		bool registerClass(const std::string name) {
+		bool registerClass(const std::string& name) {
 		
-			size_t hash = hasher(name);
+			size_t hash = SHash::hashString(name);
 			
 			// Create a new factory with the name and template
 			SLevelAllocator<T>* allocator = new SLevelAllocator<T>();
 			allocators[hash] = allocator;
 			
-			hashes[hasher(typeid(T).name())] = hash;
+			hashes[SHash::hashString(typeid(T).name())] = hash;
 			
 			return true;
 		
@@ -57,7 +59,6 @@ class SLevelFactoryRegistry {
 	
 	private:
 	
-		static std::hash<std::string> hasher;
 		std::map<size_t, SLevelAllocatorBase*> allocators;
 		std::map<size_t, size_t> hashes;
 	
@@ -75,7 +76,7 @@ class SLevelFactory {
 		static T* allocate(const std::string& name) {
 		
 			// Hash the class name
-			size_t hash = SLevelFactoryRegistry::hasher(name);
+			size_t hash = SHash::hashString(name);
 			return allocate<T>(hash);
 		
 		}
@@ -95,14 +96,12 @@ class SLevelFactory {
 		static size_t getClassHash() {
 		
 			// Get the hash of the class name
-			size_t class_hash = SLevelFactoryRegistry::instance()->hasher(typeid(T).name());
+			size_t class_hash = SHash::hashString(typeid(T).name());
 			
 			// Get the appropriate hash
 			return SLevelFactoryRegistry::instance()->hashes[class_hash];
 		
 		}
-	
-		static size_t hashClassName(const std::string& name);
 	
 };
 

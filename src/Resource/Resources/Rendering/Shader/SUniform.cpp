@@ -26,7 +26,7 @@ SUniformManger* SUniformManger::instance() {
 SUniform* SUniformManger::getUniformWithName(std::string name) {
     
     // Hash the name
-    size_t hash = hasher(name);
+    size_t hash = SHash::hashString(name);
     
     // Make sure we have the uniform
     if (uniforms.count(hash))
@@ -39,7 +39,7 @@ SUniform* SUniformManger::getUniformWithName(std::string name) {
 bool SUniformManger::registerUniform(std::string name, void* value, int type, int count) {
     
     // Hash the name
-    size_t hash = hasher(name);
+    size_t hash = SHash::hashString(name);
     
     // Make a new uniform
     SUniform uniform;

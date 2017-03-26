@@ -12,6 +12,8 @@
 		0201C7811DEF4ACB00AA0B24 /* libopenal.1.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 0201C77E1DEF4A9A00AA0B24 /* libopenal.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		0202413E1D7C99130050E9D3 /* libboost_signals.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0202413D1D7C99130050E9D3 /* libboost_signals.a */; };
 		021004601E4B645B00E00A24 /* SSkinnedModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0210045E1E4B645B00E00A24 /* SSkinnedModel.cpp */; };
+		022188C41E8836CE005C1E74 /* Level in CopyFiles */ = {isa = PBXBuildFile; fileRef = 022188C31E8836C6005C1E74 /* Level */; };
+		022765151E8561D8000131BC /* SLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022765131E8561D8000131BC /* SLevel.cpp */; };
 		025903251D7793EA00EA6372 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259031E1D7793EA00EA6372 /* libboost_system.a */; };
 		025903261D7793EA00EA6372 /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259031F1D7793EA00EA6372 /* libboost_thread.a */; };
 		025903281D7793EA00EA6372 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903211D7793EA00EA6372 /* CoreVideo.framework */; };
@@ -68,6 +70,7 @@
 		0291EBE91E46B2D50048DB92 /* SUITextField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EBB71E46B2D50048DB92 /* SUITextField.cpp */; };
 		0293F7771E8015DD00B1AE11 /* SLevelFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0293F7751E8015DD00B1AE11 /* SLevelFactory.cpp */; };
 		0293F77A1E80160A00B1AE11 /* SSceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0293F7781E80160900B1AE11 /* SSceneGraph.cpp */; };
+		0295534C1E881709006CAC38 /* SHash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0295534A1E881709006CAC38 /* SHash.cpp */; };
 		029865851D84771F005EED43 /* Material in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865841D84771A005EED43 /* Material */; };
 		029865981D84AD52005EED43 /* Model in CopyFiles */ = {isa = PBXBuildFile; fileRef = 029865971D84AD4D005EED43 /* Model */; };
 		0298659B1D84C3A8005EED43 /* Texture in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0298659A1D84C38D005EED43 /* Texture */; };
@@ -120,6 +123,7 @@
 				029865851D84771F005EED43 /* Material in CopyFiles */,
 				02B6B7DD1DDB39A80068FCBA /* Shader in CopyFiles */,
 				029865981D84AD52005EED43 /* Model in CopyFiles */,
+				022188C41E8836CE005C1E74 /* Level in CopyFiles */,
 				02A7556E1E526A3A00B8279C /* Sound in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,6 +139,9 @@
 		020604711DB7982800B6268F /* Shader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shader; path = Resources/Shader; sourceTree = "<group>"; };
 		0210045E1E4B645B00E00A24 /* SSkinnedModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SSkinnedModel.cpp; path = "Skinned Mesh/SSkinnedModel.cpp"; sourceTree = "<group>"; };
 		0210045F1E4B645B00E00A24 /* SSkinnedModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SSkinnedModel.hpp; path = "Skinned Mesh/SSkinnedModel.hpp"; sourceTree = "<group>"; };
+		022188C31E8836C6005C1E74 /* Level */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Level; path = Resources/Level; sourceTree = "<group>"; };
+		022765131E8561D8000131BC /* SLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLevel.cpp; sourceTree = "<group>"; };
+		022765141E8561D8000131BC /* SLevel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLevel.hpp; sourceTree = "<group>"; };
 		025903091D77933E00EA6372 /* Spud Engine 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Spud Engine 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0259031E1D7793EA00EA6372 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = /usr/local/lib/libboost_system.a; sourceTree = "<absolute>"; };
 		0259031F1D7793EA00EA6372 /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = /usr/local/lib/libboost_thread.a; sourceTree = "<absolute>"; };
@@ -247,6 +254,8 @@
 		0293F7761E8015DD00B1AE11 /* SLevelFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLevelFactory.hpp; sourceTree = "<group>"; };
 		0293F7781E80160900B1AE11 /* SSceneGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SSceneGraph.cpp; path = "src/Rendering/Scene Graph/SSceneGraph.cpp"; sourceTree = SOURCE_ROOT; };
 		0293F7791E80160A00B1AE11 /* SSceneGraph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SSceneGraph.hpp; path = "src/Rendering/Scene Graph/SSceneGraph.hpp"; sourceTree = SOURCE_ROOT; };
+		0295534A1E881709006CAC38 /* SHash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SHash.cpp; path = Utility/SHash.cpp; sourceTree = "<group>"; };
+		0295534B1E881709006CAC38 /* SHash.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SHash.hpp; path = Utility/SHash.hpp; sourceTree = "<group>"; };
 		029865841D84771A005EED43 /* Material */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Material; path = Resources/Material; sourceTree = "<group>"; };
 		029865971D84AD4D005EED43 /* Model */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Model; path = Resources/Model; sourceTree = "<group>"; };
 		0298659A1D84C38D005EED43 /* Texture */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Texture; path = Resources/Texture; sourceTree = "<group>"; };
@@ -391,6 +400,8 @@
 				0259F1B31E6E4BD400BE5158 /* SSerialization.hpp */,
 				0293F7751E8015DD00B1AE11 /* SLevelFactory.cpp */,
 				0293F7761E8015DD00B1AE11 /* SLevelFactory.hpp */,
+				022765131E8561D8000131BC /* SLevel.cpp */,
+				022765141E8561D8000131BC /* SLevel.hpp */,
 			);
 			path = Level;
 			sourceTree = "<group>";
@@ -398,6 +409,7 @@
 		025CB5A61D83D6AE0059AF6C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				022188C31E8836C6005C1E74 /* Level */,
 				02B6B7DC1DDB399B0068FCBA /* Font */,
 				0298659A1D84C38D005EED43 /* Texture */,
 				029865841D84771A005EED43 /* Material */,
@@ -411,6 +423,7 @@
 		0291EB371E46B2D40048DB92 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				029553491E8816FA006CAC38 /* Utility */,
 				0259F1B11E6E4BC100BE5158 /* Level */,
 				0291EB381E46B2D40048DB92 /* Debug */,
 				0291EB3C1E46B2D40048DB92 /* Engine */,
@@ -747,6 +760,15 @@
 			path = Widget;
 			sourceTree = "<group>";
 		};
+		029553491E8816FA006CAC38 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				0295534A1E881709006CAC38 /* SHash.cpp */,
+				0295534B1E881709006CAC38 /* SHash.hpp */,
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
 		029AE7C61E75E31700B53CF5 /* Octree */ = {
 			isa = PBXGroup;
 			children = (
@@ -851,8 +873,10 @@
 				0291EBBF1E46B2D50048DB92 /* SFileSystem.cpp in Sources */,
 				0291EBCC1E46B2D50048DB92 /* SAmbientOcclusionPass.cpp in Sources */,
 				0291EBE81E46B2D50048DB92 /* SUIButton.cpp in Sources */,
+				0295534C1E881709006CAC38 /* SHash.cpp in Sources */,
 				0291EBBC1E46B2D50048DB92 /* STime.cpp in Sources */,
 				0291EBBD1E46B2D50048DB92 /* SInputSystem.cpp in Sources */,
+				022765151E8561D8000131BC /* SLevel.cpp in Sources */,
 				0291EBCF1E46B2D50048DB92 /* SRenderingPipeline.cpp in Sources */,
 				0291EBDA1E46B2D50048DB92 /* SModel.cpp in Sources */,
 				0291EBD01E46B2D50048DB92 /* SGL.cpp in Sources */,

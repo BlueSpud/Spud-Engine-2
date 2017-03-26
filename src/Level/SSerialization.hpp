@@ -143,7 +143,7 @@ class SDeserializer {
 	
 	public:
 	
-		SDeserializer(SSerializedData* _data);
+		SDeserializer(SSerializedData* _data, const std::vector<std::string>& paths);
 		~SDeserializer();
 	
 		template <class T>
@@ -164,19 +164,18 @@ class SDeserializer {
 	
 		template <class T>
 		T* deserializeResource() {
-		
-			size_t hash;
 			
 			if (data->size - offset >= sizeof(size_t)) {
 				
 				// Get the hash of the resource
+				size_t hash;
 				memcpy(&hash, data->data + offset, sizeof(size_t));
 				
 				// Add offset
 				offset = offset + sizeof(size_t);
 				
 				// Access the resource (assume it to be loaded)
-				return SResourceManager::getResource<T>(hash);
+				return SResourceManager::getResource<T>(hashed_paths[hash]);
 				
 			}
 			
@@ -187,6 +186,7 @@ class SDeserializer {
 	
 	private:
 	
+		std::map<size_t, std::string> hashed_paths;
 		SSerializedData* data;
 		size_t offset = 0;
 	

@@ -71,11 +71,10 @@ class SFile {
         bool getNextTokenWithDeliminator(char deliminator, std::string& destination);
         bool bad();
     
-        void read(void* to_place, std::streamsize size);
+        void read(void* to_place, size_t size);
     
     private:
-    
-        SFile();
+	
         SFile(const std::string& _path, bool binary = false);
     
         void load(const std::string& _path, bool binary = false);
@@ -85,6 +84,30 @@ class SFile {
         std::ifstream in_stream;
         std::string path;
     
+};
+
+/******************************************************************************
+ *  Definition of writable file                                               *
+ ******************************************************************************/
+
+class SFileWritable {
+	
+	friend class SFileSystem;
+	
+	public:
+	
+		void close();
+	
+		template <class T>
+		void write(const T& value) { out_stream << value; }
+		void write(void* data, size_t size);
+	
+	private:
+	
+		SFileWritable(const std::string& _path, bool binary = false);
+		std::ofstream out_stream;
+		std::string path;
+	
 };
 
 /******************************************************************************
@@ -103,6 +126,7 @@ class SFileSystem : public SSubsystem {
         static void setRootDirectory(const SPath& _root_directory);
     
         static SFile* loadFile(const SPath& path, bool binary = false);
+		static SFileWritable* loadFileWritable(const SPath& path, bool binary = false);
         static void closeFile(SFile* file);
     
         static std::vector<SPath> listDirectory(SPath& path);
@@ -114,7 +138,6 @@ class SFileSystem : public SSubsystem {
     private:
     
         static std::map<size_t, SFile*> loaded_files;
-        static std::hash<std::string> hasher;
     
 };
 
