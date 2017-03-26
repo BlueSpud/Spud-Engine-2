@@ -10,12 +10,13 @@
 #define SLight_hpp
 
 #include "SFramebuffer.hpp"
-#include "SSceneGraph.hpp"
+#include "SObject.hpp"
 #include "SCamera.hpp"
 #include "SLightingConstants.h"
 
 // Forward declarations
 class SLightGraph;
+class SSceneGraph;
 
 /******************************************************************************
  *  Definition for default kind of light                                      *

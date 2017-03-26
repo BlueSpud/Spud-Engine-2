@@ -10,7 +10,6 @@
 
 SRenderingPipeline* SRenderSystem::rendering_pipeline;
 SSceneGraph* SRenderSystem::current_scene_graph;
-SLightGraph* SRenderSystem::current_light_graph;
 
 /******************************************************************************
  *  Implementation for the render system                                      *
@@ -32,19 +31,16 @@ void SRenderSystem::shutdown() {
     
     if (current_scene_graph)
         delete current_scene_graph;
-    
-    if (current_light_graph)
-        delete current_light_graph;
 
 }
 
 void SRenderSystem::render(double interpolation) {
     
     // If we have a scene graph and a rendering pipline we can render the scene
-    if(rendering_pipeline && current_scene_graph && current_light_graph) {
+    if(rendering_pipeline && current_scene_graph && current_scene_graph->light_graph) {
         
         // Render and then finalize
-        rendering_pipeline->render(*current_scene_graph, *current_light_graph, *SCamera::current_camera, interpolation);
+        rendering_pipeline->render(*current_scene_graph, *current_scene_graph->light_graph, *SCamera::current_camera, interpolation);
         rendering_pipeline->finalizeRender(nullptr);
         
     }

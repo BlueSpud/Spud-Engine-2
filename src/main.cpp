@@ -51,7 +51,26 @@ void hello(const std::vector<std::string>& args) {
     
 }
 
+void loadMesh(const std::string& path) {
+	
+	SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/" + path)));
+	mesh->transform.translation = camera.transform.translation;
+	
+	SLevel::spawnObject(mesh);
+	
+}
+
+void spawnMesh(const std::vector<std::string>& args) {
+	
+	// Test command
+	SLog::verboseLog(SVerbosityLevel::Debug, "Spawning mesh %s", args[0].c_str());
+	boost::thread thread = boost::thread(&loadMesh, args[0]);
+	
+	
+}
+
 REGISTER_COMMAND(hello, &hello);
+REGISTER_COMMAND(spawnMesh, &spawnMesh);
 
 void keyPress(int key) {
     
@@ -204,36 +223,34 @@ int main(int argc, char* argv[]) {
 //    sound_emitter->play();
 //    sound_emitter->setLoops(true);
 //    sound_emitter->transform.translation = camera.transform.translation;
+
+	SSerializer s;
 	
-	//SSimpleSceneGraph* scene_graph = new SSimpleSceneGraph();
+    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
+	mesh->transform.translation.y = 0.4;
+	mesh->serialize(s);
 	
-//	SSerializer s;
-//	
-//    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
-//	mesh->transform.translation.y = 0.4;
-//	mesh->serialize(s);
-//	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/wall.smdl")));
-//	mesh->transform.scale = glm::vec3(0.25);
-//	mesh->transform.translation.y = 1.65;
-//	mesh->transform.translation.z = -1.20;
-//	mesh->transform.rotation.x = M_PI_2;
-//	mesh->serialize(s);
-//	
-//	light = new SSpotLight();
-//	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
-//	light->casts_shadow = true;
-//	light->setRadius(10.0);
-//	light->serialize(s);
-//	
+	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/wall.smdl")));
+	mesh->transform.scale = glm::vec3(0.25);
+	mesh->transform.translation.y = 1.65;
+	mesh->transform.translation.z = -1.20;
+	mesh->transform.rotation.x = M_PI_2;
+	mesh->serialize(s);
+	
+	light = new SSpotLight();
+	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
+	light->casts_shadow = true;
+	light->setRadius(10.0);
+	light->serialize(s);
+	
 //	light = new SDirectionalLight();
 //	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
 //	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
 //	light->light_color = glm::vec3(0.5);
 //	light->casts_shadow = true;
 //	light->serialize(s);
-//	
-//	SFileWritable* file = SFileSystem::loadFileWritable(SPath("test.slevel"));
+	
+//	SFileWritable* file = SFileSystem::loadFileWritable(SPath("Level/test.slevel"));
 //	
 //	const std::vector<std::string>& paths = s.getPaths();
 //	unsigned int writable_int = (unsigned int)paths.size();
@@ -255,7 +272,7 @@ int main(int argc, char* argv[]) {
 //	file->write(&writable_int, sizeof(unsigned int));
 //	
 //	// Light count
-//	writable_int = 2;
+//	writable_int = 1;
 //	file->write(&writable_int, sizeof(unsigned int));
 //	
 //	// Write out the data
@@ -269,7 +286,7 @@ int main(int argc, char* argv[]) {
 //	file->close();
 	
 	// Access the level
-	SLevel* level = SResourceManager::getResource<SLevel>(SPath("Level/test.slevel"));
+	SResourceManager::getResource<SLevel>(SPath("Level/test.slevel"));
 	
 	
 //	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));

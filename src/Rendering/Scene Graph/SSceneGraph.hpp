@@ -16,11 +16,13 @@
 #include <vector>
 #include <list>
 
-#include "SObject.hpp"
-#include "SCamera.hpp"
+#include "SLightGraph.hpp"
+
+// Forward declaration
+class SLevel;
 
 /******************************************************************************
- *  Definition for scene graph render order sorting                             *
+ *  Definition for scene graph render order sorting                            *
  ******************************************************************************/
 
 struct SSortedObject {
@@ -31,7 +33,9 @@ struct SSortedObject {
 };
 
 class SSceneGraph {
-    
+	
+	friend class SLevel;
+	
     public:
 	
 		SSceneGraph();
@@ -42,10 +46,37 @@ class SSceneGraph {
 		void render(SCamera& camera, double interpolation);
 		void render(SCamera& camera, SGbufferShader* shader, double interpolation);
 	
-        virtual void addObject(SObject* object) = 0;
-        virtual void removeObject(SObject* object) = 0;
+		template <class T>
+		void addObject(T* object) {
+		
+			// Check if this belongs in the light graph or the scene graph
+			if (std::is_base_of<SLight, T>::value) {
+				
+				// We need to do this so that it compiles for objects that are not subclasses of light
+				light_graph->addLight((SLight*)(SObject*)object);
+				
+			} else performAddObject(object);
+		
+		}
+	
+		template <class T>
+		void removeObject(SObject* object) {
+		
+			// Check if this belongs in the light graph or the scene graph
+			if (std::is_base_of<SLight, T>::value) {
+			
+				// We need to do this so that it compiles for objects that are not subclasses of light
+				light_graph->removeLight((SLight*)(SObject*)object);
+			
+			} else performRemoveObject(object);
+		
+		}
+	
+        virtual void performAddObject(SObject* object) = 0;
+        virtual void performRemoveObject(SObject* object) = 0;
 
         SPhysicsGraph* physics_graph;
+		SLightGraph* light_graph;
 	
 	protected:
 	
@@ -58,11 +89,13 @@ class SSceneGraph {
  ******************************************************************************/
 
 class SSimpleSceneGraph : public SSceneGraph {
-    
+	
+	friend class SLevel;
+	
     public:
     
-        virtual void addObject(SObject* object);
-        virtual void removeObject(SObject* object);
+        virtual void performAddObject(SObject* object);
+        virtual void performRemoveObject(SObject* object);
     
         virtual ~SSimpleSceneGraph();
 	

@@ -18,10 +18,12 @@
 
 class SOctreeSceneGraph : public SSceneGraph {
 	
+	friend class SLevel;
+	
 	public:
 	
-		virtual void addObject(SObject* object);
-		virtual void removeObject(SObject* object);
+		virtual void performAddObject(SObject* object);
+		virtual void performRemoveObject(SObject* object);
 	
 		virtual ~SOctreeSceneGraph();
 	

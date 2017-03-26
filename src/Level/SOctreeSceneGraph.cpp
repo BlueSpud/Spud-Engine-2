@@ -63,7 +63,7 @@ void SOctreeSceneGraph::collectObjects(SCamera& camera, double interpolation, st
 	
 }
 
-void SOctreeSceneGraph::addObject(SObject* object) {
+void SOctreeSceneGraph::performAddObject(SObject* object) {
 	
 	// Add it to the list
 	octree.insert(object);
@@ -71,7 +71,7 @@ void SOctreeSceneGraph::addObject(SObject* object) {
 	
 }
 
-void SOctreeSceneGraph::removeObject(SObject* object) {
+void SOctreeSceneGraph::performRemoveObject(SObject* object) {
 	
 	// Remove it from the list
 	object->onRemoveFromSceneGraph(physics_graph);

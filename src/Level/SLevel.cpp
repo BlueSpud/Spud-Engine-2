@@ -8,6 +8,8 @@
 
 #include "SLevel.hpp"
 
+SLevel* SLevel::current_level;
+
 /******************************************************************************
  *  Registration for supported level extensions                               *
  ******************************************************************************/
@@ -83,7 +85,7 @@ bool SLevel::load(const SPath& path) {
 		}
 		
 		// Create the light graph and the lights
-		SSimpleLightGraph* light_graph = new SSimpleLightGraph();
+		scene_graph->light_graph = new SSimpleLightGraph();
 	
 		for (int i = 0; i < light_count; i++) {
 			
@@ -94,13 +96,13 @@ bool SLevel::load(const SPath& path) {
 			SLight* light = SLevelFactory::allocate<SLight>(class_hash);
 			light->deserialize(deserializer);
 			
-			light_graph->addLight(light);
+			scene_graph->addObject(light);
 			
 		}
 		
 		// TEMP, set as current
 		scene_graph->makeCurrent();
-		SRenderSystem::current_light_graph = light_graph;
+		current_level = this;
 		
 		return true;
 		

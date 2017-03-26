@@ -21,12 +21,25 @@
 
 class SLevel : public SResource {
 	
+	public:
+	
+		template <class T>
+		static void spawnObject(T* object) {
+		
+			current_level->scene_graph->addObject(object);
+		
+		}
+	
 	protected:
 	
 		virtual bool load(const SPath& path);
 		virtual void unload();
 	
 		SOctreeSceneGraph* scene_graph;
+	
+	private:
+	
+		static SLevel* current_level;
 	
 };
 

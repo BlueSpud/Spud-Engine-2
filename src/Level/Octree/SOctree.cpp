@@ -174,6 +174,20 @@ void SOctreeNode::collectObjects(const SFrustum& frustum, std::vector<SObject*>&
 	
 }
 
+void SOctreeNode::linearizeObjects(std::vector<SObject*>& objects) {
+	
+	// First we know that we need to collect all of the objects
+	for (int i = 0; i < this->objects.size(); i++)
+		objects.push_back(this->objects[i]);
+	
+	// If we have children, collect them as well
+	if (has_children)
+		for (int i = 0; i < 8; i++)
+			children[i]->linearizeObjects(objects);
+	
+	
+}
+
 void SOctreeNode::purge() {
 	
 	// Clean out all of the objects
@@ -237,6 +251,17 @@ void SOctree::collectObjects(const SFrustum& frustum, std::vector<SObject*>& cul
 			culled_objects.push_back(excess[i]);
 			
 	}
+	
+}
+
+void SOctree::linearizeObjects(std::vector<SObject*>& objects) {
+	
+	// Collect the objects that are outside of the scene graph
+	for (int i = 0;	i < excess.size(); i++)
+		objects.push_back(excess[i]);
+	
+	// Collect the objects from the root node
+	root_node.linearizeObjects(objects);
 	
 }
 

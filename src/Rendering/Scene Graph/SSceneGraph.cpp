@@ -24,7 +24,13 @@ void SSceneGraph::makeCurrent() {
 	
 }
 
-SSceneGraph::~SSceneGraph() { /* blank, destroy objects, scene graph manages memory for them */ }
+SSceneGraph::~SSceneGraph() {
+
+	// If we have a light graph, delete it
+	if (light_graph)
+		delete light_graph;
+
+}
 
 void SSceneGraph::render(SCamera& camera, double interpolation) {
 	
@@ -118,7 +124,7 @@ void SSimpleSceneGraph::collectObjects(SCamera& camera, double interpolation, st
 	
 }
 
-void SSimpleSceneGraph::addObject(SObject* object) {
+void SSimpleSceneGraph::performAddObject(SObject* object) {
 
     // Add it to the list
     objects.push_back(object);
@@ -126,7 +132,7 @@ void SSimpleSceneGraph::addObject(SObject* object) {
 
 }
 
-void SSimpleSceneGraph::removeObject(SObject* object) {
+void SSimpleSceneGraph::performRemoveObject(SObject* object) {
 
     // Remove it from the list
     objects.remove(object);

@@ -108,112 +108,85 @@ void SLightGraph::blurLightTile(glm::ivec2& tile) {
 	
 }
 
-/******************************************************************************
- *  Implementation for simple light graph                                     *
- ******************************************************************************/
-
-void SSimpleLightGraph::cullLights(glm::mat4& projection_view_matrix) {
-    
-    /******************************************************************************
-     *  Cull lights that cant be seen by the camera                               *
-     *  Save light list so that we can use it for the lighting pass later         *
-     ******************************************************************************/
+void SLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_matrix, glm::mat4& view_matrix, double interpolation) {
 	
-	// Generate a frustum
-	SFrustum frustum = SFrustum(projection_view_matrix);
-    
-    // Clear the old list of lights
-    culled_lights.clear();
-    
-    for (std::list<SLight*>::iterator i = lights.begin(); i != lights.end(); i++) {
-        
-        // Check if the light needs a shadow update and if we can see it in the frustrum
-        if ((*i)->shouldBeRendered(frustum))
-            culled_lights.push_back(*i);
-        
-    }
+	bool bound_shadow_map_buffer = false;
 	
-}
-
-void SSimpleLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_matrix, glm::mat4& view_matrix, double interpolation) {
-
-    bool bound_shadow_map_buffer = false;
-    
-    // Generate the cascades for shadow mapping
-    glm::vec3* close_frustum = SCamera::getFrustumWithPlanes(projection_matrix, view_matrix, 0.1, 10.0);
-    
-    // Take the list of lights that need to be updated and render their shadow maps
-    for (int i= 0; i < culled_lights.size(); i++)
-        if (culled_lights[i]->needsShadowUpdate()) {
+	// Generate the cascades for shadow mapping
+	glm::vec3* close_frustum = SCamera::getFrustumWithPlanes(projection_matrix, view_matrix, 0.1, 10.0);
+	
+	// Take the list of lights that need to be updated and render their shadow maps
+	for (int i= 0; i < culled_lights.size(); i++)
+		if (culled_lights[i]->needsShadowUpdate()) {
 			
-            // Check if we havent bound the shadow map buffer yet, if we have no lights we dont need to bind it
-            if(!bound_shadow_map_buffer) {
-                
-                bound_shadow_map_buffer = true;
-                shadow_map_buffer->bind();
-                
-                // Enable scissor testing
-                glEnable(GL_SCISSOR_TEST);
+			// Check if we havent bound the shadow map buffer yet, if we have no lights we dont need to bind it
+			if(!bound_shadow_map_buffer) {
 				
-            }
+				bound_shadow_map_buffer = true;
+				shadow_map_buffer->bind();
+				
+				// Enable scissor testing
+				glEnable(GL_SCISSOR_TEST);
+				
+			}
 			
 			// Render the shadow map and then blur it
 			culled_lights[i]->renderShadowMap(scene_graph, close_frustum, interpolation);
 			blurLightTile(culled_lights[i]->shadow_map_position);
 			
-        }
-    
-    if (bound_shadow_map_buffer) {
-    
-        // Disable scissor testing if we enabled it
-        glDisable(GL_SCISSOR_TEST);
-        
-    }
-    
-    // Delete the cascandes
-    delete close_frustum;
-
+		}
+	
+	if (bound_shadow_map_buffer) {
+		
+		// Disable scissor testing if we enabled it
+		glDisable(GL_SCISSOR_TEST);
+		
+	}
+	
+	// Delete the cascandes
+	delete close_frustum;
+	
 }
 
 void SSimpleLightGraph::addLight(SLight* light) {
-
-    // Add the light to the graph
-    lights.push_back(light);
-    
-    if (light->casts_shadow) {
-    
-        // Find a spot for the shadow map
-        for (int i = 0; i < SHADOW_MAP_ATLAS_TILE_COUNT; i++) {
-            for (int j = 0; j < SHADOW_MAP_ATLAS_TILE_COUNT; j++) {
-            
-                if (!shadow_map_atlas[i][j]) {
-                
-                    // Save that we used this tile in the atlas and then return
-                    shadow_map_atlas[j][i] = true;
-                    light->shadow_map_position = glm::vec2(i, j);
-                    return;
-                
-                }
-            
-            }
-        }
-        
-    }
-
+	
+	// Add the light to the graph
+	lights.push_back(light);
+	
+	if (light->casts_shadow) {
+		
+		// Find a spot for the shadow map
+		for (int i = 0; i < SHADOW_MAP_ATLAS_TILE_COUNT; i++) {
+			for (int j = 0; j < SHADOW_MAP_ATLAS_TILE_COUNT; j++) {
+				
+				if (!shadow_map_atlas[i][j]) {
+					
+					// Save that we used this tile in the atlas and then return
+					shadow_map_atlas[j][i] = true;
+					light->shadow_map_position = glm::vec2(i, j);
+					return;
+					
+				}
+				
+			}
+		}
+		
+	}
+	
 }
 
 void SSimpleLightGraph::removeLight(SLight* light) {
-
-    // Free up the spot in the shadow map atlas
-    if (light->casts_shadow)
-        shadow_map_atlas[light->shadow_map_position.x][light->shadow_map_position.y] = false;
-    
-    // Remove the light from the graph
-    lights.remove(light);
-
+	
+	// Free up the spot in the shadow map atlas
+	if (light->casts_shadow)
+		shadow_map_atlas[light->shadow_map_position.x][light->shadow_map_position.y] = false;
+	
+	// Remove the light from the graph
+	lights.remove(light);
+	
 }
 
-void SSimpleLightGraph::uploadCulledLightData(SShader* shader, double interpolation) {
+void SLightGraph::uploadCulledLightData(SShader* shader, double interpolation) {
 	
 	// Datas
 	std::vector<int> light_types;
@@ -288,10 +261,37 @@ void SSimpleLightGraph::uploadCulledLightData(SShader* shader, double interpolat
 	// Upload the shadow info
 	shader->bindUniform(shadow_matricies.data(), "light_matrices", UNIFORM_MAT4, (int)shadow_matricies.size());
 	shader->bindUniform(shadow_coordinates.data(), "shadow_map_coordinates", UNIFORM_VEC2, (int)shadow_coordinates.size());
-
+	
 }
 
-std::vector<SLight*>& SSimpleLightGraph::getCulledLights() { return culled_lights; }
+std::vector<SLight*>& SLightGraph::getCulledLights() { return culled_lights; }
+
+/******************************************************************************
+ *  Implementation for simple light graph                                     *
+ ******************************************************************************/
+
+void SSimpleLightGraph::cullLights(glm::mat4& projection_view_matrix) {
+	
+    /******************************************************************************
+     *  Cull lights that cant be seen by the camera                               *
+     *  Save light list so that we can use it for the lighting pass later         *
+     ******************************************************************************/
+	
+	// Generate a frustum
+	SFrustum frustum = SFrustum(projection_view_matrix);
+    
+    // Clear the old list of lights
+    culled_lights.clear();
+    
+    for (std::list<SLight*>::iterator i = lights.begin(); i != lights.end(); i++) {
+        
+        // Check if the light needs a shadow update and if we can see it in the frustrum
+        if ((*i)->shouldBeRendered(frustum))
+            culled_lights.push_back(*i);
+        
+    }
+	
+}
 
 SSimpleLightGraph::~SSimpleLightGraph() {
     

@@ -27,14 +27,14 @@ class SLightGraph {
         virtual ~SLightGraph();
     
         virtual void cullLights(glm::mat4& projection_view_matrix) = 0;
-        virtual void updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_matrix, glm::mat4& view_matrix, double interpolation) = 0;
+		void updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_matrix, glm::mat4& view_matrix, double interpolation);
     
         virtual void addLight(SLight* light) = 0;
         virtual void removeLight(SLight* light) = 0;
 	
-		virtual void uploadCulledLightData(SShader* shader, double interpolation) = 0;
+		void uploadCulledLightData(SShader* shader, double interpolation);
 	
-		virtual std::vector<SLight*>& getCulledLights() = 0;
+		std::vector<SLight*>& getCulledLights();
 	
         SFramebuffer* shadow_map_buffer;
         bool** shadow_map_atlas;
@@ -47,6 +47,8 @@ class SLightGraph {
 		static SShader* shadow_blur_shader_h;
 		static SShader* shadow_blur_shader_v;
 	
+		std::vector<SLight*> culled_lights;
+	
 };
 
 /******************************************************************************
@@ -56,23 +58,17 @@ class SLightGraph {
 class SSimpleLightGraph : public SLightGraph {
     
     public:
-    
+	
+		virtual ~SSimpleLightGraph();
+	
         virtual void cullLights(glm::mat4& projection_view_matrix);
-        virtual void updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_matrix, glm::mat4& view_matrix, double interpolation);
     
         virtual void addLight(SLight* light);
         virtual void removeLight(SLight* light);
-	
-		virtual void uploadCulledLightData(SShader* shader, double interpolation);
-	
-		virtual std::vector<SLight*>& getCulledLights();
-	
-        virtual ~SSimpleLightGraph();
     
     private:
     
         std::list<SLight*> lights;
-        std::vector<SLight*> culled_lights;
     
 };
 
