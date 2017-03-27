@@ -174,9 +174,14 @@ bool STexture::load(const SPath& path) {
 void STexture::unload() {
 
     // Delete the texture on the GPU or the CPU data if we need to
-    if (uploaded)
-        glDeleteTextures(1, &texture_id);
-	else for (int i = 0; i < mipmaps.size(); i++)
+	if (uploaded) {
+	
+		STextureUnload* unload = new STextureUnload();
+		unload->texture_id = texture_id;
+		
+		SGLUploadSystem::addUpload(unload);
+		
+	} else for (int i = 0; i < mipmaps.size(); i++)
 		free(mipmaps[i].data);
 
 }

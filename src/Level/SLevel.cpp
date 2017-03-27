@@ -214,6 +214,8 @@ void SLevelManager::loadLevelThreaded(const SPath& path) {
 			
 			// Clear resources
 			
+			// Delete the old level's physics graph, not done in the destructor because the physics system is responsible for the current graph upon shutdown
+			delete old_level->scene_graph->physics_graph;
 			delete old_level;
 			
 		}

@@ -8,7 +8,6 @@
 
 #include "SMainLoop.hpp"
 #include "SDeferredRenderingPipeline.hpp"
-#include "SCamera.hpp"
 #include "SHotLoadSystem.hpp"
 
 #include "SConsole.hpp"
@@ -21,7 +20,6 @@
 #include "SSoundSystem.hpp"
 #include "SSoundEmitter.hpp"
 
-#include "SRigidBody.hpp"
 #include "SCharacterController.hpp"
 
 #include "SSkinnedMesh.hpp"
@@ -72,7 +70,7 @@ void spawnMesh(const std::vector<std::string>& args) {
 void loadLevel(const std::vector<std::string>& args) {
 	
 	// Load a level
-	SLevelManager::loadLevel(SPath(args[0]));
+	SLevelManager::loadLevel(SPath("Level/" + args[0]));
 	
 }
 
@@ -222,6 +220,12 @@ int main(int argc, char* argv[]) {
     SConsole::startup();
     
     // TEMP CODE
+	
+	//std::shared_ptr<SResource> pointer = std::shared_ptr<SResource>(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
+	//std::shared_ptr<SModel> model_pointer = std::dynamic_pointer_cast<SModel>(pointer);
+	
+	//std::cout << model_pointer.use_count() << std::endl;
+	
 	camera.transform.translation.y = 2.0;
     SCamera::current_camera = &camera;
 	
@@ -234,7 +238,6 @@ int main(int argc, char* argv[]) {
 	
 	// Access the level
 	SLevelManager::loadLevel(SPath("Level/test.slevel"));
-	//SLevelManager::createLevel();
 	
 //	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
 //	
@@ -343,11 +346,7 @@ int main(int argc, char* argv[]) {
 	
 	//controller = new SCharacterController(scene_graph->physics_graph, glm::vec2(0.2, 1.0), &camera.transform);
 	//controller->movement_speed = 3.25;
-	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/model.smdl")));
-//	mesh->transform.translation.y = 0.0;
-//	scene_graph->addObject(mesh);
-	
+
     // END TEMP CODE
     
     // Clear all the uploads

@@ -76,7 +76,7 @@ struct SModelUnload : public SGLUpload {
     virtual void unload();
     
     GLuint array_id;
-    GLuint buffer_ids[buffer_count];
+    GLuint* buffer_ids;
 	GLuint indicies_id;
 	
 	unsigned int buffer_count;

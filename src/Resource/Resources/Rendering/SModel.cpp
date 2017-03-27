@@ -263,10 +263,14 @@ void SModel::unload() {
     // Check if we havent already deleted these already, we might not have uploaded it yet
     if (uploaded) {
         
-        // We had already uploaded the GPU
-        glDeleteBuffers(m_buffer_count, buffer_ids);
-		glDeleteBuffers(1, &indicies_id);
-        glDeleteVertexArrays(1, &array_id);
+		SModelUnload* unload = new SModelUnload();
+		
+		unload->buffer_count = buffer_count;
+		unload->buffer_ids = buffer_ids;
+		unload->indicies_id = indicies_id;
+		unload->array_id = array_id;
+		
+		SGLUploadSystem::addUpload(unload);
         
     }
     
