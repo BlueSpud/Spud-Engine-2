@@ -21,7 +21,7 @@ class SMaterial : public SResource {
     public:
     
         void bind(SGbufferShaderShaders shader_t);
-		SGbufferShader* getShader();
+		std::shared_ptr<SGbufferShader> getShader();
 	
     protected:
     
@@ -33,9 +33,9 @@ class SMaterial : public SResource {
     
     private:
 
-        SGbufferShader* shader;
+        std::shared_ptr<SGbufferShader> shader;
     
-        std::map<std::string, STexture*> textures;
+        std::map<std::string, std::shared_ptr<STexture>> textures;
         std::vector<SUniform*> uniforms;
     
         static SMaterial* currently_bound_material;

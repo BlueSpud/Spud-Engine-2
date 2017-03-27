@@ -338,7 +338,7 @@ int main(int argc, char* argv[]) {
 //	
 //    SUI::current_ui_graph = ui_graph;
     
-    SCursor* cursor = SResourceManager::getResource<SCursor>(SPath("Texture/ui/cursor/pointer.png"));
+	std::shared_ptr<SCursor> cursor = SResourceManager::getResource<SCursor>(SPath("Texture/ui/cursor/pointer.png"));
     cursor->bind();
     
     SEventListener event_listener;

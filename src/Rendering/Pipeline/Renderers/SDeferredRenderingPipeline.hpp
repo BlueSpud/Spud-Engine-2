@@ -34,10 +34,10 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         // Stuff for rendering
         SFramebuffer* gbuffer;
     
-        SShader* lit_shader;
-        SShader* simple_shader;
+        std::shared_ptr<SShader> lit_shader;
+        std::shared_ptr<SShader> simple_shader;
     
-        SCubeMap* environment_map;
+        std::shared_ptr<SCubeMap> environment_map;
         SUniform* view_pos_u;
 	
 		SDeferredTileController tile_controller;

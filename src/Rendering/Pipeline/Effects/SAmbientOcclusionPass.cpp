@@ -8,9 +8,9 @@
 
 #include "SAmbientOcclusionPass.hpp"
 
-SShader* SAmbientOcclusionPass::ambient_occlusion_shader;
-SShader* SAmbientOcclusionPass::blur_shader;
-SShader* SAmbientOcclusionPass::blend_shader;
+std::shared_ptr<SShader> SAmbientOcclusionPass::ambient_occlusion_shader;
+std::shared_ptr<SShader> SAmbientOcclusionPass::blur_shader;
+std::shared_ptr<SShader> SAmbientOcclusionPass::blend_shader;
 
 /******************************************************************************
  *  Implementation for the ambient occlusion pass                             *

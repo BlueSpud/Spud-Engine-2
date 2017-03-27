@@ -62,7 +62,7 @@ class SRenderingPipeline {
     
         std::vector<SPostProcessPass*> post_process_passes;
     
-        SShader* simple_shader;
+        std::shared_ptr<SShader> simple_shader;
         SViewport* viewport_2D;
 		SViewport* screen_viewport;
         SViewport3D* viewport_3D;

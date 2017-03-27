@@ -142,6 +142,9 @@ bool SAnimation::load(const SPath& path) {
 
 		}
 		
+		// Set that we are done with the file
+		file->endUse();
+		
 		return true;
 
 	}

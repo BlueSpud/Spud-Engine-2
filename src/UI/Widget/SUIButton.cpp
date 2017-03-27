@@ -23,7 +23,7 @@ SUIButton::SUIButton() {
 void SUIButton::render(double interpolation) {
 
     // Figure out which image we should be using
-    STexture* render_image = background_image;
+    std::shared_ptr<STexture> render_image = background_image;
     
     if (hovering && hover_image)
         render_image = hover_image;

@@ -37,9 +37,9 @@ class SAmbientOcclusionPass : public SPostProcessPass {
 		SFramebuffer* blur_framebuffer_w;
         SViewport viewport;
     
-        static SShader* ambient_occlusion_shader;
-        static SShader* blur_shader;
-        static SShader* blend_shader;
+        static std::shared_ptr<SShader> ambient_occlusion_shader;
+        static std::shared_ptr<SShader> blur_shader;
+        static std::shared_ptr<SShader> blend_shader;
 
     
     

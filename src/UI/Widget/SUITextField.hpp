@@ -28,7 +28,7 @@ class SUITextField : public SUIWidget {
     
         void pressSpecialKey(int key);
     
-        SFont* font;
+        std::shared_ptr<SFont> font;
         float font_size = 15.0;
     
         glm::vec4 background_color;

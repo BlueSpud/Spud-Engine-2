@@ -38,7 +38,7 @@ class SConsole : public SSubsystem {
     
         static bool console_active;
     
-        static SFont* console_font;
+        static std::shared_ptr<SFont> console_font;
         static SUITextField* text_field;
     
 };

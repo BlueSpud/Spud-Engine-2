@@ -51,7 +51,7 @@ class SFont : public SResource {
     
     private:
     
-        STexture* font_atlas;
+        std::shared_ptr<STexture> font_atlas;
         std::map<char, SFontCharacter> characters;
     
         float font_size;

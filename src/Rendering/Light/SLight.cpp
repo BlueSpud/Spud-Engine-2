@@ -13,7 +13,7 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
                                    0.0, 0.0, 0.5, 0.0,
                                    0.5, 0.5, 0.5, 1.0);
 
-SGbufferShader* SLight::shadow_shader;
+std::shared_ptr<SGbufferShader> SLight::shadow_shader;
 
 REGISTER_CLASS(SPointLight)
 REGISTER_CLASS(SSpotLight)

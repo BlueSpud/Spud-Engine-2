@@ -20,7 +20,7 @@ SObject::SObject() : bounding_box(glm::vec3(0.0), glm::vec3(0.0), &transform) {
 }
 
 
-void SObject::render(SGbufferShader* shader, double interpolation) {
+void SObject::render(std::shared_ptr<SGbufferShader> shader, double interpolation) {
 	
 	// This is going to be object specific, so by default we just render normally
 	render(interpolation);

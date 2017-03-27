@@ -13,12 +13,14 @@
 #include <typeinfo>
 #include <iostream>
 #include <map>
+#include <memory.h>
 
 #include "SFileSystem.hpp"
 
 // Forward declarations
 class SResourceManager;
 class SHotLoadSystem;
+class SLevelManager;
 
 /******************************************************************************
  *  Definition for generic resource                                           *
@@ -74,6 +76,7 @@ class SResourceAllocatorManger {
 class SResourceManager : public SSubsystem {
     
     friend class SHotLoadSystem;
+	friend class SLevelManager;
     
     public:
     
@@ -81,18 +84,15 @@ class SResourceManager : public SSubsystem {
         static void shutdown();
     
         template <class T>
-        static T* getResource(const SPath& resource_path);
-	
-		template <class T>
-		static T* getResource(size_t hash);
-
+        static std::shared_ptr<T> getResource(const SPath& resource_path);
 	
     private:
     
         static long getModifiedTimeForFileAtPath(const char* path);
     
-        static std::map<size_t, SResource*>loaded_resources;
-    
+		static std::map<size_t, std::shared_ptr<SResource>>loaded_resources;
+		static void purge();
+	
 };
 
 /******************************************************************************
@@ -100,7 +100,7 @@ class SResourceManager : public SSubsystem {
  ******************************************************************************/
 
 template <class T>
-T* SResourceManager::getResource(const SPath& resource_path) {
+std::shared_ptr<T> SResourceManager::getResource(const SPath& resource_path) {
     
     // Hash the name of the resource
     size_t hash = SHash::hashString(resource_path.getPathAsString());
@@ -147,31 +147,19 @@ T* SResourceManager::getResource(const SPath& resource_path) {
                 resource->modified_times.push_back(getModifiedTimeForFileAtPath(resource->paths[i].getPathAsAbsolutePath().c_str()));
 			
 			resource->hash = hash;
-            loaded_resources[hash] = resource;
-            
+			loaded_resources[hash] = std::shared_ptr<SResource>(resource);
+			
         } else {
             
             // The class we asked this object to be didnt support the extension of the path
             SLog::verboseLog(SVerbosityLevel::Critical, "Coud not load resource: %s! Resource attempted to be loaded with invalid extension", resource_path.getPathAsString().c_str());
-            return nullptr;
+            return std::shared_ptr<T>();
             
         }
         
     }
     
-	return (T*)loaded_resources[hash];
-	
-}
-
-template <class T>
-T* SResourceManager::getResource(size_t hash) {
-	
-	// See if we have loaded a resource
-	if (loaded_resources.count(hash))
-		return (T*)loaded_resources[hash];
-	else SLog::verboseLog(SVerbosityLevel::Critical, "Attempted to access resource by hash that was not loaded, nullptr was returned which will likely cause a crash");
-	
-	return nullptr;
+	return std::dynamic_pointer_cast<T>(loaded_resources[hash]);
 	
 }
 

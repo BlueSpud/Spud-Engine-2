@@ -101,8 +101,8 @@ class SModel : public SResource {
     
     public:
     
-		void render(const std::vector<SMaterial*>& instance_material);
-		void render(SGbufferShader* shader);
+		void render(const std::vector<std::shared_ptr<SMaterial>>& instance_material);
+		void render(std::shared_ptr<SGbufferShader> shader);
 	
         void getModelExtents(glm::vec3& _mins, glm::vec3& _maxes);
     
@@ -123,7 +123,7 @@ class SModel : public SResource {
 		unsigned int vertex_count;
         std::vector<glm::ivec3>* indicies;
     
-        std::vector<SMaterial*> materials;
+        std::vector<std::shared_ptr<SMaterial>> materials;
         std::vector<unsigned int> draw_calls;
 		unsigned int index_count;
 	

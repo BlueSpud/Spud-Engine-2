@@ -167,6 +167,14 @@ bool SFile::bad() {
     return false;
 }
 
+void SFile::endUse() {
+	
+	// Save that the file stream was closed
+	done = true;
+	in_stream.close();
+	
+}
+
 void SFile::read(void* to_place, size_t size) {
     
     // Read from the stream
@@ -293,8 +301,14 @@ SFile* SFileSystem::loadFile(const SPath& path, bool binary) {
         }
         
         // Return the already loaded file
-        return loaded_files[hash];
-        
+		SFile* file = loaded_files[hash];
+		
+		// If the file's stream was closed, reopen
+		if (file->done)
+			file->load(root_directory + path.path_str, binary);
+		
+		return file;
+		
     }
 	
     return nullptr;

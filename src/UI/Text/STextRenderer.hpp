@@ -37,18 +37,18 @@ class STextRenderer : public SSubsystem {
         static void startup();
         static void shutdown();
     
-        static void renderText(std::string text, SFont* font, float font_size, glm::vec2 screen_pos);
-        static void renderTextCentered(std::string text, SFont* font, float font_size, glm::vec2 screen_pos, float width);
-        static void renderTextWithCursor(std::string text, int cursor_pos, SFont* font, float font_size, glm::vec2 screen_pos);
+        static void renderText(std::string text, std::shared_ptr<SFont> font, float font_size, glm::vec2 screen_pos);
+        static void renderTextCentered(std::string text, std::shared_ptr<SFont> font, float font_size, glm::vec2 screen_pos, float width);
+        static void renderTextWithCursor(std::string text, int cursor_pos, std::shared_ptr<SFont> font, float font_size, glm::vec2 screen_pos);
     
     private:
     
-        static void renderCursor(SFont* font, float font_size_multiplier, const glm::vec2& position);
-        static void renderCenteredTextLine(std::vector<SCharacterDrawCall>& character_draw_calls, SFont* font,
+        static void renderCursor(std::shared_ptr<SFont> font, float font_size_multiplier, const glm::vec2& position);
+        static void renderCenteredTextLine(std::vector<SCharacterDrawCall>& character_draw_calls, std::shared_ptr<SFont> font,
                                            float font_size_multiplier, float& line_length, float width);
     
-        static SFont* default_font;
-        static SShader* text_shader;
+        static std::shared_ptr<SFont> default_font;
+        static std::shared_ptr<SShader> text_shader;
     
 };
 

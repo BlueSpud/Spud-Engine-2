@@ -32,7 +32,7 @@ class SLightGraph {
         virtual void addLight(SLight* light) = 0;
         virtual void removeLight(SLight* light) = 0;
 	
-		void uploadCulledLightData(SShader* shader, double interpolation);
+		void uploadCulledLightData(std::shared_ptr<SShader> shader, double interpolation);
 	
 		std::vector<SLight*>& getCulledLights();
 	
@@ -46,8 +46,8 @@ class SLightGraph {
 		void blurLightTile(glm::ivec2& tile);
 	
 		static SFramebuffer* intermediate_blur_buffer;
-		static SShader* shadow_blur_shader_h;
-		static SShader* shadow_blur_shader_v;
+		static std::shared_ptr<SShader> shadow_blur_shader_h;
+		static std::shared_ptr<SShader> shadow_blur_shader_v;
 	
 		std::vector<SLight*> culled_lights;
 	

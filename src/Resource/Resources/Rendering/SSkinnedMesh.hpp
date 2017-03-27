@@ -26,7 +26,7 @@ class SSkinnedMesh : public SObject {
 			SSkinnedMesh(SSkinnedModel* _parent_mesh);
 	
 			virtual void render(double interpolation);
-			virtual void render(SGbufferShader* shader, double interpolation);
+			virtual void render(std::shared_ptr<SGbufferShader> shader, double interpolation);
 			virtual void update(const SEvent& event);
 	
 			glm::mat4 getMatrixForBone(int bone, float time);
@@ -37,7 +37,7 @@ class SSkinnedMesh : public SObject {
 		private:
 	
 			SSkinnedModel* parent_mesh;
-			std::vector<SMaterial*> materials;
+			std::vector<std::shared_ptr<SMaterial>> materials;
 	
 	
 };

@@ -50,7 +50,7 @@ void SSceneGraph::render(SCamera& camera, double interpolation) {
 	
 }
 
-void SSceneGraph::render(SCamera& camera, SGbufferShader* shader, double interpolation) {
+void SSceneGraph::render(SCamera& camera, std::shared_ptr<SGbufferShader> shader, double interpolation) {
 
 	std::list<SSortedObject>rendered_objects;
 	collectObjects(camera, interpolation, rendered_objects);

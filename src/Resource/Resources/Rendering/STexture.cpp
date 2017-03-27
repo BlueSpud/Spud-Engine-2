@@ -163,6 +163,9 @@ bool STexture::load(const SPath& path) {
 		
 		SGLUploadSystem::addUpload(upload);
 		
+		// Set that we are done with the file
+		file->endUse();
+		
 		return true;
 		
 	}

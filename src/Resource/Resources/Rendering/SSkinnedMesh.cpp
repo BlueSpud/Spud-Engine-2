@@ -49,7 +49,7 @@ void SSkinnedMesh::render(double interpolation) {
 	
 }
 
-void SSkinnedMesh::render(SGbufferShader* shader, double interpolation) {
+void SSkinnedMesh::render(std::shared_ptr<SGbufferShader> shader, double interpolation) {
 	
 	// Set the model matrix to the proper matrix for this model
 	glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);

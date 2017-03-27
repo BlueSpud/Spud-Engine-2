@@ -82,10 +82,10 @@ class SUI : public SSubsystem {
         static void renderUI(double interpolation);
     
         static void renderRect(SUIRect& rect, glm::vec4 color);
-        static void renderRect(SUIRect& rect, STexture* texture);
+        static void renderRect(SUIRect& rect, std::shared_ptr<STexture> texture);
     
-        static SShader* simple_shader_color;
-        static SShader* simple_shader_texture;
+        static std::shared_ptr<SShader> simple_shader_color;
+        static std::shared_ptr<SShader> simple_shader_texture;
     
         /******************************************************************************
          *  Input functions                                                           *

@@ -44,7 +44,7 @@ class SSceneGraph {
         virtual void makeCurrent();
     
 		void render(SCamera& camera, double interpolation);
-		void render(SCamera& camera, SGbufferShader* shader, double interpolation);
+		void render(SCamera& camera, std::shared_ptr<SGbufferShader> shader, double interpolation);
 	
 		template <class T>
 		void addObject(T* object) {

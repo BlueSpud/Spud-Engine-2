@@ -55,7 +55,7 @@ SSerializedData* SSerializer::serialize() {
 	
 }
 
-void SSerializer::addResource(SResource* resource) {
+void SSerializer::addResource(std::shared_ptr<SResource> resource) {
 	
 	// Add the resource hash
 	SSerializerQueueItemStorage<size_t>* resource_storage = new SSerializerQueueItemStorage<size_t>();

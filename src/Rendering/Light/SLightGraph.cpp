@@ -8,8 +8,8 @@
 
 #include "SLightGraph.hpp"
 
-SShader* SLightGraph::shadow_blur_shader_h = nullptr;
-SShader* SLightGraph::shadow_blur_shader_v;
+std::shared_ptr<SShader> SLightGraph::shadow_blur_shader_h = nullptr;
+std::shared_ptr<SShader> SLightGraph::shadow_blur_shader_v;
 SFramebuffer* SLightGraph::intermediate_blur_buffer;
 
 /******************************************************************************
@@ -150,7 +150,7 @@ void SLightGraph::updateShadows(SSceneGraph& scene_graph, glm::mat4& projection_
 	
 }
 
-void SLightGraph::uploadCulledLightData(SShader* shader, double interpolation) {
+void SLightGraph::uploadCulledLightData(std::shared_ptr<SShader> shader, double interpolation) {
 	
 	// Datas
 	std::vector<int> light_types;

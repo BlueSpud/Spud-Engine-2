@@ -89,7 +89,10 @@ bool SSound::load(const SPath& path) {
         alGenBuffers(1, &buffer);
         alBufferData(buffer, al_format, data, wav_header.data_length, wav_header.sample_rate);
         delete data;
-    
+		
+		// Set that we are done with the file
+		wav_file->endUse();
+		
         return true;
         
     }

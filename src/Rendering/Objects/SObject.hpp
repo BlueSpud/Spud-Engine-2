@@ -28,7 +28,7 @@ class SObject : public SSerializable {
         virtual ~SObject() { /* intentionally empty */ }
     
         virtual void render(double interpolation) = 0;
-		virtual void render(SGbufferShader* shader, double interpolation);
+		virtual void render(std::shared_ptr<SGbufferShader> shader, double interpolation);
         virtual void update(const SEvent& event) = 0;
     
         virtual bool shouldBeRendered(const SFrustum& frustum) { return true; }

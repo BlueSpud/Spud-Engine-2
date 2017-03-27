@@ -62,7 +62,7 @@ class SLight : public SObject {
 		float radius = 1.0;
 	
 		static glm::mat4 bias;
-		static SGbufferShader* shadow_shader;
+		static std::shared_ptr<SGbufferShader> shadow_shader;
 	
 };
 

@@ -8,7 +8,7 @@
 
 #include "SResourceManager.hpp"
 
-std::map<size_t, SResource*>SResourceManager::loaded_resources;
+std::map<size_t, std::shared_ptr<SResource>>SResourceManager::loaded_resources;
 
 /******************************************************************************
  *  Implementation for generic resource                                       *
@@ -59,15 +59,16 @@ void SResourceManager::startup() {
 void SResourceManager::shutdown() {
     
     // Delete all the loaded resources
-    for (std::map<size_t, SResource*>::iterator i = loaded_resources.begin(); i != loaded_resources.end(); i++) {
+    for (std::map<size_t, std::shared_ptr<SResource>>::iterator i = loaded_resources.begin(); i != loaded_resources.end(); i++) {
         
-        SResource* resource = i->second;
+        SResource* resource = i->second.get();
         
         if (resource) {
             
             // Close the file and delete it from memory
             loaded_resources[i->first]->unload();
-            delete loaded_resources[i->first];
+			// Memory is deallocated when the pointer is destroyed
+			//delete loaded_resources[i->first].get();
             
         }
     }
@@ -89,4 +90,34 @@ long SResourceManager::getModifiedTimeForFileAtPath(const char* path) {
     // Return the time in seconds
     return stats.st_mtimespec.tv_sec;
     
+}
+
+void SResourceManager::purge() {
+	
+	// Some resources may reference others, this is something that wont be called often, so it is ok ot do it like this
+	bool removed = true;
+	while (removed) {
+	
+		removed = false;
+		
+		// Itterate through all of the resources and check if they need to be unloaded
+		std::map<size_t, std::shared_ptr<SResource>>::iterator i = loaded_resources.begin();
+	
+		while (i != loaded_resources.end()) {
+		
+			// Check if the resource had one reference, that will mean nothing is referencing it other than the storage
+			if (i->second.use_count() <= 1) {
+		
+				// Remove it from the map, this will deallocate the memory
+				SLog::verboseLog(SVerbosityLevel::Debug, "Unloading %s", i->second->getPath().getPathAsString().c_str());
+				i->second->unload();
+				i = loaded_resources.erase(i);
+				removed = true;
+		
+			} else i++;
+			
+		}
+			
+	}
+	
 }

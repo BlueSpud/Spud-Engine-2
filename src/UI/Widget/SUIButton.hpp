@@ -25,12 +25,12 @@ class SUIButton : public SUIWidget {
         virtual void render(double interpolation);
     
         std::string label;
-        SFont* font = nullptr;
+        std::shared_ptr<SFont> font = nullptr;
         float font_size = 15.0;
     
-        STexture* background_image;
-        STexture* hover_image;
-        STexture* press_image;
+        std::shared_ptr<STexture> background_image;
+        std::shared_ptr<STexture> hover_image;
+        std::shared_ptr<STexture> press_image;
     
         SSound* hover_sound;
         SSound* press_sound;

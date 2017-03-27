@@ -124,7 +124,7 @@ class SSerializer {
 
 		SSerializedData* serialize();
 	
-		void addResource(SResource* resource);
+		void addResource(std::shared_ptr<SResource> resource);
 		const std::vector<std::string>& getPaths() const;
 	
 	private:
@@ -163,7 +163,7 @@ class SDeserializer {
 		}
 	
 		template <class T>
-		T* deserializeResource() {
+		std::shared_ptr<T> deserializeResource() {
 			
 			if (data->size - offset >= sizeof(size_t)) {
 				

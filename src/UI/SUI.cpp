@@ -10,8 +10,8 @@
 #include "SUIWidget.hpp"
 #include "SConsole.hpp"
 
-SShader* SUI::simple_shader_color;
-SShader* SUI::simple_shader_texture;
+std::shared_ptr<SShader> SUI::simple_shader_color;
+std::shared_ptr<SShader> SUI::simple_shader_texture;
 
 SUIWidget* SUI::current_widget_input;
 SUIGraph* SUI::current_ui_graph;
@@ -107,7 +107,7 @@ void SUI::renderRect(SUIRect& rect, glm::vec4 color) {
     
 }
 
-void SUI::renderRect(SUIRect& rect, STexture* texture) {
+void SUI::renderRect(SUIRect& rect, std::shared_ptr<STexture> texture) {
     
      // Bind the simple color shader and the texture
     simple_shader_texture->bind();

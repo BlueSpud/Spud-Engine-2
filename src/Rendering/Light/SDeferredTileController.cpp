@@ -88,7 +88,7 @@ void SDeferredTileController::buildLightGrid(const glm::mat4& projection_view_ma
 	
 }
 
-void SDeferredTileController::renderLightGrid(SShader* shader) {
+void SDeferredTileController::renderLightGrid(std::shared_ptr<SShader> shader) {
 	
 	// For each tile
 	for (int r = 0; r < tile_grid_size.y; r++) {

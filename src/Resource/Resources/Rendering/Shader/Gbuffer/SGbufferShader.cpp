@@ -135,6 +135,10 @@ void SGbufferShader::compileShader(SPath shader_vert, const SPath& master_vert, 
 		// Save the path for hotloading
 		paths.push_back(master_vert);
 		
+		// Set that we are done with the file
+		master_file->endUse();
+		shader_file->endUse();
+		
 	}
 	
 }

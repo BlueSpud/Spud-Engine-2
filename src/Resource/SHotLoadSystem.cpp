@@ -39,11 +39,11 @@ void SHotLoadSystem::checkForUpdates() {
     while (should_check_for_updates) {
     
         // Go through all of the files loaded
-        for (std::map<size_t, SResource*>::iterator i = SResourceManager::loaded_resources.begin();
+		for (std::map<size_t, std::shared_ptr<SResource>>::iterator i = SResourceManager::loaded_resources.begin();
              i != SResourceManager::loaded_resources.end();
              i++) {
         
-            SResource* resource = i->second;
+            SResource* resource = i->second.get();
         
             if (resource) {
             

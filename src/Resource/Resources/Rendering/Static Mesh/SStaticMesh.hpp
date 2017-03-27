@@ -24,17 +24,17 @@ class SStaticMesh : public SObject {
     public:
 	
 		SStaticMesh();
-        SStaticMesh(SModel* _parent_mesh);
+        SStaticMesh(std::shared_ptr<SModel> _parent_mesh);
 	
-		void setModel(SModel* model);
+		void setModel(std::shared_ptr<SModel> model);
 	
         virtual void render(double interpolation);
-		virtual void render(SGbufferShader* shader, double interpolation);
+		virtual void render(std::shared_ptr<SGbufferShader> shader, double interpolation);
 		virtual bool shouldBeRendered(const SFrustum& frustum);
 	
         virtual void update(const SEvent& event);
     
-        void setMaterial(SMaterial* new_material, int material_domain);
+        void setMaterial(std::shared_ptr<SMaterial> new_material, int material_domain);
     
         virtual void onMoveToSceneGraph(SPhysicsGraph* physics_graph);
         virtual void onRemoveFromSceneGraph(SPhysicsGraph* physics_graph);
@@ -44,8 +44,8 @@ class SStaticMesh : public SObject {
 	
     private:
     
-        SModel* parent_mesh;
-        std::vector<SMaterial*> materials;
+        std::shared_ptr<SModel> parent_mesh;
+        std::vector<std::shared_ptr<SMaterial>> materials;
 		bool materials_identical = true;
 	
         SRigidBody* rigid_body = nullptr;

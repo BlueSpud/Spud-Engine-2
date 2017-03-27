@@ -60,7 +60,7 @@ int SShader::getUniformLocation(const std::string& uniform) {
 void SShader::bindUniform(void* value, const std::string& name, int type, int count) {
     
     // Keep track of the current shader and attempt to bind ourself
-    SShader* bound_shader_old = bound_shader;
+	SShader* bound_shader_old = bound_shader;
     bool needed_bind = bind();
     
     // Call the appropriate uniform function
@@ -174,7 +174,11 @@ bool SShader::load(const SPath& vert, const SPath& frag) {
     upload->uploaded = &uploaded;
     
     SGLUploadSystem::addUpload(upload);
-    
+	
+	// Set that we are done with the file
+	vert_file->endUse();
+	frag_file->endUse();
+	
     return true;
     
 }

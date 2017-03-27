@@ -27,7 +27,7 @@ class SDeferredTileController {
 	
 	void buildLightGrid(const glm::mat4& projection_view_matrix, const glm::vec3& cam_position, SLightGraph* light_graph);
 	
-		void renderLightGrid(SShader* shader);
+		void renderLightGrid(std::shared_ptr<SShader> shader);
 	
 	private:
 	

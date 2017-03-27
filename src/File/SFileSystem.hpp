@@ -70,7 +70,8 @@ class SFile {
     
         bool getNextTokenWithDeliminator(char deliminator, std::string& destination);
         bool bad();
-    
+		void endUse();
+	
         void read(void* to_place, size_t size);
     
     private:
@@ -83,7 +84,9 @@ class SFile {
     
         std::ifstream in_stream;
         std::string path;
-    
+	
+		bool done = false;
+	
 };
 
 /******************************************************************************

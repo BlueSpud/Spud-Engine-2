@@ -18,7 +18,7 @@ REGISTER_RESOURCE_CLASS(smdl, SModel)
  *  Implementation for model                                                  *
  ******************************************************************************/
 
-void SModel::render(const std::vector<SMaterial*>& instance_material) {
+void SModel::render(const std::vector<std::shared_ptr<SMaterial>>& instance_material) {
     
     // Bind the array and then render
     glBindVertexArray(array_id);
@@ -45,7 +45,7 @@ void SModel::render(const std::vector<SMaterial*>& instance_material) {
     
 }
 
-void SModel::render(SGbufferShader* shader) {
+void SModel::render(std::shared_ptr<SGbufferShader> shader) {
 	
 	// Bind the array and then render
 	glBindVertexArray(array_id);
@@ -249,6 +249,9 @@ bool SModel::load(const SPath& path) {
         upload->uploaded = &uploaded;
         
         SGLUploadSystem::addUpload(upload);
+		
+		// Set that we are done with the file
+		file->endUse();
 
         return true;
         

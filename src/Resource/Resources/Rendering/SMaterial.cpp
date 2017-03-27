@@ -53,7 +53,10 @@ bool SMaterial::load(const SPath& path) {
 
             
         }
-        
+		
+		// Set that we are done with the file
+		file->endUse();
+		
         return true;
         
     }
@@ -89,7 +92,7 @@ void SMaterial::bind(SGbufferShaderShaders shader_t) {
         
         // Bind the textures
         int texture = 0;
-        for (std::map<std::string, STexture*>::iterator i = textures.begin(); i != textures.end(); i++) {
+        for (std::map<std::string, std::shared_ptr<STexture>>::iterator i = textures.begin(); i != textures.end(); i++) {
         
             i->second->bind(texture);
             texture++;
@@ -112,7 +115,7 @@ void SMaterial::uploadTextureIDs(SGbufferShaderShaders shader_t) {
     
     // Go through the textures and assign Ids for them
     int texture = 0;
-    for (std::map<std::string, STexture*>::iterator i = textures.begin(); i != textures.end(); i++) {
+    for (std::map<std::string, std::shared_ptr<STexture>>::iterator i = textures.begin(); i != textures.end(); i++) {
         
 		shader->bindTextureLocation(shader_t, i->first, texture);
         texture++;
@@ -130,4 +133,4 @@ void SMaterial::unload() {
 
 }
 
-SGbufferShader* SMaterial::getShader() { return shader; }
+std::shared_ptr<SGbufferShader> SMaterial::getShader() { return shader; }

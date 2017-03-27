@@ -16,9 +16,9 @@ REGISTER_CLASS(SStaticMesh)
 
 SStaticMesh::SStaticMesh() { /* default constructor, meant for deserialization */ }
 
-SStaticMesh::SStaticMesh(SModel* _parent_mesh) { setModel(_parent_mesh); }
+SStaticMesh::SStaticMesh(std::shared_ptr<SModel> _parent_mesh) { setModel(_parent_mesh); }
 
-void SStaticMesh::setModel(SModel* model) {
+void SStaticMesh::setModel(std::shared_ptr<SModel> model) {
 	
 	// Store the parent mesh
 	parent_mesh = model;
@@ -54,7 +54,7 @@ void SStaticMesh::render(double interpolation) {
 
 }
 
-void SStaticMesh::render(SGbufferShader* shader, double interpolation) {
+void SStaticMesh::render(std::shared_ptr<SGbufferShader> shader, double interpolation) {
 	
 	// Set the model matrix to the proper matrix for this model
 	glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
@@ -66,7 +66,7 @@ void SStaticMesh::render(SGbufferShader* shader, double interpolation) {
 
 bool SStaticMesh::shouldBeRendered(const SFrustum& frustum) { return bounding_box.frustrumCull(frustum); }
 
-void SStaticMesh::setMaterial(SMaterial* new_material, int material_domain) {
+void SStaticMesh::setMaterial(std::shared_ptr<SMaterial> new_material, int material_domain) {
     
     // Check if we have a material domain for the material we tried to replace
     if (material_domain < materials.size() && materials[material_domain] != new_material) {

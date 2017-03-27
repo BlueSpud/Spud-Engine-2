@@ -16,7 +16,7 @@ SUIRect SConsole::consoleFrame;
 
 bool SConsole::console_active = false;
 
-SFont* SConsole::console_font;
+std::shared_ptr<SFont> SConsole::console_font;
 SUITextField* SConsole::text_field;
 
 /******************************************************************************

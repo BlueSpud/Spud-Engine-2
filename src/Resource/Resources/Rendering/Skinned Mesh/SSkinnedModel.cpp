@@ -18,7 +18,7 @@ REGISTER_RESOURCE_CLASS(smdl, SSkinnedModel)
  *  Implementation for skinned model                                          *
  ******************************************************************************/
 
-void SSkinnedModel::render(const std::vector<SMaterial*>& instance_material, const std::vector<glm::mat4>& matricies) {
+void SSkinnedModel::render(const std::vector<std::shared_ptr<SMaterial>>& instance_material, const std::vector<glm::mat4>& matricies) {
 	
 	// Bind the array and then render
 	glBindVertexArray(array_id);
@@ -35,7 +35,7 @@ void SSkinnedModel::render(const std::vector<SMaterial*>& instance_material, con
 		SGL::flushMatrix(MAT_MODEL);
 		SGL::flushMatrix(MAT_VIEW);
 		
-		SGbufferShader* shader = instance_material[i]->getShader();
+		std::shared_ptr<SGbufferShader> shader = instance_material[i]->getShader();
 		
 		const void* data = matricies.data();
 		shader->bindUniform(SGbufferShaderSkinned, const_cast<void*>(data), "bones", UNIFORM_MAT4, (int)matricies.size());
@@ -48,7 +48,7 @@ void SSkinnedModel::render(const std::vector<SMaterial*>& instance_material, con
 	
 }
 
-void SSkinnedModel::render(SGbufferShader* shader, const std::vector<glm::mat4>& matricies) {
+void SSkinnedModel::render(std::shared_ptr<SGbufferShader> shader, const std::vector<glm::mat4>& matricies) {
 	
 	// Bind the array and then render
 	glBindVertexArray(array_id);
@@ -76,7 +76,6 @@ bool SSkinnedModel::load(const SPath& path) {
 	// Load up the model file
 	if (SModel::load(path)) {
 
-	
 		// Get the path to the skeleton
 		SPath new_path = SPath(path);
 	
@@ -130,6 +129,9 @@ bool SSkinnedModel::load(const SPath& path) {
 			upload->m_buffer_count = m_buffer_count = buffer_count;
 			upload->bone_indicies = bone_indicies;
 			upload->vertex_weights = vertex_weights;
+			
+			// Set that we are done with the file
+			file->endUse();
 			
 			return true;
 			
