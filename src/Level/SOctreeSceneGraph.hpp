@@ -22,12 +22,14 @@ class SOctreeSceneGraph : public SSceneGraph {
 	
 	public:
 	
-		virtual void performAddObject(SObject* object);
-		virtual void performRemoveObject(SObject* object);
-	
 		virtual ~SOctreeSceneGraph();
 	
+		virtual void linearizeObjects(std::vector<SObject*>& objects);
+	
 	protected:
+	
+		virtual void performAddObject(SObject* object);
+		virtual void performRemoveObject(SObject* object);
 	
 		virtual void collectObjects(SCamera& camera, double interpolation, std::list<SSortedObject>& sorted_objects);
 

@@ -72,6 +72,14 @@ void SSceneGraph::render(SCamera& camera, SGbufferShader* shader, double interpo
  *  Implementation for basic scene graph                                      *
  ******************************************************************************/
 
+void SSimpleSceneGraph::linearizeObjects(std::vector<SObject*>& objects) {
+	
+	// Convert the list to a vector basically
+	for (std::list<SObject*>::iterator i = this->objects.begin(); i != this->objects.end(); i++)
+		objects.push_back(*i);
+	
+}
+
 void SSimpleSceneGraph::collectObjects(SCamera& camera, double interpolation, std::list<SSortedObject>& sorted_objects) {
 	
 	// Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling

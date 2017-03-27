@@ -56,7 +56,7 @@ void loadMesh(const std::string& path) {
 	SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/" + path)));
 	mesh->transform.translation = camera.transform.translation;
 	
-	SLevel::spawnObject(mesh);
+	SLevelManager::spawnObject(mesh);
 	
 }
 
@@ -69,8 +69,16 @@ void spawnMesh(const std::vector<std::string>& args) {
 	
 }
 
+void loadLevel(const std::vector<std::string>& args) {
+	
+	// Load a level
+	SLevelManager::loadLevel(SPath(args[0]));
+	
+}
+
 REGISTER_COMMAND(hello, &hello);
-REGISTER_COMMAND(spawnMesh, &spawnMesh);
+REGISTER_COMMAND(spawn_mesh, &spawnMesh);
+REGISTER_COMMAND(load_level, &loadLevel);
 
 void keyPress(int key) {
     
@@ -223,71 +231,10 @@ int main(int argc, char* argv[]) {
 //    sound_emitter->play();
 //    sound_emitter->setLoops(true);
 //    sound_emitter->transform.translation = camera.transform.translation;
-
-	SSerializer s;
-	
-    SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
-	mesh->transform.translation.y = 0.4;
-	mesh->serialize(s);
-	
-	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/wall.smdl")));
-	mesh->transform.scale = glm::vec3(0.25);
-	mesh->transform.translation.y = 1.65;
-	mesh->transform.translation.z = -1.20;
-	mesh->transform.rotation.x = M_PI_2;
-	mesh->serialize(s);
-	
-	light = new SSpotLight();
-	light->transform.translation = glm::vec3(0.0, 1.0, 0.0);
-	light->casts_shadow = true;
-	light->setRadius(10.0);
-	light->serialize(s);
-	
-//	light = new SDirectionalLight();
-//	light->transform.translation = glm::vec3(0.0, 1.5, 0.0);
-//	light->transform.rotation = glm::vec3(-0.541348, 7.37523, 0.0);
-//	light->light_color = glm::vec3(0.5);
-//	light->casts_shadow = true;
-//	light->serialize(s);
-	
-//	SFileWritable* file = SFileSystem::loadFileWritable(SPath("Level/test.slevel"));
-//	
-//	const std::vector<std::string>& paths = s.getPaths();
-//	unsigned int writable_int = (unsigned int)paths.size();
-//	
-//	file->write(&writable_int, sizeof(unsigned int));
-//	
-//	for (int i = 0; i < paths.size(); i++) {
-//	
-//		writable_int = (unsigned int)paths[i].length();
-//		file->write(&writable_int, sizeof(unsigned int));
-//		
-//		char* c = const_cast<char*>(paths[i].c_str());
-//		file->write(c, writable_int * sizeof(char));
-//		
-//	}
-//	
-//	// Object count
-//	writable_int = 2;
-//	file->write(&writable_int, sizeof(unsigned int));
-//	
-//	// Light count
-//	writable_int = 1;
-//	file->write(&writable_int, sizeof(unsigned int));
-//	
-//	// Write out the data
-//	SSerializedData* data_s = s.serialize();
-//	
-//	file->write(&data_s->size, sizeof(size_t));
-//	file->write(data_s->data, data_s->size);
-//	
-//	delete data_s;
-//	
-//	file->close();
 	
 	// Access the level
-	SResourceManager::getResource<SLevel>(SPath("Level/test.slevel"));
-	
+	SLevelManager::loadLevel(SPath("Level/test.slevel"));
+	//SLevelManager::createLevel();
 	
 //	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
 //	
@@ -414,6 +361,8 @@ int main(int argc, char* argv[]) {
 	
 	// TEMP CODE
 	
+	//SLevelManager::saveLevel(SPath("Level/out.slevel"));
+	
 	delete sound_emitter;
 	//delete controller;
 	
@@ -447,7 +396,11 @@ int main(int argc, char* argv[]) {
     SFileSystem::shutdown();
     
     SInputSystem::shutdown();
-    
+	
+	// Clear any pending unloads
+	SGLUploadSystem::setUploadLimitPerFrame(UPLOADS_INFINITE);
+	SGLUploadSystem::processUploads();
+	
     SGLUploadSystem::shutdown();
     
     SPhysicsSystem::shutdown();

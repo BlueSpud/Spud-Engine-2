@@ -79,7 +79,7 @@ struct SFramebufferUnload : public SGLUpload {
     virtual void unload();
     
     GLuint framebuffer_id;
-    std::map<int, GLuint>* textures;
+    std::map<int, GLuint> textures;
     
     GLenum* buffers_to_render;
     

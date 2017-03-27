@@ -126,7 +126,7 @@ class SFileSystem : public SSubsystem {
         static void setRootDirectory(const SPath& _root_directory);
     
         static SFile* loadFile(const SPath& path, bool binary = false);
-		static SFileWritable* loadFileWritable(const SPath& path, bool binary = false);
+		static SFileWritable* openWritableFile(const SPath& path, bool binary = false);
         static void closeFile(SFile* file);
     
         static std::vector<SPath> listDirectory(SPath& path);

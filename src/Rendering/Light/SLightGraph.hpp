@@ -39,6 +39,8 @@ class SLightGraph {
         SFramebuffer* shadow_map_buffer;
         bool** shadow_map_atlas;
 	
+		virtual void linearizeLights(std::vector<SObject*>& lights) = 0;
+	
 	protected:
 	
 		void blurLightTile(glm::ivec2& tile);
@@ -65,7 +67,9 @@ class SSimpleLightGraph : public SLightGraph {
     
         virtual void addLight(SLight* light);
         virtual void removeLight(SLight* light);
-    
+	
+		virtual void linearizeLights(std::vector<SObject*>& lights);
+	
     private:
     
         std::list<SLight*> lights;

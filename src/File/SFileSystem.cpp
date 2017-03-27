@@ -301,7 +301,7 @@ SFile* SFileSystem::loadFile(const SPath& path, bool binary) {
     
 }
 
-SFileWritable* SFileSystem::loadFileWritable(const SPath& path, bool binary) {
+SFileWritable* SFileSystem::openWritableFile(const SPath& path, bool binary) {
 	
 	// Create a new file
 	SFileWritable* file = new SFileWritable(root_directory + path.path_str, binary);

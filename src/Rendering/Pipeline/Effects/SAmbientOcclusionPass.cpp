@@ -34,14 +34,10 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
     occlusion_framebuffer = new SFramebuffer(attatchments_occlusion, viewport.screen_size.x, viewport.screen_size.y);
     
     // Create the framebuffer for the blur
-    std::vector<SFramebufferAttatchment*> attatchments_blur;
-    attatchments_blur.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0));
-    
+	std::vector<SFramebufferAttatchment*> attatchments_blur = {new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0)};
     blur_framebuffer_w = new SFramebuffer(attatchments_blur, viewport.screen_size.x / 2.0f, viewport.screen_size.y / 2.0f);
 	
-	attatchments_blur.clear();
-	attatchments_blur.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RED, GL_RED, GL_UNSIGNED_INT, 0));
-	
+	attatchments_blur = {new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0)};
 	blur_framebuffer_h = new SFramebuffer(attatchments_blur, viewport.screen_size.x / 2.0f, viewport.screen_size.y / 2.0f);
 	
 }
@@ -152,8 +148,10 @@ SAmbientOcclusionPass::~SAmbientOcclusionPass() {
     // Unload the framebuffer and delete it
     occlusion_framebuffer->unload();
     blur_framebuffer_w->unload();
+	blur_framebuffer_h->unload();
     
     delete occlusion_framebuffer;
     delete blur_framebuffer_w;
+	delete blur_framebuffer_h;
     
 }

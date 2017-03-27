@@ -75,3 +75,10 @@ void SOctreeLightGraph::removeLight(SLight* light) {
 	
 }
 
+void SOctreeLightGraph::linearizeLights(std::vector<SObject*>& lights) {
+	
+	// Linearize the octree
+	octree.linearizeObjects(lights);
+	
+}
+

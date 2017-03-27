@@ -8,19 +8,28 @@
 
 #include "SLevel.hpp"
 
-SLevel* SLevel::current_level;
-
-/******************************************************************************
- *  Registration for supported level extensions                               *
- ******************************************************************************/
-
-REGISTER_RESOURCE_CLASS(slevel, SLevel)
+SLevel* SLevelManager::current_level = nullptr;
 
 /******************************************************************************
  *  Implementation for level												  *
  ******************************************************************************/
 
-bool SLevel::load(const SPath& path) {
+SLevel::SLevel() {
+	
+	// Create an empty level
+	scene_graph = new SOctreeSceneGraph();
+	scene_graph->light_graph = new SOctreeLightGraph();
+	
+	// Make this level current
+	scene_graph->makeCurrent();
+	SLevelManager::current_level = this;
+	
+	// We were good
+	good = true;
+	
+}
+
+SLevel::SLevel(const SPath& path) {
 
 	// Open up the file
 	SFile* file = SFileSystem::loadFile(path, true);
@@ -100,16 +109,147 @@ bool SLevel::load(const SPath& path) {
 			
 		}
 		
-		// TEMP, set as current
-		scene_graph->makeCurrent();
-		current_level = this;
+		// Close the file, this is not a resource so we dont maintain it
+		SFileSystem::closeFile(file);
 		
-		return true;
+		// We were good
+		good = true;
 		
 	}
-	
-	return false;
 
 }
 
-void SLevel::unload() {}
+SLevel::~SLevel() {
+	
+	// Delete the scene graph
+	if (scene_graph)
+		delete scene_graph;
+	
+}
+
+void SLevel::saveLevel(const SPath& path) {
+	
+	// Collect the objects
+	std::vector<SObject*> scene_objects;
+	std::vector <SObject*> lights;
+	
+	scene_graph->linearizeObjects(scene_objects);
+	scene_graph->light_graph->linearizeLights(lights);
+	
+	// Serialize all the objects, order is regular objects and then lights
+	SSerializer s;
+	
+	for (int i = 0; i < scene_objects.size(); i++)
+		scene_objects[i]->serialize(s);
+	
+	for (int i = 0; i < lights.size(); i++)
+		lights[i]->serialize(s);
+	
+	SFileWritable* file = SFileSystem::openWritableFile(path);
+	
+	// Collect the paths we used for resources
+	const std::vector<std::string>& paths = s.getPaths();
+	unsigned int writable_int = (unsigned int)paths.size();
+
+	file->write(&writable_int, sizeof(unsigned int));
+	
+	// Write them out
+	for (int i = 0; i < paths.size(); i++) {
+	
+		writable_int = (unsigned int)paths[i].length();
+		file->write(&writable_int, sizeof(unsigned int));
+	
+		char* c = const_cast<char*>(paths[i].c_str());
+		file->write(c, writable_int * sizeof(char));
+	
+	}
+	
+	// Object count
+	writable_int = (unsigned int)scene_objects.size();
+	file->write(&writable_int, sizeof(unsigned int));
+	
+	// Light count
+	writable_int = (unsigned int)lights.size();
+	file->write(&writable_int, sizeof(unsigned int));
+	
+	// Write out the object data
+	SSerializedData* data_s = s.serialize();
+	
+	file->write(&data_s->size, sizeof(size_t));
+	file->write(data_s->data, data_s->size);
+	
+	delete data_s;
+		
+	file->close();
+	
+}
+
+/******************************************************************************
+ *  Implementation for level manager										  *
+ ******************************************************************************/
+
+void SLevelManager::loadLevel(const SPath& path) {
+	
+	// Create a new thread for the level
+	SLog::verboseLog(SVerbosityLevel::Debug, "Loading level %s", path.getPathAsString().c_str());
+	boost::thread thread = boost::thread(&loadLevelThreaded, path);
+	
+}
+
+void SLevelManager::loadLevelThreaded(const SPath& path) {
+	
+	// Keep track of the old level
+	SLevel* old_level = current_level;
+	
+	// First we load up the level
+	current_level = new SLevel(path);
+
+	// If the level was good, we can change to that level
+	if (current_level->good) {
+		
+		current_level->scene_graph->makeCurrent();
+		
+		// If there was an old level, unload it
+		if (old_level) {
+			
+			// Clear resources
+			
+			delete old_level;
+			
+		}
+		
+	} else {
+		
+		// Level was bad
+		delete current_level;
+		current_level = old_level;
+		
+		SLog::verboseLog(SVerbosityLevel::Critical, "Failed to load level %s", path.getPathAsString().c_str());
+		
+	}
+	
+	
+}
+
+void SLevelManager::saveLevel(const SPath& path) {
+	
+	// If there is a level, save it
+	if (current_level) {
+	
+		// Create a new thread for the level
+		SLog::verboseLog(SVerbosityLevel::Debug, "Saving level %s", path.getPathAsString().c_str());
+		boost::thread thread = boost::thread(&saveLevelThreaded, path);
+		
+	}
+	
+}
+
+void SLevelManager::saveLevelThreaded(const SPath& path) { current_level->saveLevel(path); }
+
+void SLevelManager::createLevel() {
+
+	// Create a new blank level
+	current_level = new SLevel();
+	current_level->scene_graph->makeCurrent();
+	
+}

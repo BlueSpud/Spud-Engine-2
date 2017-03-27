@@ -27,6 +27,8 @@ class SOctreeLightGraph : public SLightGraph {
 		virtual void addLight(SLight* light);
 		virtual void removeLight(SLight* light);
 	
+		virtual void linearizeLights(std::vector<SObject*>& lights);
+	
 	private:
 	
 		SOctree octree;

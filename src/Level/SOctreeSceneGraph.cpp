@@ -12,6 +12,13 @@
  *  Implementation for octree scene graph                                     *
  ******************************************************************************/
 
+void SOctreeSceneGraph::linearizeObjects(std::vector<SObject*>& objects) {
+	
+	// Linearize the octree
+	octree.linearizeObjects(objects);
+	
+}
+
 void SOctreeSceneGraph::collectObjects(SCamera& camera, double interpolation, std::list<SSortedObject>& sorted_objects) {
 	
 	// Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling

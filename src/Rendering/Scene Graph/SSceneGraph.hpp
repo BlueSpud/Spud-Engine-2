@@ -71,14 +71,16 @@ class SSceneGraph {
 			} else performRemoveObject(object);
 		
 		}
-	
-        virtual void performAddObject(SObject* object) = 0;
-        virtual void performRemoveObject(SObject* object) = 0;
 
+		virtual void linearizeObjects(std::vector<SObject*>& objects) = 0;
+	
         SPhysicsGraph* physics_graph;
 		SLightGraph* light_graph;
 	
 	protected:
+	
+		virtual void performAddObject(SObject* object) = 0;
+		virtual void performRemoveObject(SObject* object) = 0;
 	
 		virtual void collectObjects(SCamera& camera, double interpolation, std::list<SSortedObject>& sorted_objects) = 0;
 	
@@ -94,12 +96,13 @@ class SSimpleSceneGraph : public SSceneGraph {
 	
     public:
     
-        virtual void performAddObject(SObject* object);
-        virtual void performRemoveObject(SObject* object);
-    
         virtual ~SSimpleSceneGraph();
+		virtual void linearizeObjects(std::vector<SObject*>& objects);
 	
 	protected:
+	
+		virtual void performAddObject(SObject* object);
+		virtual void performRemoveObject(SObject* object);
 	
 		virtual void collectObjects(SCamera& camera, double interpolation, std::list<SSortedObject>& sorted_objects);
 

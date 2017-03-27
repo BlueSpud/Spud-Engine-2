@@ -24,16 +24,18 @@ SLightGraph::SLightGraph() {
 		shadow_blur_shader_h = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow/blur_h.glsl"));
 		shadow_blur_shader_v = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow/blur_v.glsl"));
 		
-		std::vector<SFramebufferAttatchment*> attatchments;
-		attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 0));
+		std::vector<SFramebufferAttatchment*> attatchments = {new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 0)};
 		intermediate_blur_buffer = new SFramebuffer(attatchments, SHADOW_MAP_ATLAS_TILE_SIZE / 2.0, SHADOW_MAP_ATLAS_TILE_SIZE / 2.0);
 		
 	}
 	
     // Create a massive framebuffer for a bunch of shadow maps
-    std::vector<SFramebufferAttatchment*> attatchments;
-    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0));
-	attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 1));
+    std::vector<SFramebufferAttatchment*> attatchments = {
+		
+			new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0),
+			new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 1)
+	};
+	
     shadow_map_buffer = new SFramebuffer(attatchments, SHADOW_MAP_ATLAS_SIZE, SHADOW_MAP_ATLAS_SIZE);
     
     // Create the 2D array for the shadow maps
@@ -298,6 +300,14 @@ void SSimpleLightGraph::removeLight(SLight* light) {
 	
 	// Remove the light from the graph
 	lights.remove(light);
+	
+}
+
+void SSimpleLightGraph::linearizeLights(std::vector<SObject*>& lights) {
+	
+	// Turn the list into a vector
+	 for (std::list<SLight*>::iterator i = this->lights.begin(); i != this->lights.end(); i++)
+		 lights.push_back(*i);
 	
 }
 
