@@ -246,9 +246,6 @@ void STextureUpload::upload() {
     unload();
 	
 	*uploaded = true;
-	
-    // Bind the default texture just in case
-    glBindTexture(GL_TEXTURE_2D, 0);
     
 }
 

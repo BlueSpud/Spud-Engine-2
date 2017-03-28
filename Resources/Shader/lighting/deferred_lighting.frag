@@ -222,7 +222,7 @@ void main() {
 
     // Get the PBR properties
     vec4 orm = texture(tex_orm, tex_coord0);
-    roughness = orm.y;
+    roughness = clamp(orm.y, 0.04, 0.96);
     inverse_roughness = 1.0 - roughness;
     metalic = orm.z;
 
@@ -289,10 +289,16 @@ void main() {
     vec3 fresnel_reflection = clamp(reflection_color * fresnel_pow * inverse_roughness, 0.0, 1.0);
     vec3 metalic_reflection = reflection_color * metalic;
 
+	// Calculate how much the specular and the diffuse will be blended to satisfy diffuse + specular <= 1
+	float term_blend = metalic + inverse_roughness * (1.0 - metalic) + 0.08;
+	
+	// Colors
+	vec3 specular_color = mix(vec3(1.0), albedo, metalic);
+	vec3 fresnel_color = mix(albedo, vec3(1.0), metalic / 2.0);
+	
     // Combine lighting and texture
-    vec3 color = albedo * (lerp(specular_acc, diffuse_acc, metalic * inverse_roughness) + 0.3 + metalic_reflection) + fresnel_reflection * inverse_roughness * orm.x;
-    
-    out_color = vec4(color, 1.0);
+    vec3 color = mix(albedo * diffuse_acc, specular_acc * specular_color, term_blend) + (0.3 + metalic_reflection) * albedo + fresnel_reflection * fresnel_color;
+    out_color = vec4(color * orm.x, 1.0);
 
 
 }

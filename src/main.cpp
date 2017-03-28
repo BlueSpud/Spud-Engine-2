@@ -74,9 +74,22 @@ void loadLevel(const std::vector<std::string>& args) {
 	
 }
 
+void spawnLight(const std::vector<std::string>& args) {
+
+	SPointLight* new_light = new SPointLight();
+	new_light->transform.translation = camera.transform.translation;
+	
+	if (args.size())
+		new_light->setRadius(atof(args[0].c_str()));
+	
+	SLevelManager::spawnObject(new_light);
+	
+}
+
 REGISTER_COMMAND(hello, &hello);
 REGISTER_COMMAND(spawn_mesh, &spawnMesh);
 REGISTER_COMMAND(load_level, &loadLevel);
+REGISTER_COMMAND(spawn_light, &spawnLight);
 
 void keyPress(int key) {
     

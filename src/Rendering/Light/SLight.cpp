@@ -74,7 +74,12 @@ float SLight::getRadius() { return radius; }
  *  Implementation for point light                                            *
  ******************************************************************************/
 
-SPointLight::SPointLight() { /* No initialization */ }
+SPointLight::SPointLight() {
+
+	// Set default radius to 1
+	setRadius(1.0);
+
+}
 
 void SPointLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
     
@@ -261,7 +266,12 @@ void SDirectionalLight::serialize(SSerializer& serializer) {
  *  Implementation for spot light                                             *
  ******************************************************************************/
 
-SSpotLight::SSpotLight() { /* No initialization */ }
+SSpotLight::SSpotLight() {
+	
+	// Set default radius to 1
+	setRadius(1.0);
+	
+}
 
 void SSpotLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
 	

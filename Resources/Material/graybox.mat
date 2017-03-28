@@ -1,0 +1,4 @@
+s:Shader/gbuffer/gbuffer.glsl
+t:tex_albedo:Texture/blank/graybox_albedo.dds
+t:tex_orm:Texture/blank/blank_orm.dds
+t:tex_normal:Texture/blank/blank_normal.dds
