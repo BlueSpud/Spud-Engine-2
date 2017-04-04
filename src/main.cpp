@@ -253,40 +253,7 @@ int main(int argc, char* argv[]) {
 	
 	// Access the level
 	SLevelManager::loadLevel(SPath("Level/test.slevel"));
-//	SLevelManager::createLevel();
-//	
-//	SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
-//	SLevelManager::spawnObject(mesh);
-//	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
-//	mesh->setTranslation(glm::vec3(0.0, 0.0, 0.75));
-//	SLevelManager::spawnObject(mesh);
-//	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
-//	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/material_test/gold.mat")), 1);
-//	mesh->setTranslation(glm::vec3(0.0, 0.0, 2.25));
-//	SLevelManager::spawnObject(mesh);
-//	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
-//	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/material_test/bricks.mat")), 1);
-//	mesh->setTranslation(glm::vec3(0.0, 0.0, -0.75));
-//	SLevelManager::spawnObject(mesh);
-//	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
-//	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/material_test/plastic.mat")), 1);
-//	mesh->setTranslation(glm::vec3(0.0, 0.0, -2.25));
-//	SLevelManager::spawnObject(mesh);
-//	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
-//	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/material_test/stone.mat")), 1);
-//	mesh->setTranslation(glm::vec3(0.0, 0.0, 3.75));
-//	SLevelManager::spawnObject(mesh);
-//	
-//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
-//	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/material_test/silver.mat")), 1);
-//	mesh->setTranslation(glm::vec3(0.0, 0.0, -3.75));
-//	SLevelManager::spawnObject(mesh);
-//	
+
 //	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
 //	
 //	skinned_mesh->transform.rotation.x = -M_PI_2;

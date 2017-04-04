@@ -282,7 +282,7 @@ void main() {
     vec3 reflection = reflect(-V, normal);
     
     // Mip map selection is done with a cube root
-    float reflection_mip_map = (pow(roughness, 0.5)) * 10.0;
+    float reflection_mip_map = (pow(roughness, 0.333333333)) * 12.0;
     vec3 reflection_color = textureLod(tex_cube, reflection, reflection_mip_map).xyz;
 
     vec3 fresnel_reflection = clamp(reflection_color * fresnel_pow * inverse_roughness, 0.0, 1.0);
