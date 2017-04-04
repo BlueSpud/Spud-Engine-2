@@ -37,8 +37,7 @@ int SMainLoop::loop() {
             glfwPollEvents();
             
             // Post a tick event for everyone
-            SEventTick tick_event;
-            SEventSystem::postEvent(EVENT_TICK, tick_event);
+            SEventSystem::postEvent(EVENT_TICK, SEventTick());
             
             // Poll for the mouse movement
             SInputSystem::moveMouse();
@@ -57,10 +56,12 @@ int SMainLoop::loop() {
         SGLUploadSystem::processUploads();
         
         double interpolation = loop_elapsed_time / real_time_per_tick;
-        
+		
         // Update physics
         SPhysicsSystem::updatePhysics(elapsed, interpolation);
-        
+		 
+		SEventSystem::postEvent(EVENT_START_FRAME, SEventStartFrame());
+		
         // Before we render we set where the listener is
         SSoundSystem::updateListenerPosition(interpolation);
         
@@ -75,9 +76,9 @@ int SMainLoop::loop() {
 			
 		}
 		
-        // Save that we drew a frame
-        //frames_counted++;
-        
+		// Send out an event to clean anything up
+		SEventSystem::postEvent(EVENT_END_FRAME, SEventEndFrame());
+		
     }
     
     return 0;

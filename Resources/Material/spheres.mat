@@ -1,0 +1,4 @@
+s:Shader/gbuffer/gbuffer.glsl
+t:tex_albedo:Texture/spheres/spheres_albedo.dds
+t:tex_orm:Texture/spheres/spheres_orm.dds
+t:tex_normal:Texture/spheres/spheres_normal.dds

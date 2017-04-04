@@ -63,15 +63,13 @@ void SOctreeLightGraph::addLight(SLight* light) {
 }
 
 void SOctreeLightGraph::removeLight(SLight* light) {
-
-	// Remove not supported yet
 	
 	// Free up the spot in the shadow map atlas
-//	if (light->casts_shadow)
-//		shadow_map_atlas[light->shadow_map_position.x][light->shadow_map_position.y] = false;
-//	
-//	// Remove the light from the graph
-//	lights.remove(light);
+	if (light->casts_shadow)
+		shadow_map_atlas[light->shadow_map_position.x][light->shadow_map_position.y] = false;
+	
+	// Remove it from the octree
+	octree.remove(light);
 	
 }
 

@@ -17,7 +17,7 @@ void SComponent::render(double interpolation) {
     // First we render this component, but there is nothing to render in the default component
     
     // Get the transform of this
-    glm::mat4 model_matrix = SGL::transformToMatrix(transform);
+    glm::mat4 model_matrix = SGL::transformToMatrix(getTransform());
     SGL::mulMatrix(model_matrix, MAT_MODEL);
     
     // Get the modified model matrix

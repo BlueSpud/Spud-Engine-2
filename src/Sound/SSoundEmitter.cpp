@@ -104,8 +104,11 @@ void SSoundEmitter::updateSoundPosition(const SEvent& event) {
     } else {
         
         // The sound is a positional source, get it from the transform
-        alSourcefv(source, AL_POSITION, &transform.translation[0]);
-        alSourcefv(source, AL_VELOCITY, &transform.translation_velocity[0]);
+		glm::vec3 translation = getTranslation();
+		glm::vec3 velocity = getTranslationVel();
+		
+        alSourcefv(source, AL_POSITION, &translation[0]);
+        alSourcefv(source, AL_VELOCITY, &velocity[0]);
         
     }
 }

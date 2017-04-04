@@ -18,4 +18,10 @@ struct SEvent {};
 #define EVENT_TICK 0
 struct SEventTick : SEvent {};
 
+#define EVENT_START_FRAME 1
+struct SEventStartFrame : public SEvent {};
+
+#define EVENT_END_FRAME 2
+struct SEventEndFrame : public SEvent {};
+
 #endif /* SEvents_h */

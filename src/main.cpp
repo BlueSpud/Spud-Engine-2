@@ -35,13 +35,6 @@ SLight* light;
 SSoundEmitter* sound_emitter;
 SCharacterController* controller;
 
-void moveLight(int key) {
-    
-    light->transform.translation = camera.transform.translation;
-	light->transform.rotation = camera.transform.rotation;
-    
-}
-
 void hello(const std::vector<std::string>& args) {
     
     // Test command
@@ -52,7 +45,7 @@ void hello(const std::vector<std::string>& args) {
 void loadMesh(const std::string& path) {
 	
 	SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/" + path)));
-	mesh->transform.translation = camera.transform.translation;
+	mesh->setTranslation(camera.transform.translation);
 	
 	SLevelManager::spawnObject(mesh);
 	
@@ -74,10 +67,18 @@ void loadLevel(const std::vector<std::string>& args) {
 	
 }
 
+void saveLevel(const std::vector<std::string>& args) {
+	
+	// Save level
+	SLevelManager::saveLevel(SPath("Level/test.slevel"));
+	
+}
+
+
 void spawnLight(const std::vector<std::string>& args) {
 
 	SPointLight* new_light = new SPointLight();
-	new_light->transform.translation = camera.transform.translation;
+	new_light->setTranslation(camera.transform.translation);
 	
 	if (args.size())
 		new_light->setRadius(atof(args[0].c_str()));
@@ -89,6 +90,7 @@ void spawnLight(const std::vector<std::string>& args) {
 REGISTER_COMMAND(hello, &hello);
 REGISTER_COMMAND(spawn_mesh, &spawnMesh);
 REGISTER_COMMAND(load_level, &loadLevel);
+REGISTER_COMMAND(save_level, &saveLevel);
 REGISTER_COMMAND(spawn_light, &spawnLight);
 
 void keyPress(int key) {
@@ -251,7 +253,40 @@ int main(int argc, char* argv[]) {
 	
 	// Access the level
 	SLevelManager::loadLevel(SPath("Level/test.slevel"));
-	
+//	SLevelManager::createLevel();
+//	
+//	SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
+//	SLevelManager::spawnObject(mesh);
+//	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
+//	mesh->setTranslation(glm::vec3(0.0, 0.0, 0.75));
+//	SLevelManager::spawnObject(mesh);
+//	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
+//	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/material_test/gold.mat")), 1);
+//	mesh->setTranslation(glm::vec3(0.0, 0.0, 2.25));
+//	SLevelManager::spawnObject(mesh);
+//	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
+//	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/material_test/bricks.mat")), 1);
+//	mesh->setTranslation(glm::vec3(0.0, 0.0, -0.75));
+//	SLevelManager::spawnObject(mesh);
+//	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
+//	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/material_test/plastic.mat")), 1);
+//	mesh->setTranslation(glm::vec3(0.0, 0.0, -2.25));
+//	SLevelManager::spawnObject(mesh);
+//	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
+//	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/material_test/stone.mat")), 1);
+//	mesh->setTranslation(glm::vec3(0.0, 0.0, 3.75));
+//	SLevelManager::spawnObject(mesh);
+//	
+//	mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/material_test.smdl")));
+//	mesh->setMaterial(SResourceManager::getResource<SMaterial>(SPath("Material/material_test/silver.mat")), 1);
+//	mesh->setTranslation(glm::vec3(0.0, 0.0, -3.75));
+//	SLevelManager::spawnObject(mesh);
+//	
 //	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
 //	
 //	skinned_mesh->transform.rotation.x = -M_PI_2;
@@ -280,8 +315,7 @@ int main(int argc, char* argv[]) {
     listener.bind(&keyPress, GLFW_KEY_D, INPUT_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_A, INPUT_ACTION_DOWN);
     listener.bind(&keyPress, GLFW_KEY_SPACE, INPUT_ACTION_DOWN);
-    
-    listener.bind(&moveLight, GLFW_KEY_P, INPUT_ACTION_DOWN);
+	
     listener.bind(&keyPress, GLFW_KEY_G, INPUT_ACTION_DOWN);
     
     listener.bind(&keyRelease, GLFW_KEY_S, INPUT_ACTION_UP);

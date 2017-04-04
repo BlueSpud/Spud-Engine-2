@@ -1,0 +1,4 @@
+s:Shader/gbuffer/gbuffer.glsl
+t:tex_albedo:Texture/material_tests/silver/albedo.dds
+t:tex_orm:Texture/material_tests/silver/orm.dds
+t:tex_normal:Texture/material_tests/silver/normal.dds

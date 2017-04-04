@@ -25,10 +25,10 @@ SBoundingBox::SBoundingBox(glm::vec3 _mins, glm::vec3 _maxes, STransform* _trans
 
 void SBoundingBox::project(const glm::mat4& matrix, bool homogonized) {
     
-    glm::mat4 model_matrix = SGL::transformToMatrix(*transform);
+    const glm::mat4 model_matrix = SGL::transformToMatrix(*transform);
     
     // Make 8 points to project
-    glm::vec4 points[8] = {
+    const glm::vec4 points[8] = {
     
         glm::vec4(mins.x, mins.y, mins.z, 1.0),
         glm::vec4(maxes.x, mins.y, mins.z, 1.0),
@@ -41,7 +41,7 @@ void SBoundingBox::project(const glm::mat4& matrix, bool homogonized) {
     
     };
 	
-	glm::mat4 input_matrix_model_matrix = matrix * model_matrix;
+	const glm::mat4 input_matrix_model_matrix = matrix * model_matrix;
 	
     // Project all the points, also homogonize it
     for (int i = 0; i < 8; i++) {
@@ -78,21 +78,24 @@ bool SBoundingBox::frustrumCull(const SFrustum& frustum) {
 
 	// First we project ourselves with a identity matrix
 	// This transforms the bounding box to transformed space (rotation, translation, scale, etc)
-	project(glm::mat4(1.0), false);
+	//project(glm::mat4(1.0), false);
 	
 	// Get the points we need to test
-	glm::vec3 points[8] = {
-		
-		glm::vec3(projected_mins.x, projected_mins.y, projected_mins.z),
-		glm::vec3(projected_maxes.x, projected_mins.y, projected_mins.z),
-		glm::vec3(projected_maxes.x, projected_maxes.y, projected_mins.z),
-		glm::vec3(projected_mins.x, projected_maxes.y, projected_mins.z),
-		glm::vec3(projected_mins.x, projected_mins.y, projected_maxes.z),
-		glm::vec3(projected_maxes.x, projected_mins.y, projected_maxes.z),
-		glm::vec3(projected_maxes.x, projected_maxes.y, projected_maxes.z),
-		glm::vec3(projected_mins.x, projected_maxes.y, projected_maxes.z)
-		
-	};
+//	glm::vec3 points[8] = {
+//		
+//		glm::vec3(projected_mins.x, projected_mins.y, projected_mins.z),
+//		glm::vec3(projected_maxes.x, projected_mins.y, projected_mins.z),
+//		glm::vec3(projected_maxes.x, projected_maxes.y, projected_mins.z),
+//		glm::vec3(projected_mins.x, projected_maxes.y, projected_mins.z),
+//		glm::vec3(projected_mins.x, projected_mins.y, projected_maxes.z),
+//		glm::vec3(projected_maxes.x, projected_mins.y, projected_maxes.z),
+//		glm::vec3(projected_maxes.x, projected_maxes.y, projected_maxes.z),
+//		glm::vec3(projected_mins.x, projected_maxes.y, projected_maxes.z)
+//		
+//	};
+	
+	glm::vec3 points[8];
+	getOrientedPoints(&points[0]);
 	
 	// If all 8 points are outside a plane, we are culled, otherwise we are good to go
 	for (int plane = 0; plane < 6; plane++) {
@@ -112,8 +115,7 @@ bool SBoundingBox::frustrumCull(const SFrustum& frustum) {
 			return false;
 		
 	}
-	
-	
+
     return true;
 	
 }
@@ -121,7 +123,7 @@ bool SBoundingBox::frustrumCull(const SFrustum& frustum) {
 void SBoundingBox::getOrientedPoints(glm::vec3* _points) const {
 	
 	// Make 8 points to project
-	glm::vec4 points[8] = {
+	const glm::vec4 points[8] = {
 		
 		glm::vec4(mins.x, mins.y, mins.z, 1.0),
 		glm::vec4(maxes.x, mins.y, mins.z, 1.0),
@@ -135,12 +137,12 @@ void SBoundingBox::getOrientedPoints(glm::vec3* _points) const {
 	};
 	
 	
-	glm::mat4 model_matrix = SGL::transformToMatrix(*transform);
+	const glm::mat4 model_matrix = SGL::transformToMatrix(*transform);
 	
 	// Project all the points
 	for (int i = 0; i < 8; i++) {
 		
-		glm::vec4 point_projected = model_matrix * points[i];
+		const glm::vec4 point_projected = model_matrix * points[i];
 		_points[i] = glm::vec3(point_projected);
 		
 	}

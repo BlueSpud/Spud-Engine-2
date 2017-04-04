@@ -121,6 +121,59 @@ bool SOctreeNode::insert(SObject* object, glm::vec3* points) {
 	
 }
 
+bool SOctreeNode::remove(SObject* object, glm::vec3* points) {
+	
+	// First we check if this node has the object
+	for (std::list<SObject*>::iterator i = this->objects.begin(); i != this->objects.end(); i++) {
+		
+		if (*i == object) {
+			
+			// Object was found, remove it and return true
+			objects.erase(i);
+			return true;
+			
+		}
+		
+	}
+	
+	// The object was not in this node, so if the object was not contained in this node we can return false
+	
+	// Compute the mins and maxes of this node
+	glm::vec3 maxes = center + radius;
+	glm::vec3 mins = center - radius;
+	
+	// Check if the object will fit inside us
+	bool contained = true;
+	for (int i = 0; i < 8; i++) {
+		
+		if (points[i].x >= maxes.x || points[i].y >= maxes.y || points[i].z >= maxes.z ||
+			points[i].x <= mins.x  || points[i].y <= mins.y  || points[i].z <= mins.z) {
+			
+			// One of the points was outside of the box so we could not contain this object in this node
+			contained = false;
+			break;
+			
+		}
+		
+	}
+	
+	// Check through children if we had a chance of containing the object 
+	if (contained && has_children) {
+		
+		for (int i = 0; i < 8; i++) {
+		
+			// Try to remove it with the children
+			if (children[i]->remove(object, points))
+				return true;
+			
+		}
+		
+	}
+	
+	return false;
+	
+}
+
 void SOctreeNode::collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects) {
 	
 	// First we frustum cull the actual node itself, we dont use a bounding box to do this to save on the matrix multiplication
@@ -157,10 +210,10 @@ void SOctreeNode::collectObjects(const SFrustum& frustum, std::vector<SObject*>&
 	}
 
 	// Now we collect the objects inside the box, we frustum cull these now
-	for (int i = 0; i < objects.size(); i++) {
+	for (std::list<SObject*>::iterator i = this->objects.begin(); i != this->objects.end(); i++) {
 		
-		if (objects[i]->shouldBeRendered(frustum))
-			culled_objects.push_back(objects[i]);
+		if ((*i)->shouldBeRendered(frustum))
+			culled_objects.push_back(*i);
 		
 	}
 	
@@ -177,8 +230,8 @@ void SOctreeNode::collectObjects(const SFrustum& frustum, std::vector<SObject*>&
 void SOctreeNode::linearizeObjects(std::vector<SObject*>& objects) {
 	
 	// First we know that we need to collect all of the objects
-	for (int i = 0; i < this->objects.size(); i++)
-		objects.push_back(this->objects[i]);
+	for (std::list<SObject*>::iterator i = this->objects.begin(); i != this->objects.end(); i++)
+		objects.push_back(*i);
 	
 	// If we have children, collect them as well
 	if (has_children)
@@ -188,11 +241,32 @@ void SOctreeNode::linearizeObjects(std::vector<SObject*>& objects) {
 	
 }
 
+void SOctreeNode::update(SOctree& parent_octree) {
+	
+	// Update any dynamic objects so that they are always correct in the tree
+	// Do the excess first
+	for (std::list<SObject*>::iterator i = objects.begin(); i != objects.end(); i++) {
+		
+		SObject* object = *i;
+		 
+		if (object->isDynamic()) {
+			
+			// Erase from the list
+			i = objects.erase(i);
+			parent_octree.insert(object);
+			
+		}
+		
+	}
+
+	
+}
+
 void SOctreeNode::purge() {
 	
 	// Clean out all of the objects
-	for (int i = 0; i < objects.size(); i++)
-		delete objects[i];
+	for (std::list<SObject*>::iterator i = this->objects.begin(); i != this->objects.end(); i++)
+		delete *i;
 	
 	// If we have children, purge them too
 	if (has_children) {
@@ -221,6 +295,8 @@ SOctree::SOctree() {
 	root_node.center = glm::vec3(0.0);
 	root_node.radius = 512.0;
 	
+	event_listener.listenToEvent(EVENT_START_FRAME, EVENT_MEMBER(SOctree::update));
+	
 }
 
 bool SOctree::insert(SObject* object) {
@@ -239,16 +315,46 @@ bool SOctree::insert(SObject* object) {
 	
 }
 
+void SOctree::remove(SObject* object) {
+	
+	// First we get the points of the bounding box of the object
+	glm::vec3 points[8];
+	object->getBoundingBox().getOrientedPoints(points);
+	
+	// If for some reason the octree cant take the object, we keep it in an overflow array
+	bool removed = root_node.remove(object, points);
+	
+	// If we didnt find it in the octree, it was probably in the excess
+	if (!removed) {
+		
+		for (std::list<SObject*>::iterator i = excess.begin(); i != excess.end(); i++) {
+			
+			if (*i == object) {
+				
+				// Remove
+				excess.erase(i);
+				return;
+				
+			}
+			
+		}
+		
+	}
+	
+	SLog::verboseLog(SVerbosityLevel::Warning, "Object %lu was not inserted into the octree before it was attempted to be removed", object);
+	
+}
+
 void SOctree::collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects) {
 	
 	// Call collect on the root node
 	root_node.collectObjects(frustum, culled_objects);
 	
 	// Do regular frustum culling on any objects not in the octree
-	for (int i = 0; i < excess.size(); i++) {
+	for (std::list<SObject*>::iterator i = excess.begin(); i != excess.end(); i++) {
 		
-		if (excess[i]->shouldBeRendered(frustum))
-			culled_objects.push_back(excess[i]);
+		if ((*i)->shouldBeRendered(frustum))
+			culled_objects.push_back((*i));
 			
 	}
 	
@@ -257,11 +363,34 @@ void SOctree::collectObjects(const SFrustum& frustum, std::vector<SObject*>& cul
 void SOctree::linearizeObjects(std::vector<SObject*>& objects) {
 	
 	// Collect the objects that are outside of the scene graph
-	for (int i = 0;	i < excess.size(); i++)
-		objects.push_back(excess[i]);
+	for (std::list<SObject*>::iterator i = excess.begin(); i != excess.end(); i++)
+		objects.push_back(*i);
 	
 	// Collect the objects from the root node
 	root_node.linearizeObjects(objects);
+	
+}
+
+void SOctree::update(const SEvent& event) {
+	
+	// Update any dynamic objects so that they are always correct in the tree
+	// Do the excess first
+	for (std::list<SObject*>::iterator i = excess.begin(); i != excess.end(); i++) {
+	
+		SObject* object = *i;
+		
+		if (object->isDynamic()) {
+			
+			// Erase from the list
+			i = excess.erase(i);
+			insert(object);
+			
+		}
+		
+	}
+	
+	// Update the tree
+	root_node.update(*this);
 	
 }
 

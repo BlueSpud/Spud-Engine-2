@@ -30,7 +30,6 @@ class SMainLoop {
     
         static int loop();
     
-    
 };
 
 #endif /* SMainLoop_hpp */

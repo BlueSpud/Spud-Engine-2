@@ -103,7 +103,8 @@ bool SPointLight::shouldBeRendered(const SFrustum& frustum) {
 void SPointLight::getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes) {
 	
 	// Figure out if the camera was inside of the light
-	if (glm::distance(cam_position, transform.translation) <= radius) {
+	// We multiply by the square root of 2 because we use a bounding box and the corner is sqrt(2) * radius away from the center
+	if (glm::distance(cam_position, getTranslation()) <= radius * sqrt(2.0)) {
 		
 		mins = glm::vec3(-1.0);
 		maxes = glm::vec3(1.0);
@@ -171,7 +172,7 @@ void SDirectionalLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* clo
     
     // Create a camera that we can use to render the scene
     SCamera camera;
-    camera.transform = transform;
+    camera.transform = getTransform();
     camera.transform.translation = glm::vec3(0.0);
 
     // Make a viewport and scissor so we only clear our part of the shadow atlas
@@ -276,7 +277,7 @@ SSpotLight::SSpotLight() {
 void SSpotLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frustum, double interpolation) {
 	
 	SCamera camera;
-	camera.transform = transform;
+	camera.transform = getTransform();
 	
 	// Make a viewport and scissor so we only clear our part of the shadow atlas
 	SViewport3D viewport = SViewport3D(glm::vec2(SHADOW_MAP_ATLAS_TILE_SIZE), shadow_map_position * SHADOW_MAP_ATLAS_TILE_SIZE, 180.0, glm::vec2(0.1, 500.0));
@@ -298,12 +299,15 @@ void SSpotLight::renderShadowMap(SSceneGraph& scene_graph, glm::vec3* close_frus
 	
 	light_matrix = SLight::bias * projection_matrix * view_matrix;
 	
+	// Save that we no longer need a shadow update
+	needs_shadow_update = false;
+	
 }
 
 bool SSpotLight::needsShadowUpdate() {
 	
 	// For now always return false
-	return true;
+	return isDynamic() | needs_shadow_update;
 }
 
 bool SSpotLight::shouldBeRendered(const SFrustum& frustum) {
@@ -316,7 +320,8 @@ bool SSpotLight::shouldBeRendered(const SFrustum& frustum) {
 void SSpotLight::getScreenSpaceExtents(const glm::mat4& matrix, const glm::vec3& cam_position, glm::vec3& mins, glm::vec3& maxes) {
 	
 	// Figure out if the camera was inside of the light
-	if (glm::distance(cam_position, transform.translation) <= radius) {
+	// We multiply by the square root of 2 because we use a bounding box and the corner is sqrt(2) * radius away from the center
+	if (glm::distance(cam_position, getTranslation()) <= radius * sqrt(2.0)) {
 	
 		mins = glm::vec3(-1.0);
 		maxes = glm::vec3(1.0);

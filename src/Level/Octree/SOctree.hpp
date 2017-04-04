@@ -13,6 +13,9 @@
 
 #define OCTREE_MAX_LEVELS 12
 
+// Forward declarations
+class SOctree;
+
 /******************************************************************************
  *  Definition for Octree node                                                *
  ******************************************************************************/
@@ -28,12 +31,14 @@ struct SOctreeNode {
 	SOctreeNode* children[8];
 	bool has_children = false;
 	
-	std::vector<SObject*> objects;
+	std::list<SObject*> objects;
 	
 	bool insert(SObject* object, glm::vec3* points);
+	bool remove(SObject* object, glm::vec3* points);
 	void collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects);
 	void linearizeObjects(std::vector<SObject*>& objects);
 	
+	void update(SOctree& parent_octree);
 	void purge();
 	
 };
@@ -48,15 +53,18 @@ class SOctree {
 	
 		SOctree();
 		bool insert(SObject* object);
+		void remove(SObject* object);
 		void collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects);
 		void linearizeObjects(std::vector<SObject*>& objects);
 	
+		void update(const SEvent& event);
 		void purge();
 	
 	private:
 	
 		SOctreeNode root_node;
-		std::vector<SObject*> excess;
+		std::list<SObject*> excess;
+		SEventListener event_listener;
 	
 };
 

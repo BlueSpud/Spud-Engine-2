@@ -81,8 +81,9 @@ vec3 getLightVector(int light, vec3 position) {
 
 float getAttPoint(float dist) {
 	
-	float fourth_pow = pow(dist, 4);
-	return pow(clamp(1.0 - fourth_pow, 0.0, 1.0), 2) / (dist * dist + 1.0);
+	float second_pow = pow(dist, 2);
+	float fourth_pow = pow(second_pow, 2);
+	return pow(clamp(1.0 - fourth_pow, 0.0, 1.0), 2) / (second_pow + 1.0);
 	
 }
 
@@ -100,8 +101,7 @@ float getAtt(int light, vec3 L) {
 			//return clamp(0.5 / (att * att + att), 0.0, 1.0);
 			
 			// Epic's falloff algorithm from https://de45xmedrsdbp.cloudfront.net/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf
-			float dist = length(L);
-			float scaled_dist = dist / light_params[light].w;
+			float scaled_dist = length(L) / light_params[light].w;
 			
 			return getAttPoint(scaled_dist);
 
@@ -114,9 +114,7 @@ float getAtt(int light, vec3 L) {
 			
 			// Check if this pixel is inside the spot light
 			float spot_dot = dot(spot_data[spot_index].xyz, normalize(L));
-			
-			float spot_dist = length(L);
-			float spot_scaled_dist = spot_dist / light_params[light].w;
+			float spot_scaled_dist = length(L) / light_params[light].w;
 			
 			if (spot_dot > spot_data[spot_index].w) {
 				
@@ -225,6 +223,7 @@ void main() {
     roughness = clamp(orm.y, 0.04, 0.96);
     inverse_roughness = 1.0 - roughness;
     metalic = orm.z;
+	float inverse_metalic = 1.0 - metalic;
 
     // Get position from depth
     depth = texture(tex_depth, tex_coord0).x;
@@ -283,22 +282,22 @@ void main() {
     vec3 reflection = reflect(-V, normal);
     
     // Mip map selection is done with a cube root
-    float reflection_mip_map = (pow(roughness, 0.3333333)) * 12.0;
+    float reflection_mip_map = (pow(roughness, 0.5)) * 10.0;
     vec3 reflection_color = textureLod(tex_cube, reflection, reflection_mip_map).xyz;
 
     vec3 fresnel_reflection = clamp(reflection_color * fresnel_pow * inverse_roughness, 0.0, 1.0);
-    vec3 metalic_reflection = reflection_color * metalic;
+    vec3 metalic_reflection = reflection_color * (metalic + inverse_metalic * inverse_roughness / 8.0) * inverse_roughness;
 
 	// Calculate how much the specular and the diffuse will be blended to satisfy diffuse + specular <= 1
-	float term_blend = metalic + inverse_roughness * (1.0 - metalic) + 0.08;
+	float term_blend = metalic + inverse_roughness * inverse_metalic / 2.0 + 0.08;
 	
 	// Colors
 	vec3 specular_color = mix(vec3(1.0), albedo, metalic);
-	vec3 fresnel_color = mix(albedo, vec3(1.0), metalic / 2.0);
+	vec3 fresnel_color = mix(albedo, vec3(1.0), metalic * 0.5);
 	
     // Combine lighting and texture
-    vec3 color = mix(albedo * diffuse_acc, specular_acc * specular_color, term_blend) + (0.3 + metalic_reflection) * albedo + fresnel_reflection * fresnel_color;
-    out_color = vec4(color * orm.x, 1.0);
+    vec3 color = mix(albedo * diffuse_acc, specular_acc * specular_color, term_blend) + (0.3 * orm.x + metalic_reflection) * albedo + fresnel_reflection * fresnel_color;
+    out_color = vec4(color, 1.0);
 
 
 }

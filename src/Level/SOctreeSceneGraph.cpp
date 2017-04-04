@@ -43,8 +43,8 @@ void SOctreeSceneGraph::collectObjects(SCamera& camera, double interpolation, st
 		object_s.object = culled_objects[i];
 		
 		//Calculate z value
-		object_s.z_value = (view_matrix * glm::vec4((object_s.object->transform.translation +
-													 object_s.object->transform.translation_velocity * (float)interpolation), 1.0)).z;
+		object_s.z_value = (view_matrix * glm::vec4((object_s.object->getTranslation() +
+													 object_s.object->getTranslationVel() * (float)interpolation), 1.0)).z;
 		
 		// Do an insertion sort of the new object into the array
 		bool added = false;
@@ -72,7 +72,7 @@ void SOctreeSceneGraph::collectObjects(SCamera& camera, double interpolation, st
 
 void SOctreeSceneGraph::performAddObject(SObject* object) {
 	
-	// Add it to the list
+	// Add it to the octree
 	octree.insert(object);
 	object->onMoveToSceneGraph(physics_graph);
 	
@@ -80,14 +80,15 @@ void SOctreeSceneGraph::performAddObject(SObject* object) {
 
 void SOctreeSceneGraph::performRemoveObject(SObject* object) {
 	
-	// Remove it from the list
+	// Remove from the octree
+	octree.remove(object);
 	object->onRemoveFromSceneGraph(physics_graph);
 	
 }
 
 SOctreeSceneGraph::~SOctreeSceneGraph() {
 	
-	// Purge the tree
+	// Purge the tree, deletes all of the objects
 	octree.purge();
 	
 }

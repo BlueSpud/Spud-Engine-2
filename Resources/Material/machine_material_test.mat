@@ -1,4 +1,0 @@
-s:Shader/gbuffer/gbuffer.glsl
-t:tex_albedo:Texture/material_tests/machine/material_test_machine_albedo.dds
-t:tex_orm:Texture/material_tests/machine/material_test_machine_orm.dds
-t:tex_normal:Texture/material_tests/machine/material_test_machine_normal.dds

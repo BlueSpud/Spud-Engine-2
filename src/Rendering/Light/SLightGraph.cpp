@@ -174,13 +174,13 @@ void SLightGraph::uploadCulledLightData(std::shared_ptr<SShader> shader, double 
 		int type = light->getLightType();
 		light_types.push_back(type);
 		
-		glm::vec3 position = glm::vec3(light->transform.translation + light->transform.translation_velocity * (float)interpolation);
+		glm::vec3 position = glm::vec3(light->getTranslation() + light->getTranslationVel() * (float)interpolation);
 		
 		// Check if the light was a spotlight
 		if (type == LIGHT_TYPE_SPOT) {
 			
 			// Get the spot cutoff and direction of the light
-			glm::vec4 spot_data_light = glm::vec4(light->transform.getForwardVector(interpolation), cos(((SSpotLight*)light)->spotlight_cutoff));
+			glm::vec4 spot_data_light = glm::vec4(light->getTransform().getForwardVector(interpolation), cos(((SSpotLight*)light)->spotlight_cutoff));
 			
 			// Save the index of the spot
 			light_info.y = spot_data.size();

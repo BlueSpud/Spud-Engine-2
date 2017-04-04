@@ -32,7 +32,7 @@ void SStaticMesh::setModel(std::shared_ptr<SModel> model) {
 	
 	// Check if there is a colliison mesh for the parent
 	if (parent_mesh->collision_geometry)
-		rigid_body = new SRigidBody(0.0, parent_mesh->collision_geometry, PxGetPhysics().createMaterial(0.5, 0.5, 0.1), &transform);
+		rigid_body = new SRigidBody(0.0, parent_mesh->collision_geometry, PxGetPhysics().createMaterial(0.5, 0.5, 0.1), &getTransform());
 	
 	// TODO add to physics graph if object is already in the scene
 	
@@ -44,7 +44,7 @@ void SStaticMesh::setModel(std::shared_ptr<SModel> model) {
 void SStaticMesh::render(double interpolation) {
 
     // Set the model matrix to the proper matrix for this model
-    glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
+    glm::mat4 transform_matrix = SGL::transformToMatrix(getTransform(), interpolation);
     SGL::mulMatrix(transform_matrix, MAT_MODEL);
     
     // Call render on the parent model
@@ -57,7 +57,7 @@ void SStaticMesh::render(double interpolation) {
 void SStaticMesh::render(std::shared_ptr<SGbufferShader> shader, double interpolation) {
 	
 	// Set the model matrix to the proper matrix for this model
-	glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
+	glm::mat4 transform_matrix = SGL::transformToMatrix(getTransform(), interpolation);
 	SGL::mulMatrix(transform_matrix, MAT_MODEL);
 
 	parent_mesh->render(shader);
@@ -98,7 +98,7 @@ void SStaticMesh::onRemoveFromSceneGraph(SPhysicsGraph* physics_graph) {
 void SStaticMesh::update(const SEvent& event) {
     
     // Update the transform
-    transform.update();
+    getTransform().update();
     
 }
 

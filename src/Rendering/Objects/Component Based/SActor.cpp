@@ -22,7 +22,7 @@ SActor::SActor() {
 void SActor::render(double interpolation) {
 
     // Get the transform matrix and make it the model matrix
-    glm::mat4 model_matrix = SGL::transformToMatrix(transform);
+    glm::mat4 model_matrix = SGL::transformToMatrix(getTransform());
     SGL::mulMatrix(model_matrix, MAT_MODEL);
     
     // Render the root component, the others should follow

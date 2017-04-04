@@ -1,0 +1,4 @@
+s:Shader/gbuffer/gbuffer.glsl
+t:tex_albedo:Texture/material_tests/gold/albedo.dds
+t:tex_orm:Texture/material_tests/gold/orm.dds
+t:tex_normal:Texture/material_tests/gold/normal.dds

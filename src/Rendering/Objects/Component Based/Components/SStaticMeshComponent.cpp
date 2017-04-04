@@ -18,7 +18,7 @@ void SStaticMeshComponent::render(double interpolation) {
     if (mesh_instance) {
         
         // Set the transform of the mesh to the transform of the component
-        mesh_instance->transform = transform;
+        mesh_instance->setTransform(getTransform());
         
         // Render the mesh
         mesh_instance->render(interpolation);

@@ -21,7 +21,7 @@ SSkinnedMesh::SSkinnedMesh(SSkinnedModel* _parent_mesh) {
 void SSkinnedMesh::render(double interpolation) {
 	
 	// Set the model matrix to the proper matrix for this model
-	glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
+	glm::mat4 transform_matrix = SGL::transformToMatrix(getTransform(), interpolation);
 	SGL::mulMatrix(transform_matrix, MAT_MODEL);
 	
 	// Calculate the matricies
@@ -52,7 +52,7 @@ void SSkinnedMesh::render(double interpolation) {
 void SSkinnedMesh::render(std::shared_ptr<SGbufferShader> shader, double interpolation) {
 	
 	// Set the model matrix to the proper matrix for this model
-	glm::mat4 transform_matrix = SGL::transformToMatrix(transform, interpolation);
+	glm::mat4 transform_matrix = SGL::transformToMatrix(getTransform(), interpolation);
 	SGL::mulMatrix(transform_matrix, MAT_MODEL);
 	
 	// Calculate the matricies
@@ -83,7 +83,7 @@ void SSkinnedMesh::render(std::shared_ptr<SGbufferShader> shader, double interpo
 void SSkinnedMesh::update(const SEvent& event) {
 	
 	// Update the transform
-	transform.update();
+	getTransform().update();
 	
 }
 
