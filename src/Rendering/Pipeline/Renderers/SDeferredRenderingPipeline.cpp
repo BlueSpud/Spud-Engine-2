@@ -7,6 +7,7 @@
 //
 
 #include "SDeferredRenderingPipeline.hpp"
+#include "SRenderSystem.hpp"
 
 /******************************************************************************
  * Implementation for deferred rendering pipeline                             *
@@ -32,7 +33,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     addPostProcessPass(new SAmbientOcclusionPass(_viewport_3D->screen_size));
     
     // Get the cube map
-    environment_map =  SResourceManager::getResource<SCubeMap>(SPath("Texture/room.cube"));
+    environment_map =  SResourceManager::getResource<SCubeMap>(SPath("Texture/outside.cube"));
     
     // Get the lighting shader
     lit_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/deferred_lighting.glsl"));
@@ -117,6 +118,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
     environment_map->bind(ENVIRONMENT_MAP);
     glActiveTexture(GL_TEXTURE5);
     light_graph.shadow_map_buffer->bindTexture(1);
+	SRenderSystem::bindBRDF(BRDF_INTEGRAL);
     
     // Render the lit buffer to the screen
     final_framebuffer->bind();
@@ -138,6 +140,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
 	lit_shader->bindTextureLocation("tex_orm", GBUFFER_ORM);
     lit_shader->bindTextureLocation("tex_cube", ENVIRONMENT_MAP);
     lit_shader->bindTextureLocation("tex_shadow", SHADOW_ATLAS);
+	lit_shader->bindTextureLocation("tex_brdf", BRDF_INTEGRAL);
     
     // Bind other uniforms needed for lighting
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
@@ -157,10 +160,12 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& 
 //	
 //	glm::vec2 start = (glm::vec2(b.projected_mins) + 1.0f) / 2.0f;
 //	glm::vec2 size = ((glm::vec2(b.projected_maxes) + 1.0f) / 2.0f) - start;
-//	
+//
 //	simple_shader->bind();
-//	SGL::renderRect(glm::vec2(start.x, 1.0 - start.y) * viewport_3D->screen_size, glm::vec2(size.x, -size.y) * viewport_3D->screen_size);
-	
+//	SRenderSystem::bindBRDF(0);
+//	
+//	SGL::renderRect(glm::vec2(0.0), glm::vec2(1024.0));
+//	
     // Perform post-processing
 	runPostProcess(view_matrix, projection_matrix_3D, POST_RPOCESS_START);
 	

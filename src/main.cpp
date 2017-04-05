@@ -366,6 +366,9 @@ int main(int argc, char* argv[]) {
     // Clear all the uploads
     SGLUploadSystem::processUploads();
     SGLUploadSystem::setUploadLimitPerFrame(10);
+	
+	// Generate the BRDF
+	SRenderSystem::generateBRDF();
     
     SLog::verboseLog(SVerbosityLevel::Debug, "Startup complete");
     

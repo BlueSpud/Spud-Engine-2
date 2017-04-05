@@ -6,6 +6,7 @@ uniform sampler2D tex_normal;
 uniform sampler2D tex_orm;
 uniform samplerCube tex_cube;
 uniform sampler2D tex_shadow;
+uniform sampler2D tex_brdf;
 
 uniform vec3 view_position;
 uniform mat4 inverse_proj_view;
@@ -58,9 +59,9 @@ vec3 position;
 vec3 normal;
 
 vec3 lerp(vec3 a, vec3 b, float percent) {
-    
-    return a * percent + b * (1.0 - percent);
-    
+	
+	return a * percent + b * (1.0 - percent);
+	
 }
 
 vec3 getLightVector(int light, vec3 position) {
@@ -104,7 +105,7 @@ float getAtt(int light, vec3 L) {
 			float scaled_dist = length(L) / light_params[light].w;
 			
 			return getAttPoint(scaled_dist);
-
+			
 			break;
 			
 		case LIGHT_TYPE_SPOT:
@@ -149,145 +150,135 @@ float getVSM(float pos, vec2 moments) {
 }
 
 float getShadowTerm(int matrix, vec3 L) {
-    
-    // Get the position in the shadow map
-    vec4 position_shadow = light_matrices[matrix] * vec4(position, 1.0);
+	
+	// Get the position in the shadow map
+	vec4 position_shadow = light_matrices[matrix] * vec4(position, 1.0);
 	position_shadow = position_shadow / position_shadow.w;
 	
 	if (length(clamp(position_shadow.xy, 0.0, 1.0) - position_shadow.xy) > 0.0)
 		return 1.0;
-
-    // Calculate the texture coordinates based off of the shadow atlas
-    vec2 tex_coord_shadow = position_shadow.xy / 8.0 + vec2(tile_step) * shadow_map_coordinates[matrix];
-    vec2 moments = texture(tex_shadow, tex_coord_shadow).xy;
-    
-    return getVSM(position_shadow.z, moments);
-
+	
+	// Calculate the texture coordinates based off of the shadow atlas
+	vec2 tex_coord_shadow = position_shadow.xy / 8.0 + vec2(tile_step) * shadow_map_coordinates[matrix];
+	vec2 moments = texture(tex_shadow, tex_coord_shadow).xy;
+	
+	return getVSM(position_shadow.z, moments);
+	
 }
 
 float G1(float NDV, float k) {
-
-    float den = NDV * (1.0 - k) + k;
-    return NDV / den;
-
+	
+	float den = NDV * (1.0 - k) + k;
+	return NDV / den;
+	
 }
 
 float getDiffuseTerm(float NDL) {
-
-    // Diffuse intensity uses the Lambertian reflectance model, ambient is added here
-    return clamp(-NDL, 0.0, 1.0);
-
+	
+	// Diffuse intensity uses the Lambertian reflectance model, ambient is added here
+	return clamp(-NDL, 0.0, 1.0);
+	
 }
 
 float getSpecularTerm(vec3 L, float NDL) {
-
-    // Get H
-    vec3 H = normalize(L + V);
-
-    // Calculate a few things with alpha
-    float a = roughness * roughness;
-    float a_sqrd = a * a;
-
-    // Get G
-    NDH = dot(normal, H);
-    float D_den = NDH * NDH * (a_sqrd - 1.0) + 1.0;
-    D_den = D_den * D_den * 3.14159;
-
-    float D = a_sqrd / D_den;
-
-    // Get G
-    float k = 2.0 / sqrt(3.14159 * (a + 2.0));
-    float G = G1(NDL, k) * G1(NDV, k);
-
-    return clamp((fresnel * D * G) / (4.0 * NDL * NDV), 0.0, 1.0);
-
+	
+	// Get H
+	vec3 H = normalize(L + V);
+	
+	// Calculate a few things with alpha
+	float a = roughness * roughness;
+	float a_sqrd = a * a;
+	
+	// Get G
+	NDH = dot(normal, H);
+	float D_den = NDH * NDH * (a_sqrd - 1.0) + 1.0;
+	D_den = D_den * D_den * 3.14159;
+	
+	float D = a_sqrd / D_den;
+	
+	// Get G
+	float k = 2.0 / sqrt(3.14159 * (a + 2.0));
+	float G = G1(NDL, k) * G1(NDV, k);
+	
+	return clamp((fresnel * D * G) / (4.0 * NDL * NDV), 0.0, 1.0);
+	
 }
 
 void main() {
-
+	
 	// Calculate the texture coordinate
 	vec2 tex_coord0 = (gl_FragCoord.xy) / screen_size;
 	
-    // Get albedo and if we're transparent, discard
-    vec4 albedo_s = texture(tex_albedo, tex_coord0);
-    if (albedo_s.w == 0)
-        discard;
-
-    vec3 albedo = albedo_s.xyz;
-
-    // Get normal
-    normal = texture(tex_normal, tex_coord0).xyz;
-
-    // Get the PBR properties
-    vec4 orm = texture(tex_orm, tex_coord0);
-    roughness = clamp(orm.y, 0.04, 0.96);
-    inverse_roughness = 1.0 - roughness;
-    metalic = orm.z;
+	// Get albedo and if we're transparent, discard
+	vec4 albedo_s = texture(tex_albedo, tex_coord0);
+	if (albedo_s.w == 0)
+		discard;
+	
+	vec3 albedo = albedo_s.xyz;
+	
+	// Get normal
+	normal = texture(tex_normal, tex_coord0).xyz;
+	
+	// Get the PBR properties
+	vec4 orm = texture(tex_orm, tex_coord0);
+	roughness = clamp(orm.y, 0.04, 0.96);
+	inverse_roughness = 1.0 - roughness;
+	metalic = orm.z;
 	float inverse_metalic = 1.0 - metalic;
-
-    // Get position from depth
-    depth = texture(tex_depth, tex_coord0).x;
-    vec4 position_p = vec4(tex_coord0 * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
-    position_p = inverse_proj_view * position_p;
-    position = (position_p / position_p.w).xyz;
-
-    // Compute V
-    V = normalize(position.xyz - view_position);
-    NDV = dot(normal, V);
-
-    // Calculate fresnel term F
-    float F0 = clamp(metalic, 0.05, 1.0);
-    float fresnel_pow = pow(1.0 + NDV, fresnel_pow);
-    fresnel = F0 + (1.0 - F0) * fresnel_pow;
-
-    // Storage lighting accumulation
-    vec3 diffuse_acc, specular_acc;
-
-    // Save how many lights that we shadowed, arrays for shadow mapping only use shadow mapped lights
-    int shadow_light = 0;
-
-    for (int i = 0; i < light_count; i++) {
-
-        // Get L
-        vec3 L = getLightVector(light_indicies[i], position.xyz);
-
-        float shadow = 1.0;
+	
+	// Get position from depth
+	depth = texture(tex_depth, tex_coord0).x;
+	vec4 position_p = vec4(tex_coord0 * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
+	position_p = inverse_proj_view * position_p;
+	position = (position_p / position_p.w).xyz;
+	
+	// Compute V
+	V = normalize(position.xyz - view_position);
+	NDV = dot(normal, V);
+	
+	// Calculate fresnel term F
+	float F0 = clamp(metalic, 0.05, 1.0);
+	float fresnel_pow = pow(1.0 + NDV, fresnel_pow);
+	fresnel = F0 + (1.0 - F0) * fresnel_pow;
+	
+	// Storage lighting accumulation
+	vec3 diffuse_acc, specular_acc;
+	
+	// Save how many lights that we shadowed, arrays for shadow mapping only use shadow mapped lights
+	int shadow_light = 0;
+	
+	for (int i = 0; i < light_count; i++) {
+		
+		// Get L
+		vec3 L = getLightVector(light_indicies[i], position.xyz);
+		
+		float shadow = 1.0;
 		float att = getAtt(light_indicies[i], L);
-
-        if (lights_shadow[light_indicies[i]] == 1) {
-            
-            shadow = getShadowTerm(shadow_light, L);
-
-            shadow_light++;
-
-        }
-
-        // Make a threshhold for attenuation to be over to actually calculate light
-        att = att * shadow;
-        if (att > 0.001) {
+		
+		if (lights_shadow[light_indicies[i]] == 1) {
 			
-            // Get NDL
-            L = normalize(L);
-            float NDL = dot(normal, L);
-
-            // Accumulate the lighting
-            diffuse_acc += light_params[light_indicies[i]].xyz * getDiffuseTerm(NDL) * att;
-            specular_acc += light_params[light_indicies[i]].xyz * getSpecularTerm(L, NDL) * att;
-
-        }
-
-    }
-
-    // Get the reflection color
-    vec3 reflection = reflect(-V, normal);
-    
-    // Mip map selection is done with a cube root
-    float reflection_mip_map = (pow(roughness, 0.333333333)) * 12.0;
-    vec3 reflection_color = textureLod(tex_cube, reflection, reflection_mip_map).xyz;
-
-    vec3 fresnel_reflection = clamp(reflection_color * fresnel_pow * inverse_roughness, 0.0, 1.0);
-    vec3 metalic_reflection = reflection_color * (metalic + inverse_metalic * inverse_roughness / 8.0) * inverse_roughness;
-
+			shadow = getShadowTerm(shadow_light, L);
+			
+			shadow_light++;
+			
+		}
+		
+		// Make a threshhold for attenuation to be over to actually calculate light
+		att = att * shadow;
+		if (att > 0.001) {
+			
+			// Get NDL
+			L = normalize(L);
+			float NDL = dot(normal, L);
+			
+			// Accumulate the lighting
+			diffuse_acc += light_params[light_indicies[i]].xyz * getDiffuseTerm(NDL) * att;
+			specular_acc += light_params[light_indicies[i]].xyz * getSpecularTerm(L, NDL) * att;
+			
+		}
+		
+	}
+	
 	// Calculate how much the specular and the diffuse will be blended to satisfy diffuse + specular <= 1
 	float term_blend = metalic + inverse_roughness * inverse_metalic / 2.0 + 0.08;
 	
@@ -295,9 +286,20 @@ void main() {
 	vec3 specular_color = mix(vec3(1.0), albedo, metalic);
 	vec3 fresnel_color = mix(albedo, vec3(1.0), metalic * 0.5);
 	
-    // Combine lighting and texture
-    vec3 color = mix(albedo * diffuse_acc, specular_acc * specular_color, term_blend) + (0.3 * orm.x + metalic_reflection) * albedo + fresnel_reflection * fresnel_color;
-    out_color = vec4(color, 1.0);
-
-
+	// Get the reflection color
+	vec3 reflection = reflect(-V, normal);
+	
+	// Mip map selection is done with a cube root
+	float reflection_mip_map = sqrt(roughness) * 12.0;
+	vec3 reflection_color = textureLod(tex_cube, reflection, reflection_mip_map).xyz;
+	vec2 env_spec = texture(tex_brdf, vec2(max(-NDV, 0.0), roughness)).rg;
+	
+	// Calculate ambient color from the blurriest mipmap
+	vec3 ambient_color = textureLod(tex_cube, -normal, 12.0).xyz;
+	vec3 ambient = ambient_color * albedo * ((1.0 - fresnel) * inverse_metalic);
+	ambient = ambient + specular_color * reflection_color * (fresnel * env_spec.x + env_spec.y);
+	
+	// Combine lighting and texture
+	vec3 color = mix(albedo * diffuse_acc, specular_acc * specular_color, term_blend) + ambient * orm.x;
+	out_color = vec4(color, 1.0);
 }

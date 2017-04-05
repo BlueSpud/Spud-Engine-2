@@ -11,6 +11,9 @@
 SRenderingPipeline* SRenderSystem::rendering_pipeline;
 SSceneGraph* SRenderSystem::current_scene_graph;
 
+std::shared_ptr<SShader> SRenderSystem::brdf_shader;
+SFramebuffer* SRenderSystem::brdf_buffer;
+
 /******************************************************************************
  *  Implementation for the render system                                      *
  ******************************************************************************/
@@ -18,7 +21,13 @@ SSceneGraph* SRenderSystem::current_scene_graph;
 void SRenderSystem::startup() {
     
     SLog::verboseLog(SVerbosityLevel::Debug, "SRenderSystem startup");
-    
+	
+	// Generate the BRDF
+	brdf_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/brdf/brdf_integral.glsl"));
+	
+	std::vector<SFramebufferAttatchment*> attatchments = { new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 0) };
+	brdf_buffer = new SFramebuffer(attatchments, 1024.0, 1024.0);
+	
 }
 
 void SRenderSystem::shutdown() {
@@ -31,6 +40,8 @@ void SRenderSystem::shutdown() {
     
     if (current_scene_graph)
         delete current_scene_graph;
+	
+	delete brdf_buffer;
 
 }
 
@@ -45,4 +56,30 @@ void SRenderSystem::render(double interpolation) {
         
     }
     
+}
+
+void SRenderSystem::generateBRDF() {
+	
+	SLog::verboseLog(SVerbosityLevel::Debug, "Generating BRDF, this may take a while");
+	
+	// Set up a temporary viewport and a renderer
+	SViewport viewport = SViewport(glm::vec2(1024.0), glm::vec2(0.0));
+	SGL::setUpViewport(viewport);
+	SGL::loadMatrix(SGL::getProjectionMatrix2D(viewport), MAT_PROJECTION);
+	SGL::clearMatrix(MAT_VIEW);
+	SGL::clearMatrix(MAT_MODEL);
+	
+	// Draw
+	brdf_buffer->bind();
+	brdf_shader->bind();
+	SGL::renderRect(glm::vec2(0.0), glm::vec2(1024.0));
+	
+}
+
+void SRenderSystem::bindBRDF(int texture) {
+
+	// Bind the BRDF teacher
+	glActiveTexture(GL_TEXTURE0 + texture);
+	brdf_buffer->bindTexture(0);
+
 }

@@ -28,8 +28,15 @@ class SRenderSystem : public SSubsystem {
     
         static SRenderingPipeline* rendering_pipeline;
         static SSceneGraph* current_scene_graph;
-    
-    
+	
+		static void generateBRDF();
+		static void bindBRDF(int texture);
+	
+	private:
+	
+		static std::shared_ptr<SShader> brdf_shader;
+		static SFramebuffer* brdf_buffer;
+	
 };
 
 #endif /* SRenderSystem_hpp */

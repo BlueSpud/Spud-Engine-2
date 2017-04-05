@@ -41,7 +41,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         SUniform* view_pos_u;
 	
 		SDeferredTileController tile_controller;
-	
+
 };
 
 #endif /* SDeferredRenderingPipeline_hpp */
