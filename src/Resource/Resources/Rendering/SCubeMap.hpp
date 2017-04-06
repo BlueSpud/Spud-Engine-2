@@ -12,6 +12,7 @@
 #include <FreeImage.h>
 
 #include "STexture.hpp"
+#include "SRenderingPipeline.hpp"
 
 /******************************************************************************
  *  Definition for cube map upload                                            *
@@ -39,6 +40,9 @@ struct SCubeMapUpload : public SGLUpload {
 class SCubeMap : public STexture {
     
     public:
+	
+		SCubeMap();
+		SCubeMap(const glm::vec3& position, SRenderingPipeline* pipeline, SSceneGraph& scene_graph, unsigned int size);
     
         virtual void bind();
         virtual void bind(int texture_number);

@@ -585,7 +585,7 @@
 			isa = PBXGroup;
 			children = (
 				0291EB6D1E46B2D40048DB92 /* Effects */,
-				0291EB701E46B2D40048DB92 /* Renderers */,
+				0291EB701E46B2D40048DB92 /* Deferred */,
 				0291EB741E46B2D40048DB92 /* SFramebuffer.cpp */,
 				0291EB751E46B2D40048DB92 /* SFramebuffer.hpp */,
 				0291EB761E46B2D40048DB92 /* SRenderingPipeline.cpp */,
@@ -603,7 +603,7 @@
 			path = Effects;
 			sourceTree = "<group>";
 		};
-		0291EB701E46B2D40048DB92 /* Renderers */ = {
+		0291EB701E46B2D40048DB92 /* Deferred */ = {
 			isa = PBXGroup;
 			children = (
 				0291EB711E46B2D40048DB92 /* GBuffer.h */,
@@ -612,6 +612,7 @@
 				02B9A95C1E4F7BB500A21784 /* SDeferredTileController.cpp */,
 				02B9A95D1E4F7BB500A21784 /* SDeferredTileController.hpp */,
 			);
+			name = Deferred;
 			path = Renderers;
 			sourceTree = "<group>";
 		};

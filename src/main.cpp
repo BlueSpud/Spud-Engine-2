@@ -42,28 +42,33 @@ void hello(const std::vector<std::string>& args) {
     
 }
 
-void loadMesh(const std::string& path) {
+void loadMesh(const std::string& _path) {
 	
-	SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/" + path)));
-	mesh->setTranslation(camera.transform.translation);
+	SPath path = SPath("Model/" + _path);
+	if (SFileSystem::fileExitsAtPath(path)) {
+		
+		SLog::verboseLog(SVerbosityLevel::Debug, "Spawning mesh %s", _path.c_str());
+		
+		SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(path));
+		mesh->setTranslation(camera.transform.translation);
 	
-	SLevelManager::spawnObject(mesh);
+		SLevelManager::spawnObject(mesh);
+		
+	} else SLog::verboseLog(SVerbosityLevel::Critical, "Model did not exist %s", _path.c_str());
 	
 }
 
-void spawnMesh(const std::vector<std::string>& args) {
-	
-	// Test command
-	SLog::verboseLog(SVerbosityLevel::Debug, "Spawning mesh %s", args[0].c_str());
-	boost::thread thread = boost::thread(&loadMesh, args[0]);
-	
-	
-}
+void spawnMesh(const std::vector<std::string>& args) { boost::thread thread = boost::thread(&loadMesh, args[0]); }
 
 void loadLevel(const std::vector<std::string>& args) {
 	
-	// Load a level
-	SLevelManager::loadLevel(SPath("Level/" + args[0]));
+	SPath path = SPath("Level/" + args[0]);
+	if (SFileSystem::fileExitsAtPath(path)) {
+	
+		// Load a level
+		SLevelManager::loadLevel(path);
+		
+	} else SLog::verboseLog(SVerbosityLevel::Critical, "Level did not exist %s", args[0].c_str());
 	
 }
 
@@ -213,27 +218,27 @@ int main(int argc, char* argv[]) {
     
     SSoundSystem::startup();
     SGL::startup();
+	SGLUploadSystem::startup();
+	
+	SFileSystem::startup();
+	SFileSystem::getDefaultRootDirectory("/Users/Logan/Desktop/Spud Engine 2/a/a/");
+	
+	SResourceManager::startup();
+	SHotLoadSystem::startup();
+	
     SRenderSystem::startup();
     
     STime::startup();
     
     SPhysicsSystem::startup();
-    
-    SGLUploadSystem::startup();
-    
+	
     SInputSystem::startup();
-
-    SFileSystem::startup();
-    SFileSystem::getDefaultRootDirectory("/Users/Logan/Desktop/Spud Engine 2/a/a/");
-    
-    SResourceManager::startup();
-    SHotLoadSystem::startup();
     
     STextRenderer::startup();
     SUI::startup();
     
     SConsole::startup();
-    
+	
     // TEMP CODE
 	
 	//std::shared_ptr<SResource> pointer = std::shared_ptr<SResource>(SResourceManager::getResource<SModel>(SPath("Model/floor.smdl")));
@@ -253,6 +258,10 @@ int main(int argc, char* argv[]) {
 	
 	// Access the level
 	SLevelManager::loadLevel(SPath("Level/test.slevel"));
+	
+//	SStaticMesh* mesh = new SStaticMesh(SResourceManager::getResource<SModel>(SPath("Model/cerberus.smdl")));
+//	mesh->setTranslation(glm::vec3(-1.0, 0.75, 0.0));
+//	SLevelManager::spawnObject(mesh);
 
 //	SSkinnedMesh* skinned_mesh = new SSkinnedMesh(SResourceManager::getResource<SSkinnedModel>(SPath("Model/ak.smdl")));
 //	
@@ -270,11 +279,19 @@ int main(int argc, char* argv[]) {
 	
     glm::ivec2 window_framebuffer_size = SGL::getWindowFramebufferSize();
     
-	SViewport viewport_2D = SViewport(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2());
-	SViewport screen_viewport = SViewport(window_framebuffer_size, glm::vec2());
-    SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2(0), 45.0f, glm::vec2(0.1, 500.0));
+	SViewport viewport_2D = SViewport(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2(0.0));
+	SViewport screen_viewport = SViewport(window_framebuffer_size, glm::vec2(0.0));
+    SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2(0.0), 45.0f, glm::vec2(0.1, 500.0));
 
-    SRenderSystem::rendering_pipeline = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
+	SDeferredRenderingPipleline* deferred = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
+	SRenderSystem::rendering_pipeline = deferred;
+	
+//	SViewport viewport_2D_c = SViewport(glm::vec2(1024.0), glm::vec2(0.0));
+//	SViewport screen_viewport_c = SViewport(glm::vec2(1024.0), glm::vec2(0.0));
+//	SViewport3D viewport_3D_c = SViewport3D(glm::vec2(1024.0), glm::vec2(0.0), M_PI_2, glm::vec2(0.1, 500.0));
+//	
+//	SRenderSystem::cubemap_pipeline = new SDeferredRenderingPipleline(&viewport_2D_c, &screen_viewport_c, &viewport_3D_c);
+	
 
     SInputListener listener;
     listener.bind(&keyPress, GLFW_KEY_S, INPUT_ACTION_DOWN);
@@ -371,7 +388,11 @@ int main(int argc, char* argv[]) {
 	SRenderSystem::generateBRDF();
     
     SLog::verboseLog(SVerbosityLevel::Debug, "Startup complete");
-    
+	
+	// Generate a cubemap
+	//SCubeMap* map = SRenderSystem::generateCubeMap(glm::vec3(-2.0, 0.2, 0.0));
+	//deferred->environment_map = std::shared_ptr<SCubeMap>(map);
+	
     // Do the main loop
     SMainLoop::loop();
 	
@@ -390,9 +411,6 @@ int main(int argc, char* argv[]) {
     SUI::shutdown();
     STextRenderer::shutdown();
     
-    SHotLoadSystem::shutdown();
-    SResourceManager::shutdown();
-    
     // Write out the log to a file
 	SPath log_root_path = SPath(argv[0]);
 	
@@ -408,25 +426,28 @@ int main(int argc, char* argv[]) {
 	
 	log_root_path.appendPathComponent("Spud Engine.log");
 	std::string log_path = log_root_path.getPathAsString();
-	
-    SFileSystem::shutdown();
     
     SInputSystem::shutdown();
 	
 	// Clear any pending unloads
 	SGLUploadSystem::setUploadLimitPerFrame(UPLOADS_INFINITE);
 	SGLUploadSystem::processUploads();
-	
-    SGLUploadSystem::shutdown();
     
     SPhysicsSystem::shutdown();
     
     STime::shutdown();
     
     SRenderSystem::shutdown();
-    SGL::shutdown();
-    SSoundSystem::shutdown();
-    
+	
+	SHotLoadSystem::shutdown();
+	SResourceManager::shutdown();
+	
+	SFileSystem::shutdown();
+	
+	SGLUploadSystem::shutdown();
+	SGL::shutdown();
+	SSoundSystem::shutdown();
+	
     SEventSystem::shutdown();
 	
 	SLog::writeLogToFile(log_path);

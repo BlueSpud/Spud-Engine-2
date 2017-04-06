@@ -8,12 +8,13 @@ const uint SAMPLES = 1024u;
 
 float VanDerCorpus(uint bits) {
 	
-	// Do some crazy madness
+	// Do some crazy bit madness to get the sampling pattern
 	bits = (bits << 16u) | (bits >> 16u);
 	bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
 	bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);
 	bits = ((bits & 0x0F0F0F0Fu) << 4u) | ((bits & 0xF0F0F0F0u) >> 4u);
 	bits = ((bits & 0x00FF00FFu) << 8u) | ((bits & 0xFF00FF00u) >> 8u);
+	
 	return float(bits) * 2.3283064365386963e-10;
 }
 
@@ -21,7 +22,7 @@ vec2 Hammersley(uint i, uint N) { return vec2(float(i) / float(N), VanDerCorpus(
 
 vec3 importanceSample(vec2 ham, vec3 normal, float roughness) {
 	
-	// Get the dot product
+	// Get the dot products and get sign from that
 	float a = roughness * roughness;
 	float phi = 2.0 * M_PI * ham.x;
 	float dot_t = sqrt((1.0 - ham.y) / (1.0 + (a * a - 1.0) * ham.y));
@@ -49,6 +50,7 @@ float GGX(float NDV, float roughness) {
 
 float smith(vec3 N, vec3 V, vec3 L, float roughness) {
 	
+	// Get G
 	float NDV = max(dot(N, V), 0.0);
 	float NDL = max(dot(N, L), 0.0);
 	
@@ -73,12 +75,14 @@ vec2 computeIntegral(float NDV, float roughness) {
 		vec3 H = importanceSample(ham, normal, roughness);
 		vec3 L = normalize(2.0 * dot(normal, H) * H - V);
 		
+		// Get relevant dot products
 		float NDL = max(L.z, 0.0);
 		float NDH = max(H.z, 0.0);
 		float VDH = max(dot(V, H), 0.0);
 		
 		if (NDL > 0.0) {
 			
+			// Calculate the values
 			float G = smith(normal, V, L, roughness);
 			float G_v = (G * VDH) / (NDH * NDV);
 			float F = pow(1.0 - VDH, 5.0);

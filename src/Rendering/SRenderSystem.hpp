@@ -11,7 +11,7 @@
 
 #include "SSubsystem.hpp"
 
-#include "SRenderingPipeline.hpp"
+#include "SCubeMap.hpp"
 
 /******************************************************************************
  *  Definition for the render system                                          *
@@ -23,14 +23,18 @@ class SRenderSystem : public SSubsystem {
     
         static void startup();
         static void shutdown();
-    
+	
         static void render(double interpolation);
     
         static SRenderingPipeline* rendering_pipeline;
+		static SRenderingPipeline* cubemap_pipeline;
+	
         static SSceneGraph* current_scene_graph;
 	
 		static void generateBRDF();
 		static void bindBRDF(int texture);
+	
+		static SCubeMap* generateCubeMap(const glm::vec3& position);
 	
 	private:
 	

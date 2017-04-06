@@ -8,7 +8,23 @@
 
 #include "SCubeMap.hpp"
 
-std::string side_names[] = {"right.jpg", "left.jpg", "bottom.jpg", "top.jpg", "front.jpg", "back.jpg"};
+static std::string side_names[] = {"right.jpg", "left.jpg", "bottom.jpg", "top.jpg", "front.jpg", "back.jpg"};
+
+static glm::vec3 rotations[] = {
+	
+		glm::vec3(0.0,  -M_PI_2, 0.0),
+		glm::vec3(0.0, M_PI_2, 0.0),
+
+	
+								 glm::vec3(-M_PI_2,  M_PI, 0.0),
+								 glm::vec3(M_PI_2, M_PI, 0.0),
+
+	glm::vec3(0.0,  M_PI,    0.0),
+	glm::vec3(0.0,  0.0,   0.0),
+
+	
+	
+							   };
 
 /******************************************************************************
  *  Registration for supported texture extensions                             *
@@ -17,8 +33,91 @@ std::string side_names[] = {"right.jpg", "left.jpg", "bottom.jpg", "top.jpg", "f
 REGISTER_RESOURCE_CLASS(cube, SCubeMap)
 
 /******************************************************************************
- *  Implementation for texture                                                *
+ *  Implementation for cube map                                               *
  ******************************************************************************/
+
+SCubeMap::SCubeMap() { /* should never be called manually!!!! */ }
+
+SCubeMap::SCubeMap(const glm::vec3& position, SRenderingPipeline* pipeline, SSceneGraph& scene_graph, unsigned int size) {
+	
+	// Instead of loading the cubemap from a file, we render a scene to a cubemap
+	SCamera camera;
+	camera.transform.translation = position;
+	
+	glGenTextures(1, &texture_id);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
+	
+	// Parameters for the cube map
+	glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	
+	// Allocate storage for the sides
+	for (int i = 0; i < 6; i++)
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, size, size, 0, GL_RGB, GL_UNSIGNED_INT, nullptr);
+
+	// Create a framebuffer
+	GLuint framebuffer;
+	GLuint depth;
+	GLuint color;
+
+	glGenFramebuffers(1, &framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	
+	// Gen depth
+	glGenTextures(1, &depth);
+	glBindTexture(GL_TEXTURE_2D, depth);
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, size, size, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth, 0);
+	
+	// Gen color
+	glGenTextures(1, &color);
+	glBindTexture(GL_TEXTURE_2D, color);
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size, size, 0, GL_RGB, GL_UNSIGNED_INT, 0);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
+	
+	// Render
+	for (int i = 0; i < 6; i++) {
+		
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		
+		// Store the framebuffer in the cubemap
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, texture_id, 0);
+		
+		// Set camera rotation
+		camera.transform.rotation = rotations[i];
+		
+		pipeline->render(scene_graph, camera, 0.0);
+		pipeline->finalizeRender(framebuffer);
+		
+	}
+	
+	// Generate a mipmap
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+	
+	// Cleanup
+	//glDeleteTextures(1, &depth);
+	//glDeleteTextures(1, &color);
+	//glDeleteFramebuffers(1, &framebuffer);
+	
+}
 
 void SCubeMap::bind() {
 
@@ -143,11 +242,11 @@ void SCubeMapUpload::upload() {
         // Set the parameters of the texture
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internal_format, width, height, 0, external_format, GL_UNSIGNED_BYTE, image_data[i]);
         
-        // Generate a mipmap
-        glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-        
     }
-    
+	
+	// Generate a mipmap
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+	
     unload();
 
     *uploaded = true;

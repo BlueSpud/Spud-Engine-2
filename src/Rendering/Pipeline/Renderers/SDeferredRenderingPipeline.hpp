@@ -27,7 +27,9 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D);
         virtual ~SDeferredRenderingPipleline();
     
-        virtual void render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation);
+        virtual void render(SSceneGraph& scene_graph, SCamera& camera, double interpolation);
+	
+		std::shared_ptr<SCubeMap> environment_map;
     
     private:
     
@@ -36,8 +38,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
     
         std::shared_ptr<SShader> lit_shader;
         std::shared_ptr<SShader> simple_shader;
-    
-        std::shared_ptr<SCubeMap> environment_map;
+	
         SUniform* view_pos_u;
 	
 		SDeferredTileController tile_controller;

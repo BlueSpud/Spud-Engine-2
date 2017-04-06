@@ -50,14 +50,17 @@ class SRenderingPipeline {
         SRenderingPipeline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D);
 		virtual ~SRenderingPipeline();
     
-        virtual void render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation) = 0;
+        virtual void render(SSceneGraph& scene_graph, SCamera& camera, double interpolation) = 0;
         void finalizeRender(SFramebuffer* output_framebuffer);
+		void finalizeRender(GLuint framebuffer);
     
         void runPostProcess(glm::mat4& view_matrix, glm::mat4& projection_matrix, int texture_bind_start);
         void addPostProcessPass(SPostProcessPass* pass);
     
     protected:
-    
+	
+		void performFinalize();
+	
         SFramebuffer* final_framebuffer;
     
         std::vector<SPostProcessPass*> post_process_passes;

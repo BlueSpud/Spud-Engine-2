@@ -152,7 +152,7 @@ bool SShader::load(const SPath& vert, const SPath& frag) {
         file_string = file_string + temp_string + "\n";
     
     const char* vert_string_r = file_string.c_str();
-    vert_string = new char[strlen(vert_string_r)];
+    vert_string = new char[strlen(vert_string_r) + 1];
     strcpy(vert_string, vert_string_r);
     
     file_string = "";
@@ -161,7 +161,7 @@ bool SShader::load(const SPath& vert, const SPath& frag) {
         file_string = file_string + temp_string + "\n";
     
     const char* frag_string_r = file_string.c_str();
-    frag_string = new char[strlen(frag_string_r)];
+    frag_string = new char[strlen(frag_string_r) + 1];
     strcpy(frag_string, frag_string_r);
     
     // Make an upload

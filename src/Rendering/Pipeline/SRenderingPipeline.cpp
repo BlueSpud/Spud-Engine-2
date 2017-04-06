@@ -45,23 +45,38 @@ void SRenderingPipeline::finalizeRender(SFramebuffer* output_framebuffer) {
     else
         SFramebuffer::unbind();
     
-    // Reset to the regular 2D viewport
-    glm::mat4 projection_matrix = SGL::getProjectionMatrix2D(*screen_viewport);
-    SGL::setUpViewport(*screen_viewport);
-    SGL::loadMatrix(projection_matrix, MAT_PROJECTION);
-    SGL::clearMatrix(MAT_MODEL);
-    SGL::clearMatrix(MAT_VIEW);
+	performFinalize();
     
-    // Bind the final texture, reset the simple shader
-    simple_shader->bind();
+}
+
+void SRenderingPipeline::finalizeRender(GLuint framebuffer) {
+	
+	// Bind by id rather than an object
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	performFinalize();
+	
+}
+
+void SRenderingPipeline::performFinalize() {
+	
+	// Reset to the regular 2D viewport
+	glm::mat4 projection_matrix = SGL::getProjectionMatrix2D(*screen_viewport);
+	SGL::setUpViewport(*screen_viewport);
+	SGL::loadMatrix(projection_matrix, MAT_PROJECTION);
+	SGL::clearMatrix(MAT_MODEL);
+	SGL::clearMatrix(MAT_VIEW);
+	
+	// Bind the final texture, reset the simple shader
+	simple_shader->bind();
 	
 	simple_shader->bindTextureLocation("tex_albedo", 0);
 	
-    glActiveTexture(GL_TEXTURE0);
-    final_framebuffer->bindTexture(0);
-    
-    SGL::renderRect(screen_viewport->screen_pos, screen_viewport->screen_size);
-    
+	glActiveTexture(GL_TEXTURE0);
+	final_framebuffer->bindTexture(0);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	
+	SGL::renderRect(screen_viewport->screen_pos, screen_viewport->screen_size);
+	
 }
 
 void SRenderingPipeline::runPostProcess(glm::mat4& view_matrix, glm::mat4& projection_matrix, int texture_bind_start) {

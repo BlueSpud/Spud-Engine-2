@@ -211,8 +211,6 @@ void main() {
 	
 	// Get albedo and if we're transparent, discard
 	vec4 albedo_s = texture(tex_albedo, tex_coord0);
-	if (albedo_s.w == 0)
-		discard;
 	
 	vec3 albedo = albedo_s.xyz;
 	
@@ -235,6 +233,15 @@ void main() {
 	// Compute V
 	V = normalize(position.xyz - view_position);
 	NDV = dot(normal, V);
+	
+	if (albedo_s.w == 0) {
+		
+		// Skybox
+		vec3 reflection = reflect(-V, normal);
+		out_color = textureLod(tex_cube, vec3(reflection.x, reflection.y, -reflection.z), 5.0);
+		return;
+		
+	}
 	
 	// Calculate fresnel term F
 	float F0 = clamp(metalic, 0.05, 1.0);
@@ -291,15 +298,17 @@ void main() {
 	
 	// Mip map selection is done with a cube root
 	float reflection_mip_map = sqrt(roughness) * 12.0;
-	vec3 reflection_color = textureLod(tex_cube, reflection, reflection_mip_map).xyz;
+	vec3 reflection_color = textureLod(tex_cube, vec3(reflection.x, reflection.y, -reflection.z), reflection_mip_map).xyz;
 	vec2 env_spec = texture(tex_brdf, vec2(max(-NDV, 0.0), roughness)).rg;
 	
 	// Calculate ambient color from the blurriest mipmap
-	vec3 ambient_color = textureLod(tex_cube, -normal, 12.0).xyz;
+	vec3 ambient_color = textureLod(tex_cube, -normal, 12).xyz;
 	vec3 ambient = ambient_color * albedo * ((1.0 - fresnel) * inverse_metalic);
 	ambient = ambient + specular_color * reflection_color * (fresnel * env_spec.x + env_spec.y);
 	
 	// Combine lighting and texture
 	vec3 color = mix(albedo * diffuse_acc, specular_acc * specular_color, term_blend) + ambient * orm.x;
+	//color = pow(color, vec3(2.0 / 2.2));
+	
 	out_color = vec4(color, 1.0);
 }

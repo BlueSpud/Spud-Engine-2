@@ -52,8 +52,11 @@ SDeferredRenderingPipleline::~SDeferredRenderingPipleline() {
 	
 }
 
-void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SLightGraph& light_graph, SCamera& camera, double interpolation) {
-    
+void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& camera, double interpolation) {
+	
+	// Extract the light graph from the scene graph
+	SLightGraph& light_graph = *scene_graph.light_graph;
+	
     /******************************************************************************
      * 3D viewport setup                                                          *
      ******************************************************************************/
