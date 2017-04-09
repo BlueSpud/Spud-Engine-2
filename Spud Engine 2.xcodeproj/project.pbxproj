@@ -23,6 +23,8 @@
 		0259032B1D7793EA00EA6372 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025903241D7793EA00EA6372 /* OpenGL.framework */; };
 		0259F1B41E6E4BD400BE5158 /* SSerialization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0259F1B21E6E4BD400BE5158 /* SSerialization.cpp */; };
 		02673D491E78530500FF9E3A /* SOctreeSceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02673D471E78530500FF9E3A /* SOctreeSceneGraph.cpp */; };
+		0291C0931E99A95B00674689 /* SAmbientOcclusionPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0243307D1E99A71E007FBAE3 /* SAmbientOcclusionPass.cpp */; };
+		0291C0941E99A95C00674689 /* SScreenSpaceReflections.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 024330831E99A748007FBAE3 /* SScreenSpaceReflections.cpp */; };
 		0291EBBA1E46B2D50048DB92 /* SLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB391E46B2D40048DB92 /* SLog.cpp */; };
 		0291EBBB1E46B2D50048DB92 /* SRectPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB3F1E46B2D40048DB92 /* SRectPacker.cpp */; };
 		0291EBBC1E46B2D50048DB92 /* STime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB411E46B2D40048DB92 /* STime.cpp */; };
@@ -39,7 +41,6 @@
 		0291EBC81E46B2D50048DB92 /* SActor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB641E46B2D40048DB92 /* SActor.cpp */; };
 		0291EBC91E46B2D50048DB92 /* SComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB661E46B2D40048DB92 /* SComponent.cpp */; };
 		0291EBCB1E46B2D50048DB92 /* SObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB6A1E46B2D40048DB92 /* SObject.cpp */; };
-		0291EBCC1E46B2D50048DB92 /* SAmbientOcclusionPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB6E1E46B2D40048DB92 /* SAmbientOcclusionPass.cpp */; };
 		0291EBCD1E46B2D50048DB92 /* SDeferredRenderingPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB721E46B2D40048DB92 /* SDeferredRenderingPipeline.cpp */; };
 		0291EBCE1E46B2D50048DB92 /* SFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB741E46B2D40048DB92 /* SFramebuffer.cpp */; };
 		0291EBCF1E46B2D50048DB92 /* SRenderingPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0291EB761E46B2D40048DB92 /* SRenderingPipeline.cpp */; };
@@ -145,6 +146,10 @@
 		022188C61E88571C005C1E74 /* SOctreeLightGraph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SOctreeLightGraph.hpp; sourceTree = "<group>"; };
 		022765131E8561D8000131BC /* SLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLevel.cpp; sourceTree = "<group>"; };
 		022765141E8561D8000131BC /* SLevel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SLevel.hpp; sourceTree = "<group>"; };
+		0243307D1E99A71E007FBAE3 /* SAmbientOcclusionPass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SAmbientOcclusionPass.cpp; sourceTree = "<group>"; };
+		0243307E1E99A71E007FBAE3 /* SAmbientOcclusionPass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SAmbientOcclusionPass.hpp; sourceTree = "<group>"; };
+		024330831E99A748007FBAE3 /* SScreenSpaceReflections.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SScreenSpaceReflections.cpp; sourceTree = "<group>"; };
+		024330841E99A748007FBAE3 /* SScreenSpaceReflections.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SScreenSpaceReflections.hpp; sourceTree = "<group>"; };
 		025903091D77933E00EA6372 /* Spud Engine 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Spud Engine 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0259031E1D7793EA00EA6372 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = /usr/local/lib/libboost_system.a; sourceTree = "<absolute>"; };
 		0259031F1D7793EA00EA6372 /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = /usr/local/lib/libboost_thread.a; sourceTree = "<absolute>"; };
@@ -191,8 +196,6 @@
 		0291EB671E46B2D40048DB92 /* SComponent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SComponent.hpp; sourceTree = "<group>"; };
 		0291EB6A1E46B2D40048DB92 /* SObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SObject.cpp; sourceTree = "<group>"; };
 		0291EB6B1E46B2D40048DB92 /* SObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SObject.hpp; sourceTree = "<group>"; };
-		0291EB6E1E46B2D40048DB92 /* SAmbientOcclusionPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SAmbientOcclusionPass.cpp; sourceTree = "<group>"; };
-		0291EB6F1E46B2D40048DB92 /* SAmbientOcclusionPass.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SAmbientOcclusionPass.hpp; sourceTree = "<group>"; };
 		0291EB711E46B2D40048DB92 /* GBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBuffer.h; sourceTree = "<group>"; };
 		0291EB721E46B2D40048DB92 /* SDeferredRenderingPipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDeferredRenderingPipeline.cpp; sourceTree = "<group>"; };
 		0291EB731E46B2D40048DB92 /* SDeferredRenderingPipeline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SDeferredRenderingPipeline.hpp; sourceTree = "<group>"; };
@@ -335,6 +338,24 @@
 				02BE01451E4CD3480031DD19 /* SAnimation.hpp */,
 			);
 			name = "Skinned Mesh";
+			sourceTree = "<group>";
+		};
+		0243307C1E99A71E007FBAE3 /* AO */ = {
+			isa = PBXGroup;
+			children = (
+				0243307D1E99A71E007FBAE3 /* SAmbientOcclusionPass.cpp */,
+				0243307E1E99A71E007FBAE3 /* SAmbientOcclusionPass.hpp */,
+			);
+			path = AO;
+			sourceTree = "<group>";
+		};
+		024330821E99A748007FBAE3 /* Reflection */ = {
+			isa = PBXGroup;
+			children = (
+				024330831E99A748007FBAE3 /* SScreenSpaceReflections.cpp */,
+				024330841E99A748007FBAE3 /* SScreenSpaceReflections.hpp */,
+			);
+			path = Reflection;
 			sourceTree = "<group>";
 		};
 		025903001D77933E00EA6372 = {
@@ -597,8 +618,8 @@
 		0291EB6D1E46B2D40048DB92 /* Effects */ = {
 			isa = PBXGroup;
 			children = (
-				0291EB6E1E46B2D40048DB92 /* SAmbientOcclusionPass.cpp */,
-				0291EB6F1E46B2D40048DB92 /* SAmbientOcclusionPass.hpp */,
+				0243307C1E99A71E007FBAE3 /* AO */,
+				024330821E99A748007FBAE3 /* Reflection */,
 			);
 			path = Effects;
 			sourceTree = "<group>";
@@ -877,13 +898,14 @@
 				0291EBD31E46B2D50048DB92 /* SCamera.cpp in Sources */,
 				0293F77A1E80160A00B1AE11 /* SSceneGraph.cpp in Sources */,
 				0291EBBF1E46B2D50048DB92 /* SFileSystem.cpp in Sources */,
-				0291EBCC1E46B2D50048DB92 /* SAmbientOcclusionPass.cpp in Sources */,
 				0291EBE81E46B2D50048DB92 /* SUIButton.cpp in Sources */,
 				0295534C1E881709006CAC38 /* SHash.cpp in Sources */,
 				0291EBBC1E46B2D50048DB92 /* STime.cpp in Sources */,
 				0291EBBD1E46B2D50048DB92 /* SInputSystem.cpp in Sources */,
+				0291C0931E99A95B00674689 /* SAmbientOcclusionPass.cpp in Sources */,
 				022765151E8561D8000131BC /* SLevel.cpp in Sources */,
 				0291EBCF1E46B2D50048DB92 /* SRenderingPipeline.cpp in Sources */,
+				0291C0941E99A95C00674689 /* SScreenSpaceReflections.cpp in Sources */,
 				0291EBDA1E46B2D50048DB92 /* SModel.cpp in Sources */,
 				0291EBD01E46B2D50048DB92 /* SGL.cpp in Sources */,
 				0291EBC31E46B2D50048DB92 /* SRigidBody.cpp in Sources */,

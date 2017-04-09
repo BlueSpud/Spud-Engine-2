@@ -13,6 +13,7 @@
 #include "GBuffer.h"
 #include "SCubeMap.hpp"
 #include "SAmbientOcclusionPass.hpp"
+#include "SScreenSpaceReflections.hpp"
 
 #include "SDeferredTileController.hpp"
 
@@ -42,6 +43,7 @@ class SDeferredRenderingPipleline : public SRenderingPipeline {
         SUniform* view_pos_u;
 	
 		SDeferredTileController tile_controller;
+		SScreenSpaceReflectionPass* reflection_pass;
 
 };
 

@@ -31,6 +31,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     
     // Create an ambient occlusion pass
     addPostProcessPass(new SAmbientOcclusionPass(_viewport_3D->screen_size));
+	reflection_pass = new SScreenSpaceReflectionPass(_viewport_3D->screen_size);
     
     // Get the cube map
     environment_map =  SResourceManager::getResource<SCubeMap>(SPath("Texture/outside.cube"));
@@ -122,18 +123,22 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
     glActiveTexture(GL_TEXTURE5);
     light_graph.shadow_map_buffer->bindTexture(1);
 	SRenderSystem::bindBRDF(BRDF_INTEGRAL);
-    
-    // Render the lit buffer to the screen
-    final_framebuffer->bind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+	
     // Set up the new viewport
     SGL::setUpViewport(*viewport_2D);
     glm::mat4 projection_matrix_2D = SGL::getProjectionMatrix2D(*viewport_2D);
     SGL::loadMatrix(projection_matrix_2D, MAT_PROJECTION);
     SGL::clearMatrix(MAT_MODEL);
     SGL::clearMatrix(MAT_VIEW);
-    
+	
+	// Generate the reflections
+	reflection_pass->generateReflections(projection_view_matrix, inverse_proj_view, final_framebuffer);
+	reflection_pass->bindReflections(9);
+	
+	// Render the lit buffer to the screen
+	final_framebuffer->bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
     lit_shader->bind();
     
     // Bind the texture locations
@@ -144,7 +149,8 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
     lit_shader->bindTextureLocation("tex_cube", ENVIRONMENT_MAP);
     lit_shader->bindTextureLocation("tex_shadow", SHADOW_ATLAS);
 	lit_shader->bindTextureLocation("tex_brdf", BRDF_INTEGRAL);
-    
+	lit_shader->bindTextureLocation("tex_ssr", 9);
+	
     // Bind other uniforms needed for lighting
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
 	lit_shader->bindUniform(&viewport_3D->screen_size, "screen_size", UNIFORM_VEC2, 1);
@@ -166,9 +172,27 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
 //
 //	simple_shader->bind();
 //	SRenderSystem::bindBRDF(0);
+//
+//	glActiveTexture(GL_TEXTURE0 + GBUFFER_ALBEDO);
+//	final_framebuffer->bindTexture(0);
 //	
-//	SGL::renderRect(glm::vec2(0.0), glm::vec2(1024.0));
+//	r_shader->bind();
+//	r_shader->bindTextureLocation("tex_depth", GBUFFER_DEPTH);
+//	r_shader->bindTextureLocation("tex_albedo", GBUFFER_ALBEDO);
+//	r_shader->bindTextureLocation("tex_normal", GBUFFER_NORMAL);
 //	
+//	r_shader->bindUniform(view_pos_u);
+//	
+//	glm::mat4 proj_inv = glm::inverse(projection_matrix_3D);
+//	
+//	r_shader->bindUniform(&proj_inv, "mat_inverse_proj", UNIFORM_MAT4, 1);
+//	r_shader->bindUniform(&view_matrix, "mat_view_scene", UNIFORM_MAT4, 1);
+//	r_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
+//	r_shader->bindUniform(&projection_matrix_3D, "mat_proj", UNIFORM_MAT4, 1);
+//	r_shader->bindUniform(&projection_view_matrix, "mat_view_proj", UNIFORM_MAT4, 1);
+//	
+//	SGL::renderRect(glm::vec2(0.0), viewport_3D->screen_size);
+//
     // Perform post-processing
 	runPostProcess(view_matrix, projection_matrix_3D, POST_RPOCESS_START);
 	

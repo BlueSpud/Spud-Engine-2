@@ -7,6 +7,7 @@ uniform sampler2D tex_orm;
 uniform samplerCube tex_cube;
 uniform sampler2D tex_shadow;
 uniform sampler2D tex_brdf;
+uniform sampler2D tex_ssr;
 
 uniform vec3 view_position;
 uniform mat4 inverse_proj_view;
@@ -299,6 +300,11 @@ void main() {
 	// Mip map selection is done with a cube root
 	float reflection_mip_map = sqrt(roughness) * 12.0;
 	vec3 reflection_color = textureLod(tex_cube, vec3(reflection.x, reflection.y, -reflection.z), reflection_mip_map).xyz;
+	
+	vec3 ssr = texture(tex_ssr, tex_coord0).rgb;
+	if (length(ssr) > 0.0)
+		reflection_color = ssr;
+	
 	vec2 env_spec = texture(tex_brdf, vec2(max(-NDV, 0.0), roughness)).rg;
 	
 	// Calculate ambient color from the blurriest mipmap
