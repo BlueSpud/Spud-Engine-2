@@ -247,7 +247,7 @@ void main() {
 	// Calculate fresnel term F
 	float F0 = clamp(metalic, 0.05, 1.0);
 	float fresnel_pow = pow(1.0 + NDV, fresnel_pow);
-	fresnel = F0 + (1.0 - F0) * fresnel_pow;
+	fresnel = clamp(F0 + (1.0 - F0) * fresnel_pow, 0.0, 1.0);
 	
 	// Storage lighting accumulation
 	vec3 diffuse_acc, specular_acc;
@@ -301,10 +301,10 @@ void main() {
 	float reflection_mip_map = sqrt(roughness) * 12.0;
 	vec3 reflection_color = textureLod(tex_cube, vec3(reflection.x, reflection.y, -reflection.z), reflection_mip_map).xyz;
 	
-	vec3 ssr = texture(tex_ssr, tex_coord0).rgb;
-	if (length(ssr) > 0.0)
-		reflection_color = ssr;
-	
+//	vec3 ssr = texture(tex_ssr, tex_coord0).rgb;
+//	if (length(ssr) > 0.0)
+//		reflection_color = ssr;
+//	
 	vec2 env_spec = texture(tex_brdf, vec2(max(-NDV, 0.0), roughness)).rg;
 	
 	// Calculate ambient color from the blurriest mipmap

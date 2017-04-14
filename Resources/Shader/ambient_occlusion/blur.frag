@@ -30,7 +30,8 @@ void main() {
 	if (unpacked_zm == 1.0)
 		discard;
 	
-	float sum = main_sample.r;
+	float main = main_sample.r;
+	float sum = main;
 	
 	// Do initial weight
 	float weight_total = kernel[0];
@@ -58,6 +59,6 @@ void main() {
 		
 	}
 	
-	blurred = vec3(sum / weight_total, main_sample.g, main_sample.b);
+	blurred = vec3(mix(sum / weight_total, main, clamp(unpacked_zm * 20.0, 0.0, 1.0)), main_sample.g, main_sample.b);
     
 }

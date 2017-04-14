@@ -31,7 +31,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     
     // Create an ambient occlusion pass
     addPostProcessPass(new SAmbientOcclusionPass(_viewport_3D->screen_size));
-	reflection_pass = new SScreenSpaceReflectionPass(_viewport_3D->screen_size);
+	//reflection_pass = new SScreenSpaceReflectionPass(_viewport_3D->screen_size);
     
     // Get the cube map
     environment_map =  SResourceManager::getResource<SCubeMap>(SPath("Texture/outside.cube"));
@@ -132,8 +132,8 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
     SGL::clearMatrix(MAT_VIEW);
 	
 	// Generate the reflections
-	reflection_pass->generateReflections(projection_view_matrix, inverse_proj_view, final_framebuffer);
-	reflection_pass->bindReflections(9);
+	//reflection_pass->generateReflections(projection_view_matrix, inverse_proj_view, final_framebuffer);
+	//reflection_pass->bindReflections(9);
 	
 	// Render the lit buffer to the screen
 	final_framebuffer->bind();

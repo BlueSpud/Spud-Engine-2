@@ -64,8 +64,8 @@ void main() {
 	vec3 reflection_pos_s = reflection_pos.xyz * 0.5 + 0.5;
 	
 	// Calculate a jitter to add some noise
-	float c = (tex_coord0.x * 14400.0 + tex_coord0.y * 8500.0) * 0.25;
-	float jitter = mod( c, 1.0);
+//	float c = (tex_coord0.x * 14400.0 + tex_coord0.y * 8500.0) * 0.25;
+//	float jitter = mod( c, 1.0);
 	
 	vec3 NDC = vec3(tex_coord0, depth);
 	vec3 ray_direction = normalize(reflection_pos_s - NDC);
