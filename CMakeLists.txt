@@ -25,6 +25,10 @@ set( CMAKE_LIBRARY_PATH
     ${CMAKE_SOURCE_DIR}/OpenAL/lib/
     ${CMAKE_LIBRARY_PATH})
 
+# OpenAL
+find_library( OPENAL_1_LIBRARY openal.1)
+message( STATUS "OPENAL_1_LIBRARY is ${OPENAL_1_LIBRARY}")
+
 # macOS specific frameworks
 if (APPLE)
 
@@ -96,10 +100,6 @@ message( STATUS "FREEIMAGE_LIBRARY is ${FREEIMAGE_LIBRARY}")
 # GLFW
 find_library( GLFW3_LIBRARY glfw3)
 message( STATUS "GLFW3_LIBRARY is ${GLFW3_LIBRARY}")
-
-# OpenAL
-find_library( OPENAL_1_LIBRARY openal.1)
-message( STATUS "OPENAL_1_LIBRARY is ${OPENAL_1_LIBRARY}")
 
 set( STATIC_DEPENDENCIES
     ${BOOST_SIGNALS_LIBRARY}
