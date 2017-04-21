@@ -7,7 +7,7 @@
 //
 
 #include "SLog.hpp"
-#include "SFileSystem.hpp"
+#include "File/SFileSystem.hpp"
 
 // Definition for printable names of verbosity
 std::string verbosity_strs[] = {"Critical", "Warning", "Debug"};

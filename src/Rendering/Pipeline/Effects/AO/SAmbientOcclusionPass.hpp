@@ -11,8 +11,8 @@
 
 #include <random>
 
-#include "SRenderingPipeline.hpp"
-#include "GBuffer.h"
+#include "Rendering/Pipeline/SRenderingPipeline.hpp"
+#include "Rendering/Pipeline/Renderers/GBuffer.h"
 
 /******************************************************************************
  *  Definition for the ambient occlusion pass                                 *

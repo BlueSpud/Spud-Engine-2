@@ -12,7 +12,7 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
-#include "SResourceManager.hpp"
+#include "Resource/SResourceManager.hpp"
 
 // Forward declarations
 class SSoundEmitter;

@@ -22,23 +22,25 @@ SAmbientOcclusionPass::SAmbientOcclusionPass(glm::vec2 main_framebuffer_size) : 
     if (!ambient_occlusion_shader) {
         
         ambient_occlusion_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/ambient_occlusion.glsl"));
+		ambient_occlusion_shader->bindTextureLocation("tex_depth", GBUFFER_DEPTH);
+		
         blur_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/blur.glsl"));
         blend_shader = SResourceManager::getResource<SShader>(SPath("Shader/ambient_occlusion/blend.glsl"));
 		
 	}
-    
+	
     // Create the framebuffer for ambient occlusion
-    std::vector<SFramebufferAttatchment*> attatchments_occlusion;
-    attatchments_occlusion.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0));
+    std::vector<SFramebufferAttachment*> attachments_occlusion;
+    attachments_occlusion.push_back(new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0));
     
-    occlusion_framebuffer = new SFramebuffer(attatchments_occlusion, viewport.screen_size.x, viewport.screen_size.y);
+    occlusion_framebuffer = new SFramebuffer(attachments_occlusion, viewport.screen_size.x, viewport.screen_size.y);
     
     // Create the framebuffer for the blur
-	std::vector<SFramebufferAttatchment*> attatchments_blur = {new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0)};
-    blur_framebuffer_w = new SFramebuffer(attatchments_blur, viewport.screen_size.x / 2.0f, viewport.screen_size.y / 2.0f);
+	std::vector<SFramebufferAttachment*> attachments_blur = {new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0)};
+    blur_framebuffer_w = new SFramebuffer(attachments_blur, viewport.screen_size.x / 2.0f, viewport.screen_size.y / 2.0f);
 	
-	attatchments_blur = {new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0)};
-	blur_framebuffer_h = new SFramebuffer(attatchments_blur, viewport.screen_size.x / 2.0f, viewport.screen_size.y / 2.0f);
+	attachments_blur = {new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RGB8, GL_RGB, GL_UNSIGNED_INT, 0)};
+	blur_framebuffer_h = new SFramebuffer(attachments_blur, viewport.screen_size.x / 2.0f, viewport.screen_size.y / 2.0f);
 	
 }
 
@@ -55,7 +57,6 @@ void SAmbientOcclusionPass::render(SPostProcessPassData& data) {
     
     // Use the shader
     ambient_occlusion_shader->bind();
-    ambient_occlusion_shader->bindTextureLocation("tex_depth", GBUFFER_DEPTH);
 	
     // Bind the near and far planes
     ambient_occlusion_shader->bindUniform(&data.viewport_3D->planes, "planes", UNIFORM_VEC2, 1);

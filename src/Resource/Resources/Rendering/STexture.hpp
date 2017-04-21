@@ -11,8 +11,8 @@
 
 #include <vector>
 
-#include "SResourceManager.hpp"
-#include "SGLUpload.hpp"
+#include "Resource/SResourceManager.hpp"
+#include "Resource/SGLUpload.hpp"
 
 #define DDS_MAGIC 0x20534444
 #define DDS_HEADER_SIZE 124

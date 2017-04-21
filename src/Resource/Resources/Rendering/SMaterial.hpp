@@ -9,8 +9,8 @@
 #ifndef SMaterial_hpp
 #define SMaterial_hpp
 
-#include "SGbufferShader.hpp"
-#include "STexture.hpp"
+#include "Resource/Resources/Rendering/Shader/Gbuffer/SGbufferShader.hpp"
+#include "Resource/Resources/Rendering/STexture.hpp"
 
 /******************************************************************************
  *  Definition for material                                                   *

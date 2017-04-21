@@ -11,7 +11,7 @@
 
 #include <queue>
 
-#include "SGL.hpp"
+#include "Rendering/SGL.hpp"
 
 /******************************************************************************
  *  Defiunition for default kind of upload                                    *

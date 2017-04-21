@@ -9,9 +9,9 @@
 #ifndef SScreenSpaceReflections_hpp
 #define SScreenSpaceReflections_hpp
 
-#include "SFramebuffer.hpp"
-#include "SShader.hpp"
-#include "GBuffer.h"
+#include "Rendering/Pipeline/SFramebuffer.hpp"
+#include "Resource/Resources/Rendering/Shader/SShader.hpp"
+#include "Rendering/Pipeline/Renderers/GBuffer.h"
 
 /******************************************************************************
  *  Definition for the screen space reflection pass                           *

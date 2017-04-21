@@ -7,7 +7,7 @@
 //
 
 #include "STextRenderer.hpp"
-#include "SUI.hpp"
+#include "UI/SUI.hpp"
 
 std::shared_ptr<SFont> STextRenderer::default_font;
 std::shared_ptr<SShader> STextRenderer::text_shader;
@@ -32,7 +32,7 @@ void STextRenderer::shutdown() {
 }
 
 void STextRenderer::renderText(std::string text, std::shared_ptr<SFont> font, float font_size, glm::vec2 screen_pos) {
-    
+	
     text_shader->bind();
     font->font_atlas->bind();
     
@@ -67,7 +67,7 @@ void STextRenderer::renderText(std::string text, std::shared_ptr<SFont> font, fl
 }
 
 void STextRenderer::renderTextCentered(std::string text, std::shared_ptr<SFont> font, float font_size, glm::vec2 screen_pos, float width) {
-    
+	
     text_shader->bind();
     font->font_atlas->bind();
     
@@ -115,7 +115,7 @@ void STextRenderer::renderTextCentered(std::string text, std::shared_ptr<SFont> 
 }
 
 void STextRenderer::renderTextWithCursor(std::string text, int cursor_pos, std::shared_ptr<SFont> font, float font_size, glm::vec2 screen_pos) {
-    
+	
     text_shader->bind();
     font->font_atlas->bind();
     
@@ -177,7 +177,7 @@ void STextRenderer::renderCursor(std::shared_ptr<SFont> font, float font_size_mu
 
 void STextRenderer::renderCenteredTextLine(std::vector<SCharacterDrawCall>& character_draw_calls, std::shared_ptr<SFont> font,
                                            float font_size_multiplier, float& line_length, float width) {
-    
+	
     // Get the offset on the x to center the line
     float offset_x = (width * SGL::getScreenScale() - line_length) / 2.0;
     

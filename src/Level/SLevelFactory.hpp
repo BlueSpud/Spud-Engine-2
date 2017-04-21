@@ -12,7 +12,7 @@
 #include <iostream>
 #include <map>
 
-#include "SHash.hpp"
+#include "Utility/SHash.hpp"
 
 // Forward declaration
 class SLevelFactory;

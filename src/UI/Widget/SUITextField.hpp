@@ -9,8 +9,8 @@
 #ifndef SUITextField_hpp
 #define SUITextField_hpp
 
-#include "SUIWidget.hpp"
-#include "STime.hpp"
+#include "UI/Widget/SUIWidget.hpp"
+#include "Engine/Utility/STime.hpp"
 
 /******************************************************************************
  *  Definition for tex field widget                                           *

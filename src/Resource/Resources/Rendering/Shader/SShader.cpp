@@ -8,7 +8,7 @@
 
 #include "SShader.hpp"
 
-SShader* SShader::bound_shader;
+SShader* SShader::bound_shader = nullptr;
 
 /***********************************************************************************
  *  Registration for supported shader extensions (GLSL used to load frag and vert) *
@@ -58,7 +58,15 @@ int SShader::getUniformLocation(const std::string& uniform) {
 }
 
 void SShader::bindUniform(void* value, const std::string& name, int type, int count) {
-    
+	
+	// Check if we have been uploaded, otherwise save it
+	if (!uploaded) {
+		
+		preuploadUniform(value, name, type, count);
+		return;
+		
+	}
+	
     // Keep track of the current shader and attempt to bind ourself
 	SShader* bound_shader_old = bound_shader;
     bool needed_bind = bind();
@@ -96,10 +104,11 @@ void SShader::bindUniform(void* value, const std::string& name, int type, int co
                 break;
             
     }
-    
+	
     // If we were not the current shader, we need to bind the old one
-    if (needed_bind)
+    if (needed_bind && bound_shader_old)
         bound_shader_old->bind();
+	else bound_shader = this;
     
 }
 
@@ -172,6 +181,9 @@ bool SShader::load(const SPath& vert, const SPath& frag) {
     
     upload->program_id = &program_id;
     upload->uploaded = &uploaded;
+	
+	// Tell the upload who we are so that we can upload any uniforms we need to when its uploaded
+	upload->shader = this;
     
     SGLUploadSystem::addUpload(upload);
 	
@@ -220,12 +232,61 @@ void SShader::hotload(const SPath& path) {
     
 }
 
+void SShader::preuploadUniform(void* value, const std::string& name, int type, int count) {
+	
+	pre_upload_uniforms.emplace_back(SUniform());
+	SUniform& uniform = pre_upload_uniforms.back();
+	uniform.type = type;
+	uniform.count = count;
+	uniform.name = name;
+	
+	// Get the size of what we need, we might not be guranteed to have the value when we do upload
+	size_t size = 0;
+	switch (type) {
+			
+		case UNIFORM_INT:
+			size = sizeof(int);
+			break;
+			
+		case UNIFORM_FLOAT:
+			size = sizeof(float);
+			break;
+			
+		case UNIFORM_VEC2:
+			size = sizeof(glm::vec2);
+			break;
+			
+		case UNIFORM_VEC3:
+			size = sizeof(glm::vec3);
+			break;
+			
+		case UNIFORM_VEC4:
+			size = sizeof(glm::vec4);
+			break;
+			
+			
+		case UNIFORM_MAT3:
+			size = sizeof(glm::mat3);
+			break;
+			
+		case UNIFORM_MAT4:
+			size = sizeof(glm::mat4);
+			break;
+			
+	}
+	
+	// Copy the value so we are guranteed to have it
+	uniform.value = malloc(size);
+	memcpy(uniform.value, value, size);
+	
+}
+
 /******************************************************************************
  *  Implementation for shader upload                                          *
  ******************************************************************************/
 
 void SShaderUpload::upload() {
-    
+	
     // Regardless of if we fail, we uploaded
     *uploaded = true;
     
@@ -309,6 +370,19 @@ void SShaderUpload::upload() {
     // Clean up the uneeded shader source
     glDeleteShader(vert_id);
     glDeleteShader(frag_id);
+	
+	// Go through the uniform que
+	for (int i = 0; i < shader->pre_upload_uniforms.size(); i++) {
+		
+		// Upload it
+		shader->bindUniform(&shader->pre_upload_uniforms[i]);
+			
+		// Memory was allocated for the preuploads, free it
+		free(shader->pre_upload_uniforms[i].value);
+		
+	}
+	
+	shader->pre_upload_uniforms.clear();
     
 }
 

@@ -9,8 +9,8 @@
 #ifndef SOctreeLightGraph_hpp
 #define SOctreeLightGraph_hpp
 
-#include "SLightGraph.hpp"
-#include "SOctree.hpp"
+#include "Rendering/Light/SLightGraph.hpp"
+#include "Octree/SOctree.hpp"
 
 /******************************************************************************
  *  Definition for octree light graph                                         *

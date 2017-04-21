@@ -19,7 +19,7 @@ SSoundEmitter::SSoundEmitter() {
 
 }
 
-SSoundEmitter::SSoundEmitter(SSound* _sound) {
+SSoundEmitter::SSoundEmitter(std::shared_ptr<SSound> _sound) {
     
     // Keep the parent
     sound = _sound;
@@ -33,7 +33,7 @@ SSoundEmitter::SSoundEmitter(SSound* _sound) {
 
 SSoundEmitter::~SSoundEmitter() { unload(); }
 
-void SSoundEmitter::setSound(SSound* _sound) {
+void SSoundEmitter::setSound(std::shared_ptr<SSound> _sound) {
 
     // Unload the last source if there was one
     unload();

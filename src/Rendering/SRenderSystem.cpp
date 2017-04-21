@@ -26,7 +26,7 @@ void SRenderSystem::startup() {
 	// Generate the BRDF buffer
 	brdf_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/brdf/brdf_integral.glsl"));
 	
-	std::vector<SFramebufferAttatchment*> attatchments = { new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 0) };
+	std::vector<SFramebufferAttachment*> attatchments = { new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 0) };
 	brdf_buffer = new SFramebuffer(attatchments, 1024.0, 1024.0);
 	
 }

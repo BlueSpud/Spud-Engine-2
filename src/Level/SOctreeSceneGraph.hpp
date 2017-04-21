@@ -9,8 +9,8 @@
 #ifndef SOctreeSceneGraph_hpp
 #define SOctreeSceneGraph_hpp
 
-#include "SOctree.hpp"
-#include "SSceneGraph.hpp"
+#include "Octree/SOctree.hpp"
+#include "Rendering/Scene Graph/SSceneGraph.hpp"
 
 /******************************************************************************
  *  Definition for octree scene graph                                         *
@@ -25,6 +25,7 @@ class SOctreeSceneGraph : public SSceneGraph {
 		virtual ~SOctreeSceneGraph();
 	
 		virtual void linearizeObjects(std::vector<SObject*>& objects);
+		virtual SObject* pickObject(const glm::vec3& origin, const glm::vec3& direction, float length);
 	
 	protected:
 	

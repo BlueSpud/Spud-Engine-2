@@ -9,7 +9,7 @@
 #ifndef SComponent_hpp
 #define SComponent_hpp
 
-#include "SObject.hpp"
+#include "Rendering/Objects/SObject.hpp"
 
 /******************************************************************************
  *  Definition for generic component                                          *

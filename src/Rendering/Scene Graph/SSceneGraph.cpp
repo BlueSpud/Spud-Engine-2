@@ -7,7 +7,7 @@
 //
 
 #include "SSceneGraph.hpp"
-#include "SRenderSystem.hpp"
+#include "Rendering/SRenderSystem.hpp"
 
 SSceneGraph::SSceneGraph() {
 	
@@ -77,6 +77,29 @@ void SSimpleSceneGraph::linearizeObjects(std::vector<SObject*>& objects) {
 	// Convert the list to a vector basically
 	for (std::list<SObject*>::iterator i = this->objects.begin(); i != this->objects.end(); i++)
 		objects.push_back(*i);
+	
+}
+
+SObject* SSimpleSceneGraph::pickObject(const glm::vec3& origin, const glm::vec3& direction, float length) {
+	
+	// Start with no object and infinite distamce
+	float closest_dist = std::numeric_limits<float>::max();
+	SObject* object = nullptr;
+	
+	// Go through every object and see if the ray hits and is closer than the result 
+	for (std::list<SObject*>::iterator i = objects.begin(); i != objects.end(); i++) {
+	
+		float new_distance = (*i)->getBoundingBox().rayTrace(origin, direction, length);
+		if (new_distance != -1.0 && new_distance < closest_dist) {
+		
+			closest_dist = new_distance;
+			object = *i;
+			
+		}
+			
+	}
+	
+	return object;
 	
 }
 

@@ -9,8 +9,8 @@
 #ifndef SStaticMeshComponent_hpp
 #define SStaticMeshComponent_hpp
 
-#include "SComponent.hpp"
-#include "SStaticMesh.hpp"
+#include "Rendering/Objects/Component Based/SComponent.hpp"
+#include "Resource/Resources/Rendering/Static Mesh/SStaticMesh.hpp"
 
 /******************************************************************************
  *  Definition for static mesh component                                      *

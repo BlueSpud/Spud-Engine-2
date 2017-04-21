@@ -6,25 +6,25 @@
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#include "SFramebuffer.hpp"
+#include "Rendering/Pipeline/SFramebuffer.hpp"
 
 /******************************************************************************
  *  Implementation for framebuffer                                            *
  ******************************************************************************/
 
-SFramebuffer::SFramebuffer(std::vector<SFramebufferAttatchment*> attatchments, unsigned int _width, unsigned int _height) {
+SFramebuffer::SFramebuffer(std::vector<SFramebufferAttachment*> attachments, unsigned int _width, unsigned int _height) {
     
     // Generate a framebuffer upload
     upload = new SFramebufferUpload();
     upload->framebuffer_id = &framebuffer_id;
     
     // Create a spot for the texture and then give it over to the upload
-    for (int i = 0; i < attatchments.size(); i++) {
+    for (int i = 0; i < attachments.size(); i++) {
         
-        textures.insert(std::pair<int, GLuint>(attatchments[i]->id, -1));
-        attatchments[i]->texture_id = &textures[attatchments[i]->id];
+        textures.insert(std::pair<int, GLuint>(attachments[i]->id, -1));
+        attachments[i]->texture_id = &textures[attachments[i]->id];
         
-        upload->attatchments.push_back(attatchments[i]);
+        upload->attachments.push_back(attachments[i]);
         
     }
     
@@ -33,6 +33,7 @@ SFramebuffer::SFramebuffer(std::vector<SFramebufferAttatchment*> attatchments, u
     upload->height = height = _height;
     
     upload->buffers_to_render = &buffers_to_render;
+	upload->attachment_count = &attachment_count;
     
     SGLUploadSystem::addUpload(upload);
     
@@ -54,7 +55,7 @@ void SFramebuffer::bind() {
     
     // Bind the framebuffer and tell it to render all the buffers
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_id);
-    glDrawBuffers((int)textures.size(), buffers_to_render);
+    glDrawBuffers(attachment_count, buffers_to_render);
     
 }
 
@@ -82,13 +83,13 @@ void SFramebufferUpload::upload() {
     glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer_id);
     
     // Create the textures
-    int attatchment = 0;
+    int attachment = 0;
     
-    for (int i = 0; i < attatchments.size(); i++) {
+    for (int i = 0; i < attachments.size(); i++) {
         
-        SFramebufferAttatchment* a = attatchments[i];
+        SFramebufferAttachment* a = attachments[i];
         
-        // Create a texture to the specifications of the attatchment
+        // Create a texture to the specifications of the attachment
         GLuint texture;
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -100,43 +101,44 @@ void SFramebufferUpload::upload() {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         
-        // Attatch it to the framebuffer
-        GLenum attatchment_kind = GL_COLOR_ATTACHMENT0 + attatchment;
+        // Attach it to the framebuffer
+        GLenum attachment_kind = GL_COLOR_ATTACHMENT0 + attachment;
         
-        if (a->attatchment_kind != FRAMEBUFFER_COLOR)
-            attatchment_kind = GL_DEPTH_ATTACHMENT;
-        else attatchment++;
+        if (a->attachment_kind != FRAMEBUFFER_COLOR)
+            attachment_kind = GL_DEPTH_ATTACHMENT;
+        else attachment++;
         
-        glFramebufferTexture2D(GL_FRAMEBUFFER, attatchment_kind, GL_TEXTURE_2D, texture, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, attachment_kind, GL_TEXTURE_2D, texture, 0);
         
-        // Get rid of the attatchment in CPU memory and save the texture properly
+        // Get rid of the attachment in CPU memory and save the texture properly
         *a->texture_id = texture;
         delete a;
         
     }
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        SLog::verboseLog(SVerbosityLevel::Critical, "Framebuffer failed to be created! Check attatchment arguments!");
+        SLog::verboseLog(SVerbosityLevel::Critical, "Framebuffer failed to be created! Check attachment arguments!");
     
     // Make the buffer array
     GLenum* _buffers_to_render;
     
-    if (attatchment) {
+    if (attachment) {
         
-        // If there was some color attatchments we render them
-        _buffers_to_render = new GLenum[attatchment - 1];
-        for (int i = 0; i < attatchment; i++)
+        // If there was some color attachments we render them
+        _buffers_to_render = new GLenum[attachment];
+        for (int i = 0; i < attachment; i++)
             _buffers_to_render[i] = GL_COLOR_ATTACHMENT0 + i;
         
     } else {
         
-        // No color attatchments, only render the depth buffer
+        // No color attachments, only render the depth buffer
         _buffers_to_render = new GLenum[1];
         _buffers_to_render[0] = GL_NONE;
         
     }
     
     *buffers_to_render = _buffers_to_render;
+	*attachment_count = attachment;
     
     // Clear the framebuffer once
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

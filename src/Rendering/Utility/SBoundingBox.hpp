@@ -9,7 +9,8 @@
 #ifndef SBoundingBox_hpp
 #define SBoundingBox_hpp
 
-#include "SGL.hpp"
+#include "Rendering/SGL.hpp"
+#include <limits>
 
 /******************************************************************************
  *  Definition for bounding box                                               *
@@ -23,6 +24,7 @@ struct SBoundingBox {
     bool frustrumCull(const SFrustum& frustum);
 	
 	void getOrientedPoints(glm::vec3* _points) const;
+	float rayTrace(const glm::vec3& origin, const glm::vec3& direction, float length) const;
     
     STransform* transform;
     

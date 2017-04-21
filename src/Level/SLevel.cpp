@@ -256,3 +256,13 @@ void SLevelManager::createLevel() {
 	current_level->scene_graph->makeCurrent();
 	
 }
+
+SObject* SLevelManager::pickObject(const glm::vec3& origin, const glm::vec3& direction, float length) {
+	
+	// Pick from the current level if it exists
+	if (current_level)
+		return current_level->scene_graph->pickObject(origin, direction, length);
+	
+	return nullptr;
+	
+}

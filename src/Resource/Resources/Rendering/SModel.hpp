@@ -9,10 +9,10 @@
 #ifndef SStaticMesh_hpp
 #define SStaticMesh_hpp
 
-#include "SGLUpload.hpp"
+#include "Resource/SGLUpload.hpp"
 #include "SMaterial.hpp"
 
-#include "SPhysicsSystem.hpp"
+#include "Physics/SPhysicsSystem.hpp"
 
 #define MODEL_BOUNDING_BOX_PADDING 0.1f
 

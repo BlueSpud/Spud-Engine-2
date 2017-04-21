@@ -69,7 +69,7 @@ void SPath::removeLastPathComponent() {
 void SPath::getFileInfo() {
     
     // Extract the file name and the prefix
-    std::stringstream stream = std::stringstream(path_str);
+    std::stringstream stream(path_str);
     std::string last_path_component;
     
     // Get the last path component

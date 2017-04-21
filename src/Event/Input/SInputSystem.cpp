@@ -7,7 +7,7 @@
 //
 
 #include "SInputSystem.hpp"
-#include "SConsole.hpp"
+#include "UI/Console/SConsole.hpp"
 
 SInputMode SInputSystem::input_mode;
 
@@ -121,7 +121,7 @@ void SInputSystem::setInputMode(SInputMode _input_mode) {
         
             if (current_input_listener) {
         
-                for (std::map<int, boost::function<void(int)>>::iterator i = current_input_listener->up_funcs.begin();
+                for (std::map<int, boost::function<void(int)> >::iterator i = current_input_listener->up_funcs.begin();
                        i != current_input_listener->up_funcs.end();
                        i++) {
                     

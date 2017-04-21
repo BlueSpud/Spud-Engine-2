@@ -6,28 +6,28 @@
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#include "SDeferredRenderingPipeline.hpp"
-#include "SRenderSystem.hpp"
+#include "Rendering/Pipeline/Renderers/SDeferredRenderingPipeline.hpp"
+#include "Rendering/SRenderSystem.hpp"
 
 /******************************************************************************
  * Implementation for deferred rendering pipeline                             *
  ******************************************************************************/
 
-SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D) :
+SDeferredRenderingPipeline::SDeferredRenderingPipeline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D) :
 	SRenderingPipeline(_viewport_2D, _screen_viewport, _viewport_3D),
 	tile_controller(_viewport_3D->screen_size)																							{
     
-    // Create the gbuffer and its attatchments
-    std::vector<SFramebufferAttatchment*> attatchments = {
+    // Create the gbuffer and its attachments
+    std::vector<SFramebufferAttachment*> attachments = {
 		
-		new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT, GBUFFER_DEPTH),
-		new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ALBEDO),
-		new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGBA, GL_FLOAT, GBUFFER_NORMAL),
-		new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ORM)
+		new SFramebufferAttachment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT, GBUFFER_DEPTH),
+		new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, GBUFFER_ALBEDO),
+		new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGB, GL_FLOAT, GBUFFER_NORMAL),
+		new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGB, GL_UNSIGNED_INT, GBUFFER_ORM)
 	
 	};
 		
-    gbuffer = new SFramebuffer(attatchments, viewport_3D->screen_size.x, viewport_3D->screen_size.y);
+    gbuffer = new SFramebuffer(attachments, viewport_3D->screen_size.x, viewport_3D->screen_size.y);
     
     // Create an ambient occlusion pass
     addPostProcessPass(new SAmbientOcclusionPass(_viewport_3D->screen_size));
@@ -38,6 +38,17 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     
     // Get the lighting shader
     lit_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/deferred_lighting.glsl"));
+		
+	// Bind the texture locations
+	lit_shader->bindTextureLocation("tex_depth", GBUFFER_DEPTH);
+	lit_shader->bindTextureLocation("tex_albedo", GBUFFER_ALBEDO);
+	lit_shader->bindTextureLocation("tex_normal", GBUFFER_NORMAL);
+	lit_shader->bindTextureLocation("tex_orm", GBUFFER_ORM);
+	lit_shader->bindTextureLocation("tex_cube", ENVIRONMENT_MAP);
+	lit_shader->bindTextureLocation("tex_shadow", SHADOW_ATLAS);
+	lit_shader->bindTextureLocation("tex_brdf", BRDF_INTEGRAL);
+	lit_shader->bindTextureLocation("tex_ssr", 9);
+		
     simple_shader = SResourceManager::getResource<SShader>(SPath("Shader/simple/simple_texture.glsl"));
     
     // Get the view pos
@@ -45,7 +56,7 @@ SDeferredRenderingPipleline::SDeferredRenderingPipleline(SViewport* _viewport_2D
     
 }
 
-SDeferredRenderingPipleline::~SDeferredRenderingPipleline() {
+SDeferredRenderingPipeline::~SDeferredRenderingPipeline() {
     
     // Unload the gbuffer
     gbuffer->unload();
@@ -53,7 +64,7 @@ SDeferredRenderingPipleline::~SDeferredRenderingPipleline() {
 	
 }
 
-void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& camera, double interpolation) {
+void SDeferredRenderingPipeline::render(SSceneGraph& scene_graph, SCamera& camera, double interpolation) {
 	
 	// Extract the light graph from the scene graph
 	SLightGraph& light_graph = *scene_graph.light_graph;
@@ -110,7 +121,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
     /******************************************************************************
      * GBuffer and shadow atlas texture bind                                      *
      ******************************************************************************/
-    
+
     glActiveTexture(GL_TEXTURE0);
     gbuffer->bindTexture(GBUFFER_DEPTH);
     glActiveTexture(GL_TEXTURE1);
@@ -140,16 +151,6 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
     lit_shader->bind();
-    
-    // Bind the texture locations
-	lit_shader->bindTextureLocation("tex_depth", GBUFFER_DEPTH);
-	lit_shader->bindTextureLocation("tex_albedo", GBUFFER_ALBEDO);
-    lit_shader->bindTextureLocation("tex_normal", GBUFFER_NORMAL);
-	lit_shader->bindTextureLocation("tex_orm", GBUFFER_ORM);
-    lit_shader->bindTextureLocation("tex_cube", ENVIRONMENT_MAP);
-    lit_shader->bindTextureLocation("tex_shadow", SHADOW_ATLAS);
-	lit_shader->bindTextureLocation("tex_brdf", BRDF_INTEGRAL);
-	lit_shader->bindTextureLocation("tex_ssr", 9);
 	
     // Bind other uniforms needed for lighting
     lit_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
@@ -169,9 +170,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
 //	
 //	glm::vec2 start = (glm::vec2(b.projected_mins) + 1.0f) / 2.0f;
 //	glm::vec2 size = ((glm::vec2(b.projected_maxes) + 1.0f) / 2.0f) - start;
-//
-//	simple_shader->bind();
-//	SRenderSystem::bindBRDF(0);
+
 //
 //	glActiveTexture(GL_TEXTURE0 + GBUFFER_ALBEDO);
 //	final_framebuffer->bindTexture(0);
@@ -190,8 +189,7 @@ void SDeferredRenderingPipleline::render(SSceneGraph& scene_graph, SCamera& came
 //	r_shader->bindUniform(&inverse_proj_view, "inverse_proj_view", UNIFORM_MAT4, 1);
 //	r_shader->bindUniform(&projection_matrix_3D, "mat_proj", UNIFORM_MAT4, 1);
 //	r_shader->bindUniform(&projection_view_matrix, "mat_view_proj", UNIFORM_MAT4, 1);
-//	
-//	SGL::renderRect(glm::vec2(0.0), viewport_3D->screen_size);
+//
 //
     // Perform post-processing
 	runPostProcess(view_matrix, projection_matrix_3D, POST_RPOCESS_START);

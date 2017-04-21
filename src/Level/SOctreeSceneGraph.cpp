@@ -19,6 +19,8 @@ void SOctreeSceneGraph::linearizeObjects(std::vector<SObject*>& objects) {
 	
 }
 
+SObject* SOctreeSceneGraph::pickObject(const glm::vec3& origin, const glm::vec3& direction, float length) { return octree.pickObject(origin, direction, length); }
+
 void SOctreeSceneGraph::collectObjects(SCamera& camera, double interpolation, std::list<SSortedObject>& sorted_objects) {
 	
 	// Translate everytihng for view space BEFORE so we can perform frustrum and occlusion culling

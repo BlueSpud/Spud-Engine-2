@@ -148,3 +148,95 @@ void SBoundingBox::getOrientedPoints(glm::vec3* _points) const {
 	}
 
 }
+
+float SBoundingBox::rayTrace(const glm::vec3& origin, const glm::vec3& direction, float length) const {
+	
+	// First we do what we do in getOrientedPoints, however we cant use the function because we need the matrix
+	glm::vec4 points[8] = {
+		
+		glm::vec4(mins.x, mins.y, mins.z, 1.0),
+		glm::vec4(maxes.x, mins.y, mins.z, 1.0),
+		glm::vec4(maxes.x, maxes.y, mins.z, 1.0),
+		glm::vec4(mins.x, maxes.y, mins.z, 1.0),
+		glm::vec4(mins.x, mins.y, maxes.z, 1.0),
+		glm::vec4(maxes.x, mins.y, maxes.z, 1.0),
+		glm::vec4(maxes.x, maxes.y, maxes.z, 1.0),
+		glm::vec4(mins.x, maxes.y, maxes.z, 1.0)
+		
+	};
+	
+	
+	const glm::mat4 model_matrix = SGL::transformToMatrix(*transform);
+	glm::vec3 mins_p;
+	glm::vec3 maxes_p;
+	
+	// Project all the points
+	for (int i = 0; i < 8; i++) {
+		
+		points[i] = model_matrix * points[i];
+		
+		if (i == 0) {
+			
+			// If this is the first point, it is immidately the min and max
+			mins_p = (glm::vec3)points[i];
+			maxes_p = (glm::vec3)points[i];
+			
+		} else {
+			
+			// If this is a min or a max on any of the axises, save it
+			mins_p.x = glm::min(points[i].x, mins_p.x);
+			mins_p.y = glm::min(points[i].y, mins_p.y);
+			mins_p.z = glm::min(points[i].z, mins_p.z);
+			
+			maxes_p.x = glm::max(points[i].x, maxes_p.x);
+			maxes_p.y = glm::max(points[i].y, maxes_p.y);
+			maxes_p.z = glm::max(points[i].z, maxes_p.z);
+			
+		}
+		
+	}
+	
+	float time_min, time_max;
+	
+	// X direction
+	float time1 = (mins_p.x - origin.x) / direction.x;
+	float time2 = (maxes_p.x - origin.x) / direction.x;
+	
+	time_max = glm::max(time1, time2);
+	time_min = glm::min(time1, time2);
+	
+	// Y direction
+	time1 = (mins_p.y - origin.y) / direction.y;
+	time2 = (maxes_p.y - origin.y) / direction.y;
+	
+	time_max = glm::min(time_max, glm::max(time1, time2));
+	time_min = glm::max(time_min, glm::min(time1, time2));
+	
+	// Z direction
+	time1 = (mins_p.z - origin.z) / direction.z;
+	time2 = (maxes_p.z - origin.z) / direction.z;
+	
+	time_max = glm::min(time_max, glm::max(time1, time2));
+	time_min = glm::max(time_min, glm::min(time1, time2));
+	
+	// Check if there was an intersection
+	if (time_max >= time_min && time_min <= length) {
+		
+		if (time_min >= 0.0)
+			return time_min;
+		else {
+			
+			// Check if there was initial overlap
+			if (origin.x < maxes.x && origin.y < maxes.y && origin.z < maxes.z &&
+				origin.x > mins.x  && origin.y > mins.y  && origin.z > mins.z)
+				return time_max;
+			
+			
+		}
+		
+	}
+	
+	// No intersection
+	return -1.0;
+	
+}

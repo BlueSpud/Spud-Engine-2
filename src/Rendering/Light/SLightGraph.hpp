@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "SLight.hpp"
-#include "SShader.hpp"
+#include "Resource/Resources/Rendering/Shader/SShader.hpp"
 
 /******************************************************************************
  *  Definition for basic light graph                                          *

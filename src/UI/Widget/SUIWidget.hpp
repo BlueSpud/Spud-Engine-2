@@ -9,8 +9,8 @@
 #ifndef SUIWidget_hpp
 #define SUIWidget_hpp
 
-#include "SUI.hpp"
-#include "SInputSystem.hpp"
+#include "UI/SUI.hpp"
+#include "Event/Input/SInputSystem.hpp"
 
 /******************************************************************************
  *  Definition for generic ui widget                                          *

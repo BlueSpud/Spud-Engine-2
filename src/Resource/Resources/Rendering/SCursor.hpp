@@ -11,8 +11,8 @@
 
 #include <FreeImage.h>
 
-#include "SResourceManager.hpp"
-#include "SGL.hpp"
+#include "Resource/SResourceManager.hpp"
+#include "Rendering/SGL.hpp"
 
 /******************************************************************************
  *  Definition for cursor                                                     *

@@ -11,8 +11,8 @@
 
 #include <FreeImage.h>
 
-#include "STexture.hpp"
-#include "SRenderingPipeline.hpp"
+#include "Resource/Resources/Rendering/STexture.hpp"
+#include "Rendering/Pipeline/SRenderingPipeline.hpp"
 
 /******************************************************************************
  *  Definition for cube map upload                                            *

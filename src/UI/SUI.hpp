@@ -11,11 +11,11 @@
 
 #include <list>
 
-#include "STexture.hpp"
-#include "SShader.hpp"
-#include "SFramebuffer.hpp"
+#include "Resource/Resources/Rendering/STexture.hpp"
+#include "Resource/Resources/Rendering/Shader/SShader.hpp"
+#include "Rendering/Pipeline/SFramebuffer.hpp"
 
-#include "STextRenderer.hpp"
+#include "UI/Text/STextRenderer.hpp"
 
 // Forward declatations
 class SUIWidget;

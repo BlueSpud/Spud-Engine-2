@@ -16,7 +16,7 @@
 #include <vector>
 #include <list>
 
-#include "SLightGraph.hpp"
+#include "Rendering/Light/SLightGraph.hpp"
 
 // Forward declaration
 class SLevel;
@@ -73,6 +73,7 @@ class SSceneGraph {
 		}
 
 		virtual void linearizeObjects(std::vector<SObject*>& objects) = 0;
+		virtual SObject* pickObject(const glm::vec3& origin, const glm::vec3& direction, float length) = 0;
 	
         SPhysicsGraph* physics_graph;
 		SLightGraph* light_graph;
@@ -98,6 +99,7 @@ class SSimpleSceneGraph : public SSceneGraph {
     
         virtual ~SSimpleSceneGraph();
 		virtual void linearizeObjects(std::vector<SObject*>& objects);
+		virtual SObject* pickObject(const glm::vec3& origin, const glm::vec3& direction, float length);
 	
 	protected:
 	

@@ -9,9 +9,12 @@
 #ifndef SShader_hpp
 #define SShader_hpp
 
-#include "SResourceManager.hpp"
-#include "SGLUpload.hpp"
+#include "Resource/SResourceManager.hpp"
+#include "Resource/SGLUpload.hpp"
 #include "SUniform.hpp"
+
+// Forward declarations
+class SShader;
 
 /******************************************************************************
  *  Definition for shader upload                                              *
@@ -26,7 +29,8 @@ struct SShaderUpload : public SGLUpload {
     char* frag_string;
     
     GLuint* program_id;
-    
+	
+	SShader* shader;
     
 };
 
@@ -50,6 +54,7 @@ class SShader : public SResource {
 	
 	friend class SGbufferShader;
 	friend class SGbufferShaderHotload;
+	friend class SShaderUpload;
 	
     public:
     
@@ -75,7 +80,10 @@ class SShader : public SResource {
 	
     private:
 	
+		void preuploadUniform(void* value, const std::string& name, int type, int count);
+	
 		std::map<size_t, int> locations;
+		std::vector<SUniform> pre_upload_uniforms;
 	
         SFile* vert_file;
         SFile* frag_file;

@@ -23,8 +23,8 @@ SRenderingPipeline::SRenderingPipeline(SViewport* _viewport_2D, SViewport* _scre
     simple_shader = SResourceManager::getResource<SShader>(SPath("Shader/simple/simple_texture.glsl"));
     
     // Make the main framebuffer
-    std::vector<SFramebufferAttatchment*> attatchments;
-    attatchments.push_back(new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, 0));
+    std::vector<SFramebufferAttachment*> attatchments;
+    attatchments.push_back(new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RGBA, GL_RGBA, GL_UNSIGNED_INT, 0));
     final_framebuffer = new SFramebuffer(attatchments, viewport_2D->screen_size.x, viewport_2D->screen_size.y);
 	
 }
@@ -95,9 +95,14 @@ void SRenderingPipeline::runPostProcess(glm::mat4& view_matrix, glm::mat4& proje
     
     // For each post-processing pass, perform it
     // Actual process itself is reponsible for blending
-    for (int i = 0; i < post_process_passes.size(); i++)
+	for (int i = 0; i < post_process_passes.size(); i++) {
+		
+		// Clear the view matrix just in case
+		SGL::clearMatrix(MAT_VIEW);
         post_process_passes[i]->render(data);
-    
+		
+	}
+	
 }
 
 void SRenderingPipeline::addPostProcessPass(SPostProcessPass* pass) { post_process_passes.push_back(pass); }

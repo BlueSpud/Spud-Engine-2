@@ -9,8 +9,8 @@
 #ifndef SAnimation_hpp
 #define SAnimation_hpp
 
-#include "SResourceManager.hpp"
-#include "SGL.hpp"
+#include "Resource/SResourceManager.hpp"
+#include "Rendering/SGL.hpp"
 
 /******************************************************************************
  *  Definition for animation tweening					     			      *

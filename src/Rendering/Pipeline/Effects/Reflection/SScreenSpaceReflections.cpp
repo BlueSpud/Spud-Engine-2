@@ -14,13 +14,16 @@ SScreenSpaceReflectionPass::SScreenSpaceReflectionPass(glm::vec2 main_framebuffe
 	
 	// Get the reflection shader
 	reflection_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/reflections/deferred_reflections.glsl"));
+	reflection_shader->bindTextureLocation("tex_depth", GBUFFER_DEPTH);
+	reflection_shader->bindTextureLocation("tex_normal", GBUFFER_NORMAL);
+	
 	blur_shader = SResourceManager::getResource<SShader>(SPath("Shader/lighting/reflections/blur.glsl"));
 	
 	// Create the framebuffers
-	std::vector<SFramebufferAttatchment*> attatchments = { new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGBA, GL_UNSIGNED_INT, 0) };
+	std::vector<SFramebufferAttachment*> attatchments = { new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGBA, GL_UNSIGNED_INT, 0) };
 	reflection_buffer = new SFramebuffer(attatchments, main_framebuffer_size.x, main_framebuffer_size.y);
 	
-	attatchments = { new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGBA, GL_UNSIGNED_INT, 0) };
+	attatchments = { new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RGB, GL_RGBA, GL_UNSIGNED_INT, 0) };
 	blur_buffer = new SFramebuffer(attatchments, main_framebuffer_size.x, main_framebuffer_size.y);
 	
 	// Get the view pos
@@ -38,9 +41,6 @@ void SScreenSpaceReflectionPass::generateReflections(glm::mat4& projection_view_
 	
 	// Bind shader and texture locations
 	reflection_shader->bind();
-	
-	reflection_shader->bindTextureLocation("tex_depth", GBUFFER_DEPTH);
-	reflection_shader->bindTextureLocation("tex_normal", GBUFFER_NORMAL);
 	
 	// The rendered buffer needs to be bound
 	reflection_shader->bindTextureLocation("tex_albedo", POST_RPOCESS_START);

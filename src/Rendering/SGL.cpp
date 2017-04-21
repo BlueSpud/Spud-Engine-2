@@ -7,7 +7,7 @@
 //
 
 #include "SGL.hpp"
-#include "SShader.hpp"
+#include "Resource/Resources/Rendering/Shader/SShader.hpp"
 
 GLFWwindow* SGL::window;
 glm::mat4 SGL::matrices[3] = {glm::mat4(1.0), glm::mat4(1.0), glm::mat4(1.0)};
@@ -166,7 +166,7 @@ void SGL::createWindow() {
     if (!(window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Spud Engine 2", NULL, NULL))) {
         
         // For some reason we couldnt make the context, log it and then shutdown
-        SLog::verboseLog(SVerbosityLevel::Warning, "Failed to create an OpenGL context of at least version 3.2. Your GPU may not support this version of OpenGL, try updating your drivers");
+        SLog::verboseLog(SVerbosityLevel::Critical, "Failed to create an OpenGL context of at least version 3.2. Your GPU may not support this version of OpenGL, try updating your drivers");
         shutdown();
   
     }

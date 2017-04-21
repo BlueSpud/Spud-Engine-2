@@ -11,10 +11,10 @@
 
 #include <iostream>
 #include <math.h>
-#include "SSubsystem.hpp"
+#include "Engine/SSubsystem.hpp"
 
-#include "SGL.hpp"
-#include "SEventSystem.hpp"
+#include "Rendering/SGL.hpp"
+#include "Event/SEventSystem.hpp"
 
 #define TICKS_PER_SECOND 20
 

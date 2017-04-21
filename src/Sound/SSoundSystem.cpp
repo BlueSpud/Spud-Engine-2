@@ -7,7 +7,7 @@
 //
 
 #include "SSoundSystem.hpp"
-#include "SCamera.hpp"
+#include "Rendering/Utility/SCamera.hpp"
 
 ALCdevice* SSoundSystem::device;
 ALCcontext* SSoundSystem::context;

@@ -9,9 +9,9 @@
 #ifndef SSoundEmitter_hpp
 #define SSoundEmitter_hpp
 
-#include "SObject.hpp"
+#include "Rendering/Objects/SObject.hpp"
 
-#include "SSound.hpp"
+#include "Resource/Resources/Sound/SSound.hpp"
 #include "SSoundSystem.hpp"
 
 /******************************************************************************
@@ -36,10 +36,10 @@ class SSoundEmitter : public SObject {
     public:
     
         SSoundEmitter();
-        SSoundEmitter(SSound* _sound);
+        SSoundEmitter(std::shared_ptr<SSound> _sound);
         virtual ~SSoundEmitter();
     
-        void setSound(SSound* _sound);
+        void setSound(std::shared_ptr<SSound> _sound);
     
         virtual void render(double interpolation) { /* intentionally blank */ };
         virtual void update(const SEvent& event) { /* intentionally blank */ };
@@ -63,7 +63,7 @@ class SSoundEmitter : public SObject {
     
         bool playing = false;
         ALuint source;
-        SSound* sound;
+        std::shared_ptr<SSound> sound;
     
 };
 

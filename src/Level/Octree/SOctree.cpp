@@ -111,7 +111,7 @@ bool SOctreeNode::insert(SObject* object, glm::vec3* points) {
 			
 		}
 		
-		// If we get here it means this node was an acceptable node for the object but either the children couldnt fit it or we didnt have another level to have children
+		// If we get here it means this node was an acceptable fit for the object but either the children couldnt fit it or we didnt have another level to have children
 		objects.push_back(object);
 		return true;
 		
@@ -285,6 +285,60 @@ void SOctreeNode::purge() {
 	
 }
 
+void SOctreeNode::pickObject(const glm::vec3& origin, const glm::vec3& direction, float length, float& closest, SObject*& object) {
+	
+	// Make sure that the ray intersects us, we use a simplified version of the bounding box raycase because this is axis-aligned
+	glm::vec3 maxes_p = glm::vec3(center + radius);
+	glm::vec3 mins_p = glm::vec3(center - radius);
+	
+	float time_min, time_max;
+	
+	// X direction
+	float time1 = (mins_p.x - origin.x) / direction.x;
+	float time2 = (maxes_p.x - origin.x) / direction.x;
+	
+	time_max = glm::max(time1, time2);
+	time_min = glm::min(time1, time2);
+	
+	// Y direction
+	time1 = (mins_p.y - origin.y) / direction.y;
+	time2 = (maxes_p.y - origin.y) / direction.y;
+	
+	time_max = glm::min(time_max, glm::max(time1, time2));
+	time_min = glm::max(time_min, glm::min(time1, time2));
+	
+	// Z direction
+	time1 = (mins_p.z - origin.z) / direction.z;
+	time2 = (maxes_p.z - origin.z) / direction.z;
+	
+	time_max = glm::min(time_max, glm::max(time1, time2));
+	time_min = glm::max(time_min, glm::min(time1, time2));
+	
+	// Check if there was an intersection
+	if (time_max >= time_min && time_min <= length) {
+		
+		// First we check all of the objects inside this node
+		for (std::list<SObject*>::iterator i = this->objects.begin(); i != this->objects.end(); i++) {
+		
+			float distance = (*i)->getBoundingBox().rayTrace(origin, direction, length);
+			if (distance < closest && distance != -1.0) {
+			
+				closest = distance;
+				object = *i;
+				
+			}
+			
+		}
+		
+		// If we have children, do the raycast on them as well
+		if (has_children)
+			for (int i = 0; i < 8; i++)
+				children[i]->pickObject(origin, direction, length, closest, object);
+		
+	}
+	
+}
+
 /******************************************************************************
  *  Implementation for Octree                                                 *
  ******************************************************************************/
@@ -368,6 +422,31 @@ void SOctree::linearizeObjects(std::vector<SObject*>& objects) {
 	
 	// Collect the objects from the root node
 	root_node.linearizeObjects(objects);
+	
+}
+
+SObject* SOctree::pickObject(const glm::vec3& origin, const glm::vec3& direction, float length) {
+	
+	SObject* object = nullptr;
+	float distance = std::numeric_limits<float>::max();
+	
+	// Recursively go through the tree
+	root_node.pickObject(origin, direction, length, distance, object);
+	
+	// Check excess
+	for (std::list<SObject*>::iterator i = excess.begin(); i != excess.end(); i++) {
+	
+		float distance_new = (*i)->getBoundingBox().rayTrace(origin, direction, length);
+		if (distance_new < distance && distance_new != -1.0) {
+			
+			distance = distance_new;
+			object = *i;
+			
+		}
+		
+	}
+	
+	return object;
 	
 }
 

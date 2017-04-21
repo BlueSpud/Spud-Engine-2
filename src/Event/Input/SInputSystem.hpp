@@ -9,8 +9,8 @@
 #ifndef SInputSystem_hpp
 #define SInputSystem_hpp
 
-#include "SEventSystem.hpp"
-#include "SUI.hpp"
+#include "Event/SEventSystem.hpp"
+#include "UI/SUI.hpp"
 
 #define INPUT_ACTION_DOWN GLFW_PRESS
 #define INPUT_ACTION_REPEAT GLFW_REPEAT
@@ -53,8 +53,8 @@ class SInputListener {
     
     protected:
     
-        std::map<int, boost::function<void(int)>>down_funcs;
-        std::map<int, boost::function<void(int)>>up_funcs;
+        std::map<int, boost::function<void(int)> >down_funcs;
+        std::map<int, boost::function<void(int)> >up_funcs;
     
         virtual void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     

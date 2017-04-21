@@ -9,7 +9,7 @@
 #ifndef SOctree_hpp
 #define SOctree_hpp
 
-#include "SObject.hpp"
+#include "Rendering/Objects/SObject.hpp"
 
 #define OCTREE_MAX_LEVELS 12
 
@@ -37,6 +37,7 @@ struct SOctreeNode {
 	bool remove(SObject* object, glm::vec3* points);
 	void collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects);
 	void linearizeObjects(std::vector<SObject*>& objects);
+	void pickObject(const glm::vec3& origin, const glm::vec3& direction, float length, float& closest, SObject*& object);
 	
 	void update(SOctree& parent_octree);
 	void purge();
@@ -56,6 +57,7 @@ class SOctree {
 		void remove(SObject* object);
 		void collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects);
 		void linearizeObjects(std::vector<SObject*>& objects);
+		SObject* pickObject(const glm::vec3& origin, const glm::vec3& direction, float length);
 	
 		void update(const SEvent& event);
 		void purge();

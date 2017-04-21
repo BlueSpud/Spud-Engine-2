@@ -7,8 +7,8 @@
 //
 
 #include "SUI.hpp"
-#include "SUIWidget.hpp"
-#include "SConsole.hpp"
+#include "UI/Widget/SUIWidget.hpp"
+#include "UI/Console/SConsole.hpp"
 
 std::shared_ptr<SShader> SUI::simple_shader_color;
 std::shared_ptr<SShader> SUI::simple_shader_texture;
@@ -45,7 +45,7 @@ void SUIGraph::removeWidget(SUIWidget* widget) {
 }
 
 void SUIGraph::render(double interpolation) {
-    
+	
     // Go through all of the widgets and render them to the screen
     for (std::list<SUIWidget*>::iterator i = widgets.begin(); i != widgets.end(); i++)
         (*i)->render(interpolation);

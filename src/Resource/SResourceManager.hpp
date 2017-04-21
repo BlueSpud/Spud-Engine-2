@@ -15,7 +15,7 @@
 #include <map>
 #include <memory.h>
 
-#include "SFileSystem.hpp"
+#include "File/SFileSystem.hpp"
 
 // Forward declarations
 class SResourceManager;
@@ -58,7 +58,7 @@ class SResourceAllocatorManger {
     
     public:
     
-        std::map<std::string, std::vector<std::string>> supported_extensions;
+        std::map<std::string, std::vector<std::string> > supported_extensions;
         bool registerClassForExtension(const std::string& class_name, const std::string& extension);
     
         static SResourceAllocatorManger* instance();
@@ -90,7 +90,7 @@ class SResourceManager : public SSubsystem {
     
         static long getModifiedTimeForFileAtPath(const char* path);
     
-		static std::map<size_t, std::shared_ptr<SResource>>loaded_resources;
+		static std::map<size_t, std::shared_ptr<SResource> >loaded_resources;
 		static void purge();
 	
 };

@@ -9,11 +9,11 @@
 #ifndef SStaticMeshInstance_hpp
 #define SStaticMeshInstance_hpp
 
-#include "SModel.hpp"
-#include "SObject.hpp"
-#include "SBoundingBox.hpp"
+#include "Resource/Resources/Rendering/SModel.hpp"
+#include "Rendering/Objects/SObject.hpp"
+#include "Rendering/Utility/SBoundingBox.hpp"
 
-#include "SRigidBody.hpp"
+#include "Physics/SRigidBody.hpp"
 
 /******************************************************************************
  *  Definition for static mesh                                                *

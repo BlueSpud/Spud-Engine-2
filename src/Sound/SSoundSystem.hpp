@@ -12,8 +12,8 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
-#include "SEventSystem.hpp"
-#include "SGL.hpp"
+#include "Event/SEventSystem.hpp"
+#include "Rendering/SGL.hpp"
 
 /******************************************************************************
  *  Definition for sound events                                               *

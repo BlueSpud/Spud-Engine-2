@@ -9,7 +9,7 @@
 #ifndef SSkinnedModel_hpp
 #define SSkinnedModel_hpp
 
-#include "SModel.hpp"
+#include "Resource/Resources/Rendering/SModel.hpp"
 
 /******************************************************************************
  *  Definition for bone														  *

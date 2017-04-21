@@ -9,14 +9,14 @@
 #ifndef SMainLoop_hpp
 #define SMainLoop_hpp
 
-#include "SRenderSystem.hpp"
-#include "SUI.hpp"
-#include "SPhysicsSystem.hpp"
-#include "SSoundSystem.hpp"
+#include "Rendering/SRenderSystem.hpp"
+#include "UI/SUI.hpp"
+#include "Physics/SPhysicsSystem.hpp"
+#include "Sound/SSoundSystem.hpp"
 
-#include "SInputSystem.hpp"
+#include "Event/Input/SInputSystem.hpp"
 
-#include "STime.hpp"
+#include "Engine/Utility/STime.hpp"
 
 #define MAX_UPDATES_BEFORE_RENDER 5
 

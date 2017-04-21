@@ -9,8 +9,8 @@
 #ifndef SCamera_hpp
 #define SCamera_hpp
 
-#include "SUniform.hpp"
-#include "SGL.hpp"
+#include "Resource/Resources/Rendering/Shader/SUniform.hpp"
+#include "Rendering/SGL.hpp"
 
 /******************************************************************************
  *  Definition for camera                                                     *

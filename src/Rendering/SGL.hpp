@@ -20,8 +20,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "SSubsystem.hpp"
-#include "SSerialization.hpp"
+#include "Engine/SSubsystem.hpp"
+#include "Level/SSerialization.hpp"
 
 #define WINDOW_WIDTH 1440
 #define WINDOW_HEIGHT 900

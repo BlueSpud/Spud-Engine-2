@@ -9,11 +9,11 @@
 #ifndef SObject_hpp
 #define SObject_hpp
 
-#include "SEventSystem.hpp"
-#include "SGbufferShader.hpp"
+#include "Event/SEventSystem.hpp"
+#include "Resource/Resources/Rendering/Shader/Gbuffer/SGbufferShader.hpp"
 
-#include "SPhysicsSystem.hpp"
-#include "SBoundingBox.hpp"
+#include "Physics/SPhysicsSystem.hpp"
+#include "Rendering/Utility/SBoundingBox.hpp"
 
 /******************************************************************************
  *  Definition for generic renderable object                                  *

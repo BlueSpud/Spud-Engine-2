@@ -18,7 +18,7 @@
 #include <dirent.h>
 #include <unistd.h>
 
-#include "SSubsystem.hpp"
+#include "Engine/SSubsystem.hpp"
 
 // Forward declarations
 class SFile;

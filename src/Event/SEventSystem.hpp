@@ -13,7 +13,7 @@
 #include <map>
 #include <boost/signals2.hpp>
 
-#include "SSubsystem.hpp"
+#include "Engine/SSubsystem.hpp"
 #include "SEvents.h"
 
 /******************************************************************************
@@ -54,7 +54,7 @@ class SEventSystem : public SSubsystem {
     
         static boost::signals2::connection listenToEvent(int event, const boost::function<void(const SEvent&)>& function);
     
-        static std::map<int, boost::signals2::signal<void(const SEvent&)>>signals;
+        static std::map<int, boost::signals2::signal<void(const SEvent&)> >signals;
         static boost::signals2::signal<void(const SEvent&)>& getSignalForEvent(int event);
     
     protected:

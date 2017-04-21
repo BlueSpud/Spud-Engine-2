@@ -57,6 +57,8 @@ class SLevelManager {
 		static void saveLevel(const SPath& path);
 		static void createLevel();
 	
+		static SObject* pickObject(const glm::vec3& origin, const glm::vec3& direction, float length);
+	
 	private:
 	
 		static void loadLevelThreaded(const SPath& path);

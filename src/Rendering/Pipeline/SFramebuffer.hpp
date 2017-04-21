@@ -11,7 +11,7 @@
 
 #include <vector>
 
-#include "STexture.hpp"
+#include "Resource/Resources/Rendering/STexture.hpp"
 
 /******************************************************************************
  *  Definition for framebuffer attatchment                                    *
@@ -20,9 +20,9 @@
 #define FRAMEBUFFER_COLOR 0
 #define FRAMEBUFFER_DEPTH 1
 
-struct SFramebufferAttatchment {
+struct SFramebufferAttachment {
     
-    int attatchment_kind, basic_format;
+    int attachment_kind, basic_format;
     int storage_type, id;
     int internal_format;
     
@@ -38,9 +38,9 @@ struct SFramebufferAttatchment {
      *                                                                                                 *
      ***************************************************************************************************/
     
-    SFramebufferAttatchment(int _attatchment_kind, int _internal_format, int _basic_format, int _storage_type, int _id) {
+    SFramebufferAttachment(int _attachment_kind, int _internal_format, int _basic_format, int _storage_type, int _id) {
         
-        attatchment_kind = _attatchment_kind;
+        attachment_kind = _attachment_kind;
         internal_format = _internal_format;
         basic_format = _basic_format;
         storage_type = _storage_type;
@@ -63,9 +63,10 @@ struct SFramebufferUpload : public SGLUpload {
     unsigned int height;
     
     GLuint* framebuffer_id;
-    std::vector<SFramebufferAttatchment*> attatchments; 
+    std::vector<SFramebufferAttachment*> attachments;
     
     GLenum** buffers_to_render;
+    int* attachment_count;
 
 };
 
@@ -94,7 +95,7 @@ class SFramebuffer {
     public:
     
         // Default constructor should never be called
-        SFramebuffer(std::vector<SFramebufferAttatchment*> attatchments, unsigned int _width, unsigned int _height);
+        SFramebuffer(std::vector<SFramebufferAttachment*> attachments, unsigned int _width, unsigned int _height);
         void unload();
     
         void bind();
@@ -109,6 +110,7 @@ class SFramebuffer {
     
         GLuint framebuffer_id;
         std::map<int, GLuint> textures;
+        int attachment_count = 0;
     
         SFramebufferUpload* upload;
     

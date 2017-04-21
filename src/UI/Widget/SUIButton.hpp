@@ -10,7 +10,7 @@
 #define SUIButton_hpp
 
 #include "SUIWidget.hpp"
-#include "SSoundEmitter.hpp"
+#include "Sound/SSoundEmitter.hpp"
 
 /******************************************************************************
  *  Definition for simple button widget                                       *
@@ -31,9 +31,9 @@ class SUIButton : public SUIWidget {
         std::shared_ptr<STexture> background_image;
         std::shared_ptr<STexture> hover_image;
         std::shared_ptr<STexture> press_image;
-    
-        SSound* hover_sound;
-        SSound* press_sound;
+
+        std::shared_ptr<SSound> hover_sound;
+        std::shared_ptr<SSound> press_sound;
     
         boost::function<void(int)> action;
     

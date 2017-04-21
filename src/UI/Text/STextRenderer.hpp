@@ -9,9 +9,9 @@
 #ifndef STextRenderer_hpp
 #define STextRenderer_hpp
 
-#include "SSubsystem.hpp"
+#include "Engine/SSubsystem.hpp"
 #include "SFont.hpp"
-#include "SShader.hpp"
+#include "Resource/Resources/Rendering/Shader/SShader.hpp"
 
 #define CURSOR_WIDTH 1.0f
 

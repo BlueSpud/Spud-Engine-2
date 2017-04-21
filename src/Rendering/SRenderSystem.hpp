@@ -9,9 +9,8 @@
 #ifndef SRenderSystem_hpp
 #define SRenderSystem_hpp
 
-#include "SSubsystem.hpp"
-
-#include "SCubeMap.hpp"
+#include "Engine/SSubsystem.hpp"
+#include "Resource/Resources/Rendering/SCubeMap.hpp"
 
 /******************************************************************************
  *  Definition for the render system                                          *

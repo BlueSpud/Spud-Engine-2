@@ -9,8 +9,8 @@
 #ifndef SFont_hpp
 #define SFont_hpp
 
-#include "SResourceManager.hpp"
-#include "STexture.hpp"
+#include "Resource/SResourceManager.hpp"
+#include "Resource/Resources/Rendering/STexture.hpp"
 
 // Forward declarations
 class STextRenderer;

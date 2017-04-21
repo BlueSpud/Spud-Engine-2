@@ -9,9 +9,9 @@
 #ifndef SSerialization_hpp
 #define SSerialization_hpp
 
-#include "SLog.hpp"
+#include "Debug/SLog.hpp"
 #include "SLevelFactory.hpp"
-#include "SResourceManager.hpp"
+#include "Resource/SResourceManager.hpp"
 
 /******************************************************************************
  *  Definition for serializer que items									      *
@@ -93,7 +93,7 @@ class SSerializer {
 		
 			// Create a new queue node to hold this item and add it
 			SSerializerQueueItemDerrived<T>* storage = new SSerializerQueueItemDerrived<T>(item);
-			item_queue.emplace_back(storage);
+			item_queue.push_back(storage);
 			size = size + storage->getSize();
 		
 		}
@@ -105,7 +105,7 @@ class SSerializer {
 			SSerializerQueueItemStorage<T>* storage = new SSerializerQueueItemStorage<T>();
 			storage->value = value;
 		
-			item_queue.emplace_back(storage);
+			item_queue.push_back(storage);
 			size = size + storage->getSize();
 		
 		}
@@ -117,7 +117,7 @@ class SSerializer {
 			SSerializerQueueItemStorage<size_t>* class_storage = new SSerializerQueueItemStorage<size_t>();
 			class_storage->value = SLevelFactory::getClassHash<T>();
 			
-			item_queue.emplace_back(class_storage);
+			item_queue.push_back(class_storage);
 			size = size + class_storage->getSize();
 		
 		}
@@ -158,7 +158,7 @@ class SDeserializer {
 				// Add offset
 				offset = offset + sizeof(T);
 				
-			} else SLog::verboseLog(SVerbosityLevel::Critical, "Did not have enough data to serialize object\n");
+			} else SLog::verboseLog(Critical, "Did not have enough data to serialize object\n");
 		
 		}
 	

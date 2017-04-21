@@ -9,11 +9,11 @@
 #ifndef SSkinnedMesh_hpp
 #define SSkinnedMesh_hpp
 
-#include "SSkinnedModel.hpp"
+#include "Resource/Resources/Rendering/Skinned Mesh/SSkinnedModel.hpp"
 #include "SAnimation.hpp"
-#include "STime.hpp"
+#include "Engine/Utility/STime.hpp"
 
-#include "SObject.hpp"
+#include "Rendering/Objects/SObject.hpp"
 
 /******************************************************************************
  *  Definition for skinned mesh                                               *

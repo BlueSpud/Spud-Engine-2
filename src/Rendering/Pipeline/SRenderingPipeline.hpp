@@ -9,9 +9,9 @@
 #ifndef SRenderingPipeline_hpp
 #define SRenderingPipeline_hpp
 
-#include "SSceneGraph.hpp"
-#include "SLightGraph.hpp"
-#include "SShader.hpp"
+#include "Rendering/Scene Graph/SSceneGraph.hpp"
+#include "Rendering/Light/SLightGraph.hpp"
+#include "Resource/Resources/Rendering/Shader/SShader.hpp"
 
 /******************************************************************************
  *  Definition for post-process pass                                          *

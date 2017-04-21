@@ -13,8 +13,8 @@
 
 #include <PxPhysicsAPI.h>
 
-#include "SEventSystem.hpp"
-#include "SGL.hpp"
+#include "Event/SEventSystem.hpp"
+#include "Rendering/SGL.hpp"
 
 // Forward declarations
 class SPhysicsGraph;

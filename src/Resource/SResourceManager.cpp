@@ -25,7 +25,7 @@ size_t SResource::getHash() const { return hash; }
 
 SResourceAllocatorManger* SResourceAllocatorManger::instance() {
     
-    // Return a static instace of the manager
+    // Return a static instance of the manager
     static SResourceAllocatorManger* _instance = NULL;
     if (_instance == NULL)
         _instance = new SResourceAllocatorManger();
@@ -100,7 +100,7 @@ void SResourceManager::purge() {
 	
 		removed = false;
 		
-		// Itterate through all of the resources and check if they need to be unloaded
+		// Iterate through all of the resources and check if they need to be unloaded
 		std::map<size_t, std::shared_ptr<SResource>>::iterator i = loaded_resources.begin();
 	
 		while (i != loaded_resources.end()) {

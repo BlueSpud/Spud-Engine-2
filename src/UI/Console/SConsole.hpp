@@ -9,7 +9,7 @@
 #ifndef SConsole_hpp
 #define SConsole_hpp
 
-#include "SUITextField.hpp"
+#include "UI/Widget/SUITextField.hpp"
 
 #define CONSOLE_FONT_SIZE 15.0f
 #define CONSOLE_INDENT 7.5f

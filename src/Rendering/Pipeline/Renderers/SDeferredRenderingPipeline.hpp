@@ -9,24 +9,24 @@
 #ifndef SDeferredPipeline_hpp
 #define SDeferredPipeline_hpp
 
-#include "SRenderingPipeline.hpp"
+#include "Rendering/Pipeline/SRenderingPipeline.hpp"
 #include "GBuffer.h"
-#include "SCubeMap.hpp"
-#include "SAmbientOcclusionPass.hpp"
-#include "SScreenSpaceReflections.hpp"
+#include "Resource/Resources/Rendering/SCubeMap.hpp"
+#include "Rendering/Pipeline/Effects/AO/SAmbientOcclusionPass.hpp"
+#include "Rendering/Pipeline/Effects/Reflection/SScreenSpaceReflections.hpp"
 
-#include "SDeferredTileController.hpp"
+#include "Rendering/Light/SDeferredTileController.hpp"
 
 /******************************************************************************
  *  Definition for deferred rendering pipeline                                *
  ******************************************************************************/
 
-class SDeferredRenderingPipleline : public SRenderingPipeline {
+class SDeferredRenderingPipeline : public SRenderingPipeline {
     
     public:
     
-        SDeferredRenderingPipleline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D);
-        virtual ~SDeferredRenderingPipleline();
+        SDeferredRenderingPipeline(SViewport* _viewport_2D, SViewport* _screen_viewport, SViewport3D* _viewport_3D);
+        virtual ~SDeferredRenderingPipeline();
     
         virtual void render(SSceneGraph& scene_graph, SCamera& camera, double interpolation);
 	

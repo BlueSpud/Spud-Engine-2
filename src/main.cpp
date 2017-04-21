@@ -2,30 +2,29 @@
 //  main.cpp
 //  GLFW Test
 //
-//  Creatsed by Logan Pazol on 8/16/16.
+//  Created by Logan Pazol on 8/16/16.
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
 #include "SMainLoop.hpp"
-#include "SDeferredRenderingPipeline.hpp"
-#include "SHotLoadSystem.hpp"
+#include "Rendering/Pipeline/Renderers/SDeferredRenderingPipeline.hpp"
+#include "Resource/SHotLoadSystem.hpp"
 
-#include "SConsole.hpp"
-#include "SUIButton.hpp"
-#include "SCursor.hpp"
+#include "UI/Console/SConsole.hpp"
+#include "UI/Widget/SUIButton.hpp"
+#include "Resource/Resources/Rendering/SCursor.hpp"
 
-#include "SActor.hpp"
-#include "SStaticMeshComponent.hpp"
+#include "Resource/Resources/Rendering/Static Mesh/SStaticMesh.hpp"
 
-#include "SSoundSystem.hpp"
-#include "SSoundEmitter.hpp"
+#include "Sound/SSoundSystem.hpp"
+#include "Sound/SSoundEmitter.hpp"
 
-#include "SCharacterController.hpp"
+#include "Physics/SCharacterController.hpp"
 
-#include "SSkinnedMesh.hpp"
-#include "SAnimation.hpp"
+#include "Resource/Resources/Rendering/SSkinnedMesh.hpp"
+#include "Resource/Resources/Rendering/SAnimation.hpp"
 
-#include "SLevel.hpp"
+#include "Level/SLevel.hpp"
 
 double speed = 0.0;
 double speed_x = 0.0;
@@ -34,6 +33,7 @@ SCamera camera;
 SLight* light;
 SSoundEmitter* sound_emitter;
 SCharacterController* controller;
+SObject* picked;
 
 void hello(const std::vector<std::string>& args) {
     
@@ -129,6 +129,8 @@ void keyPress(int key) {
     
 			//if (controller->isOnGround())
 			//	    controller->jump();
+			if (picked)
+				picked->setTranslation(camera.transform.translation);
 			
         break;
 
@@ -170,8 +172,8 @@ void mouseClick(int button) {
 void mouseMove(glm::vec2 mouse_vel) {
     
     // Add rotation to the camera
-    camera.transform.rotation_velocity.y = mouse_vel.x * 0.01;
-    camera.transform.rotation_velocity.x = -mouse_vel.y * 0.005;
+    camera.transform.rotation_velocity.y = (float)(mouse_vel.x * 0.01);
+    camera.transform.rotation_velocity.x = (float)(-mouse_vel.y * 0.005);
     
 }
 
@@ -205,7 +207,9 @@ void update(const SEvent& event) {
 		//controller->setMoveDirection(glm::vec3(0.0));
 		
 	}
-    
+	
+	picked = SLevelManager::pickObject(camera.transform.translation, camera.transform.getForwardVector(0.0), 100.0);
+	
 }
 
 int main(int argc, char* argv[]) {
@@ -249,12 +253,12 @@ int main(int argc, char* argv[]) {
 	camera.transform.translation.y = 2.0;
     SCamera::current_camera = &camera;
 	
-//    SSound* sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
-//    sound_emitter = new SSoundEmitter();
-//    sound_emitter->setSound(sound);
-//    sound_emitter->play();
-//    sound_emitter->setLoops(true);
-//    sound_emitter->transform.translation = camera.transform.translation;
+    std::shared_ptr<SSound> sound = SResourceManager::getResource<SSound>(SPath("Sound/Birds.wav"));
+    sound_emitter = new SSoundEmitter();
+    sound_emitter->setSound(sound);
+    sound_emitter->play();
+    sound_emitter->setLoops(true);
+    sound_emitter->setTranslation(camera.transform.translation);
 	
 	// Access the level
 	SLevelManager::loadLevel(SPath("Level/test.slevel"));
@@ -283,14 +287,14 @@ int main(int argc, char* argv[]) {
 	SViewport screen_viewport = SViewport(window_framebuffer_size, glm::vec2(0.0));
     SViewport3D viewport_3D = SViewport3D(window_framebuffer_size / (int)SGL::getScreenScale(), glm::vec2(0.0), 45.0f, glm::vec2(0.1, 500.0));
 
-	SDeferredRenderingPipleline* deferred = new SDeferredRenderingPipleline(&viewport_2D, &screen_viewport, &viewport_3D);
+	SDeferredRenderingPipeline* deferred = new SDeferredRenderingPipeline(&viewport_2D, &screen_viewport, &viewport_3D);
 	SRenderSystem::rendering_pipeline = deferred;
 	
 //	SViewport viewport_2D_c = SViewport(glm::vec2(1024.0), glm::vec2(0.0));
 //	SViewport screen_viewport_c = SViewport(glm::vec2(1024.0), glm::vec2(0.0));
 //	SViewport3D viewport_3D_c = SViewport3D(glm::vec2(1024.0), glm::vec2(0.0), M_PI_2, glm::vec2(0.1, 500.0));
 //	
-//	SRenderSystem::cubemap_pipeline = new SDeferredRenderingPipleline(&viewport_2D_c, &screen_viewport_c, &viewport_3D_c);
+//	SRenderSystem::cubemap_pipeline = new SDeferredRenderingPipeline(&viewport_2D_c, &screen_viewport_c, &viewport_3D_c);
 	
 
     SInputListener listener;
@@ -310,6 +314,7 @@ int main(int argc, char* argv[]) {
     listener.bind(&mouseClick, GLFW_MOUSE_BUTTON_LEFT, INPUT_ACTION_DOWN);
     listener.bind(&mouseClick, GLFW_MOUSE_BUTTON_RIGHT, INPUT_ACTION_DOWN);
     listener.mouse_move_func = mouseMove;
+
     
     listener.setHasFocus();
     

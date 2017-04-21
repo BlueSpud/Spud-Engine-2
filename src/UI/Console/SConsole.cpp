@@ -92,7 +92,10 @@ void SConsole::render() {
     
     // If the console is not active, then we show nothing
     if (console_active) {
-    
+		
+		// Clear the view matrix just in case
+		SGL::clearMatrix(MAT_VIEW);
+		
         // First render an entirely black quad
         SUI::renderRect(consoleFrame, glm::vec4(0.0, 0.0, 0.0, 1.0));
         

@@ -9,9 +9,9 @@
 #ifndef SLight_hpp
 #define SLight_hpp
 
-#include "SFramebuffer.hpp"
-#include "SObject.hpp"
-#include "SCamera.hpp"
+#include "Rendering/Pipeline/SFramebuffer.hpp"
+#include "Rendering/Objects/SObject.hpp"
+#include "Rendering/Utility/SCamera.hpp"
 #include "SLightingConstants.h"
 
 // Forward declarations

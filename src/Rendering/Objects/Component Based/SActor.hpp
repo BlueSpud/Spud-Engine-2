@@ -9,8 +9,8 @@
 #ifndef SActor_hpp
 #define SActor_hpp
 
-#include "SObject.hpp"
-#include "SComponent.hpp"
+#include "Rendering/Objects/SObject.hpp"
+#include "Rendering/Objects/Component Based/SComponent.hpp"
 
 /******************************************************************************
  *  Definition for actor                                                      *

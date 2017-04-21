@@ -24,16 +24,20 @@ SLightGraph::SLightGraph() {
 		shadow_blur_shader_h = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow/blur_h.glsl"));
 		shadow_blur_shader_v = SResourceManager::getResource<SShader>(SPath("Shader/lighting/shadow/blur_v.glsl"));
 		
-		std::vector<SFramebufferAttatchment*> attatchments = {new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 0)};
+		// Upload the size of the blur, this is half of the resolution of a single shadow map tile
+		int shadow_map_tile_size = SHADOW_MAP_ATLAS_TILE_SIZE / 2.0;
+		shadow_blur_shader_v->bindUniform(&shadow_map_tile_size, "tile_size", UNIFORM_INT, 1);
+		
+		std::vector<SFramebufferAttachment*> attatchments = {new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 0)};
 		intermediate_blur_buffer = new SFramebuffer(attatchments, SHADOW_MAP_ATLAS_TILE_SIZE / 2.0, SHADOW_MAP_ATLAS_TILE_SIZE / 2.0);
 		
 	}
 	
     // Create a massive framebuffer for a bunch of shadow maps
-    std::vector<SFramebufferAttatchment*> attatchments = {
+    std::vector<SFramebufferAttachment*> attatchments = {
 		
-			new SFramebufferAttatchment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0),
-			new SFramebufferAttatchment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 1)
+			new SFramebufferAttachment(FRAMEBUFFER_DEPTH, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 0),
+			new SFramebufferAttachment(FRAMEBUFFER_COLOR, GL_RG32F, GL_RG, GL_FLOAT, 1)
 	};
 	
     shadow_map_buffer = new SFramebuffer(attatchments, SHADOW_MAP_ATLAS_SIZE, SHADOW_MAP_ATLAS_SIZE);
@@ -86,10 +90,6 @@ void SLightGraph::blurLightTile(glm::ivec2& tile) {
 	
 	// Bind the vertical blur shader
 	shadow_blur_shader_v->bind();
-	
-	// Upload the size of the blur, this is half of the resolution of a single shadow map tile
-	int shadow_map_tile_size = SHADOW_MAP_ATLAS_TILE_SIZE / 2.0;
-	shadow_blur_shader_v->bindUniform(&shadow_map_tile_size, "tile_size", UNIFORM_INT, 1);
 	
 	// Rebind the shadow map atlas so the new, fully blurred shadow map can be put back
 	shadow_map_buffer->bind();

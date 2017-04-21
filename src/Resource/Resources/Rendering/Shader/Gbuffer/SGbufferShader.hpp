@@ -9,7 +9,7 @@
 #ifndef SGbufferShader_hpp
 #define SGbufferShader_hpp
 
-#include "SShader.hpp"
+#include "Resource/Resources/Rendering/Shader/SShader.hpp"
 
 // Forward declarations
 class SGbufferShader;

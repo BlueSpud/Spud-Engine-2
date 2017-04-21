@@ -6,7 +6,7 @@
 //  Copyright © 2016 Logan Pazol. All rights reserved.
 //
 
-#include "SSceneGraph.hpp"
+#include "Rendering/Scene Graph/SSceneGraph.hpp"
 
 glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
                                    0.0, 0.5, 0.0, 0.0,

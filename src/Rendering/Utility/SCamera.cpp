@@ -105,3 +105,4 @@ glm::vec3* SCamera::getFrustumWithPlanes(glm::mat4& projection_matrix, glm::mat4
 
     return frustrum_corners;
 }
+
