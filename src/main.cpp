@@ -25,6 +25,7 @@
 #include "Resource/Resources/Rendering/SAnimation.hpp"
 
 #include "Level/SLevel.hpp"
+#include "Rendering/Light/Reflections/SReflectionProbe.hpp"
 
 double speed = 0.0;
 double speed_x = 0.0;
@@ -208,7 +209,7 @@ void update(const SEvent& event) {
 		
 	}
 	
-	picked = SLevelManager::pickObject(camera.transform.translation, camera.transform.getForwardVector(0.0), 100.0);
+	picked = SLevelManager::getObjectWithId(3);
 	
 }
 

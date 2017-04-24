@@ -26,6 +26,7 @@ class SOctreeSceneGraph : public SSceneGraph {
 	
 		virtual void linearizeObjects(std::vector<SObject*>& objects);
 		virtual SObject* pickObject(const glm::vec3& origin, const glm::vec3& direction, float length);
+		SObject* getObjectWithId(unsigned int id);
 	
 	protected:
 	

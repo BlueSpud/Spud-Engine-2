@@ -59,6 +59,6 @@ void main() {
 		
 	}
 	
-	blurred = vec3(mix(sum / weight_total, main, clamp(unpacked_zm * 20.0, 0.0, 1.0)), main_sample.g, main_sample.b);
+	blurred = vec3(mix(sum / weight_total, main, clamp(unpacked_zm * 25.0, 0.0, 1.0)), main_sample.g, main_sample.b);
     
 }

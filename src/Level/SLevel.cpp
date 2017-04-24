@@ -266,3 +266,13 @@ SObject* SLevelManager::pickObject(const glm::vec3& origin, const glm::vec3& dir
 	return nullptr;
 	
 }
+
+SObject* SLevelManager::getObjectWithId(unsigned int id) {
+
+	// If we have a level grab from the level
+	if (current_level)
+		return current_level->scene_graph->getObjectWithId(id);
+
+	return nullptr;
+
+}

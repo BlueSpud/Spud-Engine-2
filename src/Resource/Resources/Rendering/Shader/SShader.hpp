@@ -70,6 +70,7 @@ class SShader : public SResource {
     
         virtual bool load(const SPath& path);
         virtual void unload();
+        void unload(bool preuploads);
         virtual void hotload(const SPath& path);
     
         bool force_rebind = false;

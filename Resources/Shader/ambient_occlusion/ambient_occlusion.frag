@@ -95,7 +95,7 @@ void main() {
 	vec3 C_n = reconstructNormal(C_pos);
 	
 	// Get radius of disk
-	float disk_rad = 50.0 / sqrt(C_pos.z);
+	float disk_rad = 100.0 / (C_pos.z);
 	
 	float occlusion = 0.0;
 	for (int s = 0; s < SAMPLES; s++)

@@ -58,6 +58,7 @@ class SLevelManager {
 		static void createLevel();
 	
 		static SObject* pickObject(const glm::vec3& origin, const glm::vec3& direction, float length);
+		static SObject* getObjectWithId(unsigned int id);
 	
 	private:
 	

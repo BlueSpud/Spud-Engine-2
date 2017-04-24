@@ -284,31 +284,7 @@ void SModel::unload() {
 
 void SModel::hotload(const SPath& path) {
     
-    // Delete the last texture
-    if (uploaded) {
-        
-        // Send a deletion command
-        SModelUnload* unload = new SModelUnload();
-        unload->array_id = array_id;
-        
-        // Copy the array
-        for (int i = 0; i < buffer_count; i++)
-            unload->buffer_ids[i] = buffer_ids[i];
-		
-		unload->buffer_count = m_buffer_count;
-		unload->indicies_id = indicies_id;
-        
-        SGLUploadSystem::addUpload(unload);
-        
-    } else {
-        
-        // Cancel the upload we had already sent
-        upload->canceled = true;
-        
-        // Free the stuff we have
-        upload->unload();
-        
-    }
+    unload();
 	
 	// General clean up
 	draw_calls.clear();
@@ -316,7 +292,7 @@ void SModel::hotload(const SPath& path) {
 	
 	delete collision_geometry;
 	delete dynamic_collision_geometry;
-	
+
     // Close the old file and then load the new one
     SFileSystem::closeFile(file);
     load(path);

@@ -24,7 +24,7 @@ SOctreeNode::~SOctreeNode() {
 
 }
 
-bool SOctreeNode::insert(SObject* object, glm::vec3* points) {
+SOctreeNode* SOctreeNode::insert(SObject* object, glm::vec3* points) {
 	
 	// First we compute the mins and maxes of this node
 	glm::vec3 maxes = center + radius;
@@ -103,8 +103,9 @@ bool SOctreeNode::insert(SObject* object, glm::vec3* points) {
 			for (int i = 0; i < 8; i++) {
     
 				// If the child inserted it, that means that we are good
-				if (children[i]->insert(object, points))
-					return true;
+                SOctreeNode* result = children[i]->insert(object, points);
+				if (result)
+					return result;
 				
 				
 			}
@@ -113,64 +114,11 @@ bool SOctreeNode::insert(SObject* object, glm::vec3* points) {
 		
 		// If we get here it means this node was an acceptable fit for the object but either the children couldnt fit it or we didnt have another level to have children
 		objects.push_back(object);
-		return true;
+		return this;
 		
 	}
 	
-	return false;
-	
-}
-
-bool SOctreeNode::remove(SObject* object, glm::vec3* points) {
-	
-	// First we check if this node has the object
-	for (std::list<SObject*>::iterator i = this->objects.begin(); i != this->objects.end(); i++) {
-		
-		if (*i == object) {
-			
-			// Object was found, remove it and return true
-			objects.erase(i);
-			return true;
-			
-		}
-		
-	}
-	
-	// The object was not in this node, so if the object was not contained in this node we can return false
-	
-	// Compute the mins and maxes of this node
-	glm::vec3 maxes = center + radius;
-	glm::vec3 mins = center - radius;
-	
-	// Check if the object will fit inside us
-	bool contained = true;
-	for (int i = 0; i < 8; i++) {
-		
-		if (points[i].x >= maxes.x || points[i].y >= maxes.y || points[i].z >= maxes.z ||
-			points[i].x <= mins.x  || points[i].y <= mins.y  || points[i].z <= mins.z) {
-			
-			// One of the points was outside of the box so we could not contain this object in this node
-			contained = false;
-			break;
-			
-		}
-		
-	}
-	
-	// Check through children if we had a chance of containing the object 
-	if (contained && has_children) {
-		
-		for (int i = 0; i < 8; i++) {
-		
-			// Try to remove it with the children
-			if (children[i]->remove(object, points))
-				return true;
-			
-		}
-		
-	}
-	
-	return false;
+	return nullptr;
 	
 }
 
@@ -224,41 +172,6 @@ void SOctreeNode::collectObjects(const SFrustum& frustum, std::vector<SObject*>&
 			children[i]->collectObjects(frustum, culled_objects);
 	
 	}
-	
-}
-
-void SOctreeNode::linearizeObjects(std::vector<SObject*>& objects) {
-	
-	// First we know that we need to collect all of the objects
-	for (std::list<SObject*>::iterator i = this->objects.begin(); i != this->objects.end(); i++)
-		objects.push_back(*i);
-	
-	// If we have children, collect them as well
-	if (has_children)
-		for (int i = 0; i < 8; i++)
-			children[i]->linearizeObjects(objects);
-	
-	
-}
-
-void SOctreeNode::update(SOctree& parent_octree) {
-	
-	// Update any dynamic objects so that they are always correct in the tree
-	// Do the excess first
-	for (std::list<SObject*>::iterator i = objects.begin(); i != objects.end(); i++) {
-		
-		SObject* object = *i;
-		 
-		if (object->isDynamic()) {
-			
-			// Erase from the list
-			i = objects.erase(i);
-			parent_octree.insert(object);
-			
-		}
-		
-	}
-
 	
 }
 
@@ -360,42 +273,37 @@ bool SOctree::insert(SObject* object) {
 	object->getBoundingBox().getOrientedPoints(points);
 	
 	// If for some reason the octree cant take the object, we keep it in an overflow array
-	bool inserted = root_node.insert(object, points);
+	SOctreeNode* node = root_node.insert(object, points);
 	
-	if (!inserted)
+	if (!node)
 		excess.push_back(object);
-	
-	return inserted;
+
+    // Give the object that we inserted an id
+    object->id = current_id;
+    current_id++;
+
+    // Keep track of the object linearly
+    objects.push_back(SOctreeObject());
+    SOctreeObject& inserted = objects.back();
+    inserted.node = node;
+    inserted.object = object;
+
+	return (bool)node;
 	
 }
 
 void SOctree::remove(SObject* object) {
 	
-	// First we get the points of the bounding box of the object
-	glm::vec3 points[8];
-	object->getBoundingBox().getOrientedPoints(points);
-	
-	// If for some reason the octree cant take the object, we keep it in an overflow array
-	bool removed = root_node.remove(object, points);
-	
-	// If we didnt find it in the octree, it was probably in the excess
-	if (!removed) {
-		
-		for (std::list<SObject*>::iterator i = excess.begin(); i != excess.end(); i++) {
-			
-			if (*i == object) {
-				
-				// Remove
-				excess.erase(i);
-				return;
-				
-			}
-			
-		}
-		
-	}
-	
-	SLog::verboseLog(SVerbosityLevel::Warning, "Object %lu was not inserted into the octree before it was attempted to be removed", object);
+    // Do a binary search to figure out where the object we are removing is
+    SOctreeObject* search_result = binarySearch(object->id);
+    if (search_result) {
+
+        // Remove it from the correct place
+        if (search_result->node)
+            search_result->node->objects.remove(object);
+        else excess.remove(object);
+
+    } else SLog::verboseLog(SVerbosityLevel::Warning, "Object %lu was not inserted into the octree before it was attempted to be removed", object);
 	
 }
 
@@ -416,13 +324,22 @@ void SOctree::collectObjects(const SFrustum& frustum, std::vector<SObject*>& cul
 
 void SOctree::linearizeObjects(std::vector<SObject*>& objects) {
 	
-	// Collect the objects that are outside of the scene graph
-	for (std::list<SObject*>::iterator i = excess.begin(); i != excess.end(); i++)
-		objects.push_back(*i);
+    // Collect all of the objects
+    for (int i = 0; i < this->objects.size(); i++)
+        objects.push_back(this->objects[i].object);
 	
-	// Collect the objects from the root node
-	root_node.linearizeObjects(objects);
-	
+}
+
+SObject* SOctree::getObjectWithId(unsigned int id) {
+
+    // Do a binary search to figure out where it is
+    SOctreeObject* search_result = binarySearch(id);
+    if (search_result)
+        return search_result->object;
+
+    // An object with this id did not exist
+    return nullptr;
+
 }
 
 SObject* SOctree::pickObject(const glm::vec3& origin, const glm::vec3& direction, float length) {
@@ -452,25 +369,32 @@ SObject* SOctree::pickObject(const glm::vec3& origin, const glm::vec3& direction
 
 void SOctree::update(const SEvent& event) {
 	
-	// Update any dynamic objects so that they are always correct in the tree
-	// Do the excess first
-	for (std::list<SObject*>::iterator i = excess.begin(); i != excess.end(); i++) {
-	
-		SObject* object = *i;
-		
-		if (object->isDynamic()) {
-			
-			// Erase from the list
-			i = excess.erase(i);
-			insert(object);
-			
-		}
-		
-	}
-	
-	// Update the tree
-	root_node.update(*this);
-	
+    // Go through all of the objects in the tree and check if they are dynamic
+    for (int i = 0; i < objects.size(); i++) {
+
+        SOctreeObject& object = objects[i];
+        if (object.object->isDynamic()) {
+
+            // Remove the object from the proper place
+            if (object.node)
+                object.node->objects.remove(object.object);
+            else excess.remove(object.object);
+
+            // Perform an insert on the object
+            glm::vec3 points[8];
+            object.object->getBoundingBox().getOrientedPoints(points);
+            SOctreeNode* new_node = root_node.insert(object.object, points);
+
+            if (!new_node)
+                excess.push_back(object.object);
+
+            // Save where this was inserted
+            object.node = new_node;
+
+        }
+
+    }
+
 }
 
 void SOctree::purge() {
@@ -478,4 +402,32 @@ void SOctree::purge() {
 	// Call purge on the root node
 	root_node.purge();
 	
+}
+
+SOctreeObject* SOctree::binarySearch(unsigned int id) {
+
+    // Do a binary search for an object with this id
+    int lower = 0;
+    int upper = (int)objects.size();
+
+    while (true) {
+
+        int mid = (upper + lower) / 2;
+        SOctreeObject& object = objects[mid];
+
+        if (object.object->id == id)
+            return &object;
+        else if (object.object->id < id)
+            lower = mid + 1;
+        else upper = mid - 1;
+
+        // Check for a failure
+        if (lower > upper)
+            break;
+
+    }
+
+    // The object was not found
+    return nullptr;
+
 }

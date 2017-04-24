@@ -172,6 +172,10 @@ bool SShader::load(const SPath& vert, const SPath& frag) {
     const char* frag_string_r = file_string.c_str();
     frag_string = new char[strlen(frag_string_r) + 1];
     strcpy(frag_string, frag_string_r);
+
+    // Set that we are done with the files
+    vert_file->endUse();
+    frag_file->endUse();
     
     // Make an upload
     upload = new SShaderUpload();
@@ -187,42 +191,53 @@ bool SShader::load(const SPath& vert, const SPath& frag) {
     
     SGLUploadSystem::addUpload(upload);
 	
-	// Set that we are done with the file
-	vert_file->endUse();
-	frag_file->endUse();
-	
     return true;
     
 }
 
-void SShader::unload() {
+void SShader::unload() { unload(true); }
 
-	// Delete the program in 2 ways, depending on if its already been uploaded
-	if (uploaded) {
-		
-		// Send a deletion command
-		SShaderUnload* unload = new SShaderUnload();
-		unload->program_id = program_id;
-		SGLUploadSystem::addUpload(unload);
-		
-	} else {
-		
-		// Cancel the upload we had already sent
-		upload->canceled = true;
-		
-		// Free the stuff we have
-		upload->unload();
-		
-	}
+void SShader::unload(bool preuploads) {
 
-	
+    // Delete the program in 2 ways, depending on if its already been uploaded
+    if (uploaded) {
+
+        // Send a deletion command
+        SShaderUnload *unload = new SShaderUnload();
+        unload->program_id = program_id;
+        SGLUploadSystem::addUpload(unload);
+
+    } else {
+
+        // Cancel the upload we had already sent
+        upload->canceled = true;
+
+        // Free the stuff we have
+        upload->unload();
+
+    }
+
+    // Clear stored locations
+    while (locations.size())
+        locations.erase(locations.begin());
+
+    // Free the preuploads memory
+    if (preuploads) {
+
+        for (int i = 0; i < pre_upload_uniforms.size(); i++)
+            free(pre_upload_uniforms[i].value);
+
+        pre_upload_uniforms.clear();
+
+    }
+
 }
 
 void SShader::hotload(const SPath& path) {
-	
-    // Delete the last texture
-	unload();
-	
+
+    // Unload the shader, making sure not to clear the preuploads
+    unload(false);
+
     // Close the files and then load the shader again
     SFileSystem::closeFile(vert_file);
     SFileSystem::closeFile(frag_file);
@@ -293,7 +308,7 @@ void SShaderUpload::upload() {
     // Create space for the shader programs on the GPU
     GLuint vert_id = glCreateShader(GL_VERTEX_SHADER);
     GLuint frag_id = glCreateShader(GL_FRAGMENT_SHADER);
-    
+
     // Upload the source
     glShaderSource(vert_id, 1, &vert_string, NULL);
     glShaderSource(frag_id, 1, &frag_string, NULL);
@@ -362,12 +377,12 @@ void SShaderUpload::upload() {
     glBindAttribLocation(*program_id, 1, "normal");
     glBindAttribLocation(*program_id, 2, "tex_coord");
     glBindAttribLocation(*program_id, 3, "tangent");
-	glBindAttribLocation(*program_id, 4, "bone_indicies");
+	glBindAttribLocation(*program_id, 4, "bone_indices");
 	glBindAttribLocation(*program_id, 5, "vertex_weights");
     
     glLinkProgram(*program_id);
     
-    // Clean up the uneeded shader source
+    // Clean up the unneeded shader source
     glDeleteShader(vert_id);
     glDeleteShader(frag_id);
 	
@@ -378,11 +393,11 @@ void SShaderUpload::upload() {
 		shader->bindUniform(&shader->pre_upload_uniforms[i]);
 			
 		// Memory was allocated for the preuploads, free it
-		free(shader->pre_upload_uniforms[i].value);
+		//free(shader->pre_upload_uniforms[i].value);
 		
 	}
 	
-	shader->pre_upload_uniforms.clear();
+	//shader->pre_upload_uniforms.clear();
     
 }
 
@@ -398,6 +413,6 @@ void SShaderUpload::unload() {
  *  Implementation for shader unload                                          *
  ******************************************************************************/
 
-void SShaderUnload::upload() { glDeleteProgram(program_id); }
+void SShaderUnload::upload() { glDeleteProgram(program_id); std::cout << "Unloaded " << program_id << std::endl; }
 
 void SShaderUnload::unload() { /* nothing */ }

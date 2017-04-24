@@ -33,15 +33,23 @@ struct SOctreeNode {
 	
 	std::list<SObject*> objects;
 	
-	bool insert(SObject* object, glm::vec3* points);
-	bool remove(SObject* object, glm::vec3* points);
+	SOctreeNode* insert(SObject* object, glm::vec3* points);
 	void collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects);
-	void linearizeObjects(std::vector<SObject*>& objects);
 	void pickObject(const glm::vec3& origin, const glm::vec3& direction, float length, float& closest, SObject*& object);
-	
-	void update(SOctree& parent_octree);
+
 	void purge();
 	
+};
+
+/******************************************************************************
+ *  Definition for Octree Object Storage                                      *
+ ******************************************************************************/
+
+struct SOctreeObject {
+
+    SOctreeNode* node;
+    SObject* object;
+
 };
 
 /******************************************************************************
@@ -57,13 +65,19 @@ class SOctree {
 		void remove(SObject* object);
 		void collectObjects(const SFrustum& frustum, std::vector<SObject*>& culled_objects);
 		void linearizeObjects(std::vector<SObject*>& objects);
+        SObject* getObjectWithId(unsigned int id);
 		SObject* pickObject(const glm::vec3& origin, const glm::vec3& direction, float length);
 	
 		void update(const SEvent& event);
 		void purge();
 	
 	private:
-	
+
+        SOctreeObject* binarySearch(unsigned int id);
+
+        unsigned int current_id = 0;
+        std::vector<SOctreeObject> objects;
+
 		SOctreeNode root_node;
 		std::list<SObject*> excess;
 		SEventListener event_listener;

@@ -14,17 +14,12 @@ static glm::vec3 rotations[] = {
 	
 		glm::vec3(0.0,  -M_PI_2, 0.0),
 		glm::vec3(0.0, M_PI_2, 0.0),
+        glm::vec3(-M_PI_2,  M_PI, 0.0),
+        glm::vec3(M_PI_2, M_PI, 0.0),
+	    glm::vec3(0.0,  M_PI,    0.0),
+	    glm::vec3(0.0,  0.0,   0.0)
 
-	
-								 glm::vec3(-M_PI_2,  M_PI, 0.0),
-								 glm::vec3(M_PI_2, M_PI, 0.0),
-
-	glm::vec3(0.0,  M_PI,    0.0),
-	glm::vec3(0.0,  0.0,   0.0),
-
-	
-	
-							   };
+};
 
 /******************************************************************************
  *  Registration for supported texture extensions                             *

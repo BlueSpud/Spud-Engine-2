@@ -10,7 +10,7 @@ in vec3 position;
 in vec3 normal;
 in vec2 tex_coord;
 in vec3 tangent;
-in vec4 bone_indicies;
+in vec4 bone_indices;
 in vec4 vertex_weights;
 
 out vec3 position0;
@@ -36,11 +36,11 @@ void main() {
 
 	for (int i = 0; i < 4; i++) {
 
-		if (bone_indicies[i] != -1) {
+		if (bone_indices[i] != -1) {
 
-			position0 = position0 + ((temp_position * bones[int(bone_indicies[i])]) * vertex_weights[i]).xyz;
-			normal0 = normal0 + ((temp_normal * bones[int(bone_indicies[i])]) * vertex_weights[i]).xyz;
-			tangent0 = tangent0 + ((temp_tangent * bones[int(bone_indicies[i])]) * vertex_weights[i]).xyz;
+			position0 = position0 + ((temp_position * bones[int(bone_indices[i])]) * vertex_weights[i]).xyz;
+			normal0 = normal0 + ((temp_normal * bones[int(bone_indices[i])]) * vertex_weights[i]).xyz;
+			tangent0 = tangent0 + ((temp_tangent * bones[int(bone_indices[i])]) * vertex_weights[i]).xyz;
 
 		} else break;
 

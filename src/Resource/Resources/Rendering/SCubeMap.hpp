@@ -46,11 +46,11 @@ class SCubeMap : public STexture {
     
         virtual void bind();
         virtual void bind(int texture_number);
+		virtual void unload();
     
     protected:
     
         virtual bool load(const SPath& path);
-        virtual void unload();
     
     private:
 

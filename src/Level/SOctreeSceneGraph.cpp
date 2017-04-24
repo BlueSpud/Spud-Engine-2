@@ -20,6 +20,7 @@ void SOctreeSceneGraph::linearizeObjects(std::vector<SObject*>& objects) {
 }
 
 SObject* SOctreeSceneGraph::pickObject(const glm::vec3& origin, const glm::vec3& direction, float length) { return octree.pickObject(origin, direction, length); }
+SObject* SOctreeSceneGraph::getObjectWithId(unsigned int id) { return octree.getObjectWithId(id); }
 
 void SOctreeSceneGraph::collectObjects(SCamera& camera, double interpolation, std::list<SSortedObject>& sorted_objects) {
 	

@@ -24,6 +24,7 @@ class SObject : public SSerializable {
     public:
     
         SObject();
+        unsigned int id;
     
         virtual ~SObject() { /* intentionally empty */ }
     
