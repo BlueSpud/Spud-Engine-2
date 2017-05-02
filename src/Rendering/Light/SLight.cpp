@@ -15,10 +15,6 @@ glm::mat4 SLight::bias = glm::mat4(0.5, 0.0, 0.0, 0.0,
 
 std::shared_ptr<SGbufferShader> SLight::shadow_shader;
 
-REGISTER_CLASS(SPointLight)
-REGISTER_CLASS(SSpotLight)
-REGISTER_CLASS(SDirectionalLight)
-
 /******************************************************************************
  *  Implementation for generic light                                          *
  ******************************************************************************/

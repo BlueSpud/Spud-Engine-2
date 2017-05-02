@@ -20,7 +20,9 @@
  ******************************************************************************/
 
 class SStaticMesh : public SObject {
-    
+
+	SCLASS(SStaticMesh)
+
     public:
 	
 		SStaticMesh();

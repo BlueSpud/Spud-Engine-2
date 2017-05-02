@@ -12,7 +12,7 @@
 #include <iostream>
 
 #include "Debug/SLog.hpp"
-#include "Utility/SHash.hpp"
+#include "Engine/Utility/SHash.hpp"
 
 /******************************************************************************
  *  Definition for generic subsystem                                          *

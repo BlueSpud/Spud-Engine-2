@@ -113,7 +113,9 @@ struct STextureUnload : public SGLUpload {
  ******************************************************************************/
 
 class STexture : public SResource {
-    
+
+    SRESOURCE(STexture, "dds")
+
     public:
     
         glm::ivec2 size;

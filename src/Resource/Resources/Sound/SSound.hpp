@@ -38,6 +38,8 @@ struct SSoundWAVHeader {
 class SSound : public SResource {
     
     friend class SSoundEmitter;
+
+    SRESOURCE(SSound, "wav")
     
     protected:
     

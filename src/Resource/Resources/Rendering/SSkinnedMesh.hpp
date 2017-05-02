@@ -20,14 +20,18 @@
  ******************************************************************************/
 
 class SSkinnedMesh : public SObject {
-	
+
 	public:
-	
-			SSkinnedMesh(SSkinnedModel* _parent_mesh);
+
+            SSkinnedMesh();
+			SSkinnedMesh(std::shared_ptr<SSkinnedModel> _parent_mesh);
 	
 			virtual void render(double interpolation);
 			virtual void render(std::shared_ptr<SGbufferShader> shader, double interpolation);
 			virtual void update(const SEvent& event);
+
+            virtual void serialize(SSerializer& serializer);
+            virtual void deserialize(SDeserializer& deserializer);
 	
 			glm::mat4 getMatrixForBone(int bone, float time);
 	
@@ -35,11 +39,11 @@ class SSkinnedMesh : public SObject {
 			SStopwatch timer;
 	
 		private:
-	
-			SSkinnedModel* parent_mesh;
+
+            std::shared_ptr<SSkinnedModel> parent_mesh;
 			std::vector<std::shared_ptr<SMaterial>> materials;
 	
-	
+
 };
 
 

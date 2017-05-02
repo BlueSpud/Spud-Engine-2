@@ -10,12 +10,6 @@
 
 SShader* SShader::bound_shader = nullptr;
 
-/***********************************************************************************
- *  Registration for supported shader extensions (GLSL used to load frag and vert) *
- ***********************************************************************************/
-
-REGISTER_RESOURCE_CLASS(glsl, SShader)
-
 /******************************************************************************
  *  Implementation for shader                                                 *
  ******************************************************************************/
@@ -218,8 +212,7 @@ void SShader::unload(bool preuploads) {
     }
 
     // Clear stored locations
-    while (locations.size())
-        locations.erase(locations.begin());
+    locations.clear();
 
     // Free the preuploads memory
     if (preuploads) {
@@ -413,6 +406,6 @@ void SShaderUpload::unload() {
  *  Implementation for shader unload                                          *
  ******************************************************************************/
 
-void SShaderUnload::upload() { glDeleteProgram(program_id); std::cout << "Unloaded " << program_id << std::endl; }
+void SShaderUnload::upload() { glDeleteProgram(program_id);}
 
 void SShaderUnload::unload() { /* nothing */ }

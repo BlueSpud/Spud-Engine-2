@@ -55,7 +55,9 @@ class SShader : public SResource {
 	friend class SGbufferShader;
 	friend class SGbufferShaderHotload;
 	friend class SShaderUpload;
-	
+
+	SRESOURCE(SShader, "glsl")
+
     public:
     
         bool bind();

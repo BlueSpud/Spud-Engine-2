@@ -38,7 +38,9 @@ struct SCubeMapUpload : public SGLUpload {
  ******************************************************************************/
 
 class SCubeMap : public STexture {
-    
+
+	SRESOURCE(SCubeMap, "cube")
+
     public:
 	
 		SCubeMap();

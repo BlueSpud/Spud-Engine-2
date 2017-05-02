@@ -8,12 +8,6 @@
 
 #include "SGbufferShader.hpp"
 
-/***********************************************************************************
- *  Registration for supported shader extensions (GLSL used to load frag and vert) *
- ***********************************************************************************/
-
-REGISTER_RESOURCE_CLASS(glsl, SGbufferShader)
-
 /******************************************************************************
  *  Implementation for Gbuffer shader                                         *
  ******************************************************************************/

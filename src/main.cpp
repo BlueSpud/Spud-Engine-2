@@ -130,8 +130,11 @@ void keyPress(int key) {
     
 			//if (controller->isOnGround())
 			//	    controller->jump();
-			if (picked)
-				picked->setTranslation(camera.transform.translation);
+			if (picked) {
+
+                if (picked->isKindOfClass(SStaticMesh::staticClass()))
+                     picked->setTranslation(camera.transform.translation);
+            }
 			
         break;
 

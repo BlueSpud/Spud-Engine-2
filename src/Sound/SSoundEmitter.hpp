@@ -32,6 +32,8 @@ enum SSoundPositionMode {
 class SSoundEmitter : public SObject {
     
     friend class SSound;
+
+    SCLASS(SSoundEmitter)
     
     public:
     
@@ -43,6 +45,9 @@ class SSoundEmitter : public SObject {
     
         virtual void render(double interpolation) { /* intentionally blank */ };
         virtual void update(const SEvent& event) { /* intentionally blank */ };
+
+        virtual void serialize(SSerializer& serializer);
+        virtual void deserialize(SDeserializer& deserializer);
     
         void play();
         void stop();

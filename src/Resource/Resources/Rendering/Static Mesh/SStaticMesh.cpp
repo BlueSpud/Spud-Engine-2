@@ -8,8 +8,6 @@
 
 #include "SStaticMesh.hpp"
 
-REGISTER_CLASS(SStaticMesh)
-
 /******************************************************************************
  *  Implementation for static mesh instance                                   *
  ******************************************************************************/
@@ -133,7 +131,7 @@ void SStaticMesh::deserialize(SDeserializer& deserializer) {
 	for (int i = 0; i < materials.size(); i++)
 		setMaterial(deserializer.deserializeResource<SMaterial>(), i);
 		
-	// Deerialize the base objects
+	// Deserialize the base objects
 	SObject::deserialize(deserializer);
 	
 }

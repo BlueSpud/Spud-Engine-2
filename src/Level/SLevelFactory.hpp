@@ -12,7 +12,8 @@
 #include <iostream>
 #include <map>
 
-#include "Utility/SHash.hpp"
+#include "Engine/Utility/SHash.hpp"
+#include "Engine/Utility/SStaticConstructor.hpp"
 
 // Forward declaration
 class SLevelFactory;
@@ -105,6 +106,10 @@ class SLevelFactory {
 	
 };
 
-#define REGISTER_CLASS(a) bool a##_registered = SLevelFactoryRegistry::instance()->registerClass<a>(#a);
+#define REGISTER_CLASS(n) struct SEngine { static void regClass() { \
+																	  SStaticConstructor<&n::SEngine::regClass>::c.f(); \
+																	  SLevelFactoryRegistry::instance()->registerClass<n>(#n); \
+																  } \
+									     }; \
 
 #endif /* SLevelFactory_hpp */

@@ -12,7 +12,7 @@
 #include <iostream>
 #include <map>
 
-#include "Utility/SHash.hpp"
+#include "Engine/Utility/SHash.hpp"
 
 /******************************************************************************
  *  Definition for types of uniforms                                          *

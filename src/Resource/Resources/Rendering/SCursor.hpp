@@ -21,6 +21,8 @@
 class SCursor : public SResource {
     
     friend class SGL;
+
+    SRESOURCE(SCursor, "png", "psd", "jpg", "jpeg", "tiff")
     
     public:
     

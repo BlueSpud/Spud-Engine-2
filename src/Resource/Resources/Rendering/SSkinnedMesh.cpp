@@ -8,7 +8,9 @@
 
 #include "SSkinnedMesh.hpp"
 
-SSkinnedMesh::SSkinnedMesh(SSkinnedModel* _parent_mesh) {
+SSkinnedMesh::SSkinnedMesh() { /* default constructor, meant for deserialization */ }
+
+SSkinnedMesh::SSkinnedMesh(std::shared_ptr<SSkinnedModel> _parent_mesh) {
 	
 	// Store the parent mesh
 	parent_mesh = _parent_mesh;
@@ -94,4 +96,38 @@ glm::mat4 SSkinnedMesh::getMatrixForBone(int bone, float time) {
 		return animation->getMatrixForBone(bone, time);
 	else return parent_mesh->bones[bone].matrix;
 	
+}
+
+void SSkinnedMesh::serialize(SSerializer& serializer) {
+
+    // Save the class
+    serializer.startClass<SSkinnedMesh>();
+
+    // Serialize the model
+    serializer.addResource(parent_mesh);
+
+    // Serialize the materials
+    for (int i = 0; i < materials.size(); i++)
+        serializer.addResource(materials[i]);
+
+    // Serialize the base object
+    SObject::serialize(serializer);
+
+}
+
+
+void SSkinnedMesh::deserialize(SDeserializer& deserializer) {
+
+    // The class is already deserialized for us
+    // Deserialize the model
+    parent_mesh = deserializer.deserializeResource<SSkinnedModel>();
+
+    // Deserialize the materials
+    materials.clear();
+    for (int i = 0; i < materials.size(); i++)
+        materials.push_back(deserializer.deserializeResource<SMaterial>());
+
+    // Deserialize the base objects
+    SObject::deserialize(deserializer);
+
 }

@@ -23,8 +23,10 @@ class SSceneGraph;
  ******************************************************************************/
 
 class SLight : public SObject {
-    
+
     friend class SLightGraph;
+
+    SCLASS_ABSTRACT(SLight)
     
     public:
     
@@ -71,7 +73,9 @@ class SLight : public SObject {
  ******************************************************************************/
 
 class SPointLight : public SLight {
-    
+
+	SCLASS(SPointLight)
+
     public:
     
         SPointLight();
@@ -97,7 +101,9 @@ class SPointLight : public SLight {
  ******************************************************************************/
 
 class SDirectionalLight : public SLight {
-    
+
+	SCLASS(SDirectionalLight)
+
     public:
 	
 		SDirectionalLight();
@@ -118,7 +124,9 @@ class SDirectionalLight : public SLight {
  ******************************************************************************/
 
 class SSpotLight : public SLight {
-	
+
+    SCLASS(SSpotLight)
+
 	public:
 	
 		SSpotLight();

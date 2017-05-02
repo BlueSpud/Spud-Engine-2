@@ -34,13 +34,24 @@ SResourceAllocatorManger* SResourceAllocatorManger::instance() {
     
 }
 
-bool SResourceAllocatorManger::registerClassForExtension(const std::string& class_name, const std::string& extension) {
+bool SResourceAllocatorManger::registerClass(const char* class_name, ...) {
     
     // Check if we need to create a new vector for the extensions
     if (!supported_extensions.count(class_name))
         supported_extensions[class_name] = std::vector<std::string>();
     
-    supported_extensions[class_name].push_back(extension);
+    // Get the variadic arguments
+    va_list args;
+    va_start(args, class_name);
+
+    while (true) {
+
+        const char* extension = va_arg(args, const char*);
+        if (strcmp(extension, "END"))
+            supported_extensions[class_name].push_back(std::string(extension));
+        else break;
+
+    }
     
     return true;
     

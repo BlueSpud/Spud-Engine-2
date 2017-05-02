@@ -11,6 +11,7 @@
 
 #include "Event/SEventSystem.hpp"
 #include "Resource/Resources/Rendering/Shader/Gbuffer/SGbufferShader.hpp"
+#include "Engine/Utility/SClass.hpp"
 
 #include "Physics/SPhysicsSystem.hpp"
 #include "Rendering/Utility/SBoundingBox.hpp"
@@ -20,7 +21,9 @@
  ******************************************************************************/
 
 class SObject : public SSerializable {
-    
+
+    SCLASS_ABSTRACT(SObject)
+
     public:
     
         SObject();

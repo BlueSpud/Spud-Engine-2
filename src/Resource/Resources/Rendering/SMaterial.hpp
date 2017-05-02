@@ -17,7 +17,9 @@
  ******************************************************************************/
 
 class SMaterial : public SResource {
-    
+
+	SRESOURCE(SMaterial, "mat")
+
     public:
     
         void bind(SGbufferShaderShaders shader_t);

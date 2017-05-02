@@ -39,7 +39,9 @@ struct SFontCharacter {
 class SFont : public SResource {
     
     friend class STextRenderer;
-    
+
+    SRESOURCE(SFont, "font")
+
     public:
     
         float getLineHeight(float _font_size);

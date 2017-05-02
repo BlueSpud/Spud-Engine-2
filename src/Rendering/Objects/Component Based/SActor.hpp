@@ -17,7 +17,9 @@
  ******************************************************************************/
 
 class SActor : public SObject {
-    
+
+    SCLASS(SActor)
+
     public:
     
         SActor();

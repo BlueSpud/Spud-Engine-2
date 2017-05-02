@@ -41,7 +41,9 @@ struct SAnimationKeyFrame {
  ******************************************************************************/
 
 class SAnimation : public SResource {
-	
+
+	SRESOURCE(SAnimation, "sanim")
+
 	public:
 	
 		glm::mat4 getMatrixForBone(int bone, float time);

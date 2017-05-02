@@ -33,6 +33,41 @@ SSoundEmitter::SSoundEmitter(std::shared_ptr<SSound> _sound) {
 
 SSoundEmitter::~SSoundEmitter() { unload(); }
 
+void SSoundEmitter::serialize(SSerializer& serializer) {
+
+    // Save the class
+    serializer.startClass<SSoundEmitter>();
+
+    // Serialize the sound
+    serializer.addResource(sound);
+
+    // Serialize whether or not we are playing
+    serializer.addItem(&playing);
+
+    // Serialize the base object
+    SObject::serialize(serializer);
+
+}
+
+
+void SSoundEmitter::deserialize(SDeserializer& deserializer) {
+
+    // The class is already deserialized for us
+    // Deserialize the sound
+    setSound(deserializer.deserializeResource<SSound>());
+
+    // Get if we are playing and update accordingly
+    deserializer.deserialize(&playing);
+
+    if (playing)
+        play();
+    else stop();
+
+    // Deerialize the base objects
+    SObject::deserialize(deserializer);
+
+}
+
 void SSoundEmitter::setSound(std::shared_ptr<SSound> _sound) {
 
     // Unload the last source if there was one

@@ -14,6 +14,7 @@
 #include <iostream>
 #include <map>
 #include <memory.h>
+#include <Level/SLevelFactory.hpp>
 
 #include "File/SFileSystem.hpp"
 
@@ -59,15 +60,18 @@ class SResourceAllocatorManger {
     public:
     
         std::map<std::string, std::vector<std::string> > supported_extensions;
-        bool registerClassForExtension(const std::string& class_name, const std::string& extension);
+        bool registerClass(const char* class_name, ...);
     
         static SResourceAllocatorManger* instance();
     
 };
 
 // Define a macro that can be used to register a resource class
-#define REGISTER_RESOURCE_CLASS(E, T) bool isRegistered_##T##E = SResourceAllocatorManger::instance()->registerClassForExtension(typeid(T).name(), #E);
-
+#define SRESOURCE(n, ...) struct SRes { static void regClass() { \
+																	  SStaticConstructor<&n::SRes::regClass>::c.f(); \
+																	  SResourceAllocatorManger::instance()->registerClass(typeid(n).name(), __VA_ARGS__, "END"); \
+																  } \
+									     }; \
 
 /******************************************************************************
  *  Definition for resource manager                                           *

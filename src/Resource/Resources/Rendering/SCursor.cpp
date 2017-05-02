@@ -9,16 +9,6 @@
 #include "SCursor.hpp"
 
 /******************************************************************************
- *  Registration for supported cursor extensions                              *
- ******************************************************************************/
-
-REGISTER_RESOURCE_CLASS(png, SCursor)
-REGISTER_RESOURCE_CLASS(psd, SCursor)
-REGISTER_RESOURCE_CLASS(jpg, SCursor)
-REGISTER_RESOURCE_CLASS(jpeg, SCursor)
-REGISTER_RESOURCE_CLASS(tiff, SCursor)
-
-/******************************************************************************
  *  Implementation for cursor                                                 *
  ******************************************************************************/
 

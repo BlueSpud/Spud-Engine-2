@@ -31,7 +31,9 @@ struct SBone {
 class SSkinnedModel : public SModel {
 	
 	friend class SSkinnedMesh;
-	
+
+	SRESOURCE(SSkinnedModel, "smdl")
+
 	public:
 	
 		void render(const std::vector<std::shared_ptr<SMaterial>>& instance_material, const std::vector<glm::mat4>& matricies);

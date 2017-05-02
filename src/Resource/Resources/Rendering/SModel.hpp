@@ -98,7 +98,9 @@ struct SModelUnload : public SGLUpload {
 class SModel : public SResource {
     
     friend class SStaticMesh;
-    
+
+	SRESOURCE(SModel, "smdl")
+
     public:
     
 		void render(const std::vector<std::shared_ptr<SMaterial>>& instance_material);

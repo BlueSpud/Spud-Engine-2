@@ -54,7 +54,9 @@ struct SGbufferShaderHotload : public SGLUpload {
 class SGbufferShader : public SResource {
 	
 	friend class SGbufferShaderHotload;
-	
+
+	SRESOURCE(SGbufferShader, "glsl")
+
 	public:
 	
 		bool bind(SGbufferShaderShaders shader);
